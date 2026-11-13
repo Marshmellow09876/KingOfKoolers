@@ -1,0 +1,10 @@
+# Ignore large zip packages (GitHub limits files to 100MB)
+*.zip
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# OS files
+Thumbs.db
+.DS_Store
