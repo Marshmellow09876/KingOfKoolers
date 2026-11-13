@@ -545,7 +545,7 @@
        ========================================================================== */
     .scroll-stack-runway {
       position: relative;
-      height: 320vh;
+      height: 220vh;
       background: radial-gradient(circle at 50% 25%, #0b1122 0%, #030508 80%);
       border-top: 1px solid rgba(255, 255, 255, 0.06);
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -4535,9 +4535,16 @@
 
       let currentStackProgress = 0;
       let stackVideoLooping = false;
+      let isStackHovered = false;
+      let isUserScrollingStack = false;
+      let stackScrollPauseTimer = null;
+      let stackAutoPlayRaf = null;
+      let stackAutoPlayActive = false;
+      let stackPauseHoldFrames = 0;
 
       function setStackMode(mode) {
         if (!containerCanvas || !containerVideo || !containerChairs) return;
+        stopStackAutoPlay();
         [modeBtnCanvas, modeBtnVideo, modeBtnChairs].forEach(b => b && b.classList.remove('active'));
         containerCanvas.style.display = 'none';
         containerVideo.style.display = 'none';
@@ -4558,6 +4565,8 @@
           if (modeBtnCanvas) modeBtnCanvas.classList.add('active');
           if (btnCampText) btnCampText.textContent = '🏕️ View Camp Chair Mode';
           if (btnVideoText) btnVideoText.textContent = '▶ Play Video Loop';
+          renderStackFrame(currentStackProgress);
+          checkStackAutoPlay();
         }
       }
 
@@ -4940,22 +4949,22 @@
           if (hudName) hudName.textContent = 'PATRIOT BLUE // 28" BUNKER BASE';
           if (hudCam) hudCam.textContent = 'CAM ROTATION: 0.0° (BASE ANCHOR)';
           if (hudHeight) hudHeight.textContent = 'STACK: 28.0"';
-          if (statusTitle) statusTitle.textContent = 'STAGE 1: VERTICAL FREEFALL ALIGNMENT';
+          if (statusTitle && !stackAutoPlayActive) statusTitle.textContent = 'STAGE 1: VERTICAL FREEFALL ALIGNMENT';
         } else if (p < 0.60) {
           if (hudName) hudName.textContent = 'ALPINE WHITE // 18" INTERMEDIATE TIER';
           if (hudCam) hudCam.textContent = `CAM ROTATION: ${Math.abs(Math.round(angWhite))}° ${angWhite === 0 ? 'LOCKED' : 'TWISTING'}`;
           if (hudHeight) hudHeight.textContent = p > 0.48 ? 'STACK: 46.0"' : 'STACK: 28.0"';
-          if (statusTitle) statusTitle.textContent = `STAGE 2: ALPINE WHITE 45° TWIST-LOCK (${Math.abs(Math.round(angWhite))}°)`;
+          if (statusTitle && !stackAutoPlayActive) statusTitle.textContent = `STAGE 2: ALPINE WHITE 45° TWIST-LOCK (${Math.abs(Math.round(angWhite))}°)`;
         } else if (p < 0.85) {
           if (hudName) hudName.textContent = 'PATRIOT RED // 12" TOP TIER';
           if (hudCam) hudCam.textContent = `CAM ROTATION: ${Math.abs(Math.round(angRed))}° ${angRed === 0 ? 'LOCKED' : 'TWISTING'}`;
           if (hudHeight) hudHeight.textContent = p > 0.78 ? 'STACK: 58.0"' : 'STACK: 46.0"';
-          if (statusTitle) statusTitle.textContent = `STAGE 3: PATRIOT RED 45° TWIST-LOCK (${Math.abs(Math.round(angRed))}°)`;
+          if (statusTitle && !stackAutoPlayActive) statusTitle.textContent = `STAGE 3: PATRIOT RED 45° TWIST-LOCK (${Math.abs(Math.round(angRed))}°)`;
         } else {
           if (hudName) hudName.textContent = 'RECESSED LID // 3-TIER BUNKER SEALED';
           if (hudCam) hudCam.textContent = 'CAM ROTATION: 0.0° LOCKED // 35 PSI EPDM';
           if (hudHeight) hudHeight.textContent = 'STACK: 58.0" (UP TO 72")';
-          if (statusTitle) statusTitle.textContent = 'STAGE 4: UNSTACK TO 500-LB CAMP CHAIRS';
+          if (statusTitle && !stackAutoPlayActive) statusTitle.textContent = 'STAGE 4: UNSTACK TO 500-LB CAMP CHAIRS';
         }
 
         // Update active card
@@ -4972,15 +4981,123 @@
         }
       }
 
-      // Scroll listener for the runway
+      // Early trigger calculation
+      function calcStackScrollProgress() {
+        if (!stackRunway) return 0;
+        const rect = stackRunway.getBoundingClientRect();
+        // Start triggering as soon as the top enters 75% down the viewport (early trigger)
+        const triggerStart = window.innerHeight * 0.75;
+        const triggerEnd = - (stackRunway.offsetHeight - window.innerHeight);
+        const totalDistance = triggerStart - triggerEnd;
+        if (totalDistance <= 0) return 0;
+
+        const currentDist = triggerStart - rect.top;
+        const p = Math.max(0, Math.min(1, currentDist / totalDistance));
+        return p;
+      }
+
+      function startStackAutoPlay() {
+        if (stackAutoPlayActive) return;
+        if (containerChairs && containerChairs.style.display === 'block') return;
+        if (containerVideo && containerVideo.style.display === 'block') return;
+
+        stackAutoPlayActive = true;
+        const statusTitle = document.getElementById('stage-status-title');
+        if (statusTitle) {
+          statusTitle.innerHTML = '<span style="color: #00f0ff;">▶ AUTO-PLAYING</span> (HOVER ACTIVE)';
+        }
+
+        function step() {
+          if (!stackAutoPlayActive) return;
+
+          if (stackPauseHoldFrames > 0) {
+            stackPauseHoldFrames--;
+          } else {
+            // Smooth slow-motion frame step (~4.5s for complete sequence)
+            currentStackProgress += 0.0035;
+            if (currentStackProgress >= 1.0) {
+              currentStackProgress = 1.0;
+              stackPauseHoldFrames = 75; // hold at locked tower for ~1.2s
+              setTimeout(() => {
+                if (stackAutoPlayActive) {
+                  currentStackProgress = 0.04;
+                  stackPauseHoldFrames = 0;
+                }
+              }, 1200);
+            }
+          }
+
+          updateStackProgress(currentStackProgress);
+          stackAutoPlayRaf = requestAnimationFrame(step);
+        }
+
+        stackAutoPlayRaf = requestAnimationFrame(step);
+      }
+
+      function stopStackAutoPlay() {
+        if (!stackAutoPlayActive) return;
+        stackAutoPlayActive = false;
+        if (stackAutoPlayRaf) {
+          cancelAnimationFrame(stackAutoPlayRaf);
+          stackAutoPlayRaf = null;
+        }
+        stackPauseHoldFrames = 0;
+        const statusTitle = document.getElementById('stage-status-title');
+        if (statusTitle) {
+          statusTitle.textContent = '60FPS SCROLL-DRIVEN SIMULATION';
+        }
+      }
+
+      function checkStackAutoPlay() {
+        if (!stackRunway) return;
+        const rect = stackRunway.getBoundingClientRect();
+        const isInView = rect.top < window.innerHeight && rect.bottom > 60;
+        if (isStackHovered && !isUserScrollingStack && isInView) {
+          startStackAutoPlay();
+        } else {
+          stopStackAutoPlay();
+        }
+      }
+
+      // Attach hover listeners to runway, sticky container, and stage frame
+      const stackSticky = document.querySelector('.scroll-stack-sticky');
+      const hoverTargets = [stackRunway, stackSticky].filter(Boolean);
+      hoverTargets.forEach(target => {
+        target.addEventListener('mouseenter', () => {
+          isStackHovered = true;
+          checkStackAutoPlay();
+        });
+        target.addEventListener('mouseleave', () => {
+          isStackHovered = false;
+          stopStackAutoPlay();
+        });
+        target.addEventListener('mousemove', () => {
+          if (!isStackHovered) {
+            isStackHovered = true;
+            checkStackAutoPlay();
+          }
+        });
+      });
+
+      // Scroll listener with user pause detection
       window.addEventListener('scroll', () => {
         if (!stackRunway) return;
         const rect = stackRunway.getBoundingClientRect();
-        const maxScroll = stackRunway.offsetHeight - window.innerHeight;
-        if (maxScroll <= 0) return;
-        const p = Math.max(0, Math.min(1, -rect.top / maxScroll));
-        if (rect.top <= 100 && rect.bottom >= 0) {
+        
+        // Active scroll range: anywhere from approaching viewport to past bottom
+        if (rect.top <= window.innerHeight * 0.95 && rect.bottom >= -50) {
+          isUserScrollingStack = true;
+          stopStackAutoPlay(); // immediately yield to physical scroll
+
+          const p = calcStackScrollProgress();
           updateStackProgress(p);
+
+          // Detect when scrolling pauses (180ms after last scroll event)
+          clearTimeout(stackScrollPauseTimer);
+          stackScrollPauseTimer = setTimeout(() => {
+            isUserScrollingStack = false;
+            checkStackAutoPlay();
+          }, 180);
         }
       }, { passive: true });
 
