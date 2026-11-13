@@ -895,12 +895,12 @@
 
           <div class="control-card">
             <div class="control-label">Primary Inscription (Line 1)</div>
-            <input type="text" class="engrave-input" id="engrave-line1" value="THE MARSHALL FAMILY" maxlength="28" placeholder="e.g. THE SMITH FAMILY">
+            <input type="text" class="engrave-input" id="engrave-line1" value="" maxlength="28" placeholder="e.g. THE SMITH FAMILY">
           </div>
 
           <div class="control-card">
             <div class="control-label">Secondary Tagline (Line 2)</div>
-            <input type="text" class="engrave-input" id="engrave-line2" value="EST. 2026 · OVERLAND EDITION" maxlength="32" placeholder="e.g. LAKE TAHOE CABIN">
+            <input type="text" class="engrave-input" id="engrave-line2" value="" maxlength="32" placeholder="e.g. LAKE TAHOE CABIN">
           </div>
 
           <div class="control-card">
@@ -1052,8 +1052,8 @@
       showSpigot: true,
       showSolar: true,
       engraveLocation: 'lid',
-      engraveLine1: 'THE MARSHALL FAMILY',
-      engraveLine2: 'EST. 2026 · OVERLAND EDITION',
+      engraveLine1: '',
+      engraveLine2: '',
       crest: 'crown',
       partySize: 4,
       tripDays: 3,
@@ -1150,35 +1150,72 @@
         ctx.fillRect(0, 0, 1024, 1024);
       }
 
-      // Engraving text & emblem
-      ctx.fillStyle = loc === 'lid' ? 'rgba(50, 30, 15, 0.88)' : 'rgba(255, 255, 255, 0.9)';
-      ctx.textAlign = 'center';
+      // Engraving text & emblem (only render when user enters text)
+      const hasText = Boolean((studioState.engraveLine1 && studioState.engraveLine1.trim()) ||
+                              (studioState.engraveLine2 && studioState.engraveLine2.trim()));
+      if (hasText) {
+        ctx.fillStyle = loc === 'lid' ? 'rgba(50, 30, 15, 0.88)' : 'rgba(255, 255, 255, 0.9)';
+        ctx.textAlign = 'center';
 
-      // Draw Crest
-      if (studioState.crest === 'crown') {
-        ctx.font = 'bold 90px serif';
-        ctx.fillText('♛', 512, 420);
-      } else if (studioState.crest === 'flag') {
-        ctx.font = 'bold 80px sans-serif';
-        ctx.fillText('★ ★ ★', 512, 420);
-      } else if (studioState.crest === 'mountains') {
-        ctx.font = 'bold 85px sans-serif';
-        ctx.fillText('▲▲▲', 512, 420);
-      } else {
-        ctx.font = 'bold 85px serif';
-        ctx.fillText('❖', 512, 420);
+        // Draw Crest
+        if (studioState.crest === 'crown') {
+          ctx.font = 'bold 90px serif';
+          ctx.fillText('♛', 512, 420);
+        } else if (studioState.crest === 'flag') {
+          ctx.font = 'bold 80px sans-serif';
+          ctx.fillText('★ ★ ★', 512, 420);
+        } else if (studioState.crest === 'mountains') {
+          ctx.font = 'bold 85px sans-serif';
+          ctx.fillText('▲▲▲', 512, 420);
+        } else {
+          ctx.font = 'bold 85px serif';
+          ctx.fillText('❖', 512, 420);
+        }
+
+        // Inscription Line 1
+        ctx.font = 'bold 44px "SF Pro Display", sans-serif';
+        ctx.fillText(studioState.engraveLine1, 512, 530);
+
+        // Inscription Line 2
+        ctx.font = '600 24px "SF Mono", monospace';
+        ctx.fillText(studioState.engraveLine2, 512, 580);
       }
-
-      // Inscription Line 1
-      ctx.font = 'bold 44px "SF Pro Display", sans-serif';
-      ctx.fillText(studioState.engraveLine1, 512, 530);
-
-      // Inscription Line 2
-      ctx.font = '600 24px "SF Mono", monospace';
-      ctx.fillText(studioState.engraveLine2, 512, 580);
 
       const texture = new THREE.CanvasTexture(cvs);
       return texture;
+    }
+
+    // 10W Monocrystalline Solar Panel Texture
+    function generateSolarTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 512;
+      cvs.height = 512;
+      const ctx = cvs.getContext('2d');
+
+      // Deep photovoltaic silicon navy-black
+      ctx.fillStyle = '#090e1a';
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Photovoltaic cell grid
+      const cell = 64;
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+      ctx.lineWidth = 2;
+      for (let x = 0; x <= 512; x += cell) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 512); ctx.stroke();
+      }
+      for (let y = 0; y <= 512; y += cell) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(512, y); ctx.stroke();
+      }
+
+      // Fine silver busbars inside cells
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.14)';
+      ctx.lineWidth = 1;
+      for (let x = 16; x < 512; x += 32) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 512); ctx.stroke();
+      }
+
+      const tex = new THREE.CanvasTexture(cvs);
+      return tex;
     }
 
     // Hydro-Dip Procedural Patterns
@@ -1376,7 +1413,7 @@
       return tierGroup;
     }
 
-    // Build Flat Recessed Lid with Personalization Center Disc
+    // Build Flat Recessed Lid with Personalization Center Disc / 10W Solar Panel
     function buildLid() {
       const lid = new THREE.Group();
 
@@ -1388,22 +1425,39 @@
       outerDisc.castShadow = true;
       lid.add(outerDisc);
 
-      // Center Personalization / Prep Disc (Bamboo or Solar)
+      // Center Personalization / Prep Disc (Bamboo base)
       const centerDisc = new THREE.Mesh(
-        new THREE.CylinderGeometry(8.5, 8.5, 0.3, 36),
+        new THREE.CylinderGeometry(8.5, 8.5, 0.3, 48),
         bambooMat
       );
       centerDisc.position.y = 0.95;
       centerDisc.castShadow = true;
       lid.add(centerDisc);
 
-      // Single Recessed Center Handle Bar
-      const handleBar = new THREE.Mesh(
-        new THREE.BoxGeometry(7.0, 0.5, 1.4),
-        new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3 })
-      );
-      handleBar.position.y = 1.05;
-      lid.add(handleBar);
+      // Full-Sized 10W USB Solar Panel Array (when enabled)
+      if (studioState.showSolar) {
+        const solarMat = new THREE.MeshStandardMaterial({
+          map: generateSolarTexture(),
+          roughness: 0.18,
+          metalness: 0.35
+        });
+        const solarDisc = new THREE.Mesh(
+          new THREE.CylinderGeometry(7.9, 7.9, 0.34, 48),
+          solarMat
+        );
+        solarDisc.position.y = 0.98;
+        solarDisc.castShadow = true;
+        lid.add(solarDisc);
+
+        // Anodized Aluminum Bezel Frame around Solar Panel
+        const bezelRing = new THREE.Mesh(
+          new THREE.TorusGeometry(7.9, 0.24, 12, 48),
+          new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.35, metalness: 0.7 })
+        );
+        bezelRing.rotation.x = Math.PI / 2;
+        bezelRing.position.y = 1.05;
+        lid.add(bezelRing);
+      }
 
       return lid;
     }
@@ -1611,6 +1665,28 @@
         buildFullStack();
       });
     });
+
+    // Hardware Toggles (Spigot & 10W Solar Lid)
+    const btnToggleSpigot = document.getElementById('btn-toggle-spigot');
+    const btnToggleSolar = document.getElementById('btn-toggle-solar');
+
+    if (btnToggleSpigot) {
+      btnToggleSpigot.addEventListener('click', () => {
+        studioState.showSpigot = !studioState.showSpigot;
+        btnToggleSpigot.classList.toggle('active', studioState.showSpigot);
+        btnToggleSpigot.textContent = studioState.showSpigot ? '✓ Fast-Flow Water Spigot' : 'Fast-Flow Water Spigot';
+        buildFullStack();
+      });
+    }
+
+    if (btnToggleSolar) {
+      btnToggleSolar.addEventListener('click', () => {
+        studioState.showSolar = !studioState.showSolar;
+        btnToggleSolar.classList.toggle('active', studioState.showSolar);
+        btnToggleSolar.textContent = studioState.showSolar ? '✓ 10W USB Solar Lid' : '10W USB Solar Lid';
+        buildFullStack();
+      });
+    }
 
     // 7. Laser Engraving Input Listeners
     const inputLine1 = document.getElementById('engrave-line1');
