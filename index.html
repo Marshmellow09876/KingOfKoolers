@@ -2277,6 +2277,168 @@
       cursor: not-allowed;
     }
 
+    /* Pizza Vault Section */
+    .pizza-vault-container {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      margin-top: 40px;
+      align-items: start;
+    }
+
+    .pizza-gallery-box {
+      background: rgba(14, 14, 20, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      backdrop-filter: blur(20px);
+    }
+
+    .pizza-main-view {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #000;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    .pizza-main-view img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.4s var(--ease-apple);
+    }
+
+    .pizza-main-view:hover img {
+      transform: scale(1.02);
+    }
+
+    .pizza-badge-overlay {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pizza-tag {
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      backdrop-filter: blur(10px);
+    }
+
+    .pizza-thumbs-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .pizza-thumb-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-sm);
+      padding: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      color: var(--text-secondary);
+    }
+
+    .pizza-thumb-btn img {
+      width: 100%;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .pizza-thumb-btn span {
+      font-size: 10.5px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .pizza-thumb-btn.active,
+    .pizza-thumb-btn:hover {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.12);
+      color: #fff;
+    }
+
+    .pizza-info-box {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pizza-header-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #f87171;
+      margin-bottom: 8px;
+    }
+
+    .pizza-specs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .pizza-spec-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+    }
+
+    .pizza-spec-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .pizza-spec-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fca5a5;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .pizza-spec-sub {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
+    .pizza-action-card {
+      background: rgba(239, 68, 68, 0.06);
+      border: 1px solid rgba(239, 68, 68, 0.28);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+
+    @media (max-width: 960px) {
+      .pizza-vault-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* Height Cards Grid (4 options: 12", 18", 20", 28") */
     .height-options-grid {
       display: grid;
@@ -2500,6 +2662,7 @@
         <li><a href="#specs">Engineering</a></li>
         <li><a href="#prototype">Prototype</a></li>
         <li><a href="#configurator">Configurator</a></li>
+        <li><a href="#pizza-vault">Pizza Vault</a></li>
         <li><a href="#investors">Pitch Deck</a></li>
       </ul>
 
@@ -3529,6 +3692,17 @@
                   <div class="addon-desc">IPX7 waterproof 360-degree acoustic driver module locking to base.</div>
                 </div>
               </div>
+
+              <div class="addon-item" data-addon="pizzaVault" id="addon-pizza-item" tabindex="0" role="checkbox" aria-checked="false">
+                <div class="addon-checkbox" id="addon-pizza-check"></div>
+                <div class="addon-content">
+                  <div class="addon-title">
+                    <span>The Pizza Vault™ 22" Canvas Insert (12" Tier)</span>
+                    <span style="color: var(--accent-cyan);">$49 Upgrade · Hot & Cold</span>
+                  </div>
+                  <div class="addon-desc">Heavy-duty red & black thermal canvas. Reduces 24" chamber to 22" usable space to transport 20"+ giant pizzas, BBQ, or hot catering.</div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -3566,7 +3740,110 @@
   </section>
 
   <!-- ==========================================================================
-       SECTION 7: INVESTOR & INVENTOR PITCH DECK
+       SECTION 6.5: THE PIZZA VAULT™ THERMAL CANVAS INSERT SPOTLIGHT
+       ========================================================================== -->
+  <section class="section scroll-reveal" id="pizza-vault">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="eyebrow">
+          <span class="eyebrow-pill" style="border-color: rgba(239, 68, 68, 0.4); color: #f87171; background: rgba(239, 68, 68, 0.08);">
+            OPTIONAL THERMAL ACCESSORY · TAILORED FOR THE 12-INCH TIER
+          </span>
+        </div>
+        <h2 class="headline-large">
+          The Pizza Vault™.<br>
+          <span style="background: linear-gradient(180deg, #f87171 0%, #ef4444 50%, #b91c1c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Piping Hot Pizza. Anywhere on Earth.
+          </span>
+        </h2>
+        <p class="subheadline subheadline-center">
+          Engineered specifically for the 12-inch King of Koolers module. The custom red and black insulated canvas insert brings the internal diameter from 24 inches down to <strong>22 inches of heavy-duty usable space</strong>—engineered to hold extra-large 20-inch family pizzas, catering trays, or campfire barbecue above 165°F for hours, or sub-zero chilled on demand.
+        </p>
+      </div>
+
+      <!-- Pizza Vault Showcase Card -->
+      <div class="pizza-vault-container">
+        <!-- Left: Interactive Gallery Viewport -->
+        <div class="pizza-gallery-box">
+          <div class="pizza-main-view">
+            <img id="pizza-display-img" src="./assets/images/pizza_vault_hero.jpg" alt="The Pizza Vault Insulated Red and Black Canvas Insert with Steaming 20-Inch Pizza inside the 12-inch King of Koolers" width="1376" height="768">
+            <div class="pizza-badge-overlay">
+              <span class="pizza-tag">22.0" Usable Interior Space</span>
+              <span class="pizza-tag" style="background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.5); color: #fca5a5;">165°F+ Heat Retention</span>
+            </div>
+          </div>
+
+          <!-- 3-Thumbnails Switcher -->
+          <div class="pizza-thumbs-row">
+            <button type="button" class="pizza-thumb-btn active" data-img="./assets/images/pizza_vault_hero.jpg" data-alt="Fresh 20-inch artisanal pizza inside red and black canvas insert in 12-inch King of Koolers">
+              <img src="./assets/images/pizza_vault_hero.jpg" alt="Hero View" loading="lazy">
+              <span>Fresh 20" Pizza in 12" Module</span>
+            </button>
+            <button type="button" class="pizza-thumb-btn" data-img="./assets/images/pizza_vault_showcase.jpg" data-alt="Technical insert pull-out view with stacked pizza boxes and 12-inch cooler">
+              <img src="./assets/images/pizza_vault_showcase.jpg" alt="Technical Showcase" loading="lazy">
+              <span>Dual Bag & 12" Cooler Showcase</span>
+            </button>
+            <button type="button" class="pizza-thumb-btn" data-img="./assets/images/pizza_vault_lifestyle.jpg" data-alt="Tailgate sunset pizza party scene near mountain lake">
+              <img src="./assets/images/pizza_vault_lifestyle.jpg" alt="Tailgate Lifestyle" loading="lazy">
+              <span>Tailgate Campsite Feast</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Technical Rationale & Action Card -->
+        <div class="pizza-info-box">
+          <div class="pizza-header-badge">
+            <span>ACCESSORY MODEL: PV-22-CANVAS</span>
+            <span style="color: var(--accent-cyan);">$49 Upgrade</span>
+          </div>
+
+          <h3 class="headline-medium" style="font-size: 24px; margin-bottom: 12px;">The 22" Pizza & Hot Food Architecture</h3>
+          <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
+            Standard box coolers cannot fit full-size pizzas flat without tilting, creating greasy slides and cold cardboard. The Pizza Vault™ transforms the 12-inch King of Koolers tier into an elite commercial food delivery chamber with dual-temp versatility.
+          </p>
+
+          <div class="pizza-specs-grid">
+            <div class="pizza-spec-card">
+              <div class="pizza-spec-val">22.0 Inches</div>
+              <div class="pizza-spec-label">Usable Interior Diameter</div>
+              <div class="pizza-spec-sub">Fits up to 20" giant pizzas or 3 stacked boxes</div>
+            </div>
+            <div class="pizza-spec-card">
+              <div class="pizza-spec-val">1000D Canvas</div>
+              <div class="pizza-spec-label">Heavy-Duty Thermal Shell</div>
+              <div class="pizza-spec-sub">Ballistic red/black fabric with nylon web straps</div>
+            </div>
+            <div class="pizza-spec-card">
+              <div class="pizza-spec-val">165°F+ / 4+ Hrs</div>
+              <div class="pizza-spec-label">Thermal Heat Lock</div>
+              <div class="pizza-spec-sub">Closed-cell EPE foam + radiant reflective lining</div>
+            </div>
+            <div class="pizza-spec-card">
+              <div class="pizza-spec-val">Crisp-Vent™</div>
+              <div class="pizza-spec-label">Steam-Release System</div>
+              <div class="pizza-spec-sub">Vents moisture to keep crust crunchy, never soggy</div>
+            </div>
+          </div>
+
+          <div class="pizza-action-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <div>
+                <div style="font-weight: 700; color: #fff; font-size: 15px;">The Pizza Vault™ Canvas Insert</div>
+                <div style="font-size: 12px; color: var(--text-muted);">Compatible with all 12" King of Koolers modules</div>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--accent-cyan);">$49.00</div>
+            </div>
+            <button type="button" class="btn btn-cyan btn-sm" id="btn-toggle-pizza-vault" style="width: 100%; justify-content: center; padding: 12px 20px;">
+              + Add Pizza Vault Insert to My Build
+            </button>
+            <div id="pizza-vault-status-msg" style="font-size: 11.5px; text-align: center; color: var(--text-dim); margin-top: 8px;">
+              Click to include this accessory in your reservation line-item summary
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
        ========================================================================== */ -->
   <section class="section scroll-reveal" id="investors">
     <div class="container">
@@ -4324,7 +4601,8 @@
           spigot: true,
           dolly: true,
           halo: false,
-          audio: false
+          audio: false,
+          pizzaVault: false
         }
       };
 
@@ -4686,6 +4964,36 @@
         // Sync Spigot Addon Card
         syncSpigotAddonCard();
 
+        // Sync Pizza Vault Addon Card & Section 6.5 Button
+        const pizzaItem = document.querySelector('.addon-item[data-addon="pizzaVault"]');
+        if (pizzaItem) {
+          const isPizzaChecked = stackState.addons.pizzaVault;
+          pizzaItem.classList.toggle('selected', isPizzaChecked);
+          pizzaItem.setAttribute('aria-checked', isPizzaChecked ? 'true' : 'false');
+          const chk = pizzaItem.querySelector('.addon-checkbox');
+          if (chk) chk.textContent = isPizzaChecked ? '✓' : '';
+        }
+
+        const btnTogglePizza = document.getElementById('btn-toggle-pizza-vault');
+        const pizzaStatusMsg = document.getElementById('pizza-vault-status-msg');
+        if (btnTogglePizza) {
+          if (stackState.addons.pizzaVault) {
+            btnTogglePizza.textContent = '✓ Pizza Vault Added to Build (Click to Remove)';
+            btnTogglePizza.style.background = '#10b981';
+            btnTogglePizza.style.color = '#fff';
+            if (pizzaStatusMsg) {
+              pizzaStatusMsg.innerHTML = '<span style="color: #34d399; font-weight: 600;">✓ Included in your current reservation build summary!</span>';
+            }
+          } else {
+            btnTogglePizza.textContent = '+ Add Pizza Vault Insert to My Build (+$49.00)';
+            btnTogglePizza.style.background = '';
+            btnTogglePizza.style.color = '';
+            if (pizzaStatusMsg) {
+              pizzaStatusMsg.textContent = 'Click to include this accessory in your reservation line-item summary';
+            }
+          }
+        }
+
         // Update Live Badges
         if (stageHeight) stageHeight.textContent = totalH.toFixed(1) + '"';
         if (stageDiameter) stageDiameter.textContent = '24.0"';
@@ -4750,6 +5058,9 @@
           }
           if (stackState.addons.audio) {
             rows.push({ name: 'Hi-Fi Spatial Bluetooth Sound Base (IPX7)', val: '+$99.00' });
+          }
+          if (stackState.addons.pizzaVault) {
+            rows.push({ name: 'The Pizza Vault™ 22" Insulated Canvas Insert (12" Tier)', val: '+$49.00' });
           }
 
           rows.forEach(r => {
@@ -5039,6 +5350,32 @@
       // Initialize Configurator
       updateConfiguratorUI();
 
+      // Pizza Vault Section 6.5 Interactive Listeners
+      const btnTogglePizza = document.getElementById('btn-toggle-pizza-vault');
+      if (btnTogglePizza) {
+        btnTogglePizza.addEventListener('click', () => {
+          stackState.addons.pizzaVault = !stackState.addons.pizzaVault;
+          updateConfiguratorUI();
+        });
+      }
+
+      const pizzaDisplayImg = document.getElementById('pizza-display-img');
+      const pizzaThumbBtns = document.querySelectorAll('.pizza-thumb-btn');
+      pizzaThumbBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          pizzaThumbBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          if (pizzaDisplayImg) {
+            pizzaDisplayImg.style.opacity = '0.3';
+            setTimeout(() => {
+              pizzaDisplayImg.src = btn.dataset.img;
+              pizzaDisplayImg.alt = btn.dataset.alt;
+              pizzaDisplayImg.style.opacity = '1';
+            }, 140);
+          }
+        });
+      });
+
       /* ------------------------------------------------------------------------
          7. NATIVE RESERVATION MODAL DIALOG & SUMMARY PREFILL
          ------------------------------------------------------------------------ */
@@ -5063,7 +5400,12 @@
             modalConfigSummary.textContent = customTitle;
           } else {
             const tiersDesc = stackState.tiers.map(t => `${t.height}" ${colorData[t.color]?.name}`).join(' + ');
-            modalConfigSummary.textContent = `Custom ${stackState.tiers.length}-Tier Build (${totalH.toFixed(1)}" · ${totalCans} Cans): ${tiersDesc} with 10W Solar Lid & Spigot`;
+            let summaryText = `Custom ${stackState.tiers.length}-Tier Build (${totalH.toFixed(1)}" · ${totalCans} Cans): ${tiersDesc}`;
+            if (stackState.addons.solarLid) summaryText += ' + 10W Solar Lid';
+            const baseTier = stackState.tiers[0];
+            if (baseTier && (baseTier.height === 20 || baseTier.height === 28) && stackState.addons.spigot) summaryText += ' + Water Bib';
+            if (stackState.addons.pizzaVault) summaryText += ' + Pizza Vault (22" Insert)';
+            modalConfigSummary.textContent = summaryText;
           }
         }
 
