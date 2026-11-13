@@ -1,6 +1,9 @@
 # Ignore large zip packages (GitHub limits files to 100MB)
 *.zip
 
+# Helper scripts
+*.bat
+
 # Python caches
 __pycache__/
 *.py[cod]
