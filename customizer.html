@@ -1325,20 +1325,22 @@
       rimMesh.position.y = height / 2;
       tierGroup.add(rimMesh);
 
-      // Molded Loop Handles on Left and Right
+      // Molded Loop Handles on Left and Right (flat horizontal orientation sticking out radially)
       const handleGeo = new THREE.TorusGeometry(2.4, 0.55, 12, 24, Math.PI);
       
       const leftHandle = new THREE.Mesh(handleGeo, material);
-      leftHandle.rotation.z = Math.PI / 2;
-      leftHandle.rotation.y = Math.PI / 2;
-      leftHandle.position.set(-RADIUS_OUTER - 0.2, height * 0.25, 0);
+      leftHandle.rotation.order = 'YXZ';
+      leftHandle.rotation.x = Math.PI / 2;
+      leftHandle.rotation.y = -Math.PI / 2;
+      leftHandle.position.set(-RADIUS_OUTER + 0.35, height * 0.25, 0);
       leftHandle.castShadow = true;
       tierGroup.add(leftHandle);
 
       const rightHandle = new THREE.Mesh(handleGeo, material);
-      rightHandle.rotation.z = -Math.PI / 2;
-      rightHandle.rotation.y = -Math.PI / 2;
-      rightHandle.position.set(RADIUS_OUTER + 0.2, height * 0.25, 0);
+      rightHandle.rotation.order = 'YXZ';
+      rightHandle.rotation.x = Math.PI / 2;
+      rightHandle.rotation.y = Math.PI / 2;
+      rightHandle.position.set(RADIUS_OUTER - 0.35, height * 0.25, 0);
       rightHandle.castShadow = true;
       tierGroup.add(rightHandle);
 
