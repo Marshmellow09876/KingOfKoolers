@@ -545,10 +545,15 @@
        ========================================================================== */
     .scroll-stack-runway {
       position: relative;
-      height: 220vh;
+      height: 130vh;
       background: radial-gradient(circle at 50% 25%, #0b1122 0%, #030508 80%);
       border-top: 1px solid rgba(255, 255, 255, 0.06);
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 0;
+    }
+
+    #thermodynamics {
+      padding-top: clamp(28px, 4vw, 54px);
     }
 
     .scroll-stack-sticky {
@@ -4981,16 +4986,14 @@
         }
       }
 
-      // Early trigger calculation
+      // Early trigger calculation calibrated for seamless section transition
       function calcStackScrollProgress() {
         if (!stackRunway) return 0;
         const rect = stackRunway.getBoundingClientRect();
-        // Start triggering as soon as the top enters 75% down the viewport (early trigger)
-        const triggerStart = window.innerHeight * 0.75;
-        const triggerEnd = - (stackRunway.offsetHeight - window.innerHeight);
-        const totalDistance = triggerStart - triggerEnd;
-        if (totalDistance <= 0) return 0;
-
+        // Start triggering as soon as top enters 70% of viewport
+        const triggerStart = window.innerHeight * 0.70;
+        const maxScroll = Math.max(1, stackRunway.offsetHeight - window.innerHeight);
+        const totalDistance = triggerStart + maxScroll;
         const currentDist = triggerStart - rect.top;
         const p = Math.max(0, Math.min(1, currentDist / totalDistance));
         return p;
