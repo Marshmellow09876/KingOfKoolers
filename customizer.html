@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>King of Koolers | 3D Interactive Studio & Digital Lab</title>
+  <meta name="description" content="Experience the 24-inch King of Koolers in full interactive 3D. Explode tiers to look inside, customize rotomolded colors and hydro-dips, simulate laser engraving, calculate ice-to-can trip capacity, and monitor live payload weight ergonomics.">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Local Three.js and OrbitControls with CDN fallback -->
+  <script src="./assets/js/three.min.js"></script>
+  <script>
+    if (typeof THREE === 'undefined') {
+      document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');
+    }
+  </script>
+  <script src="./assets/js/OrbitControls.js"></script>
+  <script>
+    if (typeof THREE.OrbitControls === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>');
+    }
+  </script>
+
+  <style>
+    /* ==========================================================================
+       CSS RESET & VARIABLES (OBSIDIAN DARK STUDIO THEME)
+       ========================================================================== */
+    :root {
+      --bg-primary: #04060a;
+      --bg-secondary: #0a0e17;
+      --bg-surface: #101624;
+      --bg-card: rgba(18, 25, 40, 0.75);
+      --bg-card-hover: rgba(28, 38, 60, 0.9);
+      --border-subtle: rgba(255, 255, 255, 0.09);
+      --border-cyan: rgba(0, 240, 255, 0.4);
+      --border-cyan-glow: rgba(0, 240, 255, 0.7);
+      --accent-cyan: #00f0ff;
+      --accent-blue: #1e4bd7;
+      --accent-red: #e1232d;
+      --accent-green: #10b981;
+      --accent-orange: #f59e0b;
+      --text-primary: #ffffff;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      --font-mono: "SF Mono", "Fira Code", Consolas, monospace;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    input, select, textarea {
+      font-family: inherit;
+    }
+
+    /* ==========================================================================
+       STICKY NAVBAR
+       ========================================================================== */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(4, 6, 10, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-container {
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--accent-cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: var(--transition);
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .nav-links a.active {
+      color: var(--accent-cyan);
+      font-weight: 600;
+      position: relative;
+    }
+
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .nav-badge-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: var(--radius-full);
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid var(--border-cyan);
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ==========================================================================
+       STUDIO WORKSPACE LAYOUT (SPLIT SCREEN)
+       ========================================================================== */
+    .studio-workspace {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 60px);
+      min-height: 700px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Left 3D Viewport */
+    .viewport-container {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at 50% 40%, #0d1524 0%, #04060a 80%);
+      overflow: hidden;
+      cursor: grab;
+    }
+
+    .viewport-container:active {
+      cursor: grabbing;
+    }
+
+    #webgl-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Viewport Floating HUD & Tools */
+    .viewport-hud-top {
+      position: absolute;
+      top: 18px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .hud-title-box {
+      background: rgba(10, 16, 28, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 8px 16px;
+      pointer-events: auto;
+    }
+
+    .hud-kpi-row {
+      display: flex;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .hud-kpi {
+      color: var(--text-muted);
+    }
+
+    .hud-kpi strong {
+      color: var(--accent-cyan);
+    }
+
+    .hud-view-presets {
+      display: flex;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .hud-btn {
+      padding: 6px 12px;
+      background: rgba(10, 16, 28, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hud-btn:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+
+    .hud-btn.active {
+      background: var(--accent-cyan);
+      color: #000;
+      border-color: var(--accent-cyan);
+    }
+
+    /* Floating Bottom Exploder Controls */
+    .viewport-hud-bottom {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 16, 28, 0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-cyan);
+      border-radius: var(--radius-full);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 240, 255, 0.15);
+    }
+
+    .exploder-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .exploder-slider {
+      -webkit-appearance: none;
+      width: 180px;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      outline: none;
+    }
+
+    .exploder-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .btn-toggle-explode {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(0, 240, 255, 0.15);
+      border: 1px solid var(--border-cyan);
+      color: var(--accent-cyan);
+      font-size: 12px;
+      font-weight: 700;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-toggle-explode:hover {
+      background: var(--accent-cyan);
+      color: #000;
+    }
+
+    /* ==========================================================================
+       RIGHT CONTROL CONSOLE (TABBED STUDIO)
+       ========================================================================== */
+    .studio-console {
+      width: 480px;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 20;
+    }
+
+    /* Tab Header Navigation */
+    .console-tab-bar {
+      display: flex;
+      background: #080c14;
+      border-bottom: 1px solid var(--border-subtle);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .console-tab-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .console-tab-btn {
+      flex: 1;
+      min-width: 90px;
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .console-tab-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .console-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .console-tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.04);
+    }
+
+    /* Console Content Panels */
+    .console-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .tool-panel {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .tool-panel.active {
+      display: flex;
+    }
+
+    .panel-header h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .panel-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Form & Control Groups */
+    .control-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-label {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Preset Buttons Grid */
+    .pill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .pill-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .preset-chip {
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-align: center;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .preset-chip:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .preset-chip.active {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .swatch-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Color Swatch Picker */
+    .color-swatch-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .color-swatch-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .color-swatch-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .color-swatch-btn.active {
+      border-color: #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Text & Logo Engraver */
+    .engrave-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: #080c14;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .engrave-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+
+    /* Capacity Calculator Sliders */
+    .calc-slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .range-input {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      outline: none;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      cursor: pointer;
+    }
+
+    /* Weight Meter & Ergonomics Gauge */
+    .weight-gauge-container {
+      background: #080c14;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .weight-meter-bar {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .weight-meter-fill {
+      height: 100%;
+      width: 45%;
+      background: linear-gradient(90deg, #10b981 0%, #f59e0b 60%, #ef4444 100%);
+      border-radius: 5px;
+      transition: width 0.3s ease;
+    }
+
+    .ergo-alert-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .ergo-green {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+
+    .ergo-yellow {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+    }
+
+    .ergo-red {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+
+    /* Console Sticky Checkout Footer */
+    .console-footer {
+      padding: 18px 24px;
+      background: #080c14;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .footer-total-price {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .btn-apply-checkout {
+      width: 100%;
+      padding: 12px 20px;
+      border-radius: var(--radius-full);
+      background: var(--accent-cyan);
+      color: #000;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .btn-apply-checkout:hover {
+      background: #38bdf8;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 1024px) {
+      .studio-workspace {
+        flex-direction: column;
+        height: auto;
+      }
+      .viewport-container {
+        height: 520px;
+        flex: none;
+      }
+      .studio-console {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       NAVBAR
+       ========================================================================== -->
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <a href="./index.html#overview" class="nav-logo" aria-label="King of Koolers Home">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
+        </svg>
+        <span>King of Koolers</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="./index.html#overview">Overview</a></li>
+        <li><a href="./index.html#stack-and-sit">Twist &amp; Lock</a></li>
+        <li><a href="./index.html#thermodynamics">Thermodynamics</a></li>
+        <li><a href="./index.html#modular-stack">Modular Stack</a></li>
+        <li><a href="./index.html#specs">Engineering</a></li>
+        <li><a href="./index.html#configurator">Configurator</a></li>
+        <li><a href="./index.html#pizza-vault">Pizza Vault</a></li>
+        <li><a href="./accessories.html">Accessories</a></li>
+        <li><a href="./customizer.html" class="active">3D Studio</a></li>
+        <li><a href="./index.html#investors">Pitch Deck</a></li>
+      </ul>
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span class="nav-badge-pill">3D Studio WebGL</span>
+        <button class="hud-btn" id="btn-snapshot" title="Capture 4K WebGL Snapshot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Capture 3D</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       STUDIO WORKSPACE: 3D VIEWPORT & CONTROL CONSOLE
+       ========================================================================== -->
+  <main class="studio-workspace">
+
+    <!-- 1. Left Viewport (Interactive Three.js 3D Canvas) -->
+    <section class="viewport-container" id="viewport-container" aria-label="3D Cooler Viewport">
+      <canvas id="webgl-canvas"></canvas>
+
+      <!-- Viewport Top HUD -->
+      <div class="viewport-hud-top">
+        <div class="hud-title-box">
+          <div class="hud-kpi-row">
+            <span class="hud-kpi">DIAMETER: <strong>24.0" OD</strong></span>
+            <span class="hud-kpi">HEIGHT: <strong id="hud-height">58.0"</strong></span>
+            <span class="hud-kpi">VOLUME: <strong id="hud-quarts">160 QT</strong></span>
+            <span class="hud-kpi">PAYLOAD: <strong id="hud-weight">84 LBS</strong></span>
+          </div>
+        </div>
+
+        <div class="hud-view-presets">
+          <button class="hud-btn active" data-view="orbit" title="Free 360 Orbit">360° Free</button>
+          <button class="hud-btn" data-view="front" title="Front Elevation">Front</button>
+          <button class="hud-btn" data-view="top" title="Top-Down Interior">Look Inside</button>
+          <button class="hud-btn" data-view="reset" title="Reset Camera">Reset</button>
+        </div>
+      </div>
+
+      <!-- Viewport Bottom HUD: Vertical Exploder Slider -->
+      <div class="viewport-hud-bottom">
+        <div class="exploder-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Explode Tiers</span>
+        </div>
+        <input type="range" class="exploder-slider" id="explode-slider" min="0" max="100" value="0">
+        <button class="btn-toggle-explode" id="btn-toggle-explode">Explode View</button>
+      </div>
+    </section>
+
+    <!-- 2. Right Control Console (Tabbed Powerhouse) -->
+    <aside class="studio-console">
+      <!-- Tabs Navigation -->
+      <div class="console-tab-bar" id="console-tabs">
+        <button class="console-tab-btn active" data-tab="tab-3d">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span>3D Stack</span>
+        </button>
+        <button class="console-tab-btn" data-tab="tab-colors">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12A10 10 0 0 1 12 2z"/></svg>
+          <span>Colors &amp; Wrap</span>
+        </button>
+        <button class="console-tab-btn" data-tab="tab-engrave">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Engraving</span>
+        </button>
+        <button class="console-tab-btn" data-tab="tab-capacity">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          <span>Trip Calc</span>
+        </button>
+        <button class="console-tab-btn" data-tab="tab-weight">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>
+          <span>Ergonomics</span>
+        </button>
+      </div>
+
+      <!-- Tab Panels Content -->
+      <div class="console-body">
+
+        <!-- TAB 1: 3D MODEL EXPLODER & STACK BUILDER -->
+        <div class="tool-panel active" id="tab-3d">
+          <div class="panel-header">
+            <h3>3D Stack Architecture</h3>
+            <p>Customize tier heights, explode layers vertically, or inspect internal chambers.</p>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Stack Preset Configuration</div>
+            <div class="pill-grid">
+              <button class="preset-chip active" data-stack="patriot-58">Patriot RWB (58")</button>
+              <button class="preset-chip" data-stack="titan-72">Titan Max (72")</button>
+              <button class="preset-chip" data-stack="explorer-38">Explorer Duo (38")</button>
+              <button class="preset-chip" data-stack="scout-30">Solo Scout (30")</button>
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Interior Chamber Contents</div>
+            <div class="pill-grid">
+              <button class="preset-chip active" id="btn-toggle-ice">✓ Crystal Ice</button>
+              <button class="preset-chip active" id="btn-toggle-cans">✓ Craft Cans</button>
+              <button class="preset-chip" id="btn-toggle-pizza">Pizza Vault Box</button>
+              <button class="preset-chip active" id="btn-toggle-drain">Center Drain Core</button>
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Base Hardware &amp; Spigot</div>
+            <div class="pill-grid">
+              <button class="preset-chip active" id="btn-toggle-spigot">✓ Fast-Flow Water Spigot</button>
+              <button class="preset-chip active" id="btn-toggle-solar">✓ 10W USB Solar Lid</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: COLOR CUSTOMIZER & HYDRO-DIP WRAP -->
+        <div class="tool-panel" id="tab-colors">
+          <div class="panel-header">
+            <h3>Color &amp; Hydro-Dip Visualizer</h3>
+            <p>Apply official rotomolded finishes or specialty hydro-dip pattern wraps.</p>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Official Patriotic &amp; Expedition Themes</div>
+            <div class="pill-grid">
+              <button class="preset-chip active" data-theme="rwb">
+                <span class="swatch-dot" style="background: #1e4bd7;"></span>
+                Patriot RWB
+              </button>
+              <button class="preset-chip" data-theme="stealth">
+                <span class="swatch-dot" style="background: #181a20;"></span>
+                Stealth Black
+              </button>
+              <button class="preset-chip" data-theme="arctic">
+                <span class="swatch-dot" style="background: #f0f4fa;"></span>
+                Alpine White
+              </button>
+              <button class="preset-chip" data-theme="olive">
+                <span class="swatch-dot" style="background: #3a4b3a;"></span>
+                Tactical Olive
+              </button>
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Hydro-Dip Pattern Wraps</div>
+            <div class="pill-grid">
+              <button class="preset-chip" data-pattern="camo">Multi-Cam Woodland</button>
+              <button class="preset-chip" data-pattern="topo">High-Alpine Topo</button>
+              <button class="preset-chip" data-pattern="flag">USA Stars &amp; Stripes</button>
+              <button class="preset-chip active" data-pattern="none">Matte Rotomold (Solid)</button>
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Custom Base Tier Color</div>
+            <div class="color-swatch-row" id="base-color-swatches">
+              <button class="color-swatch-btn active" style="background: #1e4bd7;" data-color="#1e4bd7" title="Patriot Blue"></button>
+              <button class="color-swatch-btn" style="background: #e1232d;" data-color="#e1232d" title="Patriot Red"></button>
+              <button class="color-swatch-btn" style="background: #f0f4fa;" data-color="#f0f4fa" title="Alpine White"></button>
+              <button class="color-swatch-btn" style="background: #1e222b;" data-color="#1e222b" title="Stealth Charcoal"></button>
+              <button class="color-swatch-btn" style="background: #3a4b3a;" data-color="#3a4b3a" title="Tactical Olive"></button>
+              <button class="color-swatch-btn" style="background: #f45b24;" data-color="#f45b24" title="Blaze Orange"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: LASER-ENGRAVED PERSONALIZATION -->
+        <div class="tool-panel" id="tab-engrave">
+          <div class="panel-header">
+            <h3>Laser Engraving Mockup</h3>
+            <p>Render your family crest, business logo, or boat name onto the bamboo lid or rotomolded body.</p>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Engraving Surface Placement</div>
+            <div class="pill-grid">
+              <button class="preset-chip active" data-engrave-loc="lid">Bamboo Center Disc</button>
+              <button class="preset-chip" data-engrave-loc="body">Front Wall Rotomold</button>
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Primary Inscription (Line 1)</div>
+            <input type="text" class="engrave-input" id="engrave-line1" value="THE MARSHALL FAMILY" maxlength="28" placeholder="e.g. THE SMITH FAMILY">
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Secondary Tagline (Line 2)</div>
+            <input type="text" class="engrave-input" id="engrave-line2" value="EST. 2026 · OVERLAND EDITION" maxlength="32" placeholder="e.g. LAKE TAHOE CABIN">
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Insignia / Graphic Crest</div>
+            <div class="pill-grid">
+              <button class="preset-chip active" data-crest="crown">King's Crown</button>
+              <button class="preset-chip" data-crest="flag">USA Flag</button>
+              <button class="preset-chip" data-crest="mountains">Mountains</button>
+              <button class="preset-chip" data-crest="compass">Compass Rose</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: COOLER CAPACITY & ICE CALCULATOR -->
+        <div class="tool-panel" id="tab-capacity">
+          <div class="panel-header">
+            <h3>Trip Capacity &amp; Ice Calculator</h3>
+            <p>Input your party size and trip length to generate the optimal modular tier stack.</p>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">
+              <span>Party Size</span>
+              <span id="calc-party-val" style="color: var(--accent-cyan); font-weight: 700;">4 Adults</span>
+            </div>
+            <input type="range" class="range-input" id="calc-party-range" min="1" max="16" value="4">
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">
+              <span>Trip Duration</span>
+              <span id="calc-days-val" style="color: var(--accent-cyan); font-weight: 700;">3 Days</span>
+            </div>
+            <input type="range" class="range-input" id="calc-days-range" min="1" max="10" value="3">
+          </div>
+
+          <div class="control-card" style="background: rgba(0, 240, 255, 0.05); border-color: var(--border-cyan);">
+            <div class="control-label" style="color: var(--accent-cyan);">Calculated Requirements</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Beverage Payload:</span>
+                <strong id="calc-cans-result" style="color: #fff;">48 Cans / Bottles</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Recommended Ice Ratio (2:1):</span>
+                <strong id="calc-ice-result" style="color: #fff;">38 LBS Crushed Ice</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Guaranteed Cold Hold:</span>
+                <strong style="color: var(--accent-green);">10 Days (95°F Ambient)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+                <span style="color: var(--text-muted);">Recommended Stack:</span>
+                <strong id="calc-stack-result" style="color: var(--accent-cyan);">3-Tier Patriot (58")</strong>
+              </div>
+            </div>
+            <button class="btn-apply-checkout" id="btn-apply-calc" style="margin-top: 10px; font-size: 12.5px; padding: 10px 14px;">
+              Apply Recommendation to 3D Viewer
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 5: WEIGHT & ERGONOMICS GAUGE -->
+        <div class="tool-panel" id="tab-weight">
+          <div class="panel-header">
+            <h3>Payload Weight &amp; Ergonomics</h3>
+            <p>Real-time calculation of dry vs. loaded weight with OSHA two-person lift warnings.</p>
+          </div>
+
+          <div class="weight-gauge-container">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <div>
+                <div style="font-size: 12px; color: var(--text-muted); font-family: var(--font-mono);">GROSS LOADED WEIGHT</div>
+                <div style="font-size: 32px; font-weight: 800; color: #fff; font-family: var(--font-mono);" id="gauge-gross-lbs">84 LBS</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 12px; color: var(--text-muted); font-family: var(--font-mono);">METRIC EQUIV</div>
+                <div style="font-size: 18px; font-weight: 700; color: var(--text-secondary); font-family: var(--font-mono);" id="gauge-gross-kg">38.1 KG</div>
+              </div>
+            </div>
+
+            <div class="weight-meter-bar">
+              <div class="weight-meter-fill" id="gauge-meter-fill"></div>
+            </div>
+
+            <div id="ergo-alert-box" class="ergo-alert-badge ergo-yellow">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span id="ergo-alert-text">Two-Person Team Lift Required (45 - 110 lbs). Use molded side loop handles.</span>
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Weight Composition Breakdown</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Dry Stack Weight (3 Tiers + Lid):</span>
+                <strong id="breakdown-dry">46 lbs</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Ice Weight (Melting Core):</span>
+                <strong id="breakdown-ice">24 lbs</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Beverages &amp; Provisions:</span>
+                <strong id="breakdown-cans">14 lbs</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+                <span style="color: var(--text-muted);">Center of Gravity (CoG):</span>
+                <strong style="color: var(--accent-green);">Low &amp; Concentric (Very Stable)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sticky Console Action Bar -->
+      <div class="console-footer">
+        <div class="footer-summary-row">
+          <span>Configured Stack Value</span>
+          <div class="footer-total-price" id="console-total-price">$389.00</div>
+        </div>
+        <a href="./index.html#configurator" class="btn-apply-checkout" id="btn-save-reservation">
+          <span>Apply to Dream Cooler Reservation &rarr;</span>
+        </a>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- ==========================================================================
+       THREE.JS 3D ENGINE & STUDIO LOGIC
+       ========================================================================== */ -->
+  <script>
+    // Global State
+    const studioState = {
+      stackType: 'patriot-58',
+      explodeProgress: 0,
+      theme: 'rwb',
+      pattern: 'none',
+      baseColor: '#1e4bd7',
+      midColor: '#f0f4fa',
+      topColor: '#e1232d',
+      lidColor: '#e1232d',
+      showIce: true,
+      showCans: true,
+      showPizza: false,
+      showDrain: true,
+      showSpigot: true,
+      showSolar: true,
+      engraveLocation: 'lid',
+      engraveLine1: 'THE MARSHALL FAMILY',
+      engraveLine2: 'EST. 2026 · OVERLAND EDITION',
+      crest: 'crown',
+      partySize: 4,
+      tripDays: 3,
+      cansCount: 48,
+      iceLbs: 38
+    };
+
+    // DOM Setup
+    const container = document.getElementById('viewport-container');
+    const canvas = document.getElementById('webgl-canvas');
+    const explodeSlider = document.getElementById('explode-slider');
+    const btnToggleExplode = document.getElementById('btn-toggle-explode');
+
+    // 1. Three.js Scene Setup
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x060910);
+    scene.fog = new THREE.FogExp2(0x060910, 0.012);
+
+    const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.set(38, 28, 55);
+
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, preserveDrawingBuffer: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.maxPolarAngle = Math.PI / 2 + 0.05; // don't go below ground
+    controls.minDistance = 20;
+    controls.maxDistance = 140;
+    controls.target.set(0, 16, 0);
+
+    // Studio Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    keyLight.position.set(45, 60, 40);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.width = 2048;
+    keyLight.shadow.mapSize.height = 2048;
+    scene.add(keyLight);
+
+    const cyanFillLight = new THREE.DirectionalLight(0x00f0ff, 0.7);
+    cyanFillLight.position.set(-45, 30, -30);
+    scene.add(cyanFillLight);
+
+    const rimLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    rimLight.position.set(0, 50, -50);
+    scene.add(rimLight);
+
+    // Reflective Floor Plane
+    const floorGeo = new THREE.PlaneGeometry(300, 300);
+    const floorMat = new THREE.MeshStandardMaterial({
+      color: 0x05070d,
+      roughness: 0.35,
+      metalness: 0.6
+    });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -0.05;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    // Subtle Grid Helper
+    const gridHelper = new THREE.GridHelper(120, 40, 0x00f0ff, 0x141f33);
+    gridHelper.position.y = 0.01;
+    scene.add(gridHelper);
+
+    // Procedural Dynamic Textures (Canvas Textures)
+    function generateEngraveTexture(loc) {
+      const cvs = document.createElement('canvas');
+      cvs.width = 1024;
+      cvs.height = 1024;
+      const ctx = cvs.getContext('2d');
+
+      if (loc === 'lid') {
+        // Bamboo woodgrain
+        ctx.fillStyle = '#b08b59';
+        ctx.fillRect(0, 0, 1024, 1024);
+        // wood rings
+        ctx.strokeStyle = 'rgba(120, 80, 40, 0.15)';
+        for (let i = 0; i < 40; i++) {
+          ctx.beginPath();
+          ctx.arc(512, 512, 20 + i * 25, 0, Math.PI * 2);
+          ctx.lineWidth = 4 + (i % 3);
+          ctx.stroke();
+        }
+      } else {
+        ctx.fillStyle = studioState.baseColor;
+        ctx.fillRect(0, 0, 1024, 1024);
+      }
+
+      // Engraving text & emblem
+      ctx.fillStyle = loc === 'lid' ? 'rgba(50, 30, 15, 0.88)' : 'rgba(255, 255, 255, 0.9)';
+      ctx.textAlign = 'center';
+
+      // Draw Crest
+      if (studioState.crest === 'crown') {
+        ctx.font = 'bold 90px serif';
+        ctx.fillText('♛', 512, 420);
+      } else if (studioState.crest === 'flag') {
+        ctx.font = 'bold 80px sans-serif';
+        ctx.fillText('★ ★ ★', 512, 420);
+      } else if (studioState.crest === 'mountains') {
+        ctx.font = 'bold 85px sans-serif';
+        ctx.fillText('▲▲▲', 512, 420);
+      } else {
+        ctx.font = 'bold 85px serif';
+        ctx.fillText('❖', 512, 420);
+      }
+
+      // Inscription Line 1
+      ctx.font = 'bold 44px "SF Pro Display", sans-serif';
+      ctx.fillText(studioState.engraveLine1, 512, 530);
+
+      // Inscription Line 2
+      ctx.font = '600 24px "SF Mono", monospace';
+      ctx.fillText(studioState.engraveLine2, 512, 580);
+
+      const texture = new THREE.CanvasTexture(cvs);
+      return texture;
+    }
+
+    // Hydro-Dip Procedural Patterns
+    function generatePatternTexture(type) {
+      if (type === 'none') return null;
+
+      const cvs = document.createElement('canvas');
+      cvs.width = 1024;
+      cvs.height = 1024;
+      const ctx = cvs.getContext('2d');
+
+      if (type === 'camo') {
+        // Multi-cam
+        ctx.fillStyle = '#4b5320';
+        ctx.fillRect(0, 0, 1024, 1024);
+        const colors = ['#78866b', '#2e3b23', '#8b5a2b', '#1a1d16'];
+        for (let i = 0; i < 70; i++) {
+          ctx.fillStyle = colors[i % colors.length];
+          ctx.beginPath();
+          ctx.ellipse(Math.random()*1024, Math.random()*1024, 60+Math.random()*90, 30+Math.random()*60, Math.random()*Math.PI, 0, Math.PI*2);
+          ctx.fill();
+        }
+      } else if (type === 'topo') {
+        // Topo map
+        ctx.fillStyle = '#161b22';
+        ctx.fillRect(0, 0, 1024, 1024);
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 2;
+        for (let i = 0; i < 25; i++) {
+          ctx.beginPath();
+          ctx.arc(512 + Math.sin(i)*100, 512 + Math.cos(i)*100, 30 + i * 36, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      } else if (type === 'flag') {
+        // Stars and stripes
+        const stripeH = 1024 / 13;
+        for (let i = 0; i < 13; i++) {
+          ctx.fillStyle = (i % 2 === 0) ? '#e1232d' : '#f0f4fa';
+          ctx.fillRect(0, i * stripeH, 1024, stripeH);
+        }
+        ctx.fillStyle = '#1e4bd7';
+        ctx.fillRect(0, 0, 450, stripeH * 7);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '22px sans-serif';
+        for (let r = 0; r < 5; r++) {
+          for (let c = 0; c < 6; c++) {
+            ctx.fillText('★', 35 + c * 70, 45 + r * 65);
+          }
+        }
+      }
+
+      const texture = new THREE.CanvasTexture(cvs);
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(2, 1);
+      return texture;
+    }
+
+    // 2. Build Procedural 3D Cooler Hierarchy
+    const coolerRoot = new THREE.Group();
+    scene.add(coolerRoot);
+
+    // Groups for explosion animation
+    const baseGroup = new THREE.Group();
+    const midGroup = new THREE.Group();
+    const topGroup = new THREE.Group();
+    const lidGroup = new THREE.Group();
+    coolerRoot.add(baseGroup);
+    coolerRoot.add(midGroup);
+    coolerRoot.add(topGroup);
+    coolerRoot.add(lidGroup);
+
+    // Materials
+    let baseMat, midMat, topMat, collarMat, lidMat, bambooMat;
+
+    function initMaterials() {
+      const patternTex = generatePatternTexture(studioState.pattern);
+
+      baseMat = new THREE.MeshStandardMaterial({
+        color: patternTex ? 0xffffff : new THREE.Color(studioState.baseColor),
+        map: patternTex,
+        roughness: 0.45,
+        metalness: 0.05
+      });
+
+      midMat = new THREE.MeshStandardMaterial({
+        color: patternTex ? 0xffffff : new THREE.Color(studioState.midColor),
+        map: patternTex,
+        roughness: 0.45,
+        metalness: 0.05
+      });
+
+      topMat = new THREE.MeshStandardMaterial({
+        color: patternTex ? 0xffffff : new THREE.Color(studioState.topColor),
+        map: patternTex,
+        roughness: 0.45,
+        metalness: 0.05
+      });
+
+      collarMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(studioState.topColor),
+        roughness: 0.35,
+        metalness: 0.1
+      });
+
+      bambooMat = new THREE.MeshStandardMaterial({
+        map: generateEngraveTexture('lid'),
+        roughness: 0.55
+      });
+
+      lidMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(studioState.lidColor),
+        roughness: 0.45,
+        metalness: 0.05
+      });
+    }
+
+    // Helper: Build a Cylinder Tier with Molded Loop Handles & Cam Lugs
+    const RADIUS_OUTER = 12.0; // 24" OD scaled
+    const WALL_THICK = 1.75;
+    const RADIUS_INNER = RADIUS_OUTER - WALL_THICK;
+
+    function buildCoolerTier(height, material, hasSpigot, hasFoot) {
+      const tierGroup = new THREE.Group();
+
+      // Outer Shell
+      const outerGeo = new THREE.CylinderGeometry(RADIUS_OUTER, RADIUS_OUTER, height, 48);
+      const outerMesh = new THREE.Mesh(outerGeo, material);
+      outerMesh.castShadow = true;
+      outerMesh.receiveShadow = true;
+      tierGroup.add(outerMesh);
+
+      // Hollow Interior Cavity
+      const innerGeo = new THREE.CylinderGeometry(RADIUS_INNER, RADIUS_INNER, height - 1.0, 36);
+      const innerMat = new THREE.MeshStandardMaterial({ color: 0xedf2f7, roughness: 0.3 });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      innerMesh.position.y = 0.5;
+      tierGroup.add(innerMesh);
+
+      // Top Circumferential Collar Rim (45° Bayonet Cam Lugs)
+      const rimGeo = new THREE.TorusGeometry(RADIUS_OUTER, 0.55, 12, 48);
+      const rimMesh = new THREE.Mesh(rimGeo, collarMat);
+      rimMesh.rotation.x = Math.PI / 2;
+      rimMesh.position.y = height / 2;
+      tierGroup.add(rimMesh);
+
+      // Molded Loop Handles on Left and Right
+      const handleGeo = new THREE.TorusGeometry(2.4, 0.55, 12, 24, Math.PI);
+      
+      const leftHandle = new THREE.Mesh(handleGeo, material);
+      leftHandle.rotation.z = Math.PI / 2;
+      leftHandle.rotation.y = Math.PI / 2;
+      leftHandle.position.set(-RADIUS_OUTER - 0.2, height * 0.25, 0);
+      leftHandle.castShadow = true;
+      tierGroup.add(leftHandle);
+
+      const rightHandle = new THREE.Mesh(handleGeo, material);
+      rightHandle.rotation.z = -Math.PI / 2;
+      rightHandle.rotation.y = -Math.PI / 2;
+      rightHandle.position.set(RADIUS_OUTER + 0.2, height * 0.25, 0);
+      rightHandle.castShadow = true;
+      tierGroup.add(rightHandle);
+
+      // Bottom Concentric Indexing Foot
+      if (hasFoot) {
+        const footGeo = new THREE.CylinderGeometry(RADIUS_OUTER - 1.2, RADIUS_OUTER - 1.2, 1.2, 36);
+        const footMesh = new THREE.Mesh(footGeo, material);
+        footMesh.position.y = -height / 2 - 0.6;
+        tierGroup.add(footMesh);
+      }
+
+      // Front Spigot / Water Bib
+      if (hasSpigot) {
+        const spigotGroup = new THREE.Group();
+        const spigotBody = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.8, 0.8, 2.2, 16),
+          new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2, metalness: 0.3 })
+        );
+        spigotBody.rotation.x = Math.PI / 2;
+        spigotGroup.add(spigotBody);
+
+        const valveHandle = new THREE.Mesh(
+          new THREE.BoxGeometry(0.5, 1.6, 0.4),
+          new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.3 })
+        );
+        valveHandle.position.set(0, 0.8, 1.1);
+        spigotGroup.add(valveHandle);
+
+        spigotGroup.position.set(0, -height / 2 + 3.0, RADIUS_OUTER + 0.8);
+        tierGroup.add(spigotGroup);
+      }
+
+      return tierGroup;
+    }
+
+    // Build Flat Recessed Lid with Personalization Center Disc
+    function buildLid() {
+      const lid = new THREE.Group();
+
+      // Outer Recessed Ring
+      const outerDisc = new THREE.Mesh(
+        new THREE.CylinderGeometry(RADIUS_OUTER, RADIUS_OUTER, 1.8, 48),
+        lidMat
+      );
+      outerDisc.castShadow = true;
+      lid.add(outerDisc);
+
+      // Center Personalization / Prep Disc (Bamboo or Solar)
+      const centerDisc = new THREE.Mesh(
+        new THREE.CylinderGeometry(8.5, 8.5, 0.3, 36),
+        bambooMat
+      );
+      centerDisc.position.y = 0.95;
+      centerDisc.castShadow = true;
+      lid.add(centerDisc);
+
+      // Single Recessed Center Handle Bar
+      const handleBar = new THREE.Mesh(
+        new THREE.BoxGeometry(7.0, 0.5, 1.4),
+        new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3 })
+      );
+      handleBar.position.y = 1.05;
+      lid.add(handleBar);
+
+      return lid;
+    }
+
+    // Assemble Full 3D Stack
+    let baseMesh, midMesh, topMesh, lidMesh;
+    let iceMeshGroup, cansMeshGroup;
+
+    function buildFullStack() {
+      // Clear previous children
+      while(baseGroup.children.length > 0) baseGroup.remove(baseGroup.children[0]);
+      while(midGroup.children.length > 0) midGroup.remove(midGroup.children[0]);
+      while(topGroup.children.length > 0) topGroup.remove(topGroup.children[0]);
+      while(lidGroup.children.length > 0) lidGroup.remove(lidGroup.children[0]);
+
+      initMaterials();
+
+      // Tier 1: Bunker Base (28" tall scaled ~ 14 units)
+      const H_BASE = 14;
+      baseMesh = buildCoolerTier(H_BASE, baseMat, studioState.showSpigot, true);
+      baseMesh.position.y = H_BASE / 2;
+      baseGroup.add(baseMesh);
+
+      // Tier 2: Mid Provision (18" tall scaled ~ 9 units)
+      const H_MID = 9;
+      midMesh = buildCoolerTier(H_MID, midMat, false, true);
+      midMesh.position.y = H_BASE + H_MID / 2;
+      midGroup.add(midMesh);
+
+      // Tier 3: Top Vault (12" tall scaled ~ 6 units)
+      const H_TOP = 6;
+      topMesh = buildCoolerTier(H_TOP, topMat, false, true);
+      topMesh.position.y = H_BASE + H_MID + H_TOP / 2;
+      topGroup.add(topMesh);
+
+      // Lid
+      lidMesh = buildLid();
+      lidMesh.position.y = H_BASE + H_MID + H_TOP + 0.9;
+      lidGroup.add(lidMesh);
+
+      // Internal Ice Cubes & Cans
+      iceMeshGroup = new THREE.Group();
+      cansMeshGroup = new THREE.Group();
+
+      if (studioState.showIce) {
+        const iceMat = new THREE.MeshPhysicalMaterial({
+          color: 0xe0f2fe,
+          roughness: 0.1,
+          transmission: 0.85,
+          thickness: 1.5,
+          transparent: true,
+          opacity: 0.85
+        });
+        const iceGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+        for (let i = 0; i < 60; i++) {
+          const cube = new THREE.Mesh(iceGeo, iceMat);
+          const rad = Math.random() * (RADIUS_INNER - 1.5);
+          const ang = Math.random() * Math.PI * 2;
+          cube.position.set(Math.cos(ang) * rad, 3 + Math.random() * 8, Math.sin(ang) * rad);
+          cube.rotation.set(Math.random(), Math.random(), Math.random());
+          iceMeshGroup.add(cube);
+        }
+      }
+      baseGroup.add(iceMeshGroup);
+
+      if (studioState.showCans) {
+        const canMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.8, roughness: 0.2 });
+        const canGeo = new THREE.CylinderGeometry(0.9, 0.9, 2.8, 16);
+        for (let i = 0; i < 18; i++) {
+          const can = new THREE.Mesh(canGeo, canMat);
+          const rad = 2 + Math.random() * (RADIUS_INNER - 3);
+          const ang = (i / 18) * Math.PI * 2;
+          can.position.set(Math.cos(ang) * rad, 6 + (i % 2) * 1.5, Math.sin(ang) * rad);
+          cansMeshGroup.add(can);
+        }
+      }
+      baseGroup.add(cansMeshGroup);
+    }
+
+    // Initial Stack Build
+    buildFullStack();
+
+    // 3. Exploded View Animation & Logic
+    let currentExplosion = 0;
+    let targetExplosion = 0;
+
+    function applyExplosion(val) {
+      targetExplosion = val;
+    }
+
+    explodeSlider.addEventListener('input', (e) => {
+      applyExplosion(parseFloat(e.target.value) / 100);
+    });
+
+    let isExploded = false;
+    btnToggleExplode.addEventListener('click', () => {
+      isExploded = !isExploded;
+      targetExplosion = isExploded ? 1.0 : 0.0;
+      explodeSlider.value = targetExplosion * 100;
+      btnToggleExplode.textContent = isExploded ? 'Assemble Stack' : 'Explode View';
+    });
+
+    // 4. Camera Presets
+    document.querySelectorAll('[data-view]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const view = btn.dataset.view;
+
+        if (view === 'front') {
+          gsapMoveCamera(0, 16, 52, 0, 16, 0);
+        } else if (view === 'top') {
+          gsapMoveCamera(0, 68, 8, 0, 18, 0);
+        } else if (view === 'orbit') {
+          gsapMoveCamera(38, 28, 55, 0, 16, 0);
+        } else if (view === 'reset') {
+          controls.reset();
+          camera.position.set(38, 28, 55);
+          controls.target.set(0, 16, 0);
+        }
+      });
+    });
+
+    function gsapMoveCamera(cx, cy, cz, tx, ty, tz) {
+      const startTime = performance.now();
+      const startPos = camera.position.clone();
+      const startTarget = controls.target.clone();
+      const endPos = new THREE.Vector3(cx, cy, cz);
+      const endTarget = new THREE.Vector3(tx, ty, tz);
+
+      function step(now) {
+        const progress = Math.min((now - startTime) / 600, 1);
+        const ease = 0.5 - Math.cos(progress * Math.PI) / 2; // smooth in-out
+        camera.position.lerpVectors(startPos, endPos, ease);
+        controls.target.lerpVectors(startTarget, endTarget, ease);
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // 5. Console Tabs Logic
+    document.querySelectorAll('.console-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.console-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        const tabId = btn.dataset.tab;
+        const panel = document.getElementById(tabId);
+        if (panel) panel.classList.add('active');
+      });
+    });
+
+    // 6. Theme & Color Swatches Listeners
+    document.querySelectorAll('[data-theme]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-theme]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const t = btn.dataset.theme;
+        studioState.theme = t;
+        studioState.pattern = 'none';
+
+        if (t === 'rwb') {
+          studioState.baseColor = '#1e4bd7';
+          studioState.midColor = '#f0f4fa';
+          studioState.topColor = '#e1232d';
+          studioState.lidColor = '#e1232d';
+        } else if (t === 'stealth') {
+          studioState.baseColor = '#181a20';
+          studioState.midColor = '#242a38';
+          studioState.topColor = '#181a20';
+          studioState.lidColor = '#181a20';
+        } else if (t === 'arctic') {
+          studioState.baseColor = '#f0f4fa';
+          studioState.midColor = '#f0f4fa';
+          studioState.topColor = '#00f0ff';
+          studioState.lidColor = '#f0f4fa';
+        } else if (t === 'olive') {
+          studioState.baseColor = '#3a4b3a';
+          studioState.midColor = '#2d3b2d';
+          studioState.topColor = '#3a4b3a';
+          studioState.lidColor = '#3a4b3a';
+        }
+        buildFullStack();
+      });
+    });
+
+    // Hydro-Dip Wraps
+    document.querySelectorAll('[data-pattern]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-pattern]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        studioState.pattern = btn.dataset.pattern;
+        buildFullStack();
+      });
+    });
+
+    // Custom Base Color Picker
+    document.querySelectorAll('#base-color-swatches .color-swatch-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#base-color-swatches .color-swatch-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        studioState.baseColor = btn.dataset.color;
+        studioState.pattern = 'none';
+        buildFullStack();
+      });
+    });
+
+    // 7. Laser Engraving Input Listeners
+    const inputLine1 = document.getElementById('engrave-line1');
+    const inputLine2 = document.getElementById('engrave-line2');
+
+    function updateEngraving() {
+      studioState.engraveLine1 = inputLine1.value.toUpperCase();
+      studioState.engraveLine2 = inputLine2.value.toUpperCase();
+      bambooMat.map = generateEngraveTexture(studioState.engraveLocation);
+      bambooMat.map.needsUpdate = true;
+    }
+
+    inputLine1.addEventListener('input', updateEngraving);
+    inputLine2.addEventListener('input', updateEngraving);
+
+    document.querySelectorAll('[data-crest]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-crest]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        studioState.crest = btn.dataset.crest;
+        updateEngraving();
+      });
+    });
+
+    // 8. Capacity & Ice Calculator Engine
+    const partyRange = document.getElementById('calc-party-range');
+    const daysRange = document.getElementById('calc-days-range');
+    const partyVal = document.getElementById('calc-party-val');
+    const daysVal = document.getElementById('calc-days-val');
+    const cansResult = document.getElementById('calc-cans-result');
+    const iceResult = document.getElementById('calc-ice-result');
+
+    function runCapacityCalculator() {
+      const party = parseInt(partyRange.value, 10);
+      const days = parseInt(daysRange.value, 10);
+      partyVal.textContent = `${party} ${party === 1 ? 'Adult' : 'Adults'}`;
+      daysVal.textContent = `${days} ${days === 1 ? 'Day' : 'Days'}`;
+
+      // 4 cans per adult per day
+      const totalCans = party * days * 4;
+      // 0.8 lbs ice per can for 2:1 retention ratio
+      const iceWeight = Math.round(totalCans * 0.8);
+
+      studioState.cansCount = totalCans;
+      studioState.iceLbs = iceWeight;
+
+      cansResult.textContent = `${totalCans} Cans / Bottles`;
+      iceResult.textContent = `${iceWeight} LBS Crushed Ice`;
+
+      updateErgonomicsGauge();
+    }
+
+    partyRange.addEventListener('input', runCapacityCalculator);
+    daysRange.addEventListener('input', runCapacityCalculator);
+
+    // 9. Weight & Ergonomics Gauge Engine
+    const gaugeGrossLbs = document.getElementById('gauge-gross-lbs');
+    const gaugeGrossKg = document.getElementById('gauge-gross-kg');
+    const gaugeMeterFill = document.getElementById('gauge-meter-fill');
+    const ergoAlertBox = document.getElementById('ergo-alert-box');
+    const ergoAlertText = document.getElementById('ergo-alert-text');
+    const hudWeight = document.getElementById('hud-weight');
+
+    function updateErgonomicsGauge() {
+      const dryStack = 46; // 3-tier dry weight
+      const ice = studioState.iceLbs;
+      const drinks = Math.round(studioState.cansCount * 0.78);
+      const gross = dryStack + ice + drinks;
+      const grossKg = (gross * 0.453592).toFixed(1);
+
+      gaugeGrossLbs.textContent = `${gross} LBS`;
+      gaugeGrossKg.textContent = `${grossKg} KG`;
+      hudWeight.textContent = `${gross} LBS`;
+
+      // Percentage of 200 lb scale
+      const pct = Math.min((gross / 180) * 100, 100);
+      gaugeMeterFill.style.width = `${pct}%`;
+
+      if (gross < 45) {
+        ergoAlertBox.className = 'ergo-alert-badge ergo-green';
+        ergoAlertText.textContent = 'Solo Carry Approved (<45 lbs). Easily portable by one person.';
+      } else if (gross <= 110) {
+        ergoAlertBox.className = 'ergo-alert-badge ergo-yellow';
+        ergoAlertText.textContent = 'Two-Person Team Lift Required (45-110 lbs). Use molded side loop handles.';
+      } else {
+        ergoAlertBox.className = 'ergo-alert-badge ergo-red';
+        ergoAlertText.textContent = 'Heavy Expedition Load (>110 lbs). Recommend Modular Off-Road Sand Wagon Base.';
+      }
+
+      document.getElementById('breakdown-ice').textContent = `${ice} lbs`;
+      document.getElementById('breakdown-cans').textContent = `${drinks} lbs`;
+    }
+
+    // 10. WebGL 4K Snapshot Tool
+    document.getElementById('btn-snapshot').addEventListener('click', () => {
+      renderer.render(scene, camera);
+      const dataUrl = renderer.domElement.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.download = `King_of_Koolers_Custom_3D_${Date.now()}.png`;
+      a.href = dataUrl;
+      a.click();
+    });
+
+    // Window Resize Handler
+    window.addEventListener('resize', () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+    // 11. Render Animation Loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Smooth LERP explosion animation
+      currentExplosion += (targetExplosion - currentExplosion) * 0.1;
+
+      // Base remains stationary
+      // Mid moves up
+      midGroup.position.y = currentExplosion * 14;
+      // Top moves up further
+      topGroup.position.y = currentExplosion * 28;
+      // Lid moves up highest
+      lidGroup.position.y = currentExplosion * 44;
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+    runCapacityCalculator();
+
+    // 10. Sync Studio State to Reservation Configurator
+    const btnSaveRes = document.getElementById('btn-save-reservation');
+    if (btnSaveRes) {
+      btnSaveRes.addEventListener('click', (e) => {
+        try {
+          const payload = {
+            stackType: studioState.stackType,
+            colorTheme: studioState.colorTheme,
+            engraveLocation: studioState.engraveLocation,
+            engraveLine1: studioState.engraveLine1,
+            engraveLine2: studioState.engraveLine2,
+            partySize: studioState.partySize,
+            tripDays: studioState.tripDays,
+            timestamp: Date.now()
+          };
+          localStorage.setItem('kok_studio_customization', JSON.stringify(payload));
+        } catch (err) {
+          console.warn('localStorage save error:', err);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

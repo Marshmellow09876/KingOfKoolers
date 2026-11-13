@@ -2921,6 +2921,7 @@
         <li><a href="#configurator">Configurator</a></li>
         <li><a href="#pizza-vault">Pizza Vault</a></li>
         <li><a href="./accessories.html">Accessories</a></li>
+        <li><a href="./customizer.html">3D Studio</a></li>
         <li><a href="#investors">Pitch Deck</a></li>
       </ul>
 
@@ -3844,6 +3845,21 @@
         <p class="subheadline subheadline-center" style="margin-top: 16px;">
           Build your dream cooler tier by tier. Select from 12", 18", 20", and 28" heights in 7 rotomolded outdoor finishes—scaling from a compact 30" weekend cooler up to a massive 72" (6-foot) expedition tower.
         </p>
+      </div>
+
+      <!-- 3D Studio Live Sync Banner -->
+      <div id="studio-sync-banner" style="display: none; margin: 24px auto 32px auto; max-width: 860px; background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: var(--radius-md); padding: 14px 20px; align-items: center; justify-content: space-between; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13.5px; color: #fff;">
+          <span style="font-size: 20px;">🎨</span>
+          <div>
+            <strong style="color: var(--accent-cyan); display: block;">3D Studio Configuration Applied</strong>
+            <span id="studio-sync-summary" style="color: var(--text-secondary);">Custom 3D Stack &amp; Personalization Loaded</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <a href="./customizer.html" style="font-size: 12px; font-weight: 600; color: var(--accent-cyan); text-decoration: none; padding: 6px 12px; background: rgba(0, 240, 255, 0.12); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: var(--radius-full);">Edit in 3D Studio</a>
+          <button id="studio-sync-dismiss" aria-label="Dismiss banner" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; line-height: 1;">&times;</button>
+        </div>
       </div>
 
       <div class="configurator-wrapper">
@@ -6521,6 +6537,30 @@
           el.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
           observer.observe(el);
         });
+      }
+
+      /* ------------------------------------------------------------------------
+         9. 3D STUDIO STATE SYNCHRONIZATION
+         ------------------------------------------------------------------------ */
+      try {
+        const studioRaw = localStorage.getItem('kok_studio_customization');
+        if (studioRaw) {
+          const studioData = JSON.parse(studioRaw);
+          const banner = document.getElementById('studio-sync-banner');
+          const summary = document.getElementById('studio-sync-summary');
+          const dismissBtn = document.getElementById('studio-sync-dismiss');
+          if (banner && summary) {
+            banner.style.display = 'flex';
+            summary.textContent = `Preset: ${String(studioData.stackType || '').toUpperCase()} · Theme: ${String(studioData.colorTheme || '').toUpperCase()} · Laser Engraving: "${studioData.engraveLine1 || 'CUSTOM'}"`;
+            if (dismissBtn) {
+              dismissBtn.addEventListener('click', () => {
+                banner.style.display = 'none';
+              });
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Studio sync check error:', err);
       }
 
     })();
