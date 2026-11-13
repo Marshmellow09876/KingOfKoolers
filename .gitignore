@@ -3,6 +3,8 @@
 
 # Helper scripts
 *.bat
+scratch/
+assets/images/ref_thumbs/
 
 # Python caches
 __pycache__/
