@@ -403,7 +403,7 @@
     .hero-media-wrapper {
       position: relative;
       margin: 40px auto 30px auto;
-      max-width: 760px;
+      max-width: 880px;
       width: 100%;
       z-index: 1;
     }
@@ -2252,6 +2252,31 @@
       background: rgba(239, 68, 68, 0.2);
     }
 
+    .spigot-inspector-box {
+      margin-top: 10px;
+      padding: 9px 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .spigot-inspector-box.disabled {
+      background: rgba(245, 158, 11, 0.06);
+      border-color: rgba(245, 158, 11, 0.25);
+    }
+
+    .addon-item.disabled-addon {
+      opacity: 0.6;
+      border-color: rgba(245, 158, 11, 0.2);
+      background: rgba(245, 158, 11, 0.03);
+      cursor: not-allowed;
+    }
+
     /* Height Cards Grid (4 options: 12", 18", 20", 28") */
     .height-options-grid {
       display: grid;
@@ -2515,7 +2540,7 @@
 
       <div class="hero-media-wrapper">
         <div class="hero-image-frame">
-          <img src="./assets/images/apple_hero_plastic_rwb.jpg" alt="King of Koolers High-Density Rotomolded Cylindrical Modular Stacking Cooler in Patriotic Red, White, and Blue Colorway" loading="eager" width="896" height="1200">
+          <img src="./assets/images/apple_hero_plastic_rwb.jpg" alt="King of Koolers 24-Inch Wide Rotomolded Cylindrical Modular Stacking Cooler with Flat Recessed-Handle Lid in Patriotic Red, White, and Blue" loading="eager" width="1376" height="768">
         </div>
 
         <!-- Floating Apple Badges -->
@@ -3298,6 +3323,8 @@
             <div class="tier-inspector-row" id="inspector-height-row">
               <!-- Populated by JS -->
             </div>
+            <!-- Dynamic Spigot / Water Bib Checkbox (Active on 20" & 28" Base Tiers) -->
+            <div id="inspector-spigot-container" style="display: none;"></div>
             <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
               <button type="button" class="tier-inspector-btn danger" id="inspector-delete-btn">Delete This Tier</button>
             </div>
@@ -3459,14 +3486,14 @@
                 </div>
               </div>
 
-              <div class="addon-item selected" data-addon="spigot" tabindex="0" role="checkbox" aria-checked="true">
-                <div class="addon-checkbox">✓</div>
+              <div class="addon-item selected" data-addon="spigot" id="addon-spigot-item" tabindex="0" role="checkbox" aria-checked="true">
+                <div class="addon-checkbox" id="addon-spigot-check">✓</div>
                 <div class="addon-content">
                   <div class="addon-title">
-                    <span>360° Flow-Tap Beverage Spigot</span>
-                    <span style="color: var(--accent-cyan);">$49 Value · Included</span>
+                    <span>360° Flow-Tap Beverage Water Bib / Spigot</span>
+                    <span style="color: var(--accent-cyan);" id="addon-spigot-tag">$49 Value · Included</span>
                   </div>
-                  <div class="addon-desc">Rapid gravity draft dispenser precision-machined from 316 stainless on base tier.</div>
+                  <div class="addon-desc" id="addon-spigot-desc">Precision-machined 316 stainless water bib (Compatible only with large 20" & 28" base coolers).</div>
                 </div>
               </div>
 
@@ -4503,11 +4530,14 @@
               ${tier.height}" · ${col.name}
             </text>`;
 
-          // Base Tier Add-ons: Integrated 360 Flow-Tap Spigot
-          if (index === 0 && stackState.addons.spigot) {
+          // Base Tier Add-ons: Integrated 360 Flow-Tap Water Bib Spigot (ONLY on 20" and 28" base coolers)
+          const baseTier = stackState.tiers[0];
+          const canHaveSpigot = baseTier && (baseTier.height === 20 || baseTier.height === 28);
+
+          if (index === 0 && canHaveSpigot && stackState.addons.spigot) {
             const ySpigot = curY - 24;
             svgHtml += `
-            <!-- 360 Flow-Tap Stainless Spigot -->
+            <!-- 360 Flow-Tap Stainless Water Bib / Spigot -->
             <g id="svg-spigot">
               <circle cx="${cx}" cy="${ySpigot}" r="11" fill="url(#spigot-chrome)" stroke="#1e293b" stroke-width="1.5"/>
               <circle cx="${cx}" cy="${ySpigot}" r="6" fill="#334155"/>
@@ -4609,11 +4639,52 @@
         stackSvg.innerHTML = svgHtml;
       }
 
+      // Synchronize Water Bib / Spigot Addon Card State based on Base Cooler Height
+      function syncSpigotAddonCard() {
+        const spigotItem = document.querySelector('.addon-item[data-addon="spigot"]');
+        if (!spigotItem) return;
+        const baseTier = stackState.tiers[0];
+        const isEligible = baseTier && (baseTier.height === 20 || baseTier.height === 28);
+        const check = spigotItem.querySelector('.addon-checkbox');
+        const tag = document.getElementById('addon-spigot-tag');
+        const desc = document.getElementById('addon-spigot-desc');
+
+        if (!isEligible) {
+          spigotItem.classList.add('disabled-addon');
+          spigotItem.classList.remove('selected');
+          spigotItem.setAttribute('aria-checked', 'false');
+          if (check) check.textContent = '';
+          if (tag) {
+            tag.textContent = 'Requires 20" or 28" Base';
+            tag.style.color = '#f59e0b';
+          }
+          if (desc) {
+            desc.innerHTML = `<span style="color: #f59e0b;">Water bib is restricted to large 20" and 28" bottom coolers only. Current base: ${baseTier ? baseTier.height + '"' : 'None'}.</span>`;
+          }
+        } else {
+          spigotItem.classList.remove('disabled-addon');
+          const isChecked = stackState.addons.spigot;
+          spigotItem.classList.toggle('selected', isChecked);
+          spigotItem.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+          if (check) check.textContent = isChecked ? '✓' : '';
+          if (tag) {
+            tag.textContent = isChecked ? 'Installed on Base' : 'Click to Add';
+            tag.style.color = isChecked ? 'var(--accent-cyan)' : 'var(--text-muted)';
+          }
+          if (desc) {
+            desc.textContent = `Rapid gravity draft dispenser precision-machined from 316 stainless (Installed on bottom ${baseTier.height}" cooler).`;
+          }
+        }
+      }
+
       // Update UI Telemetry & Line-Item Invoice
       function updateConfiguratorUI() {
         const totalH = getTotalHeight();
         const totalCans = getTotalCans();
         const iceLife = getEstimatedIceLife(totalH);
+
+        // Sync Spigot Addon Card
+        syncSpigotAddonCard();
 
         // Update Live Badges
         if (stageHeight) stageHeight.textContent = totalH.toFixed(1) + '"';
@@ -4666,8 +4737,10 @@
           if (stackState.addons.solarLid) {
             rows.push({ name: 'Solar Crown (10-Watt USB Solar + Bamboo Prep Board)', val: 'VIP Perk · $149 Free' });
           }
-          if (stackState.addons.spigot) {
-            rows.push({ name: '360° Flow-Tap Beverage Spigot (316 Stainless)', val: 'VIP Perk · $49 Free' });
+          const baseTier = stackState.tiers[0];
+          const canHaveSpigot = baseTier && (baseTier.height === 20 || baseTier.height === 28);
+          if (canHaveSpigot && stackState.addons.spigot) {
+            rows.push({ name: `360° Flow-Tap Water Bib Spigot (Installed on ${baseTier.height}" Base)`, val: 'VIP Perk · $49 Free' });
           }
           if (stackState.addons.dolly) {
             rows.push({ name: 'All-Terrain Wagon Roller Dolly (8" Pneumatic Wheels)', val: 'VIP Perk · $129 Free' });
@@ -4743,6 +4816,43 @@
             });
           }
 
+          // Populate Water Bib / Spigot Toggle in Inspector (Active only for Bottom Tier index === 0)
+          const inspectorSpigotContainer = document.getElementById('inspector-spigot-container');
+          if (inspectorSpigotContainer) {
+            if (index === 0) {
+              inspectorSpigotContainer.style.display = 'flex';
+              const isEligible = (tier.height === 20 || tier.height === 28);
+              if (isEligible) {
+                inspectorSpigotContainer.className = 'spigot-inspector-box';
+                inspectorSpigotContainer.innerHTML = `
+                  <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; color: #fff; user-select: none;">
+                    <input type="checkbox" id="inspector-spigot-toggle" ${stackState.addons.spigot ? 'checked' : ''} style="accent-color: var(--accent-cyan); width: 16px; height: 16px; cursor: pointer;">
+                    <span><strong>Water Bib / Spigot:</strong> ${stackState.addons.spigot ? '<span style="color:var(--accent-cyan)">Installed on Bottom Cooler</span>' : '<span style="color:var(--text-muted)">Removed (None)</span>'}</span>
+                  </label>
+                  <span style="font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(0,240,255,0.1); color: var(--accent-cyan); border: 1px solid rgba(0,240,255,0.2);">${tier.height}" Base Compatible</span>
+                `;
+                const toggle = inspectorSpigotContainer.querySelector('#inspector-spigot-toggle');
+                if (toggle) {
+                  toggle.onchange = (e) => {
+                    stackState.addons.spigot = e.target.checked;
+                    updateConfiguratorUI();
+                    window.selectStackTier(0);
+                  };
+                }
+              } else {
+                inspectorSpigotContainer.className = 'spigot-inspector-box disabled';
+                inspectorSpigotContainer.innerHTML = `
+                  <div style="font-size: 11.5px; color: #f59e0b; display: flex; align-items: center; gap: 6px;">
+                    <span>ⓘ</span>
+                    <span>Water bib only available on <strong>20"</strong> and <strong>28"</strong> versions. Change this tier height to 20" or 28" above to add the water bib.</span>
+                  </div>
+                `;
+              }
+            } else {
+              inspectorSpigotContainer.style.display = 'none';
+            }
+          }
+
           // Delete Tier Button
           if (inspectorDeleteBtn) {
             inspectorDeleteBtn.disabled = (stackState.tiers.length <= 1);
@@ -4762,6 +4872,8 @@
       if (inspectorCloseBtn) {
         inspectorCloseBtn.addEventListener('click', () => {
           stackState.selectedTierIndex = null;
+          const inspectorSpigotContainer = document.getElementById('inspector-spigot-container');
+          if (inspectorSpigotContainer) inspectorSpigotContainer.style.display = 'none';
           if (tierInspector) tierInspector.classList.remove('open');
           renderStackSVG();
         });
@@ -4900,14 +5012,27 @@
       addonItems.forEach(item => {
         item.addEventListener('click', () => {
           const key = item.dataset.addon;
+
+          if (key === 'spigot') {
+            const baseTier = stackState.tiers[0];
+            const isEligible = baseTier && (baseTier.height === 20 || baseTier.height === 28);
+            if (!isEligible) {
+              alert(`The Water Bib / Spigot is only compatible with large 20" and 28" base coolers.\n\nYour current bottom cooler is ${baseTier ? baseTier.height + '"' : 'None'}.\n\nPlease select 20" or 28" for your bottom tier to enable the water bib.`);
+              return;
+            }
+          }
+
           const isSelected = item.classList.toggle('selected');
           item.setAttribute('aria-checked', isSelected);
 
           const check = item.querySelector('.addon-checkbox');
-          check.textContent = isSelected ? '✓' : '';
+          if (check) check.textContent = isSelected ? '✓' : '';
 
           stackState.addons[key] = isSelected;
           updateConfiguratorUI();
+          if (stackState.selectedTierIndex === 0) {
+            window.selectStackTier(0);
+          }
         });
       });
 
