@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>King of Koolers | Official Modular Accessories & Outfitting Ecosystem</title>
+  <meta name="description" content="Explore all 15 official modular accessories for the King of Koolers 24-inch rotomolded stacking cooler. Bluetooth audio lids, pressurized draft beer taps, 360° LED ring lighting, bamboo prep discs, and off-road balloon sand wagons.">
+  <meta name="theme-color" content="#000000">
+
+  <style>
+    /* ==========================================================================
+       CSS RESET & DESIGN SYSTEM VARIABLES (APPLE OBSIDIAN THEME)
+       ========================================================================== */
+    :root {
+      --bg-primary: #000000;
+      --bg-secondary: #080b11;
+      --bg-card: rgba(18, 24, 38, 0.7);
+      --bg-card-hover: rgba(26, 35, 54, 0.9);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-cyan: rgba(0, 240, 255, 0.35);
+      --border-cyan-glow: rgba(0, 240, 255, 0.6);
+      --accent-cyan: #00f0ff;
+      --accent-blue: #1e4bd7;
+      --accent-blue-light: #38bdf8;
+      --accent-red: #e1232d;
+      --accent-green: #10b981;
+      --text-primary: #ffffff;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      --font-mono: "SF Mono", "Fira Code", Consolas, monospace;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --transition-smooth: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       STICKY NAVBAR
+       ========================================================================== */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: var(--transition-smooth);
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--accent-cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      transition: var(--transition-smooth);
+      position: relative;
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .nav-links a.active {
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .patent-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .cart-trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      transition: var(--transition-smooth);
+    }
+
+    .cart-trigger-btn:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--border-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .cart-count-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: var(--accent-cyan);
+      color: #000;
+      font-size: 11px;
+      font-weight: 800;
+      border-radius: var(--radius-full);
+    }
+
+    .btn-cyan {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--accent-cyan);
+      color: #000;
+      font-weight: 600;
+      font-size: 13px;
+      border-radius: var(--radius-full);
+      transition: var(--transition-smooth);
+    }
+
+    .btn-cyan:hover {
+      background: #38bdf8;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .menu-toggle {
+      display: none;
+      color: var(--text-secondary);
+    }
+
+    /* ==========================================================================
+       HERO BANNER
+       ========================================================================== */
+    .accessories-hero {
+      position: relative;
+      padding: 90px 0 60px;
+      background: radial-gradient(circle at 50% 20%, rgba(0, 100, 180, 0.18) 0%, rgba(0, 0, 0, 0) 70%),
+                  radial-gradient(circle at 80% 30%, rgba(225, 35, 45, 0.12) 0%, rgba(0, 0, 0, 0) 60%),
+                  var(--bg-primary);
+      text-align: center;
+      border-bottom: 1px solid var(--border-subtle);
+      overflow: hidden;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid var(--border-cyan);
+      border-radius: var(--radius-full);
+      color: var(--accent-cyan);
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+    }
+
+    .hero-headline {
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 70%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subheadline {
+      max-width: 820px;
+      margin: 0 auto 36px;
+      font-size: clamp(16px, 2vw, 19px);
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .hero-stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-val {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ==========================================================================
+       CATEGORY FILTER & CONTROLS
+       ========================================================================== */
+    .controls-section {
+      padding: 36px 0;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 64px;
+      z-index: 900;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .controls-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .category-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      transition: var(--transition-smooth);
+    }
+
+    .filter-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .filter-btn.active {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .search-sort-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-input {
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      color: #fff;
+      font-size: 13px;
+      width: 220px;
+      outline: none;
+      transition: var(--transition-smooth);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+
+    /* ==========================================================================
+       PRODUCT GRID & CARDS
+       ========================================================================== */
+    .catalog-section {
+      padding: 60px 0 100px;
+    }
+
+    .grid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 36px;
+    }
+
+    .grid-title-area h2 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .grid-title-area p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 32px;
+    }
+
+    .accessory-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-smooth);
+      position: relative;
+    }
+
+    .accessory-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 240, 255, 0.1);
+    }
+
+    .card-media-wrapper {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      background: #06090e;
+      overflow: hidden;
+    }
+
+    .card-media-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.5s ease;
+    }
+
+    .accessory-card:hover .card-media-wrapper img {
+      transform: scale(1.04);
+    }
+
+    .card-badge-container {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .badge-mod-num {
+      padding: 4px 10px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(8px);
+    }
+
+    .badge-compat {
+      padding: 4px 10px;
+      font-size: 10.5px;
+      font-family: var(--font-mono);
+      background: rgba(20, 25, 35, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e2e8f0;
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(8px);
+    }
+
+    .card-content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .card-price {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      white-space: nowrap;
+    }
+
+    .card-hook {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .card-specs-list {
+      list-style: none;
+      margin-bottom: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .card-specs-list li {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+    }
+
+    .card-specs-list li svg {
+      width: 14px;
+      height: 14px;
+      color: var(--accent-cyan);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .card-footer-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .btn-add-accessory {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: var(--radius-full);
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid var(--accent-cyan);
+      color: #fff;
+      font-weight: 600;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-add-accessory:hover {
+      background: var(--accent-cyan);
+      color: #000;
+    }
+
+    .btn-add-accessory.added {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      color: #fff;
+    }
+
+    .btn-spec-view {
+      padding: 10px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 12.5px;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-spec-view:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ==========================================================================
+       BUNDLE BUILDER FOOTER BAR & DRAWER
+       ========================================================================== */
+    .bundle-bar-floating {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      z-index: 950;
+      background: rgba(10, 16, 26, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-cyan);
+      border-radius: var(--radius-full);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 240, 255, 0.25);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bundle-bar-floating.visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .bundle-summary-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bundle-items-count {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .bundle-discount-pill {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+
+    .bundle-total-price {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    /* ==========================================================================
+       CART SLIDE-OVER DRAWER
+       ========================================================================== */
+    .cart-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .cart-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 440px;
+      background: #0d121c;
+      border-left: 1px solid var(--border-subtle);
+      z-index: 2001;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -15px 0 50px rgba(0, 0, 0, 0.8);
+    }
+
+    .cart-drawer-overlay.open .cart-drawer {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .drawer-header h3 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .drawer-close-btn {
+      color: var(--text-muted);
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .drawer-close-btn:hover {
+      color: #fff;
+    }
+
+    .drawer-items-list {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .drawer-item {
+      display: flex;
+      gap: 14px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      align-items: center;
+    }
+
+    .drawer-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+    }
+
+    .drawer-item-info {
+      flex: 1;
+    }
+
+    .drawer-item-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .drawer-item-price {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent-cyan);
+    }
+
+    .drawer-item-remove {
+      color: var(--text-dim);
+      font-size: 12px;
+      padding: 4px;
+    }
+
+    .drawer-item-remove:hover {
+      color: var(--accent-red);
+    }
+
+    .drawer-footer {
+      padding: 24px;
+      border-top: 1px solid var(--border-subtle);
+      background: #080c13;
+    }
+
+    .discount-banner {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #34d399;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .drawer-summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .drawer-summary-row.total {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* ==========================================================================
+       TECHNICAL SPEC SHEET MODAL
+       ========================================================================== */
+    .spec-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .spec-modal-overlay.open {
+      display: flex;
+    }
+
+    .spec-modal-card {
+      background: #0e1420;
+      border: 1px solid var(--border-cyan);
+      border-radius: var(--radius-lg);
+      max-width: 680px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 240, 255, 0.2);
+    }
+
+    .spec-modal-header {
+      padding: 20px 24px;
+      background: #141c2c;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .spec-modal-body {
+      padding: 24px;
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .spec-table th, .spec-table td {
+      padding: 10px 14px;
+      font-size: 13px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .spec-table th {
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .spec-table td:first-child {
+      color: var(--text-secondary);
+      font-weight: 600;
+      width: 35%;
+    }
+
+    .spec-table td:last-child {
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       FAQ SECTION
+       ========================================================================== */
+    .faq-section {
+      padding: 80px 0;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .faq-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .faq-grid {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 20px 24px;
+      width: 100%;
+      text-align: left;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-question:hover {
+      color: var(--accent-cyan);
+    }
+
+    .faq-answer {
+      padding: 0 24px 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      display: none;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .page-footer {
+      padding: 60px 0 40px;
+      background: #000;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand-col h4 {
+      color: #fff;
+      font-size: 17px;
+      margin-bottom: 12px;
+    }
+
+    .footer-col h5 {
+      color: #fff;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col ul a:hover {
+      color: var(--accent-cyan);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 12px;
+    }
+
+    @media (max-width: 992px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .controls-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .search-input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       STICKY NAVBAR
+       ========================================================================== -->
+  <nav class="nav-bar" id="navbar">
+    <div class="container nav-content">
+      <a href="./index.html#overview" class="nav-logo" aria-label="King of Koolers Home">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
+        </svg>
+        <span>King of Koolers</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="./index.html#overview">Overview</a></li>
+        <li><a href="./index.html#stack-and-sit">Twist &amp; Lock</a></li>
+        <li><a href="./index.html#thermodynamics">Thermodynamics</a></li>
+        <li><a href="./index.html#modular-stack">Modular Stack</a></li>
+        <li><a href="./index.html#specs">Engineering</a></li>
+        <li><a href="./index.html#prototype">Prototype</a></li>
+        <li><a href="./index.html#configurator">Configurator</a></li>
+        <li><a href="./index.html#pizza-vault">Pizza Vault</a></li>
+        <li><a href="./accessories.html" class="active">Accessories</a></li>
+        <li><a href="./index.html#investors">Pitch Deck</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <span class="patent-badge">Patent Pending</span>
+        <button class="cart-trigger-btn" id="open-cart-btn" aria-label="View Modular Outfitting Cart">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span>Outfitting</span>
+          <span class="cart-count-badge" id="nav-cart-count">0</span>
+        </button>
+        <a href="./index.html#configurator" class="btn-cyan">Build Your Kooler</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       HERO BANNER
+       ========================================================================== -->
+  <header class="accessories-hero">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span>THE MODULAR ECOSYSTEM</span> · <span>24-INCH ROTOMOLDED ARCHITECTURE</span> · <span>15 SPECIALTY MODULES</span>
+      </div>
+      <h1 class="hero-headline">
+        Engineered to Stack.<br>
+        Equipped for Anything.
+      </h1>
+      <p class="hero-subheadline">
+        Transform your 24-inch King of Koolers into a high-fidelity outdoor audio center, pressurized craft beer kegerator, gourmet sous-vide station, or 500-lb swivel camp throne. Every accessory locks securely using our patent-pending 45° circumferential bayonet cam architecture.
+      </p>
+
+      <div class="hero-stats-bar">
+        <div class="stat-item">
+          <span class="stat-val">15</span>
+          <span class="stat-label">Specialty Modules</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">45°</span>
+          <span class="stat-label">Toolless Bayonet Lock</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">IPX7</span>
+          <span class="stat-label">Marine Waterproof</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">500 LBS</span>
+          <span class="stat-label">Compressive Load Rating</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">100%</span>
+          <span class="stat-label">Food-Grade BPA-Free</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       CATEGORY FILTER & SEARCH CONTROLS
+       ========================================================================== -->
+  <section class="controls-section">
+    <div class="container controls-wrapper">
+      <div class="category-pills" id="category-filter-pills">
+        <button class="filter-btn active" data-category="all">All Outfitting (15)</button>
+        <button class="filter-btn" data-category="lid">Lid &amp; Prep (3)</button>
+        <button class="filter-btn" data-category="power">Power &amp; Lighting (2)</button>
+        <button class="filter-btn" data-category="culinary">Culinary &amp; Draft (3)</button>
+        <button class="filter-btn" data-category="angler">Seating &amp; Angler (4)</button>
+        <button class="filter-btn" data-category="mobility">Rigging &amp; Mobility (3)</button>
+      </div>
+
+      <div class="search-sort-box">
+        <input type="text" class="search-input" id="search-input" placeholder="Search accessories...">
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CATALOG PRODUCT GRID
+       ========================================================================== -->
+  <main class="catalog-section">
+    <div class="container">
+      <div class="grid-header">
+        <div class="grid-title-area">
+          <h2>Official King of Koolers Outfitting</h2>
+          <p>Precision-molded accessories designed exclusively for the 24-inch cylindrical platform</p>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-cyan);">
+          Showing <span id="displayed-count">15</span> Modules
+        </div>
+      </div>
+
+      <div class="product-grid" id="product-grid">
+        <!-- 15 Cards dynamically populated by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       FLOATING BUNDLE BAR
+       ========================================================================== -->
+  <div class="bundle-bar-floating" id="floating-bundle-bar">
+    <div class="bundle-summary-text">
+      <span class="bundle-items-count"><span id="bundle-qty">0</span> Accessories Selected</span>
+      <span class="bundle-discount-pill" id="bundle-discount-text">Bundle 2 for 10% Off · 3 for 15% Off</span>
+    </div>
+    <div class="bundle-total-price" id="bundle-total">$0.00</div>
+    <button class="btn-cyan" id="bundle-review-btn">Review Bundle</button>
+  </div>
+
+  <!-- ==========================================================================
+       CART / OUTIFTING SLIDE-OVER DRAWER
+       ========================================================================== -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay">
+    <div class="cart-drawer">
+      <div class="drawer-header">
+        <h3>My Modular Outfitting</h3>
+        <button class="drawer-close-btn" id="close-drawer-btn" aria-label="Close Drawer">&times;</button>
+      </div>
+
+      <div class="drawer-items-list" id="drawer-items-list">
+        <!-- Items inserted via JS -->
+      </div>
+
+      <div class="drawer-footer">
+        <div class="discount-banner" id="discount-banner" style="display: none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span id="discount-applied-msg">Bundle discount applied!</span>
+        </div>
+
+        <div class="drawer-summary-row">
+          <span>Subtotal</span>
+          <span id="drawer-subtotal">$0.00</span>
+        </div>
+        <div class="drawer-summary-row" id="drawer-discount-row" style="display: none; color: var(--accent-green);">
+          <span>Bundle Savings</span>
+          <span id="drawer-savings">-$0.00</span>
+        </div>
+        <div class="drawer-summary-row total">
+          <span>Total Outfitting</span>
+          <span id="drawer-total">$0.00</span>
+        </div>
+
+        <a href="./index.html#configurator" class="btn-cyan" style="width: 100%; justify-content: center; margin-top: 18px; padding: 14px 20px;">
+          Apply to Dream Cooler Build &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       TECHNICAL SPEC SHEET MODAL
+       ========================================================================== -->
+  <div class="spec-modal-overlay" id="spec-modal-overlay">
+    <div class="spec-modal-card">
+      <div class="spec-modal-header">
+        <div>
+          <span class="badge-mod-num" id="modal-mod-num">MOD-01</span>
+          <h3 id="modal-title" style="margin-top: 4px; font-size: 18px; color: #fff;">Accessory Title</h3>
+        </div>
+        <button class="drawer-close-btn" id="close-spec-modal-btn">&times;</button>
+      </div>
+      <div class="spec-modal-body">
+        <p id="modal-desc" style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;"></p>
+        <table class="spec-table" id="modal-spec-table">
+          <!-- Filled by JS -->
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       FAQ SECTION
+       ========================================================================== -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="faq-header">
+        <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Frequently Asked Questions</h2>
+        <p style="color: var(--text-muted); font-size: 14px;">Everything you need to know about King of Koolers modular outfitting</p>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Do these accessories fit all cooler tier heights (12", 18", 20", and 28")?</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-answer">
+            Yes! Because every single King of Koolers tier shares the identical 24.0-inch outer diameter and circumferential 45° twist-lock bayonet collar, all lid and inter-tier accessories (Bluetooth lid, cutting board, divider grid, dry basket, thermal isolation disc) are 100% cross-compatible with the 12", 18", 20", and 28" models. Specialty base items (like the draft beer keg siphon and UV-C core) interface with the tall 20" and 28" bunker bases.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Are electrical accessories (Bluetooth lid, LED ring, Power Bank) waterproof?</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-answer">
+            Absolutely. All electronic modules are engineered to IPX7 marine-grade submersible standards. Sealed silicone port gaskets, hydrophobic acoustic mesh, and conformal-coated internal circuit boards protect against driving rain, lake dunks, pressure-washing, and saltwater spray.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How does the Dual-Zone Hot &amp; Cold Vacuum Isolation Disc work?</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-answer">
+            The 2-inch thick Vacuum Thermal Isolation Disc utilizes closed-cell polyurethane foam with an internal vacuum barrier and dual-lip food-grade silicone compression seals. When twisted into place between two modules, it halts vertical heat transfer, allowing you to keep 32°F ice and cold beers in the bottom tier while maintaining 140°F+ steaming pizzas or smoked BBQ right above it.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Can I easily add these accessories to my cooler reservation on the main page?</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-answer">
+            Yes. When you add accessories here, they are stored directly in your session. Clicking "Apply to Dream Cooler Build" links directly back to the 3D Configurator on the home page, where your selected items are pre-populated into your line-item reservation summary with your bundle discount automatically calculated.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PAGE FOOTER
+       ========================================================================== -->
+  <footer class="page-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <h4>King of Koolers</h4>
+          <p style="margin-bottom: 16px; line-height: 1.6;">
+            The world's first patent-pending 24-inch cylindrical modular stacking cooler system. Designed by Austin Marshall with high-density UV-resistant rotomolded polyethylene, zero corner thermal bridging, and complete interchangeable modular outfitting.
+          </p>
+          <span class="patent-badge">U.S. Patent Application Pending</span>
+        </div>
+
+        <div class="footer-col">
+          <h5>Navigation</h5>
+          <ul>
+            <li><a href="./index.html#overview">Overview</a></li>
+            <li><a href="./index.html#configurator">3D Configurator</a></li>
+            <li><a href="./index.html#pizza-vault">Pizza Vault</a></li>
+            <li><a href="./accessories.html">Accessories Catalog</a></li>
+            <li><a href="./index.html#specs">Engineering Specs</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Outfitting</h5>
+          <ul>
+            <li><a href="#product-grid" data-filter="lid">Lid Ecosystem</a></li>
+            <li><a href="#product-grid" data-filter="power">Power &amp; Lighting</a></li>
+            <li><a href="#product-grid" data-filter="culinary">Culinary &amp; Draft</a></li>
+            <li><a href="#product-grid" data-filter="angler">Angler &amp; Seating</a></li>
+            <li><a href="#product-grid" data-filter="mobility">Wagons &amp; Rigging</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Continuity &amp; Specs</h5>
+          <ul>
+            <li><a href="./assets/images/king_of_koolers_character_reference_sheet.jpg" target="_blank">4K Model Sheet</a></li>
+            <li><a href="./docs/KING_OF_KOOLERS_CHARACTER_REFERENCE_SHEET.md" target="_blank">Engineering Specs</a></li>
+            <li><a href="./index.html#thermodynamics">Thermal Whitepaper</a></li>
+            <li><a href="./index.html#investors">Investor Pitch Deck</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 King of Koolers. All Rights Reserved. Designed by Austin Marshall.</div>
+        <div style="font-family: var(--font-mono); color: var(--text-dim);">Release V6.0 · Production Outfitting</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       CATALOG DATA & CLIENT SCRIPT
+       ========================================================================== -->
+  <script>
+    // Complete 15 Accessories Dataset
+    const ACCESSORIES_DATA = [
+      {
+        id: "kok-acc-01",
+        num: "01",
+        name: "Integrated Bluetooth Audio Lid",
+        category: "lid",
+        compat: "Universal 24\" Tiers",
+        price: 149.00,
+        image: "./assets/images/accessory_01_bluetooth_lid.jpg",
+        hook: "360° marine-grade waterproof surround audio integrated flush into the rotomolded lid.",
+        features: [
+          "Quad high-output acoustic drivers with passive bass radiators",
+          "IPX7 fully submersible waterproof with sealed USB-C PD charging",
+          "24-hour lithium-ion playback with tactile knurled aluminum dials",
+          "Glowing cyan LED status ring with Bluetooth 5.3 multi-link"
+        ],
+        specs: {
+          "Compatibility": "All 24.0\" OD King of Koolers modules",
+          "Driver Config": "4x 2.0\" Neodymium drivers + dual passive radiators",
+          "Battery Life": "24 Hours (7,800 mAh Li-ion internal cell)",
+          "Waterproof Rating": "IPX7 (1 meter submersion for 30 minutes)",
+          "Charging": "USB-C Power Delivery (18W fast-charge)",
+          "Material": "Rotomolded UV-polyethylene collar + acoustic mesh"
+        }
+      },
+      {
+        id: "kok-acc-02",
+        num: "02",
+        name: "Acacia & Bamboo Prep Station Inset",
+        category: "lid",
+        compat: "Universal 24\" Tiers",
+        price: 59.00,
+        image: "./assets/images/accessory_02_cutting_board.jpg",
+        hook: "Inlaid organic butcher block cutting disc with perimeter juice groove and magnetic knife dock.",
+        features: [
+          "End-grain alternating organic acacia wood and antimicrobial bamboo",
+          "Deep circumferential juice groove captures carving runoff cleanly",
+          "Rare-earth neodymium magnetic dock secures pairing knife",
+          "Laser-engraved King of Koolers crown insignia; flips for flat prep"
+        ],
+        specs: {
+          "Diameter": "19.5\" usable prep surface (24\" outer lid fitment)",
+          "Thickness": "1.25\" solid organic hardwood",
+          "Wood Species": "Antimicrobial Acacia & Moso Bamboo",
+          "Finish": "Food-grade organic beeswax & mineral oil conditioned",
+          "Knife Dock": "Twin N52 neodymium magnetic retention channels"
+        }
+      },
+      {
+        id: "kok-acc-03",
+        num: "03",
+        name: "Internal Modular Divider Grid (Pizza & Pie)",
+        category: "culinary",
+        compat: "Universal 24\" Tiers",
+        price: 45.00,
+        image: "./assets/images/accessory_03_divider_grid.jpg",
+        hook: "Food-grade polycarbonate radial divider splitting the 24\" circle into 4 organized quadrants.",
+        features: [
+          "Segments round cooler into 4 discrete food and beverage zones",
+          "Quadrant 1 holds a stacked 20\" craft pizza box perfectly flat",
+          "Quadrants 2-4 isolate fresh fruit, beverage cans, and condiments",
+          "Dishwasher-safe, shatterproof food-grade red & charcoal polymer"
+        ],
+        specs: {
+          "Geometry": "4-Quadrant radial interlocking wedge grid",
+          "Height": "10.0\" tall vertical partitions",
+          "Material": "BPA-Free High-Impact Food-Safe Polycarbonate",
+          "Cleaning": "Commercial dishwasher safe up to 180°F",
+          "Weight": "3.2 lbs total modular set"
+        }
+      },
+      {
+        id: "kok-acc-04",
+        num: "04",
+        name: "Suspended Dry Basket & Colander Combo",
+        category: "culinary",
+        compat: "Universal 24\" Tiers",
+        price: 39.00,
+        image: "./assets/images/accessory_04_dry_basket.jpg",
+        hook: "Perforated stainless steel and polymer colander keeping dry goods elevated above melting ice.",
+        features: [
+          "Rests securely on the internal indexing shoulder of any tier",
+          "High-flow perforations let sub-zero cold air circulate freely",
+          "Prevents soggy sandwiches, bruised fruit, and deli meats",
+          "Integrated dual carry handles let it double as a camp colander"
+        ],
+        specs: {
+          "Diameter": "21.5\" upper lip (drops into 24\" OD chamber)",
+          "Depth": "5.5\" high-capacity dry goods basin",
+          "Material": "304 Stainless Steel wire mesh + rotomolded PE rim",
+          "Capacity": "Holds up to 24 sub sandwiches or 15 lbs fresh produce",
+          "Drainage": "120x 0.25\" precision drainage perforations"
+        }
+      },
+      {
+        id: "kok-acc-05",
+        num: "05",
+        name: "Cold-Smoking & Sous-Vide Chamber Port",
+        category: "culinary",
+        compat: "12\" & 18\" Vault Modules",
+        price: 69.00,
+        image: "./assets/images/accessory_05_sous_vide_port.jpg",
+        hook: "Silicone bulkhead port module docking immersion circulators and cold-smoke wood generators.",
+        features: [
+          "High-temperature food-grade silicone airtight bulkhead adapter",
+          "Enables precise sous-vide water bath cooking inside the cooler",
+          "Accepts standard wood pellet cold-smoke generator tubes",
+          "Double thermal seal prevents steam or cold smoke loss"
+        ],
+        specs: {
+          "Bulkhead Diameter": "2.5\" universal tool clamp aperture",
+          "Temp Rating": "-40°F to +260°F continuous thermal envelope",
+          "Material": "FDA Platinum-cured high-temp silicone & 316 stainless",
+          "Compatibility": "Fits all standard sous-vide wands (Anova, Joule, etc.)",
+          "Seal Type": "Dual compression silicone O-ring gasket"
+        }
+      },
+      {
+        id: "kok-acc-06",
+        num: "06",
+        name: "Submersible 360° LED Chamber Ring Light",
+        category: "power",
+        compat: "Universal 24\" Tiers",
+        price: 49.00,
+        image: "./assets/images/accessory_06_led_ring.jpg",
+        hook: "Automated 360-degree waterproof circular rim lighting illuminating ice and cans at night.",
+        features: [
+          "Integrated magnetic reed switch turns lights on when tier is opened",
+          "Waterproof silicone-encapsulated 360° COB LED strip",
+          "Cool cyan & crisp white illumination eliminates flashlight fumbling",
+          "Rechargeable magnetic USB battery pack with 40-hour runtime"
+        ],
+        specs: {
+          "Light Output": "450 Lumens diffuse 360-degree illumination",
+          "Color Temp": "5000K crisp white + 480nm cool cyan night mode",
+          "Battery": "4,000 mAh rechargeable magnetic pod",
+          "Waterproof": "IP68 fully submersible waterproof rating",
+          "Sensors": "Integrated Hall-effect magnetic lid proximity sensor"
+        }
+      },
+      {
+        id: "kok-acc-07",
+        num: "07",
+        name: "Modular 50k Power Bank & Dual Qi Pad",
+        category: "power",
+        compat: "Universal 24\" Solar Lid",
+        price: 129.00,
+        image: "./assets/images/accessory_07_power_bank.jpg",
+        hook: "50,000 mAh rugged power station with dual magnetic Qi wireless phone charging spots on lid.",
+        features: [
+          "Dual Qi fast-wireless magnetic charging coils embedded in lid",
+          "Twin 65W USB-C Power Delivery ports for laptops and drones",
+          "Connects directly to the 10-Watt solar lid for pass-through charging",
+          "Digital OLED screen displays battery percentage and power flow"
+        ],
+        specs: {
+          "Capacity": "50,000 mAh / 185 Watt-Hours LiFePO4 cells",
+          "Wireless Output": "Dual 15W Qi magnetic fast-charging zones",
+          "Wired Output": "2x 65W USB-C PD + 2x 18W USB-A QC 3.0",
+          "Solar Input": "Direct DC plug for King of Koolers 10W solar lid",
+          "Enclosure": "IP67 weather-sealed polycarbonate armor housing"
+        }
+      },
+      {
+        id: "kok-acc-08",
+        num: "08",
+        name: "Pressurized Draft Beer & Kegerator Tap",
+        category: "culinary",
+        compat: "20\" & 28\" Bunker Bases",
+        price: 119.00,
+        image: "./assets/images/accessory_08_draft_beer_tap.jpg",
+        hook: "CO2 regulator kit turning the bottom 28\" cooler into a mobile party keg dispensing cold draft.",
+        features: [
+          "Connects Cornelius kegs or mini kegs directly to lower front spigot",
+          "Mini 16g/74g threaded CO2 cartridge regulator with pressure dial",
+          "Internal insulated food-grade beer siphon line maintains head",
+          "Serves crystal-cold craft draft beer with zero pump oxygenation"
+        ],
+        specs: {
+          "Keg Fitment": "Accepts standard 5-gallon Cornelius ball-lock kegs",
+          "Regulator": "0-30 PSI micro CO2 regulator with brass pressure gauge",
+          "Dispense Line": "100% barrier EVA beverage tubing with quick disconnects",
+          "Spigot Interface": "Direct 3/4\" NPT thread lock into King of Koolers base",
+          "Cartridge Type": "Threaded 16-gram food-grade CO2 cylinders"
+        }
+      },
+      {
+        id: "kok-acc-09",
+        num: "09",
+        name: "UV-C Water Sterilization Core Wand",
+        category: "culinary",
+        compat: "20\" & 28\" Bunker Bases",
+        price: 89.00,
+        image: "./assets/images/accessory_09_uvc_wand.jpg",
+        hook: "Ultraviolet sterilization core installed inside drainage funnel purifying meltwater into drinking water.",
+        features: [
+          "Destroys 99.999% of bacteria, viruses, and pathogens in meltwater",
+          "Quartz sleeve UV-C wand installs directly inside central drain tube",
+          "Provides clean emergency drinking water at campsites or tailgates",
+          "Rechargeable battery powers 150 gallons of continuous purification"
+        ],
+        specs: {
+          "Wavelength": "254nm germicidal UV-C quartz tube",
+          "Pathogen Reduction": "99.999% (Log 5) reduction of E. coli & bacteria",
+          "Flow Rate": "Up to 1.5 gallons per minute gravity fast-flow",
+          "Power": "USB-C rechargeable lithium battery (150 gallons / charge)",
+          "Housing": "Food-grade stainless steel & quartz glass sleeve"
+        }
+      },
+      {
+        id: "kok-acc-10",
+        num: "10",
+        name: "Swivel Camp Stool & Marine Vinyl Cushion",
+        category: "angler",
+        compat: "Universal 24\" Tiers",
+        price: 79.00,
+        image: "./assets/images/accessory_10_swivel_stool.jpg",
+        hook: "3-inch thick memory foam cushion with 360° ball-bearing swivel turning any tier into a camp throne.",
+        features: [
+          "Heavy-duty marine vinyl with diamond quilting & Patriot Red piping",
+          "Silent 360-degree ball-bearing steel swivel turntable plate",
+          "Keys securely into the circular top lid recess without slipping",
+          "500 lbs static weight rating—ergonomic seating for camp or boat"
+        ],
+        specs: {
+          "Diameter": "21.5\" circular cushion base (nests inside 24\" lid)",
+          "Thickness": "3.0\" dual-layer high-density memory foam",
+          "Upholstery": "UV-resistant, anti-mildew marine grade vinyl",
+          "Swivel Mechanism": "Stainless steel 360° precision ball-bearing race",
+          "Weight Rating": "500 lbs compressive static load"
+        }
+      },
+      {
+        id: "kok-acc-11",
+        num: "11",
+        name: "Rod Holder & Tool Rail Handle Mount",
+        category: "angler",
+        compat: "All Molded Loop Handles",
+        price: 55.00,
+        image: "./assets/images/accessory_11_rod_holder.jpg",
+        hook: "Anodized aluminum rail clamping to molded handles with dual fishing rod tubes and pliers dock.",
+        features: [
+          "Toolless clamp locks directly around the rigid molded loop handle",
+          "Dual vertical gimbal-slotted rod holders keep rods elevated",
+          "Dedicated stainless sheath for fishing pliers and braid cutters",
+          "Standard 1/4\"-20 & M8 accessory threads for GoPro / lantern arms"
+        ],
+        specs: {
+          "Material": "CNC-machined 6061-T6 anodized aluminum + 316 stainless",
+          "Clamp Fitment": "Precision contoured for King of Koolers loop handle",
+          "Rod Slots": "2x 1.8\" ID UV-resistant polypropylene gimbal tubes",
+          "Mounting Studs": "4x 1/4\"-20 & 2x M8 tapped stainless inserts",
+          "Corrosion Rating": "1,000+ hour salt-spray certified"
+        }
+      },
+      {
+        id: "kok-acc-12",
+        num: "12",
+        name: "Internal Live-Well Bait Aerator Module",
+        category: "angler",
+        compat: "12\" & 18\" Modules",
+        price: 65.00,
+        image: "./assets/images/accessory_12_bait_aerator.jpg",
+        hook: "Submersible micro-bubble oxygenation kit turning cooler tiers into a live bait tank.",
+        features: [
+          "Dual ceramic micro-bubble air stones create dense dissolved oxygen",
+          "Keeps minnows, shrimp, and live bait energetic for multi-day trips",
+          "Rechargeable 18-hour lithium battery with magnetic charging dock",
+          "Whisper-quiet 28dB diaphragm pump with adjustable flow rate dial"
+        ],
+        specs: {
+          "Air Output": "3.0 Liters per minute dual-port oxygen flow",
+          "Battery Life": "18 Hours continuous / 36 hours pulse mode",
+          "Charging": "Magnetic waterproof 5V USB cable",
+          "Noise Level": "<28 decibels ultra-quiet dampened operation",
+          "Diffusers": "Dual 1.5\" weighted micro-pore ceramic stones"
+        }
+      },
+      {
+        id: "kok-acc-13",
+        num: "13",
+        name: "Heavy-Duty Tie-Down Strap Cleats (Pair)",
+        category: "mobility",
+        compat: "Universal 24\" Tiers",
+        price: 49.00,
+        image: "./assets/images/accessory_13_tie_down_cleats.jpg",
+        hook: "316 marine stainless cam cleats locking into perimeter twist slots for truck and boat rigging.",
+        features: [
+          "Locks directly into circumferential 45° twist-lock rim slots",
+          "Secures entire stacked tower to truck beds, boat decks, or ATVs",
+          "Includes two 1.5\" heavy-duty polyester ratchet straps (1,500 lb WLL)",
+          "Low-profile flush design allows tiers to stack even with cleats on"
+        ],
+        specs: {
+          "Material": "Precision investment-cast 316 marine stainless steel",
+          "Working Load Limit": "1,500 lbs WLL (4,500 lbs break strength)",
+          "Straps Included": "2x 10-ft 1.5\" high-tensile polyester ratchet straps",
+          "Locking Pin": "Quick-release stainless spring ball-detent pin",
+          "Deck Anchors": "Includes 2x stainless bolt-down deck D-rings"
+        }
+      },
+      {
+        id: "kok-acc-14",
+        num: "14",
+        name: "Dual-Zone Hot & Cold Vacuum Isolation Disc",
+        category: "culinary",
+        compat: "Universal 24\" Inter-Tier",
+        price: 75.00,
+        image: "./assets/images/accessory_14_thermal_disc.jpg",
+        hook: "2-inch thick vacuum thermal barrier keeping ice at 32°F below and steaming pizza at 140°F above.",
+        features: [
+          "Stops all vertical thermal bridging between adjacent stacked modules",
+          "Keep ice-cold cans below and hot barbecue brisket or pizza above",
+          "Double-lip red food-grade silicone compression seals hold hermetic seal",
+          "45° twist-lock tabs lock the disc solidly between any two tiers"
+        ],
+        specs: {
+          "Diameter": "24.0\" outer seal envelope",
+          "Thickness": "2.0\" closed-cell polyurethane + vacuum matrix",
+          "Thermal Differential": "Maintains 110°F+ temperature delta between tiers",
+          "Seal Gasket": "FDA food-grade silicone double-lip lip seal",
+          "Weight": "4.8 lbs composite disc"
+        }
+      },
+      {
+        id: "kok-acc-15",
+        num: "15",
+        name: "Modular Off-Road Balloon Sand Wagon Base",
+        category: "mobility",
+        compat: "Universal 24\" Concentric Foot",
+        price: 189.00,
+        image: "./assets/images/accessory_15_offroad_cart.jpg",
+        hook: "Heavy-duty aluminum cradle cart with 12\" balloon sand tires and telescoping pull handle.",
+        features: [
+          "Custom circular cradle locks onto the 24\" concentric bottom foot ring",
+          "Two 12\" low-pressure balloon tires glide over soft beach sand and rocks",
+          "Aircraft-grade powder-coated aluminum chassis rated for 500 lbs",
+          "Telescoping ergonomic T-bar pull handle folds flat for transport"
+        ],
+        specs: {
+          "Cradle Diameter": "24.25\" precision circular nesting ring",
+          "Tire Size": "12.0\" x 7.0\" low-pressure pneumatic polyurethane balloon tires",
+          "Chassis": "6061-T6 seamless aircraft aluminum (corrosion-proof)",
+          "Capacity": "500 lbs static / 350 lbs rolling terrain capacity",
+          "Handle": "3-Position telescoping locking aluminum pull handle"
+        }
+      }
+    ];
+
+    // State
+    let cart = [];
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    // Load initial cart from localStorage if present
+    try {
+      const savedCart = localStorage.getItem('kok_outfitting_cart');
+      if (savedCart) cart = JSON.parse(savedCart);
+    } catch(e) {}
+
+    // DOM Elements
+    const productGrid = document.getElementById('product-grid');
+    const displayedCount = document.getElementById('displayed-count');
+    const navCartCount = document.getElementById('nav-cart-count');
+    const floatingBundleBar = document.getElementById('floating-bundle-bar');
+    const bundleQty = document.getElementById('bundle-qty');
+    const bundleTotal = document.getElementById('bundle-total');
+    const bundleDiscountText = document.getElementById('bundle-discount-text');
+    const cartOverlay = document.getElementById('cart-drawer-overlay');
+    const drawerList = document.getElementById('drawer-items-list');
+    const drawerSubtotal = document.getElementById('drawer-subtotal');
+    const drawerDiscountRow = document.getElementById('drawer-discount-row');
+    const drawerSavings = document.getElementById('drawer-savings');
+    const drawerTotal = document.getElementById('drawer-total');
+    const discountBanner = document.getElementById('discount-banner');
+    const discountAppliedMsg = document.getElementById('discount-applied-msg');
+
+    // Render Cards
+    function renderCatalog() {
+      productGrid.innerHTML = '';
+      
+      const filtered = ACCESSORIES_DATA.filter(item => {
+        const matchesCat = (currentCategory === 'all') || (item.category === currentCategory);
+        const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              item.hook.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              item.compat.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCat && matchesSearch;
+      });
+
+      displayedCount.textContent = filtered.length;
+
+      filtered.forEach(item => {
+        const isAdded = cart.some(c => c.id === item.id);
+        const card = document.createElement('article');
+        card.className = 'accessory-card';
+        card.dataset.id = item.id;
+        card.dataset.category = item.category;
+
+        card.innerHTML = `
+          <div class="card-media-wrapper">
+            <div class="card-badge-container">
+              <span class="badge-mod-num">MODULE ${item.num}</span>
+              <span class="badge-compat">${item.compat}</span>
+            </div>
+            <img src="${item.image}" alt="${item.name}" loading="lazy">
+          </div>
+          <div class="card-content">
+            <div class="card-header-row">
+              <h3 class="card-title">${item.name}</h3>
+              <div class="card-price">$${item.price.toFixed(2)}</div>
+            </div>
+            <p class="card-hook">${item.hook}</p>
+            <ul class="card-specs-list">
+              ${item.features.map(f => `
+                <li>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>${f}</span>
+                </li>
+              `).join('')}
+            </ul>
+            <div class="card-footer-actions">
+              <button class="btn-add-accessory ${isAdded ? 'added' : ''}" data-id="${item.id}">
+                ${isAdded ? '✓ Added to Build' : '+ Add to Modular Build'}
+              </button>
+              <button class="btn-spec-view" data-id="${item.id}" title="View Technical Specs">Specs</button>
+            </div>
+          </div>
+        `;
+        productGrid.appendChild(card);
+      });
+
+      updateCartUI();
+    }
+
+    // Cart & Pricing Calculation
+    function calculateCart() {
+      const count = cart.length;
+      const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+      let discountRate = 0;
+      let discountMsg = '';
+
+      if (count === 2) {
+        discountRate = 0.10;
+        discountMsg = '10% Bundle Discount Applied (2 Modules)';
+      } else if (count === 3) {
+        discountRate = 0.15;
+        discountMsg = '15% Bundle Discount Applied + Free Waterproof Dry Bag';
+      } else if (count >= 4) {
+        discountRate = 0.20;
+        discountMsg = '20% Mega Outfitting Bundle Savings Applied!';
+      }
+
+      const savings = subtotal * discountRate;
+      const total = subtotal - savings;
+
+      return { count, subtotal, savings, total, discountRate, discountMsg };
+    }
+
+    function updateCartUI() {
+      const calc = calculateCart();
+
+      // Navbar count
+      navCartCount.textContent = calc.count;
+
+      // Floating bundle bar
+      if (calc.count > 0) {
+        floatingBundleBar.classList.add('visible');
+        bundleQty.textContent = calc.count;
+        bundleTotal.textContent = `$${calc.total.toFixed(2)}`;
+        if (calc.discountRate > 0) {
+          bundleDiscountText.textContent = `✓ ${Math.round(calc.discountRate * 100)}% Bundle Discount Applied!`;
+        } else {
+          bundleDiscountText.textContent = 'Add 1 more module to unlock 10% Off';
+        }
+      } else {
+        floatingBundleBar.classList.remove('visible');
+      }
+
+      // Drawer Content
+      drawerList.innerHTML = '';
+      if (cart.length === 0) {
+        drawerList.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px; color: var(--text-dim);">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 12px; opacity: 0.5;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+            <p style="font-size: 15px; color: var(--text-secondary);">Your Outfitting Drawer is Empty</p>
+            <p style="font-size: 13px; margin-top: 6px;">Add accessories from the catalog to build your expedition bundle.</p>
+          </div>
+        `;
+      } else {
+        cart.forEach((item, index) => {
+          const div = document.createElement('div');
+          div.className = 'drawer-item';
+          div.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+            <div class="drawer-item-info">
+              <div class="drawer-item-name">${item.name}</div>
+              <div class="drawer-item-price">$${item.price.toFixed(2)}</div>
+            </div>
+            <button class="drawer-item-remove" data-index="${index}" title="Remove Item">&times;</button>
+          `;
+          drawerList.appendChild(div);
+        });
+      }
+
+      // Drawer summaries
+      drawerSubtotal.textContent = `$${calc.subtotal.toFixed(2)}`;
+      if (calc.savings > 0) {
+        drawerDiscountRow.style.display = 'flex';
+        drawerSavings.textContent = `-$${calc.savings.toFixed(2)}`;
+        discountBanner.style.display = 'flex';
+        discountAppliedMsg.textContent = calc.discountMsg;
+      } else {
+        drawerDiscountRow.style.display = 'none';
+        discountBanner.style.display = 'none';
+      }
+      drawerTotal.textContent = `$${calc.total.toFixed(2)}`;
+
+      // Persist in localStorage
+      try {
+        localStorage.setItem('kok_outfitting_cart', JSON.stringify(cart));
+      } catch(e) {}
+    }
+
+    // Event Handlers
+    document.addEventListener('click', (e) => {
+      // Add/Remove button on cards
+      if (e.target.closest('.btn-add-accessory')) {
+        const btn = e.target.closest('.btn-add-accessory');
+        const id = btn.dataset.id;
+        const item = ACCESSORIES_DATA.find(a => a.id === id);
+        
+        if (item) {
+          const idx = cart.findIndex(c => c.id === id);
+          if (idx >= 0) {
+            cart.splice(idx, 1);
+            btn.classList.remove('added');
+            btn.textContent = '+ Add to Modular Build';
+          } else {
+            cart.push(item);
+            btn.classList.add('added');
+            btn.textContent = '✓ Added to Build';
+          }
+          updateCartUI();
+        }
+      }
+
+      // Remove item in drawer
+      if (e.target.closest('.drawer-item-remove')) {
+        const btn = e.target.closest('.drawer-item-remove');
+        const idx = parseInt(btn.dataset.index, 10);
+        cart.splice(idx, 1);
+        renderCatalog();
+      }
+
+      // Open Cart Drawer
+      if (e.target.closest('#open-cart-btn') || e.target.closest('#bundle-review-btn')) {
+        cartOverlay.classList.add('open');
+      }
+
+      // Close Cart Drawer
+      if (e.target.closest('#close-drawer-btn') || e.target === cartOverlay) {
+        cartOverlay.classList.remove('open');
+      }
+
+      // Open Spec Modal
+      if (e.target.closest('.btn-spec-view')) {
+        const btn = e.target.closest('.btn-spec-view');
+        const id = btn.dataset.id;
+        const item = ACCESSORIES_DATA.find(a => a.id === id);
+        if (item) {
+          openSpecModal(item);
+        }
+      }
+
+      // Close Spec Modal
+      if (e.target.closest('#close-spec-modal-btn') || e.target === document.getElementById('spec-modal-overlay')) {
+        document.getElementById('spec-modal-overlay').classList.remove('open');
+      }
+
+      // Category filter pill click
+      if (e.target.closest('.filter-btn')) {
+        const btn = e.target.closest('.filter-btn');
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        renderCatalog();
+      }
+
+      // Footer filter shortcut links
+      if (e.target.matches('[data-filter]')) {
+        const cat = e.target.dataset.filter;
+        currentCategory = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.category === cat);
+        });
+        renderCatalog();
+      }
+
+      // FAQ accordion toggle
+      if (e.target.closest('.faq-question')) {
+        const faqItem = e.target.closest('.faq-item');
+        faqItem.classList.toggle('active');
+      }
+    });
+
+    // Search Input Listener
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim();
+      renderCatalog();
+    });
+
+    // Spec Modal Populate
+    function openSpecModal(item) {
+      document.getElementById('modal-mod-num').textContent = `MODULE ${item.num}`;
+      document.getElementById('modal-title').textContent = item.name;
+      document.getElementById('modal-desc').textContent = item.hook;
+
+      const table = document.getElementById('modal-spec-table');
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Specification</th>
+            <th>Engineering Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${Object.entries(item.specs).map(([key, val]) => `
+            <tr>
+              <td>${key}</td>
+              <td>${val}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      `;
+
+      document.getElementById('spec-modal-overlay').classList.add('open');
+    }
+
+    // Initial render
+    renderCatalog();
+  </script>
+</body>
+</html>
