@@ -682,7 +682,9 @@
       aspect-ratio: 16 / 9;
     }
 
-    .video-element-wrapper video {
+    .video-element-wrapper video,
+    .video-element-wrapper img,
+    .video-element-wrapper canvas {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -2894,15 +2896,15 @@
         </div>
 
         <div class="video-element-wrapper">
-          <video id="thermal-video" autoplay loop muted playsinline aria-label="Thermal imaging time-lapse comparing rectangular cooler corner melting with cylindrical uniform cold core retention">
-            <source src="./assets/videos/thermal_comparison.mp4" type="video/mp4">
-            <!-- Fallback image/webp for offline compatibility -->
-            <img src="./assets/videos/thermal_comparison.webp" alt="Thermal imaging comparison between rectangle cooler and King of Koolers cylinder">
-          </video>
+          <img id="thermal-display-media" src="./assets/videos/thermal_comparison.webp" alt="FLIR Thermal Imaging Laboratory Comparison: 72-Hour Accelerated Thermal Dissipation Analysis" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          <canvas id="thermal-freeze-canvas" style="display: none; width: 100%; height: 100%; object-fit: cover;"></canvas>
 
           <div class="video-overlay-ctrls">
-            <button class="btn btn-glass btn-sm" id="video-toggle-btn" aria-label="Pause or play thermal comparison video">
-              <span id="video-btn-text">Pause Video</span>
+            <button class="btn btn-glass btn-sm" id="video-toggle-btn" aria-label="Pause or resume thermal comparison scan">
+              <span id="video-btn-text">⏸ Pause Scan</span>
+            </button>
+            <button class="btn btn-glass btn-sm" id="video-restart-btn" aria-label="Restart thermal comparison scan">
+              <span>↺ Restart Scan</span>
             </button>
           </div>
         </div>
@@ -4104,21 +4106,54 @@
       }
 
       /* ------------------------------------------------------------------------
-         2. THERMAL VIDEO PAUSE/PLAY (WCAG 2.2.2 COMPLIANT)
+         2. THERMAL FLIR SCAN VIEWER (WEBP DEFAULT + WCAG 2.2.2 PAUSE/RESTART)
          ------------------------------------------------------------------------ */
-      const thermalVideo = document.getElementById('thermal-video');
+      const thermalImg = document.getElementById('thermal-display-media');
+      const thermalFreezeCanvas = document.getElementById('thermal-freeze-canvas');
       const videoToggleBtn = document.getElementById('video-toggle-btn');
+      const videoRestartBtn = document.getElementById('video-restart-btn');
       const videoBtnText = document.getElementById('video-btn-text');
+      let isThermalPaused = false;
 
-      if (thermalVideo && videoToggleBtn) {
+      if (thermalImg && videoToggleBtn) {
         videoToggleBtn.addEventListener('click', () => {
-          if (thermalVideo.paused) {
-            thermalVideo.play();
-            videoBtnText.textContent = 'Pause Video';
+          if (!isThermalPaused) {
+            // Freeze current frame to canvas
+            try {
+              if (thermalFreezeCanvas) {
+                thermalFreezeCanvas.width = thermalImg.naturalWidth || 800;
+                thermalFreezeCanvas.height = thermalImg.naturalHeight || 450;
+                const fCtx = thermalFreezeCanvas.getContext('2d');
+                fCtx.drawImage(thermalImg, 0, 0, thermalFreezeCanvas.width, thermalFreezeCanvas.height);
+                thermalFreezeCanvas.style.display = 'block';
+                thermalImg.style.display = 'none';
+              }
+            } catch (err) {
+              console.warn('Canvas freeze fallback:', err);
+            }
+            isThermalPaused = true;
+            if (videoBtnText) videoBtnText.textContent = '▶ Resume Scan';
+            videoToggleBtn.setAttribute('aria-label', 'Resume thermal comparison scan');
           } else {
-            thermalVideo.pause();
-            videoBtnText.textContent = 'Play Video';
+            // Resume animated playback
+            if (thermalFreezeCanvas) thermalFreezeCanvas.style.display = 'none';
+            thermalImg.style.display = 'block';
+            isThermalPaused = false;
+            if (videoBtnText) videoBtnText.textContent = '⏸ Pause Scan';
+            videoToggleBtn.setAttribute('aria-label', 'Pause thermal comparison scan');
           }
+        });
+      }
+
+      if (thermalImg && videoRestartBtn) {
+        videoRestartBtn.addEventListener('click', () => {
+          // Reset to frame 0 by refreshing image source
+          const baseSrc = './assets/videos/thermal_comparison.webp';
+          thermalImg.src = baseSrc + '?t=' + Date.now();
+          if (thermalFreezeCanvas) thermalFreezeCanvas.style.display = 'none';
+          thermalImg.style.display = 'block';
+          isThermalPaused = false;
+          if (videoBtnText) videoBtnText.textContent = '⏸ Pause Scan';
         });
       }
 
