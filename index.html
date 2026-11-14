@@ -215,18 +215,21 @@
       font-weight: 600;
       font-size: 17px;
       letter-spacing: -0.02em;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .nav-logo svg {
       width: 22px;
       height: 22px;
       fill: url(#crown-gradient);
+      flex-shrink: 0;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 26px;
+      gap: 10px;
       list-style: none;
     }
 
@@ -234,19 +237,100 @@
       color: var(--text-secondary);
       text-decoration: none;
       font-size: 13.5px;
-      font-weight: 400;
+      font-weight: 600;
       letter-spacing: -0.01em;
-      transition: color 0.2s ease;
+      transition: all 0.2s ease;
       position: relative;
-      padding: 6px 0;
+      padding: 7px 16px;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+      border: 1px solid transparent;
     }
 
-    .nav-links a:hover,
-    .nav-links a.active {
+    .nav-links a:hover {
       color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-links a.active {
+      color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.1);
+      border-color: rgba(0, 240, 255, 0.3);
     }
 
     .nav-links a.active::after {
+      display: none;
+    }
+
+    /* Lower Sub-Heading Bar for Overview Page Sections */
+    .sub-nav-bar {
+      position: sticky;
+      top: var(--nav-height);
+      left: 0;
+      width: 100%;
+      height: 42px;
+      background: rgba(6, 9, 15, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      z-index: 990;
+    }
+
+    .sub-nav-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .sub-nav-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sub-nav-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+      padding-right: 8px;
+      border-right: 1px solid var(--border-subtle);
+    }
+
+    .sub-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .sub-nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      padding: 8px 0;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .sub-nav-links a:hover,
+    .sub-nav-links a.active {
+      color: #ffffff;
+    }
+
+    .sub-nav-links a.active {
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    .sub-nav-links a.active::after {
       content: '';
       position: absolute;
       bottom: 0;
@@ -261,6 +345,8 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .patent-badge {
@@ -270,12 +356,13 @@
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.04em;
-      padding: 3px 10px;
+      padding: 4px 11px;
       border-radius: var(--radius-full);
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: var(--accent-frost);
       text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .patent-badge::before {
@@ -304,6 +391,7 @@
       border: 1px solid transparent;
       outline: none;
       font-family: inherit;
+      white-space: nowrap;
     }
 
     .btn-primary {
@@ -2902,7 +2990,7 @@
   <!-- ==========================================================================
        STICKY APPLE NAVBAR
        ========================================================================== -->
-  <nav class="nav-bar" id="navbar" aria-label="Main Navigation">
+  <nav class="nav-bar" id="navbar" aria-label="Primary Webpage Navigation">
     <div class="container nav-content">
       <a href="#overview" class="nav-logo" aria-label="King of Koolers Home">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -2911,19 +2999,12 @@
         <span>King of Koolers</span>
       </a>
 
+      <!-- Top Bar: Only Standalone Webpages -->
       <ul class="nav-links" id="nav-links">
-        <li><a href="#overview" class="active">Overview</a></li>
-        <li><a href="#stack-and-sit">Twist &amp; Lock</a></li>
+        <li><a href="./index.html" class="active">Overview</a></li>
         <li><a href="./locking-mechanism.html">Patented Lock</a></li>
-        <li><a href="#thermodynamics">Thermodynamics</a></li>
-        <li><a href="#modular-stack">Modular Stack</a></li>
-        <li><a href="#specs">Engineering</a></li>
-        <li><a href="#prototype">Prototype</a></li>
-        <li><a href="#configurator">Configurator</a></li>
-        <li><a href="#pizza-vault">Pizza Vault</a></li>
         <li><a href="./accessories.html">Accessories</a></li>
         <li><a href="./customizer.html">3D Studio</a></li>
-        <li><a href="#investors">Pitch Deck</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -2937,6 +3018,24 @@
           </svg>
         </button>
       </div>
+    </div>
+  </nav>
+
+  <!-- Lower Sub-Heading Bar: Overview Page Sections -->
+  <nav class="sub-nav-bar" aria-label="Overview Page Sections">
+    <div class="container sub-nav-content">
+      <span class="sub-nav-label">Overview Sections</span>
+      <ul class="sub-nav-links" id="sub-nav-links">
+        <li><a href="#overview" class="active">Intro</a></li>
+        <li><a href="#stack-and-sit">Twist &amp; Lock</a></li>
+        <li><a href="#thermodynamics">Thermodynamics</a></li>
+        <li><a href="#modular-stack">Modular Stack</a></li>
+        <li><a href="#specs">Engineering</a></li>
+        <li><a href="#prototype">Prototype</a></li>
+        <li><a href="#configurator">Configurator</a></li>
+        <li><a href="#pizza-vault">Pizza Vault</a></li>
+        <li><a href="#investors">Pitch Deck</a></li>
+      </ul>
     </div>
   </nav>
 
@@ -4500,7 +4599,7 @@
          1. SCROLL PROGRESS INDICATOR & STICKY NAV HIGHLIGHT
          ------------------------------------------------------------------------ */
       const scrollProgressBar = document.getElementById('scroll-progress');
-      const navLinks = document.querySelectorAll('.nav-links a');
+      const navLinks = document.querySelectorAll('.sub-nav-links a');
       const sections = document.querySelectorAll('section, header.hero-section');
 
       window.addEventListener('scroll', () => {

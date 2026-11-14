@@ -101,37 +101,81 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 22px;
+      gap: 10px;
       list-style: none;
     }
 
     .nav-links a {
       color: var(--text-secondary);
       text-decoration: none;
-      font-size: 13px;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-links a.active {
+      color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.1);
+      border-color: rgba(0, 240, 255, 0.3);
+    }
+
+    .sub-nav-bar {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: rgba(6, 9, 15, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 990;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 0 24px;
+    }
+
+    .sub-nav-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding-right: 12px;
+      border-right: 1px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+
+    .sub-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .sub-nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 12.5px;
       font-weight: 500;
+      white-space: nowrap;
       transition: color 0.2s ease;
     }
 
-    .nav-links a:hover,
-    .nav-links a.active {
+    .sub-nav-links a:hover {
       color: var(--accent-cyan);
-    }
-
-    .nav-links a.active {
-      font-weight: 700;
-      position: relative;
-    }
-
-    .nav-links a.active::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -19px;
-      height: 2px;
-      background: var(--accent-cyan);
-      box-shadow: 0 0 10px var(--accent-cyan);
     }
 
     .nav-cta {
@@ -142,6 +186,7 @@
       padding: 8px 16px;
       border-radius: var(--radius-full);
       text-decoration: none;
+      white-space: nowrap;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
@@ -608,25 +653,31 @@
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
-  <nav class="global-nav" aria-label="Main Navigation">
+  <!-- Top Navigation Bar: Primary Webpages -->
+  <nav class="global-nav" aria-label="Primary Webpage Navigation">
     <div class="nav-container">
       <a href="./index.html#overview" class="nav-brand">
         <span class="nav-brand-badge">♛</span>
         <span>King of Koolers</span>
       </a>
       <ul class="nav-links">
-        <li><a href="./index.html#overview">Overview</a></li>
-        <li><a href="./index.html#stack-and-sit">Twist &amp; Lock</a></li>
+        <li><a href="./index.html">Overview</a></li>
         <li><a href="./locking-mechanism.html" class="active">Patented Lock</a></li>
-        <li><a href="./index.html#thermodynamics">Thermodynamics</a></li>
-        <li><a href="./index.html#modular-stack">Modular Stack</a></li>
-        <li><a href="./index.html#configurator">Configurator</a></li>
         <li><a href="./accessories.html">Accessories</a></li>
         <li><a href="./customizer.html">3D Studio</a></li>
       </ul>
       <a href="./index.html#configurator" class="nav-cta">Build Your Stack</a>
     </div>
+  </nav>
+
+  <!-- Lower Sub-Heading Bar: Patented Lock Page Sections -->
+  <nav class="sub-nav-bar" aria-label="Patented Lock Sections">
+    <span class="sub-nav-label">Lock Architecture</span>
+    <ul class="sub-nav-links">
+      <li><a href="#six-angle-gallery">6-Angle Photo Gallery</a></li>
+      <li><a href="#interactive-simulator">Live Slider &amp; Unstacking Simulator</a></li>
+      <li><a href="#engineering-plan">Mechanical Specs &amp; Kinematics</a></li>
+    </ul>
   </nav>
 
   <!-- Hero Section -->
