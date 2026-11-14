@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>King of Koolers | The Shape of Cold · 24" Rotomolded Modular Stacking Cooler</title>
   <meta name="description" content="King of Koolers - The world's first patent-pending 24-inch cylindrical modular stacking cooler system. Designed by Austin Marshall with high-density rotomolded UV-resistant polyethylene, patriotic Red, White & Blue styling, 10-Watt USB solar lid, stacking up to 72 inches tall with zero corner thermal bridging.">
   <meta name="theme-color" content="#000000">
@@ -69,15 +69,29 @@
       font-family: var(--font-sans);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
+      overflow-x: clip;
     }
 
     body {
       background-color: var(--bg-black);
       color: var(--text-primary);
       line-height: 1.5;
-      overflow-x: hidden;
+      overflow-x: clip;
+      overflow-wrap: break-word;
       position: relative;
+    }
+
+    img, video, svg, canvas {
+      max-inline-size: 100%;
+    }
+
+    img, video {
+      height: auto;
+    }
+
+    :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+      outline: 2px solid var(--accent-cyan);
+      outline-offset: 2px;
     }
 
     /* Scroll progress indicator */
@@ -113,37 +127,41 @@
     }
 
     .headline-huge {
-      font-size: clamp(2.75rem, 6.5vw, 5.25rem);
+      font-size: clamp(2.4rem, 6.2vw, 5.25rem);
       font-weight: 700;
       letter-spacing: -0.035em;
-      line-height: 1.05;
+      line-height: 1.06;
+      text-wrap: balance;
       background: linear-gradient(180deg, #ffffff 30%, #a1a1aa 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .headline-large {
-      font-size: clamp(2rem, 4.2vw, 3.25rem);
+      font-size: clamp(1.85rem, 4vw, 3.25rem);
       font-weight: 700;
       letter-spacing: -0.025em;
       line-height: 1.15;
+      text-wrap: balance;
       background: linear-gradient(180deg, #ffffff 40%, #9ca3af 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .headline-medium {
-      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-size: clamp(1.35rem, 2.5vw, 2rem);
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 1.25;
+      text-wrap: balance;
       color: #ffffff;
     }
 
     .subheadline {
-      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+      font-size: clamp(1rem, 1.8vw, 1.35rem);
       font-weight: 400;
-      line-height: 1.5;
+      line-height: 1.55;
+      text-wrap: pretty;
       color: var(--text-secondary);
       max-width: 680px;
     }
@@ -446,24 +464,30 @@
     /* Mobile Menu Toggle */
     .menu-toggle {
       display: none;
-      background: none;
-      border: none;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
       color: #fff;
       cursor: pointer;
-      padding: 6px;
+      padding: 8px;
+      flex-shrink: 0;
     }
 
     /* ==========================================================================
        HERO SECTION
        ========================================================================== */
     .hero-section {
-      min-height: 92vh;
+      min-height: calc(100dvh - 100px);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 60px 0 80px 0;
+      padding: clamp(44px, 6vw, 72px) 0 clamp(56px, 7vw, 84px) 0;
       position: relative;
       overflow: hidden;
     }
@@ -2970,6 +2994,329 @@
       }
     }
 
+    /* ==========================================================================
+       PC & MOBILE POLISH LAYER (Container Queries, Touch Targets, Fluid Layout)
+       ========================================================================== */
+    .physics-card,
+    .telemetry-box,
+    .stage-stat-box,
+    .pitch-market-box,
+    .inventor-card,
+    .config-panel,
+    .invoice-card,
+    .scroll-stack-stage,
+    .scroll-stack-story {
+      min-inline-size: 0;
+    }
+
+    .table-wrapper {
+      container-type: inline-size;
+      max-inline-size: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 20px;
+      border-radius: var(--radius-lg);
+    }
+
+    .table-wrapper .compare-table {
+      margin-top: 0;
+    }
+
+    .specs-table-wrapper {
+      margin-top: 0;
+    }
+
+    @container (width < 560px) {
+      .compare-table thead {
+        display: none;
+      }
+      .compare-table tr {
+        display: block;
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        padding: 12px 14px;
+        margin-bottom: 12px;
+        background: rgba(255, 255, 255, 0.025);
+      }
+      .compare-table tr:last-child {
+        margin-bottom: 0;
+      }
+      .compare-table td {
+        display: grid;
+        grid-template-columns: minmax(110px, 42%) 1fr;
+        gap: 10px;
+        padding: 7px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        align-items: baseline;
+      }
+      .compare-table td:last-child {
+        border-bottom: none;
+      }
+      .compare-table td::before {
+        content: attr(data-label);
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+    }
+
+    @container (width < 600px) {
+      .specs-matrix,
+      .specs-matrix tbody,
+      .specs-matrix tr {
+        display: block;
+        width: 100%;
+      }
+      .specs-matrix {
+        border-radius: var(--radius-md);
+      }
+      .specs-matrix td {
+        display: block;
+        width: 100% !important;
+        padding: 10px 16px;
+      }
+      .specs-matrix td:first-child {
+        padding-bottom: 4px;
+        font-size: 13px;
+        color: var(--accent-cyan);
+        background: rgba(255, 255, 255, 0.025);
+      }
+      .specs-matrix td:last-child {
+        padding-top: 2px;
+        padding-bottom: 14px;
+        font-size: 12.5px;
+        line-height: 1.5;
+      }
+    }
+
+    /* Desktop short-laptop safety (1280x720 / 1366x768) */
+    @media (min-width: 993px) and (max-height: 820px) {
+      .scroll-stack-sticky {
+        top: 98px;
+        height: calc(100dvh - 102px);
+        padding: 14px 20px;
+        gap: 24px;
+      }
+      .stack-visual-panel {
+        padding: 14px 16px;
+      }
+      #scroll-stack-canvas {
+        max-height: calc(100dvh - 280px);
+        width: auto;
+        margin: 0 auto;
+        display: block;
+      }
+    }
+
+    @media (min-width: 993px) {
+      .scroll-stack-sticky {
+        height: calc(100dvh - 102px);
+      }
+    }
+
+    /* Tablet & Compact Laptop Navbar Safety */
+    @media (max-width: 960px) {
+      .nav-links {
+        display: none;
+      }
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        position: fixed;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: calc(100dvh - var(--nav-height));
+        overflow-y: auto;
+        background: rgba(8, 10, 16, 0.98);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        padding: 18px 20px max(24px, env(safe-area-inset-bottom, 24px));
+        border-bottom: 1px solid var(--border-medium);
+        gap: 8px;
+        z-index: 1005;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+      }
+      .nav-links.mobile-open a {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 10px 14px;
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+      }
+      .menu-toggle {
+        display: inline-flex;
+      }
+      .patent-badge {
+        display: none;
+      }
+      .sub-nav-content {
+        justify-content: flex-start;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+      }
+      .sub-nav-content::-webkit-scrollbar {
+        display: none;
+      }
+      .sub-nav-links {
+        flex-shrink: 0;
+      }
+    }
+
+    .hero-content > div {
+      flex-wrap: wrap !important;
+      justify-content: center;
+    }
+
+    /* Small Phone Layout Polish */
+    @media (max-width: 640px) {
+      .container,
+      .container-wide {
+        padding: 0 16px;
+      }
+      .sub-nav-label {
+        display: none;
+      }
+      .eyebrow {
+        flex-wrap: wrap;
+        justify-content: center;
+        font-size: 11px;
+        line-height: 1.4;
+      }
+      .hero-content .btn-lg {
+        width: min(100%, 340px);
+        padding: 13px 20px;
+        font-size: 15px;
+        justify-content: center;
+      }
+      .nav-logo {
+        font-size: 15px;
+        gap: 7px;
+      }
+      .nav-actions {
+        gap: 8px;
+      }
+      .nav-actions .btn-sm {
+        padding: 7px 11px;
+        font-size: 11.5px;
+      }
+      .hero-ctas {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+      }
+      .hero-ctas .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      .hero-thumb-pill {
+        font-size: 12px;
+        padding: 6px 12px 6px 8px;
+      }
+      .video-header {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .video-overlay-ctrls {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+      .sim-controls-bar {
+        padding: 14px;
+        gap: 14px;
+      }
+      .ctrl-group {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .ctrl-slider {
+        flex: 1;
+        min-width: 140px;
+        width: auto;
+      }
+      #thermal-canvas {
+        height: clamp(240px, 60vw, 340px);
+      }
+      .physics-card,
+      .sim-card,
+      .pitch-market-box,
+      .inventor-card,
+      .config-panel,
+      .invoice-card,
+      .pizza-vault-card {
+        padding: 20px 16px;
+      }
+      .config-img-box {
+        min-height: 260px;
+      }
+      .market-stats-row {
+        grid-template-columns: 1fr;
+      }
+      .cad-header {
+        padding: 14px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .stage-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      #reserve-dialog {
+        width: min(calc(100dvw - 20px), 520px);
+        max-height: 92dvh;
+        overflow-y: auto;
+      }
+      #reserve-dialog .modal-inner {
+        padding: 24px 18px;
+      }
+      #lightbox-dialog {
+        width: min(calc(100dvw - 16px), 960px);
+        max-height: 92dvh;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .nav-actions .btn-cyan {
+        display: none;
+      }
+      .stage-stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Accessible 44x44px Coarse-Pointer Touch Targets */
+    @media (pointer: coarse) {
+      button,
+      .btn,
+      .nav-links a,
+      .sub-nav-links a,
+      .gallery-filter-btn,
+      .tier-card,
+      .capacity-card,
+      .color-swatch-card,
+      .addon-item,
+      .single-stack-card,
+      .modal-close-btn,
+      .form-input,
+      select,
+      input[type="range"] {
+        min-block-size: 44px;
+      }
+    }
+
   </style>
 
   <!-- SVG Gradient Definitions -->
@@ -3001,7 +3348,7 @@
 
       <!-- Top Bar: Only Standalone Webpages -->
       <ul class="nav-links" id="nav-links">
-        <li><a href="./index.html" class="active">Overview</a></li>
+        <li><a href="./index.html" class="active" aria-current="page">Overview</a></li>
         <li><a href="./locking-mechanism.html">Patented Lock</a></li>
         <li><a href="./accessories.html">Accessories</a></li>
         <li><a href="./customizer.html">3D Studio</a></li>
@@ -3010,7 +3357,7 @@
       <div class="nav-actions">
         <span class="patent-badge" title="United States Patent and Trademark Office Application">Patent Pending</span>
         <a href="#configurator" class="btn btn-cyan btn-sm">Build Your Kooler</a>
-        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -3341,30 +3688,32 @@
             The mathematics are undeniable: for any equal internal volume $V$, the cylinder minimizes surface area $A$ compared to any box or square prism. Less surface area directly drives down $q$, extending ice preservation by up to <strong>4.2 additional days</strong>.
           </p>
 
-          <table class="compare-table">
-            <thead>
-              <tr>
-                <th>Geometry</th>
-                <th>Volume</th>
-                <th>Surface Area</th>
-                <th>Heat Ingress (W)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Rectangular Cooler</strong></td>
-                <td>80 Liters</td>
-                <td>1.18 m²</td>
-                <td class="flaw">22.4 W</td>
-              </tr>
-              <tr>
-                <td><strong>King of Koolers (Cylinder)</strong></td>
-                <td>80 Liters</td>
-                <td><strong>1.03 m²</strong></td>
-                <td class="advantage"><strong>14.8 W (-34%)</strong></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-wrapper" tabindex="0" role="region" aria-label="Geometry Thermal Comparison">
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th>Geometry</th>
+                  <th>Volume</th>
+                  <th>Surface Area</th>
+                  <th>Heat Ingress (W)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="Geometry"><strong>Rectangular Cooler</strong></td>
+                  <td data-label="Volume">80 Liters</td>
+                  <td data-label="Surface Area">1.18 m²</td>
+                  <td data-label="Heat Ingress (W)" class="flaw">22.4 W</td>
+                </tr>
+                <tr>
+                  <td data-label="Geometry"><strong>King of Koolers (Cylinder)</strong></td>
+                  <td data-label="Volume">80 Liters</td>
+                  <td data-label="Surface Area"><strong>1.03 m²</strong></td>
+                  <td data-label="Heat Ingress (W)" class="advantage"><strong>14.8 W (-34%)</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <!-- Physics Card 2: Corner Thermal Bridging -->
@@ -3388,8 +3737,8 @@
             <strong>The King of Koolers radial geometry</strong> possesses <em>zero 90-degree corners</em>. Heat is distributed symmetrically across an infinite set of radial tangents, generating a perfectly uniform isothermal boundary layer.
           </p>
 
-          <div style="display: flex; gap: 16px; margin-top: 24px;">
-            <div style="flex: 1; background: rgba(255, 255, 255, 0.03); padding: 14px; border-radius: var(--radius-md); border-left: 3px solid var(--accent-cyan);">
+          <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 24px;">
+            <div style="flex: 1 1 200px; background: rgba(255, 255, 255, 0.03); padding: 14px; border-radius: var(--radius-md); border-left: 3px solid var(--accent-cyan);">
               <div style="font-weight: 600; font-size: 13px; color: #fff;">Radial Symmetry</div>
               <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Uniform circumferential heat dissipation</div>
             </div>
@@ -3720,14 +4069,14 @@
         <div class="cad-img-box">
           <img src="./assets/images/cad_section_view.jpg" alt="Austin Marshall CAD Section View Orthographic Internal Core and Crown Interlock Profile a10ff113" loading="lazy" width="1400" height="623">
         </div>
-      </div>
         <div class="cad-img-box">
           <img src="./assets/images/cad_technical_transparency.png" alt="Technical Drawing and Orthographic Dimensions of King of Koolers Cylindrical Design" loading="lazy" width="1400" height="623">
         </div>
       </div>
 
       <!-- Master Specification Matrix -->
-      <table class="specs-matrix">
+      <div class="table-wrapper specs-table-wrapper" tabindex="0" role="region" aria-label="Master Engineering Specification Matrix">
+        <table class="specs-matrix">
         <tbody>
           <tr>
             <td>Outer Diameter (Standard)</td>
@@ -3778,7 +4127,8 @@
             <td>USPTO Utility Application: Modular Cylindrical Thermally-Optimized Multizone Container System</td>
           </tr>
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -4380,7 +4730,7 @@
       </div>
     </div>
   </section>
-       ========================================================================== */ -->
+
   <section class="section scroll-reveal" id="investors">
     <div class="container">
       <div class="section-header text-center">
@@ -4627,17 +4977,35 @@
         });
       }, { passive: true });
 
-      // Mobile Menu Toggle
+      // Mobile Menu Toggle (with Escape key, outside click, and desktop resize cleanup)
       const menuToggle = document.getElementById('menu-toggle');
       const navLinksContainer = document.getElementById('nav-links');
       if (menuToggle && navLinksContainer) {
-        menuToggle.addEventListener('click', () => {
+        const closeMobileMenu = (restoreFocus = false) => {
+          if (!navLinksContainer.classList.contains('mobile-open')) return;
+          navLinksContainer.classList.remove('mobile-open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+          if (restoreFocus) menuToggle.focus();
+        };
+        menuToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
           const isOpen = navLinksContainer.classList.toggle('mobile-open');
-          menuToggle.setAttribute('aria-expanded', isOpen);
+          menuToggle.setAttribute('aria-expanded', String(isOpen));
         });
         navLinksContainer.querySelectorAll('a').forEach(a => {
-          a.addEventListener('click', () => navLinksContainer.classList.remove('mobile-open'));
+          a.addEventListener('click', () => closeMobileMenu(false));
         });
+        document.addEventListener('click', (e) => {
+          if (!navLinksContainer.contains(e.target) && !menuToggle.contains(e.target)) {
+            closeMobileMenu(false);
+          }
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeMobileMenu(true);
+        });
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 960) closeMobileMenu(false);
+        }, { passive: true });
       }
 
       /* ------------------------------------------------------------------------
@@ -5310,13 +5678,17 @@
 
         function resizeCanvas() {
           const rect = canvas.getBoundingClientRect();
-          const dpr = window.devicePixelRatio || 1;
-          canvas.width = rect.width * dpr;
-          canvas.height = rect.height * dpr;
+          if (rect.width <= 0 || rect.height <= 0) return;
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.round(rect.width * dpr);
+          canvas.height = Math.round(rect.height * dpr);
           ctx.resetTransform();
           ctx.scale(dpr, dpr);
         }
         window.addEventListener('resize', resizeCanvas);
+        if (typeof ResizeObserver !== 'undefined') {
+          new ResizeObserver(resizeCanvas).observe(canvas);
+        }
         resizeCanvas();
 
         function getSimValues() {

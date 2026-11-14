@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>King of Koolers | 3D Interactive Studio & Digital Lab</title>
   <meta name="description" content="Experience the 24-inch King of Koolers in full interactive 3D. Explode tiers to look inside, customize rotomolded colors and hydro-dips, simulate laser engraving, calculate ice-to-can trip capacity, and monitor live payload weight ergonomics.">
   <meta name="theme-color" content="#000000">
@@ -682,6 +682,277 @@
         height: auto;
       }
     }
+    /* ==========================================================================
+       PC & MOBILE POLISH LAYER (100dvh Workspace, Non-Overlapping HUD, Mobile Nav)
+       ========================================================================== */
+    html,
+    body {
+      max-inline-size: 100%;
+      overflow-x: clip;
+      overflow-wrap: break-word;
+    }
+
+    img, video, svg, canvas {
+      max-inline-size: 100%;
+    }
+
+    :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+      outline: 2px solid var(--accent-cyan);
+      outline-offset: 2px;
+    }
+
+    .studio-workspace,
+    .viewport-container,
+    .studio-console,
+    .console-body,
+    .control-card {
+      min-inline-size: 0;
+    }
+
+    .menu-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: #fff;
+      cursor: pointer;
+      padding: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Fix short 720p/768p/900p PC laptop double scrollbars while keeping crisp full-bleed split screen */
+    @media (min-width: 1025px) {
+      html,
+      body {
+        height: 100dvh;
+        overflow: hidden;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      .studio-workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 460px;
+        grid-template-rows: minmax(0, 1fr);
+        flex: 1 1 0;
+        width: 100%;
+        height: calc(100dvh - 60px);
+        max-height: calc(100dvh - 60px);
+        min-height: 0;
+        overflow: hidden;
+      }
+      .viewport-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .viewport-container canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+      }
+      .studio-console {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .console-body {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow-y: auto;
+      }
+    }
+
+    @media (max-width: 1200px) and (min-width: 1025px) {
+      .studio-workspace {
+        grid-template-columns: minmax(0, 1fr) 400px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .studio-workspace {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        min-height: 0;
+      }
+      .viewport-container {
+        width: 100%;
+        height: clamp(320px, 50dvh, 480px);
+        min-height: 320px;
+        flex: none;
+      }
+      .studio-console {
+        width: 100%;
+        height: auto;
+        border-left: none;
+        border-top: 1px solid var(--border-subtle);
+      }
+      .console-body {
+        overflow-y: visible;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .nav-links {
+        display: none;
+      }
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: calc(100dvh - 60px);
+        overflow-y: auto;
+        background: rgba(8, 12, 20, 0.98);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        padding: 18px 20px max(24px, env(safe-area-inset-bottom, 24px));
+        border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+        gap: 8px;
+        z-index: 1200;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+      }
+      .nav-links.mobile-open a {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 10px 14px;
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+      }
+      .menu-toggle {
+        display: inline-flex;
+      }
+      .nav-badge-pill {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .studio-nav {
+        padding: 0 14px;
+      }
+      .nav-logo {
+        font-size: 14.5px;
+      }
+      .viewport-hud-top {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .hud-title-box {
+        padding: 8px 10px;
+      }
+      .hud-kpi-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 4px 10px;
+        font-size: 10.5px;
+      }
+      .hud-view-presets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .hud-view-presets .hud-btn {
+        flex: 1 1 auto;
+        text-align: center;
+        padding: 6px 8px;
+        font-size: 11px;
+      }
+      .viewport-hud-bottom {
+        bottom: 10px;
+        width: calc(100% - 20px);
+        max-width: 480px;
+        padding: 8px 12px;
+        gap: 8px 10px;
+        border-radius: 14px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .exploder-label {
+        font-size: 11px;
+      }
+      .exploder-slider {
+        flex: 1 1 120px;
+        width: auto;
+        min-width: 100px;
+      }
+      .console-tab-bar {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .console-tab-bar::-webkit-scrollbar {
+        display: none;
+      }
+      .console-tab-btn {
+        flex: 0 0 auto;
+        min-width: 82px;
+        padding: 12px 10px;
+      }
+      .console-body {
+        padding: 16px;
+        gap: 16px;
+      }
+      .console-footer {
+        padding: 16px 16px max(20px, env(safe-area-inset-bottom, 20px));
+      }
+      .pill-grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      #btn-snapshot span {
+        display: none;
+      }
+      .pill-grid,
+      .pill-grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .viewport-container {
+        height: clamp(310px, 48dvh, 420px);
+      }
+    }
+
+    @media (pointer: coarse) {
+      button,
+      .nav-links a,
+      .hud-btn,
+      .preset-chip,
+      .console-tab-btn,
+      .color-swatch-btn,
+      .btn-apply-checkout,
+      .engrave-input,
+      input[type="range"] {
+        min-block-size: 44px;
+      }
+      .exploder-slider {
+        min-block-size: 32px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -698,11 +969,11 @@
         <span>King of Koolers</span>
       </a>
 
-      <ul class="nav-links">
+      <ul class="nav-links" id="nav-links">
         <li><a href="./index.html">Overview</a></li>
         <li><a href="./locking-mechanism.html">Patented Lock</a></li>
         <li><a href="./accessories.html">Accessories</a></li>
-        <li><a href="./customizer.html" class="active">3D Studio</a></li>
+        <li><a href="./customizer.html" class="active" aria-current="page">3D Studio</a></li>
       </ul>
 
       <div style="display: flex; align-items: center; gap: 12px;">
@@ -710,6 +981,13 @@
         <button class="hud-btn" id="btn-snapshot" title="Capture 4K WebGL Snapshot">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           <span>Capture 3D</span>
+        </button>
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
         </button>
       </div>
     </div>
@@ -1069,7 +1347,7 @@
     camera.position.set(38, 28, 55);
 
     const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, preserveDrawingBuffer: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight, false);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -1783,12 +2061,50 @@
       a.click();
     });
 
-    // Window Resize Handler
-    window.addEventListener('resize', () => {
-      camera.aspect = container.clientWidth / container.clientHeight;
+    // Responsive 3D Canvas Resize Handler (Desktop split-screen + Mobile stacked)
+    function updateViewportSize() {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      if (w <= 0 || h <= 0) return;
+      camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      renderer.setSize(container.clientWidth, container.clientHeight);
-    });
+      renderer.setSize(w, h, false);
+    }
+    window.addEventListener('resize', updateViewportSize);
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(updateViewportSize).observe(container);
+    }
+
+    // Mobile Navigation Drawer Toggle
+    (function initMobileNav() {
+      const toggle = document.getElementById('menu-toggle');
+      const links = document.querySelector('.nav-links');
+      if (!toggle || !links) return;
+      if (!links.id) links.id = 'nav-links';
+      const closeMenu = (restoreFocus = false) => {
+        if (!links.classList.contains('mobile-open')) return;
+        links.classList.remove('mobile-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) toggle.focus();
+      };
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = links.classList.toggle('mobile-open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      links.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => closeMenu(false));
+      });
+      document.addEventListener('click', (e) => {
+        if (!links.contains(e.target) && !toggle.contains(e.target)) closeMenu(false);
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMenu(true);
+      });
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 960) closeMenu(false);
+      }, { passive: true });
+    })();
 
     // 11. Render Animation Loop
     function animate() {

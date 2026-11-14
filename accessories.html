@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>King of Koolers | Official Modular Accessories & Outfitting Ecosystem</title>
   <meta name="description" content="Explore all 15 official modular accessories for the King of Koolers 24-inch rotomolded stacking cooler. Bluetooth audio lids, pressurized draft beer taps, 360° LED ring lighting, bamboo prep discs, and off-road balloon sand wagons.">
   <meta name="theme-color" content="#000000">
@@ -43,6 +43,10 @@
       padding: 0;
     }
 
+    html {
+      overflow-x: clip;
+    }
+
     body {
       background-color: var(--bg-primary);
       color: var(--text-primary);
@@ -50,8 +54,30 @@
       font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-      min-height: 100vh;
+      overflow-x: clip;
+      overflow-wrap: break-word;
+      min-height: 100dvh;
+    }
+
+    img, video, svg, canvas {
+      max-inline-size: 100%;
+    }
+
+    img, video {
+      height: auto;
+    }
+
+    :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+      outline: 2px solid var(--accent-cyan);
+      outline-offset: 2px;
+    }
+
+    h1, h2, h3 {
+      text-wrap: balance;
+    }
+
+    p, li {
+      text-wrap: pretty;
     }
 
     a {
@@ -402,8 +428,8 @@
 
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-      gap: 32px;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+      gap: clamp(20px, 3vw, 32px);
     }
 
     .accessory-card {
@@ -832,8 +858,15 @@
 
     .spec-modal-body {
       padding: 24px;
-      max-height: 75vh;
-      overflow-y: auto;
+      max-height: 75dvh;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .spec-table-scroll {
+      max-inline-size: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .spec-table {
@@ -1002,6 +1035,199 @@
         width: 100%;
       }
     }
+    /* ==========================================================================
+       PC & MOBILE POLISH LAYER (Mobile Drawer, Filter Bar, Floating Bundle, Spec Modal)
+       ========================================================================== */
+    .accessory-card,
+    .card-body,
+    .faq-item,
+    .controls-wrapper {
+      min-inline-size: 0;
+    }
+
+    .controls-section {
+      top: 60px;
+      padding: clamp(16px, 2.5vw, 28px) 0;
+    }
+
+    .search-input {
+      max-width: 100%;
+    }
+
+    .cart-drawer {
+      width: min(100dvw, 440px);
+      height: 100dvh;
+      max-height: 100dvh;
+      visibility: hidden;
+    }
+
+    .cart-drawer.open {
+      visibility: visible;
+    }
+
+    .drawer-footer {
+      padding: 20px 24px max(24px, env(safe-area-inset-bottom, 24px));
+    }
+
+    .bundle-bar-floating {
+      width: min(calc(100dvw - 24px), 560px);
+      max-width: calc(100dvw - 24px);
+      bottom: max(16px, env(safe-area-inset-bottom, 16px));
+    }
+
+    @media (max-width: 992px) {
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: calc(100dvh - 64px);
+        overflow-y: auto;
+        background: rgba(8, 11, 17, 0.98);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        padding: 18px 20px max(24px, env(safe-area-inset-bottom, 24px));
+        border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+        gap: 8px;
+        z-index: 1200;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+      }
+      .nav-links.mobile-open a {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 10px 14px;
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+      }
+      .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-sm);
+        color: #fff;
+        cursor: pointer;
+        padding: 8px;
+        flex-shrink: 0;
+      }
+      .patent-badge {
+        display: none;
+      }
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .controls-section {
+        position: static;
+      }
+      .controls-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+      .category-pills {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 4px;
+      }
+      .category-pills::-webkit-scrollbar {
+        display: none;
+      }
+      .filter-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .search-sort-box {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .search-input {
+        flex: 1 1 180px;
+        width: auto;
+      }
+      .bundle-bar-floating {
+        padding: 10px 14px;
+        gap: 12px;
+        border-radius: var(--radius-lg);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 0 16px;
+      }
+      .nav-logo {
+        font-size: 15px;
+      }
+      .nav-actions {
+        gap: 8px;
+      }
+      .nav-cta-desktop {
+        display: none;
+      }
+      .cart-trigger-btn {
+        padding: 8px 12px;
+        font-size: 12.5px;
+      }
+      .hero-stats-bar {
+        gap: 18px 24px;
+      }
+      .stat-val {
+        font-size: 20px;
+      }
+      .grid-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .bundle-bar-floating {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+      .spec-modal-overlay {
+        padding: 12px;
+      }
+      .spec-modal-body {
+        padding: 16px;
+      }
+      .spec-table th,
+      .spec-table td {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (pointer: coarse) {
+      button,
+      .nav-links a,
+      .filter-btn,
+      .btn-add-cart,
+      .btn-view-specs,
+      .faq-question,
+      .cart-trigger-btn,
+      .drawer-item-remove,
+      .search-input,
+      select {
+        min-block-size: 44px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1018,21 +1244,28 @@
         <span>King of Koolers</span>
       </a>
 
-      <ul class="nav-links">
+      <ul class="nav-links" id="nav-links">
         <li><a href="./index.html">Overview</a></li>
         <li><a href="./locking-mechanism.html">Patented Lock</a></li>
-        <li><a href="./accessories.html" class="active">Accessories</a></li>
+        <li><a href="./accessories.html" class="active" aria-current="page">Accessories</a></li>
         <li><a href="./customizer.html">3D Studio</a></li>
       </ul>
 
       <div class="nav-actions">
         <span class="patent-badge">Patent Pending</span>
-        <button class="cart-trigger-btn" id="open-cart-btn" aria-label="View Modular Outfitting Cart">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <button type="button" class="cart-trigger-btn" id="open-cart-btn" aria-label="View Modular Outfitting Cart">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span>Outfitting</span>
           <span class="cart-count-badge" id="nav-cart-count">0</span>
         </button>
-        <a href="./index.html#configurator" class="btn-cyan">Build Your Kooler</a>
+        <a href="./index.html#configurator" class="btn-cyan nav-cta-desktop">Build Your Kooler</a>
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
       </div>
     </div>
   </nav>
@@ -2291,6 +2524,35 @@
 
     // Initial render
     renderCatalog();
+    // Mobile Navigation Drawer Toggle
+    (function initMobileNav() {
+      const toggle = document.getElementById('menu-toggle');
+      const links = document.querySelector('.nav-links');
+      if (!toggle || !links) return;
+      const closeMenu = (restoreFocus = false) => {
+        if (!links.classList.contains('mobile-open')) return;
+        links.classList.remove('mobile-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) toggle.focus();
+      };
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = links.classList.toggle('mobile-open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      links.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => closeMenu(false));
+      });
+      document.addEventListener('click', (e) => {
+        if (!links.contains(e.target) && !toggle.contains(e.target)) closeMenu(false);
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMenu(true);
+      });
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 992) closeMenu(false);
+      }, { passive: true });
+    })();
   </script>
 </body>
 </html>
