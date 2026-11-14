@@ -4,31 +4,38 @@
 
 ---
 
-## 1. Recommended Production Workflow (Why Start-Frame Image Prompts Matter First)
+## 1. Recommended Production Workflow (Why Image Prompts Come First)
 
 Because AI text-to-video models almost always hallucinate a generic **rectangular Yeti/Igloo chest cooler**, DO NOT send raw text alone straight to a video generator. Use a **two-step Image-to-Video workflow** anchored to your master sheet:
 
-1. **Step 1 — Generate the 6 Start-Frame Keyframe Images (16:9)**:
-   Feed [king_of_koolers_character_reference_sheet.jpg](file:///e:/Documents/AiPrograms/KingOfKoolers/assets/images/king_of_koolers_character_reference_sheet.jpg) as your style/geometry reference image + each **Start-Frame Image Prompt** below (works in Nano Banana / Gemini Image, Midjourney `--cref`, Flux, or Runway Frames).
+1. **Step 1 — Generate the 16:9 Start-Frame Keyframe Images (Plus Optional End Frames)**:
+   Feed [king_of_koolers_character_reference_sheet.png](file:///e:/Documents/AiPrograms/KingOfKoolers/assets/images/king_of_koolers_character_reference_sheet.png) (or `.jpg`) as your style/geometry reference image + each **Start-Frame Image Prompt** below (works in Nano Banana / Gemini Image, Midjourney `--cref`, Flux, or Runway Frames).
+   - **Pro Tip for Physics & Mechanical Precision (Scene 1 & Scene 4)**: For generators supporting **First Frame + Last Frame interpolation** (Runway Gen-4, Kling 2.x, Luma Ray), generate both a **Start Frame** (e.g., Scene 1 base tier alone / empty drop space) and an **End Frame** (the completed 5-cooler tower) so the falling coolers never drift off-proportion.
+   - **Mobile & Desktop Center-Safe Framing Rule**: Keep every cooler subject inside the **center 60% horizontal zone** (`16:9` aspect ratio) so the hero video crops cleanly on `375px` mobile screens as well as `1440px` desktop monitors.
 2. **Step 2 — Animate Each Keyframe into a 10-Second Video Clip**:
    Upload each approved 16:9 keyframe image into **Veo 3, Runway Gen-4, Kling 2.x, Sora, or Luma Ray** and paste its matching **10-Second Video Motion Prompt**.
 3. **Step 3 — Assemble & Encode (`assets/videos/hero_sizzle_reel_60s.mp4`)**:
-   Stitch the six 10-second clips with crisp `0.25s` cross-dissolves/whip cuts, upbeat driving bass percussion, and minimal Apple-style white lower-third callouts (`SF Pro Display`), compressed to **1080p H.264 `.mp4` (~12–18 MB)** so it works inside `KingOfKoolers_Email_Package.zip` and loads instantaneously on GitHub Pages.
+   Stitch the six 10-second clips with crisp `0.25s` cross-dissolves/whip cuts, upbeat driving bass percussion, and minimal Apple-style white lower-third callouts (`SF Pro Display`), compressed to **1080p H.264 `.mp4` (`yuv420p`, `+faststart`, ~12–18 MB)** so it works inside `KingOfKoolers_Email_Package.zip` and streams smoothly on GitHub Pages.
 
 ---
 
-## 2. How It Plays Automatically on First Visit (`index.html`)
+## 2. How the Hero Video Plays First on `index.html` (First-Visit UX Blueprint)
 
-To guarantee the 60-second hero sizzle reel plays immediately when someone runs `index.html` for the first time (without triggering browser autoplay blocks):
+Modern browsers (Chrome, Safari, iOS, Edge) **block automatic playback with sound** until a user taps the page. To guarantee 100% reliable first-second motion on both mobile phones and PCs inside [index.html](file:///e:/Documents/AiPrograms/KingOfKoolers/index.html) (`<header class="hero-section" id="overview">`), choose between two clean implementation modes (or combine both):
 
+### Option A (High-Conversion Landing Hero — Recommended Default)
+- Inside `.hero-media-wrapper > .hero-image-frame`, replace the static `<img>` with `<video autoplay muted loop playsinline preload="metadata" poster="./assets/images/apple_hero_plastic_rwb.jpg">` pointing to `./assets/videos/hero_sizzle_reel_60s.mp4`.
+- **Why this converts best**: Visitors see the headline (*"King of Koolers. The Shape of Cold."*) AND immediate slow-motion 5-tier cooler action in **0.2 seconds** without a modal blocking mobile users from scrolling.
+- Overlay two crisp glass pill buttons in the bottom-right corner of `.hero-image-frame`: **`🔊 Watch 60s Launch Film (With Sound)`** (opens edge-to-edge unmuted cinema player) and **`Pause`** (for accessibility).
+
+### Option B (First-Visit Full-Screen Premiere — Literal First-Open Intro)
 1. **First-Visit Cinema Overlay (`localStorage.getItem('kok_intro_seen')`)**:
-   - On a user's **very first visit**, `index.html` opens a sleek edge-to-edge full-screen cinema stage playing `hero_sizzle_reel_60s.mp4` automatically (`autoplay muted playsinline`).
-   - Top-right/bottom corners include two minimalist glass pill buttons: **`🔊 Unmute Audio`** and **`Skip to Website →`**.
-   - At `0:60` (or when `Skip` is clicked), the overlay fades seamlessly into the main Hero Header (`<header class="hero-section">`).
-2. **Persistent Hero Header Video Loop**:
-   - Inside `<header class="hero-section">`, `.hero-image-frame` displays the **Hero Background Video Loop** (either the full 60s sizzle reel muted on loop, or an instant toggle between **"▶ Watch 60s Launch Film"** and the Patriot RWB hero render).
-3. **Return Visits**:
-   - Repeat visits skip the full-screen blocker automatically and land straight on the playing Hero Header video (with a **"↺ Replay Launch Film"** pill button nearby).
+   - On a visitor's **very first load** of `index.html`, an edge-to-edge full-screen cinema stage opens automatically at the top of the viewport, auto-playing `hero_sizzle_reel_60s.mp4` (`autoplay muted playsinline poster="./assets/images/apple_hero_plastic_rwb.jpg"`).
+   - Minimalist glass pill controls sit safely away from notches/thumbs (`env(safe-area-inset-bottom)`): **`🔊 Unmute Audio`** and **`Skip to Website →`**.
+   - At `0:60` (`onended`), or immediately when `Skip` is clicked, `kok_intro_seen = '1'` is saved and the stage cross-fades cleanly down into the playing `.hero-image-frame` inside `<header class="hero-section">`.
+2. **Repeat Visits & Accessibility (`prefers-reduced-motion`)**:
+   - Return visitors bypass the full-screen gate automatically and land straight on the Hero Header with the muted background sizzle loop active plus a **`↺ Replay 60s Film`** button.
+   - If the visitor's OS enables `prefers-reduced-motion: reduce`, skip forced video motion and show the static `./assets/images/apple_hero_plastic_rwb.jpg` keyframe instead.
 
 ---
 
@@ -48,13 +55,17 @@ Stout, wide 24-inch outer diameter cylindrical rotomolded cooler modules (1:1.1 
 
 ### SCENE 1 (`0:00 – 0:10`) — Slow-Motion Gravity Drop & 5-Tier Modular Studio Stack *(User Request)*
 * **Selling Hook**: *"One footprint. Five tiers tall. Zero compromises."* — Instantly proves scale, concentric alignment, and modularity in the first 10 seconds.
-* **Color Stack Order (Bottom → Top)**: `28" Patriot Blue Base (with bottom drain spigot)` → `18" Alpine White` → `18" Patriot Red` → `12" Alpine White` → `12" Patriot Red with Flat 10W Circular Solar Lid`.
+* **Color Stack Order (Bottom → Top)**: `28" Patriot Blue Base (with bottom drain spigot)` → `20" Alpine White` → `18" Patriot Red` → `12" Alpine White` → `12" Patriot Red with Flat 10W Circular Solar Lid`.
+* **First+Last Frame AI Video Tip**: If your video model supports **Start Frame + End Frame** keyframes (Runway Gen-4 / Kling / Luma), generate both keyframes below so the slow-motion drop lands cleanly without cooler warping.
 
-> **Start-Frame Image Prompt (16:9 Studio Keyframe)**
-> Studio architectural commercial photograph on a clean neutral medium-cool gray seamless cyclorama studio background (`#555C66` softly lit with subtle darker vignette corners and a faint glossy concrete studio floor reflection). Centered in tall vertical composition are **five stout 24-inch diameter circular King of Koolers rotomolded cylindrical cooler tiers stacked vertically 5 tiers high** in descending heights from bottom to top: a tall Patriot Blue base tier with a recessed bottom drain spigot, an Alpine White mid tier, a Patriot Red mid tier, an Alpine White upper tier, and a compact Patriot Red top tier crowned with a flat flush recessed lid featuring a dark monocrystalline circular 10W solar disc and flush center bar handle. Each cylindrical tier has crisp horizontal 20-start bayonet twist seams, zero external latches, fine matte micro-stippled polyethylene texture, and opposing **flat horizontal molded side loop handles** sticking straight out radially. Dramatic Apple-keynote three-point studio softbox lighting sculpting crisp rim highlights along the circular curves, ultra-sharp 8K commercial macro clarity, no text, no watermarks.
+> **Start-Frame A — Pre-Drop Base (16:9 Studio Keyframe, Center-Safe)**
+> Studio architectural commercial photograph on a clean neutral medium-cool gray seamless cyclorama studio background (`#555C66` softly lit with subtle darker vignette corners and a faint glossy concrete studio floor reflection). Centered horizontally in the lower-third center 60% safe zone (with generous clean empty gray studio headroom above for vertical drops) sits a single **24-inch diameter King of Koolers 28-inch tall Patriot Blue rotomolded cylindrical cooler base tier**. Near its bottom front rim sits a recessed quarter-turn stainless drain spigot; opposing sides feature rigid **flat horizontal molded loop handles**; along its top rim sits an open precision 20-start spiral helix collar ready to accept stacked tiers. Fine matte micro-stippled polyethylene texture, dramatic Apple-keynote three-point studio softbox lighting sculpting crisp rim highlights, 8K macro clarity, no latches, no text, no watermarks.
+
+> **End-Frame B — Completed 5-Cooler Stack (16:9 Studio Hero Keyframe, Center-Safe)**
+> Same neutral medium-cool gray seamless cyclorama studio background (`#555C66`) and camera position, pulled slightly wider so all 5 stacked tiers fit inside the center 60% safe zone from top to bottom. Stacked vertically 5 coolers tall are **five stout 24-inch diameter circular King of Koolers rotomolded cylindrical cooler tiers** in descending modular heights: `28" Patriot Blue base with bottom drain spigot` → `20" Alpine White tier` → `18" Patriot Red tier` → `12" Alpine White tier` → `12" Patriot Red top tier` crowned with a flat flush recessed circular 10W monocrystalline solar lid and flush center handle. Crisp horizontal 20-start bayonet seams between every tier, matte micro-stippled HDPE texture, flat horizontal side loop handles sticking straight out symmetrically, zero external latches, crisp three-point studio rim highlights, no text, no watermarks.
 
 > **10-Second Video Motion & Camera Prompt (Image-to-Video / Veo / Runway / Kling)**
-> 120fps cinematic slow-motion studio sequence on a neutral seamless gray cyclorama backdrop. Starts with the bottom Patriot Blue 24-inch cylindrical base tier planted firmly on the reflective gray floor, then one-by-one from the top of the frame, the remaining four circular cylindrical cooler tiers (Alpine White, Patriot Red, Alpine White, Patriot Red with flat solar lid) drop straight down in silky slow motion along a vertical axis. As each cylindrical tier lands onto the tier below, it performs a sharp, precise `18-degree` (1/20th circle) clockwise rotational twist-lock snap with a crisp subtle puff of sub-zero cold mist escaping each seam, locking seamlessly into a towering 5-cooler stack while the camera executes a smooth vertical pedestal pullback revealing the complete 5-tier monument under crisp gray studio rim light.
+> 120fps cinematic slow-motion studio sequence on a neutral seamless gray cyclorama backdrop. Starts on the lone Patriot Blue 24-inch cylindrical base tier planted firmly on the reflective gray floor (`0:00`), then one-by-one from the top of the frame (`0:01–0:08`), the remaining four circular cylindrical cooler tiers (`20" Alpine White`, `18" Patriot Red`, `12" Alpine White`, and `12" Patriot Red with flat 10W solar lid`) fall straight down in silky slow motion along a dead-center vertical axis. As each cylindrical tier lands onto the tier below, it performs a sharp, precise `18-degree` (1/20th circle) clockwise rotational twist-lock snap with a crisp subtle puff of sub-zero cold mist escaping each seam, locking seamlessly into the towering 5-cooler stack while the camera executes a smooth vertical pedestal pullback revealing the complete 5-tier monument cleanly centered in frame.
 
 * **Optional On-Screen Title (`0:06`)**: `MODULAR BY DESIGN. STACKS 5 TIERS HIGH.`
 
@@ -95,7 +106,7 @@ Stout, wide 24-inch outer diameter cylindrical rotomolded cooler modules (1:1.1 
 > Ultra-crisp studio-lit macro product photograph on a dark slate outdoor workbench showcasing two stacked 24-inch cylindrical King of Koolers tiers: a matte Patriot Blue lower cooler capped by a flush Patriot Red circular lid, with an Alpine White upper cooler tier stacked upright directly on top of the red lid. On the outer right shoulder of the Patriot Red lid, an anodized metallic cyan-and-steel **external Vertical Deadbolt Slider** sits cleanly recessed in a dovetail channel directly aligned above a vertical receiver slot molded into the Patriot Blue collar below. Sharp close-up lighting highlights the visible precision 20-start spiral bayonet rim, thick black EPDM rubber compression seal, molded flat horizontal loop handles, and matte micro-stippled polyethylene grain. Ultra-clean commercial hardware photography, dark studio background with crisp rim lighting, zero text overlays.
 
 > **10-Second Video Motion & Camera Prompt (10s Clip)**
-> Precision mechanical macro commercial shot in two snappy beats. First (`0:00–0:04`), a close-up finger firmly pushes the recessed Vertical Deadbolt Slider on the outer rim of the Patriot Red lid straight DOWN `12 mm` with an authoritative mechanical snap directly into the lower blue cooler's collar slot, anchoring the lid solid. Immediately (`0:04–0:10`), two hands grip the opposing horizontal loop handles of the Alpine White upper cooler stacked on top and twist it counter-clockwise a tiny **1/20th of a circle (`18 degrees`)**—lifting the white upper cooler cleanly away into the air while the red lid underneath remains 100% locked, sealed, and motionless on the blue base. Crisp macro focus rack, Satisfying precision engineering aesthetic.
+> Precision mechanical macro commercial shot in two snappy beats. First (`0:00–0:04`), a close-up finger firmly pushes the recessed Vertical Deadbolt Slider on the outer rim of the Patriot Red lid straight DOWN `12.0 mm` with an authoritative mechanical snap directly into the lower blue cooler's collar slot, anchoring the lid solid. Immediately (`0:04–0:10`), two hands grip the opposing horizontal loop handles of the Alpine White upper cooler stacked on top and twist it counter-clockwise a tiny **1/20th of a circle (`18 degrees`)**—lifting the white upper cooler cleanly away into the air while the red lid underneath remains 100% locked, sealed, and motionless on the blue base. Crisp macro focus rack, satisfying precision engineering aesthetic.
 
 * **Optional On-Screen Title (`0:35`)**: `1/20TH TURN LOCK. PATENTED VERTICAL DEADBOLT.`
 
@@ -105,7 +116,7 @@ Stout, wide 24-inch outer diameter cylindrical rotomolded cooler modules (1:1.1 
 * **Why This Sells Hard**: Hits **three emotional + functional conversion triggers** in 10 seconds: sub-zero ice preservation (Circle Advantage vs. hot corners), refreshing cold water pour on demand, and off-grid smartphone charging from the lid.
 
 > **Start-Frame Image Prompt (16:9 Sensory Commercial Keyframe)**
-> Dramatic golden-hour outdoor camp-kitchen commercial photograph showing a single stout 24-inch cylindrical **King of Koolers 28-inch Patriot Blue base tier** topped with its **flat recessed circular 10W Solar Panel Lid** resting on a weathered timber deck overlooking calm water. Plugged into the waterproof USB port bezel on top of the matte solar lid is a modern smartphone resting cleanly on the flat lid surface displaying a bright green charging bolt. Down near the bottom front skirt of the cylindrical cooler, a crisp stainless-accented **fast-flow quarter-turn drain spigot** sits cleanly above an insulated stainless tumbler resting on a wooden step. The 3.5-inch thick rotomolded polyethylene wall shows crisp frost beads near the top rim, heavy horizontal molded side handles, zero exterior buckles. Rich golden sunset backlight rimming droplets of condensation, appetizing ultra-real 8K commercial look, no text.
+> Dramatic golden-hour outdoor camp-kitchen commercial photograph showing a single stout 24-inch cylindrical **King of Koolers 28-inch Patriot Blue base tier** topped with its **flat recessed circular 10-Watt USB Solar Panel Lid** resting on a weathered timber deck overlooking calm water. Plugged into the protected waterproof USB port bezel on top of the matte solar lid is a modern smartphone resting cleanly on the flat lid surface displaying a bright green charging bolt. Down near the bottom front skirt of the cylindrical cooler, a crisp **360° Flow-Tap stainless-accented drain spigot** sits cleanly above an insulated stainless tumbler resting on a wooden step. The 3.5-inch thick rotomolded polyethylene wall (R-8 insulation) shows crisp frost beads near the top rim, heavy horizontal molded side handles, zero exterior buckles. Rich golden sunset backlight rimming droplets of condensation, appetizing ultra-real 8K commercial look, no text.
 
 > **10-Second Video Motion & Camera Prompt (10s Clip)**
 > Lush slow-motion sensory commercial shot. Camera glides upward from the bottom quarter-turn spigot of a condensation-kissed Patriot Blue cylindrical cooler as crisp, sparkling ice-cold water pours cleanly into a waiting camp cup (`0:00–0:04`), pans smoothly up the matte rotomolded wall past subtle shimmering thermal heat distortion kept completely outside the 3.5-inch circular R-8 foam core (`0:04–0:07`), and settles onto the top 10W monocrystalline solar lid bathed in golden sunlight where a smartphone screen lights up showing rapid USB charging (`0:07–0:10`). Rich warm golden highlights balanced with icy cyan condensation cool tones.
@@ -137,4 +148,4 @@ Stout, wide 24-inch outer diameter cylindrical rotomolded cooler modules (1:1.1 
   * `0:30–0:40`: Crisp mechanical deadbolt *SNICK* + subtle futuristic riser.
   * `0:40–0:50`: Refreshing crystal water pour SFX + soaring warm pad swell.
   * `0:50–1:00`: Wide cinematic resolution chord, ending on a clean 1-second hold on Scene 6's hero frame.
-* **Post-Production FFmpeg Stitch Command**: Once your six 10-second clips (`clip_01.mp4` ... `clip_06.mp4`) are ready, we can automatically stitch, color-match, add clean Apple-style kinetic captions, normalize web bitrate (`H.264 / yuv420p / +faststart`), save as `assets/videos/hero_sizzle_reel_60s.mp4`, and wire the first-visit autoplay experience right into [index.html](file:///e:/Documents/AiPrograms/KingOfKoolers/index.html) using the FFmpeg binary already installed in your workspace.
+* **Post-Production Assembly & Integration**: Once your six 10-second clips (`clip_01.mp4` ... `clip_06.mp4`) are rendered, they can be stitched, color-matched, overlaid with Apple-style kinetic captions, web-encoded (`1080p H.264 / yuv420p / +faststart`), saved as `assets/videos/hero_sizzle_reel_60s.mp4`, and wired into the first-visit hero autoplay player inside [index.html](file:///e:/Documents/AiPrograms/KingOfKoolers/index.html).
