@@ -1910,12 +1910,59 @@
     .invoice-row {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      gap: 10px;
       color: var(--text-secondary);
     }
 
     .invoice-row.highlight {
       color: #fff;
       font-weight: 500;
+    }
+
+    .invoice-section-divider {
+      margin: 6px 0 2px 0;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.14);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-cyan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .invoice-remove-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--text-muted);
+      border-radius: 6px;
+      width: 22px;
+      height: 22px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .invoice-remove-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.5);
+      color: #fca5a5;
+    }
+
+    .modal-action-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 18px;
     }
 
     .invoice-total-box {
@@ -4303,17 +4350,18 @@
       </div>
 
       <!-- 3D Studio Live Sync Banner -->
-      <div id="studio-sync-banner" style="display: none; margin: 24px auto 32px auto; max-width: 860px; background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: var(--radius-md); padding: 14px 20px; align-items: center; justify-content: space-between; gap: 16px;">
+      <div id="studio-sync-banner" style="display: none; flex-wrap: wrap; margin: 24px auto 32px auto; max-width: 860px; background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: var(--radius-md); padding: 14px 20px; align-items: center; justify-content: space-between; gap: 16px;">
         <div style="display: flex; align-items: center; gap: 12px; font-size: 13.5px; color: #fff;">
           <span style="font-size: 20px;">🎨</span>
           <div>
-            <strong style="color: var(--accent-cyan); display: block;">3D Studio Configuration Applied</strong>
+            <strong style="color: var(--accent-cyan); display: block;">3D Studio Configuration Synced</strong>
             <span id="studio-sync-summary" style="color: var(--text-secondary);">Custom 3D Stack &amp; Personalization Loaded</span>
           </div>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <button type="button" id="studio-sync-reapply" style="font-size: 12px; font-weight: 600; color: #05070c; cursor: pointer; padding: 6px 12px; background: var(--accent-cyan); border: none; border-radius: var(--radius-full);">Apply to Builder</button>
           <a href="./customizer.html" style="font-size: 12px; font-weight: 600; color: var(--accent-cyan); text-decoration: none; padding: 6px 12px; background: rgba(0, 240, 255, 0.12); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: var(--radius-full);">Edit in 3D Studio</a>
-          <button id="studio-sync-dismiss" aria-label="Dismiss banner" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; line-height: 1;">&times;</button>
+          <button id="studio-sync-dismiss" type="button" aria-label="Dismiss banner" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; line-height: 1; padding: 4px;">&times;</button>
         </div>
       </div>
 
@@ -4603,16 +4651,23 @@
               <!-- Dynamically populated via JS -->
             </div>
 
+            <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <a href="./accessories.html" style="font-size: 12px; font-weight: 600; color: var(--accent-cyan); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius-full); background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.25);">
+                + Browse 30 Outfitting Modules &rarr;
+              </a>
+              <span id="invoice-outfitting-badge" style="display: none; font-size: 11px; color: #10b981; font-family: var(--font-mono);"></span>
+            </div>
+
             <div class="invoice-total-box">
-              <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <span style="color: var(--text-muted); font-size: 14px;">Estimated Backer Pledge:</span>
-                <span class="price-tbd">Cost: TBD</span>
+              <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
+                <span style="color: var(--text-muted); font-size: 14px;" id="invoice-total-label">Upgrades &amp; Outfitting Total:</span>
+                <span class="price-tbd" id="invoice-addons-total">$0.00</span>
               </div>
-              <div class="price-sub">
-                Prototype Backer Tier — Exclusive founder pricing to be announced at Kickstarter launch
+              <div class="price-sub" id="invoice-total-sub">
+                Base Cooler Stack: VIP Launch Pricing TBD · Paid upgrades &amp; outfitting totaled above
               </div>
-              <div style="font-size: 11.5px; color: var(--text-dim); margin-top: 4px;">
-                Estimated MSRP: $549 – $749 (Modular cylindrical architecture provides 34% better thermal retention than standard rectangular boxes).
+              <div style="font-size: 11.5px; color: var(--text-dim); margin-top: 4px;" id="invoice-msrp-note">
+                Estimated Complete Stack MSRP: $549 – $749 (Modular cylindrical architecture provides 34% better thermal retention than standard rectangular boxes).
               </div>
             </div>
 
@@ -4815,22 +4870,23 @@
         <div style="font-size: 12px; color: var(--accent-frost); font-weight: 500;">
           Selected Configuration: <strong id="modal-config-summary">The King 4-Tier · Space Gray</strong>
         </div>
+        <div id="modal-accessories-badge" style="display: none; font-size: 11.5px; color: var(--text-secondary); margin-top: 6px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 6px;"></div>
       </div>
 
       <form id="reserve-form" class="modal-form" method="dialog">
         <div class="form-group">
           <label for="backer-name">Full Name</label>
-          <input type="text" id="backer-name" class="form-input" placeholder="e.g. Alex Henderson" required autofocus>
+          <input type="text" id="backer-name" name="name" class="form-input" placeholder="e.g. Alex Henderson" required autofocus>
         </div>
 
         <div class="form-group">
           <label for="backer-email">Email Address</label>
-          <input type="email" id="backer-email" class="form-input" placeholder="alex@example.com" required>
+          <input type="email" id="backer-email" name="email" class="form-input" placeholder="alex@example.com" required>
         </div>
 
         <div class="form-group">
           <label for="backer-country">Country / Region</label>
-          <select id="backer-country" class="form-input">
+          <select id="backer-country" name="country" class="form-input">
             <option value="US">United States</option>
             <option value="CA">Canada</option>
             <option value="UK">United Kingdom</option>
@@ -4838,6 +4894,11 @@
             <option value="EU">European Union</option>
             <option value="OTHER">Other / Worldwide</option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <label for="backer-notes">Custom Notes / Laser Engraving (Optional)</label>
+          <input type="text" id="backer-notes" name="notes" class="form-input" maxlength="80" placeholder="e.g. Custom monogram or special build request">
         </div>
 
         <div style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-top: 4px;">
@@ -4852,16 +4913,22 @@
       </form>
 
       <!-- Confirmation state (hidden initially) -->
-      <div id="modal-success" style="display: none; text-align: center; padding: 20px 0;">
+      <div id="modal-success" style="display: none; text-align: center; padding: 16px 0;">
         <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px auto;">✓</div>
-        <h3 class="headline-medium" style="font-size: 22px;">You're on the VIP Priority List!</h3>
+        <h3 class="headline-medium" style="font-size: 22px;">VIP Build Specification Ready!</h3>
         <p style="color: var(--text-secondary); font-size: 13.5px; margin-top: 8px;">
           Your reservation key: <strong style="color: var(--accent-cyan); font-family: var(--font-mono);" id="res-key-display">#KOK-7842-VIP</strong>
         </p>
-        <p style="color: var(--text-muted); font-size: 12px; margin-top: 6px;">
-          We will notify you 48 hours before public Kickstarter launch with your private discount link.
+        <p id="reserve-delivery-status" style="color: var(--text-muted); font-size: 12.5px; margin-top: 8px; line-height: 1.5;">
+          Saved to your browser VIP Pass. Send your build to the founder or download your spec sheet below to lock in founder pricing.
         </p>
-        <button type="button" class="btn btn-glass btn-sm" id="btn-success-close" style="margin-top: 20px;">Done</button>
+        <div id="modal-success-summary-preview" style="margin-top: 14px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 10px 12px; text-align: left; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); max-height: 110px; overflow-y: auto; white-space: pre-wrap;"></div>
+        <div class="modal-action-grid">
+          <a id="btn-mailto-dispatch" href="mailto:marshall.austin@gmail.com" class="btn btn-cyan btn-sm">Email VIP Reservation to Founder &rarr;</a>
+          <button type="button" class="btn btn-glass btn-sm" id="btn-download-spec">Download Build Spec (.txt)</button>
+          <button type="button" class="btn btn-glass btn-sm" id="btn-copy-summary">Copy Summary</button>
+          <button type="button" class="btn btn-glass btn-sm" id="btn-success-close">Done</button>
+        </div>
       </div>
     </div>
   </dialog>
@@ -6148,6 +6215,79 @@
       const btnRemoveTier = document.getElementById('btn-remove-tier');
       const btnResetStack = document.getElementById('btn-reset-stack');
       const invoiceItemsList = document.getElementById('invoice-items-list');
+      const invoiceAddonsTotal = document.getElementById('invoice-addons-total');
+      const invoiceTotalSub = document.getElementById('invoice-total-sub');
+      const invoiceMsrpNote = document.getElementById('invoice-msrp-note');
+      const invoiceOutfittingBadge = document.getElementById('invoice-outfitting-badge');
+
+      // Outfitting & 3D Studio LocalStorage Sync Helpers
+      function loadOutfittingCart() {
+        try {
+          const raw = localStorage.getItem('kok_outfitting_cart');
+          if (!raw) return [];
+          const parsed = JSON.parse(raw);
+          return Array.isArray(parsed) ? parsed.filter(item => item && typeof item.name === 'string') : [];
+        } catch (err) {
+          return [];
+        }
+      }
+
+      function saveOutfittingCart(items) {
+        try {
+          localStorage.setItem('kok_outfitting_cart', JSON.stringify(items));
+        } catch (err) {
+          console.warn('Could not save outfitting cart:', err);
+        }
+      }
+
+      function getOutfittingBundle(items) {
+        const count = items.length;
+        const subtotal = items.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+        let discountRate = 0;
+        let discountMsg = '';
+        if (count === 2) {
+          discountRate = 0.10;
+          discountMsg = '10% Bundle Savings (2 Modules)';
+        } else if (count === 3) {
+          discountRate = 0.15;
+          discountMsg = '15% Bundle Savings + Free Dry Bag';
+        } else if (count >= 4) {
+          discountRate = 0.20;
+          discountMsg = '20% Max Bundle Savings + Free Dry Bag';
+        }
+        const savings = subtotal * discountRate;
+        const total = subtotal - savings;
+        return { count, subtotal, discountRate, savings, total, discountMsg };
+      }
+
+      function getPaidStackAddonsTotal() {
+        let sum = 0;
+        if (stackState.addons.halo) sum += 39;
+        if (stackState.addons.audio) sum += 99;
+        if (stackState.addons.pizzaVault) sum += 49;
+        return sum;
+      }
+
+      function loadStudioCustomization() {
+        try {
+          const raw = localStorage.getItem('kok_studio_customization');
+          return raw ? JSON.parse(raw) : null;
+        } catch (err) {
+          return null;
+        }
+      }
+
+      function syncAddonCheckboxes() {
+        document.querySelectorAll('.addon-item').forEach(item => {
+          const key = item.dataset.addon;
+          if (!key) return;
+          const active = Boolean(stackState.addons[key]);
+          item.classList.toggle('selected', active);
+          item.setAttribute('aria-checked', String(active));
+          const check = item.querySelector('.addon-checkbox');
+          if (check) check.textContent = active ? '✓' : '';
+        });
+      }
 
       // Inspector DOM Elements
       const tierInspector = document.getElementById('tier-inspector');
@@ -6594,12 +6734,126 @@
             rows.push({ name: 'The Pizza Vault™ 22" Insulated Canvas Insert (12" Tier)', val: '+$49.00' });
           }
 
+          const studioData = loadStudioCustomization();
+          if (studioData && studioData.engraveLine1 && studioData.engraveLine1.trim()) {
+            const locLabel = studioData.engraveLocation === 'body' ? 'Front Wall' : 'Bamboo Lid';
+            rows.push({
+              name: `3D Studio Laser Engraving (${locLabel}): "${studioData.engraveLine1.trim()}"`,
+              val: 'Included · Custom'
+            });
+          }
+
           rows.forEach(r => {
             const div = document.createElement('div');
             div.className = 'invoice-row' + (r.highlight ? ' highlight' : '');
-            div.innerHTML = `<span>${r.name}</span><span style="font-family: var(--font-mono); font-weight: 500;">${r.val}</span>`;
+            const left = document.createElement('span');
+            left.textContent = r.name;
+            const right = document.createElement('span');
+            right.style.fontFamily = 'var(--font-mono)';
+            right.style.fontWeight = '500';
+            right.style.flexShrink = '0';
+            right.textContent = r.val;
+            div.appendChild(left);
+            div.appendChild(right);
             invoiceItemsList.appendChild(div);
           });
+
+          // Synced Modular Outfitting Cart (from accessories.html)
+          const outfittingCart = loadOutfittingCart();
+          const bundle = getOutfittingBundle(outfittingCart);
+
+          if (outfittingCart.length > 0) {
+            const divider = document.createElement('div');
+            divider.className = 'invoice-section-divider';
+            const divLabel = document.createElement('span');
+            divLabel.textContent = `Outfitting Modules (${outfittingCart.length} Selected)`;
+            const divEdit = document.createElement('a');
+            divEdit.href = './accessories.html';
+            divEdit.textContent = 'Edit Kit';
+            divEdit.style.color = 'var(--accent-cyan)';
+            divEdit.style.textDecoration = 'none';
+            divider.appendChild(divLabel);
+            divider.appendChild(divEdit);
+            invoiceItemsList.appendChild(divider);
+
+            outfittingCart.forEach((accItem, idx) => {
+              const row = document.createElement('div');
+              row.className = 'invoice-row';
+              const left = document.createElement('span');
+              left.textContent = accItem.num ? `Mod ${accItem.num}: ${accItem.name}` : accItem.name;
+              const rightWrap = document.createElement('span');
+              rightWrap.style.display = 'inline-flex';
+              rightWrap.style.alignItems = 'center';
+              rightWrap.style.gap = '8px';
+              rightWrap.style.flexShrink = '0';
+
+              const priceSpan = document.createElement('span');
+              priceSpan.style.fontFamily = 'var(--font-mono)';
+              priceSpan.style.fontWeight = '500';
+              priceSpan.textContent = `+$${(Number(accItem.price) || 0).toFixed(2)}`;
+
+              const rmBtn = document.createElement('button');
+              rmBtn.type = 'button';
+              rmBtn.className = 'invoice-remove-btn';
+              rmBtn.title = `Remove ${accItem.name}`;
+              rmBtn.setAttribute('aria-label', `Remove ${accItem.name}`);
+              rmBtn.textContent = '×';
+              rmBtn.addEventListener('click', () => {
+                const updated = loadOutfittingCart();
+                updated.splice(idx, 1);
+                saveOutfittingCart(updated);
+                updateConfiguratorUI();
+              });
+
+              rightWrap.appendChild(priceSpan);
+              rightWrap.appendChild(rmBtn);
+              row.appendChild(left);
+              row.appendChild(rightWrap);
+              invoiceItemsList.appendChild(row);
+            });
+
+            if (bundle.savings > 0) {
+              const discRow = document.createElement('div');
+              discRow.className = 'invoice-row highlight';
+              discRow.style.color = '#10b981';
+              const left = document.createElement('span');
+              left.textContent = bundle.discountMsg;
+              const right = document.createElement('span');
+              right.style.fontFamily = 'var(--font-mono)';
+              right.style.fontWeight = '600';
+              right.textContent = `-$${bundle.savings.toFixed(2)}`;
+              discRow.appendChild(left);
+              discRow.appendChild(right);
+              invoiceItemsList.appendChild(discRow);
+            }
+          }
+
+          // Update Total Box with live paid upgrades + synced outfitting bundle
+          const combinedTotal = getPaidStackAddonsTotal() + bundle.total;
+          if (invoiceAddonsTotal) {
+            invoiceAddonsTotal.textContent = `$${combinedTotal.toFixed(2)}`;
+          }
+          if (invoiceOutfittingBadge) {
+            if (outfittingCart.length > 0) {
+              invoiceOutfittingBadge.style.display = 'inline';
+              const pctLabel = bundle.discountRate > 0 ? ` · ${Math.round(bundle.discountRate * 100)}% Bundle Savings` : '';
+              invoiceOutfittingBadge.textContent = `✓ ${outfittingCart.length} Module${outfittingCart.length > 1 ? 's' : ''} Synced${pctLabel}`;
+            } else {
+              invoiceOutfittingBadge.style.display = 'none';
+            }
+          }
+          if (invoiceTotalSub) {
+            const studioPrice = (studioData && typeof studioData.estimatedPrice === 'number')
+              ? ` · 3D Studio Est. Base: $${studioData.estimatedPrice.toFixed(2)}`
+              : '';
+            invoiceTotalSub.textContent = `Base Cooler Stack: VIP Launch Pricing TBD${studioPrice}`;
+          }
+          if (invoiceMsrpNote && studioData && typeof studioData.estimatedPrice === 'number') {
+            const estCombined = studioData.estimatedPrice + combinedTotal;
+            invoiceMsrpNote.textContent = `Estimated Complete Custom Build (Base + Selected Add-ons & Outfitting): ~$${estCombined.toFixed(2)} · 34% higher ice efficiency than box coolers.`;
+          } else if (invoiceMsrpNote) {
+            invoiceMsrpNote.textContent = 'Estimated Complete Stack MSRP: $549 – $749 (Modular cylindrical architecture provides 34% better thermal retention than standard rectangular boxes).';
+          }
         }
       }
 
@@ -6908,8 +7162,12 @@
       });
 
       /* ------------------------------------------------------------------------
-         7. NATIVE RESERVATION MODAL DIALOG & SUMMARY PREFILL
+         7. NATIVE RESERVATION MODAL DIALOG, LEAD DELIVERY & SPEC EXPORT
          ------------------------------------------------------------------------ */
+      // Optional Formspree / Web3Forms JSON endpoint (leave empty for offline + mailto/export mode)
+      const KOK_RESERVE_ENDPOINT = '';
+      const KOK_FOUNDER_EMAIL = 'marshall.austin@gmail.com';
+
       const reserveDialog = document.getElementById('reserve-dialog');
       const openReserveBtn = document.getElementById('open-reserve-btn');
       const modalCloseX = document.getElementById('modal-close-x');
@@ -6917,32 +7175,146 @@
       const modalSuccess = document.getElementById('modal-success');
       const btnSuccessClose = document.getElementById('btn-success-close');
       const modalConfigSummary = document.getElementById('modal-config-summary');
+      const modalAccessoriesBadge = document.getElementById('modal-accessories-badge');
+      const backerNotesInput = document.getElementById('backer-notes');
       const resKeyDisplay = document.getElementById('res-key-display');
+      const reserveDeliveryStatus = document.getElementById('reserve-delivery-status');
+      const modalSuccessPreview = document.getElementById('modal-success-summary-preview');
+      const btnMailtoDispatch = document.getElementById('btn-mailto-dispatch');
+      const btnDownloadSpec = document.getElementById('btn-download-spec');
+      const btnCopySummary = document.getElementById('btn-copy-summary');
       const btnRequestPitch = document.getElementById('btn-request-pitch');
       const btnTitaniumAlert = document.getElementById('btn-titanium-alert');
 
-      function openModalWithBuildSummary(customTitle) {
-        if (!reserveDialog) return;
+      const activeReservationContext = {
+        customTitle: null,
+        latestSpecText: '',
+        latestFileName: 'KingOfKoolers_Build_Spec.txt'
+      };
+
+      function getCurrentBuildSummaryText() {
         const totalH = getTotalHeight();
         const totalCans = getTotalCans();
+        const tiersDesc = stackState.tiers.map(t => `${t.height}" ${colorData[t.color]?.name || t.color}`).join(' + ');
+        let summaryText = `Custom ${stackState.tiers.length}-Tier Build (${totalH.toFixed(1)}" · ${totalCans} Cans): ${tiersDesc}`;
+        if (stackState.addons.solarLid) summaryText += ' + 10W Solar Lid';
+        const baseTier = stackState.tiers[0];
+        if (baseTier && (baseTier.height === 20 || baseTier.height === 28) && stackState.addons.spigot) summaryText += ' + Water Bib';
+        if (stackState.addons.halo) summaryText += ' + LED Halo';
+        if (stackState.addons.audio) summaryText += ' + Audio Base';
+        if (stackState.addons.pizzaVault) summaryText += ' + Pizza Vault (22" Insert)';
+        return summaryText;
+      }
+
+      function openModalWithBuildSummary(customTitle) {
+        if (!reserveDialog) return;
+        activeReservationContext.customTitle = customTitle || null;
+        const outfittingCart = loadOutfittingCart();
+        const bundle = getOutfittingBundle(outfittingCart);
+        const studioData = loadStudioCustomization();
 
         if (modalConfigSummary) {
-          if (customTitle) {
-            modalConfigSummary.textContent = customTitle;
-          } else {
-            const tiersDesc = stackState.tiers.map(t => `${t.height}" ${colorData[t.color]?.name}`).join(' + ');
-            let summaryText = `Custom ${stackState.tiers.length}-Tier Build (${totalH.toFixed(1)}" · ${totalCans} Cans): ${tiersDesc}`;
-            if (stackState.addons.solarLid) summaryText += ' + 10W Solar Lid';
-            const baseTier = stackState.tiers[0];
-            if (baseTier && (baseTier.height === 20 || baseTier.height === 28) && stackState.addons.spigot) summaryText += ' + Water Bib';
-            if (stackState.addons.pizzaVault) summaryText += ' + Pizza Vault (22" Insert)';
-            modalConfigSummary.textContent = summaryText;
+          modalConfigSummary.textContent = customTitle || getCurrentBuildSummaryText();
+        }
+
+        if (modalAccessoriesBadge) {
+          const extras = [];
+          if (outfittingCart.length > 0) {
+            const pct = bundle.discountRate > 0 ? ` (${Math.round(bundle.discountRate * 100)}% Off)` : '';
+            extras.push(`Outfitting Kit: ${outfittingCart.length} Module${outfittingCart.length > 1 ? 's' : ''} · $${bundle.total.toFixed(2)}${pct}`);
           }
+          if (studioData && studioData.engraveLine1 && studioData.engraveLine1.trim()) {
+            extras.push(`3D Engraving: "${studioData.engraveLine1.trim()}"`);
+          }
+          if (extras.length > 0) {
+            modalAccessoriesBadge.style.display = 'block';
+            modalAccessoriesBadge.textContent = extras.join(' · ');
+          } else {
+            modalAccessoriesBadge.style.display = 'none';
+          }
+        }
+
+        if (backerNotesInput && !backerNotesInput.value.trim() && studioData && studioData.engraveLine1 && studioData.engraveLine1.trim()) {
+          const loc = studioData.engraveLocation === 'body' ? 'Front Wall' : 'Bamboo Lid';
+          backerNotesInput.value = `Laser Engraving (${loc}): "${studioData.engraveLine1.trim()}"`;
         }
 
         if (reserveForm) reserveForm.style.display = 'flex';
         if (modalSuccess) modalSuccess.style.display = 'none';
         reserveDialog.showModal();
+      }
+
+      function buildSpecSheetText(record) {
+        const lines = [
+          '====================================================',
+          'KING OF KOOLERS — VIP BUILD & RESERVATION SPEC SHEET',
+          '====================================================',
+          `Reservation Key : ${record.reservationKey}`,
+          `Submitted At    : ${record.submittedAt}`,
+          `Backer Name     : ${record.name}`,
+          `Backer Email    : ${record.email}`,
+          `Country/Region  : ${record.country}`,
+          record.notes ? `Notes/Engraving : ${record.notes}` : null,
+          record.customTitle ? `Request Type    : ${record.customTitle}` : null,
+          '',
+          `CORE STACK (${record.stackSummary.totalHeightIn}" Tall · 24.0" OD · ${record.stackSummary.totalCans} Cans)`,
+          ...record.stackSummary.tiers.map((t, i) => `  - Tier ${i + 1}: ${t.height}" ${t.heightName} · ${t.colorName} (${t.cans} Cans)`),
+          '',
+          'HARDWARE & UPGRADES',
+          record.addons.solarLid ? '  - Solar Crown 10W USB Lid + Bamboo Prep Board (VIP Perk)' : null,
+          record.addons.spigotEligible && record.addons.spigot ? '  - 360° Flow-Tap Water Bib Spigot (VIP Perk)' : null,
+          record.addons.dolly ? '  - All-Terrain Wagon Roller Dolly (VIP Perk)' : null,
+          record.addons.halo ? '  - 360° Night-Vision LED Perimeter Halo (+$39.00)' : null,
+          record.addons.audio ? '  - Hi-Fi Spatial Bluetooth Sound Base (+$99.00)' : null,
+          record.addons.pizzaVault ? '  - The Pizza Vault™ 22" Canvas Insert (+$49.00)' : null
+        ].filter(Boolean);
+
+        if (record.studioCustomization) {
+          const sc = record.studioCustomization;
+          const finish = (sc.pattern && sc.pattern !== 'none')
+            ? `${String(sc.pattern).toUpperCase()} Hydro-Dip`
+            : `${String(sc.theme || sc.colorTheme || 'RWB').toUpperCase()} Theme`;
+          lines.push('', `3D STUDIO PRESET: ${sc.stackLabel || sc.stackType || 'Custom'} · ${finish}`);
+          if (sc.engraveLine1 && sc.engraveLine1.trim()) {
+            lines.push(`  - Engraving (${sc.engraveLocation === 'body' ? 'Front Wall' : 'Bamboo Lid'}): "${sc.engraveLine1.trim()}"`);
+          }
+        }
+
+        if (record.outfitting.items.length > 0) {
+          lines.push('', `MODULAR OUTFITTING KIT (${record.outfitting.items.length} Modules)`);
+          record.outfitting.items.forEach(item => {
+            lines.push(`  - Mod ${item.num || '--'}: ${item.name} (+$${(Number(item.price) || 0).toFixed(2)})`);
+          });
+          if (record.outfitting.savings > 0) {
+            lines.push(`  - ${record.outfitting.discountMsg}: -$${record.outfitting.savings.toFixed(2)}`);
+          }
+          lines.push(`  - Outfitting Kit Net Total: $${record.outfitting.total.toFixed(2)}`);
+        }
+
+        lines.push(
+          '',
+          `UPGRADES & OUTFITTING TOTAL : $${record.totals.upgradesAndOutfittingTotal.toFixed(2)}`,
+          `CORE STACK PRICING          : VIP Kickstarter Launch Tier TBD`,
+          '===================================================='
+        );
+        return lines.join('\n');
+      }
+
+      function buildMailtoHref(record, fullSpecText) {
+        const subject = `[King of Koolers VIP ${record.reservationKey}] ${record.name} — ${record.stackSummary.totalHeightIn}" Build`;
+        let body = fullSpecText;
+        if (encodeURIComponent(body).length > 1550) {
+          const modList = record.outfitting.items.map(i => `Mod ${i.num || ''}: ${i.name}`).join(', ');
+          body = [
+            `Reservation Key: ${record.reservationKey}`,
+            `Name: ${record.name} | Email: ${record.email} | Region: ${record.country}`,
+            record.notes ? `Notes: ${record.notes}` : null,
+            `Build: ${getCurrentBuildSummaryText()}`,
+            modList ? `Outfitting (${record.outfitting.items.length}): ${modList} ($${record.outfitting.total.toFixed(2)} net)` : null,
+            `Upgrades & Outfitting Total: $${record.totals.upgradesAndOutfittingTotal.toFixed(2)}`
+          ].filter(Boolean).join('\n');
+        }
+        return `mailto:${KOK_FOUNDER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       }
 
       if (openReserveBtn) {
@@ -6965,13 +7337,156 @@
         btnSuccessClose.addEventListener('click', () => reserveDialog.close());
       }
 
+      if (btnDownloadSpec) {
+        btnDownloadSpec.addEventListener('click', () => {
+          if (!activeReservationContext.latestSpecText) return;
+          const blob = new Blob([activeReservationContext.latestSpecText], { type: 'text/plain;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = activeReservationContext.latestFileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        });
+      }
+
+      if (btnCopySummary) {
+        btnCopySummary.addEventListener('click', async () => {
+          const text = activeReservationContext.latestSpecText;
+          if (!text) return;
+          let copied = false;
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(text);
+              copied = true;
+            }
+          } catch (err) {
+            copied = false;
+          }
+          if (!copied) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+              copied = document.execCommand('copy');
+            } catch (e) {
+              copied = false;
+            }
+            document.body.removeChild(ta);
+          }
+          const orig = btnCopySummary.textContent;
+          btnCopySummary.textContent = copied ? '✓ Copied!' : 'Copy Failed';
+          setTimeout(() => { btnCopySummary.textContent = orig; }, 2000);
+        });
+      }
+
       if (reserveForm) {
-        reserveForm.addEventListener('submit', (e) => {
+        reserveForm.addEventListener('submit', async (e) => {
           e.preventDefault();
+          const nameInput = document.getElementById('backer-name');
+          const emailInput = document.getElementById('backer-email');
+          const countryInput = document.getElementById('backer-country');
+
+          const name = (nameInput?.value || '').trim();
+          const email = (emailInput?.value || '').trim();
+          const country = countryInput?.value || 'US';
+          const notes = (backerNotesInput?.value || '').trim();
+
           const randomKey = '#KOK-' + Math.floor(1000 + Math.random() * 9000) + '-VIP';
+          const baseTier = stackState.tiers[0];
+          const spigotEligible = Boolean(baseTier && (baseTier.height === 20 || baseTier.height === 28));
+          const outfittingItems = loadOutfittingCart();
+          const bundle = getOutfittingBundle(outfittingItems);
+          const paidAddons = getPaidStackAddonsTotal();
+          const studioData = loadStudioCustomization();
+
+          const record = {
+            reservationKey: randomKey,
+            submittedAt: new Date().toISOString(),
+            name,
+            email,
+            country,
+            notes,
+            customTitle: activeReservationContext.customTitle,
+            summaryLine: activeReservationContext.customTitle || getCurrentBuildSummaryText(),
+            stackSummary: {
+              totalHeightIn: Number(getTotalHeight().toFixed(1)),
+              totalCans: getTotalCans(),
+              tiers: stackState.tiers.map(t => ({
+                height: t.height,
+                heightName: heightData[t.height]?.name || 'Tier',
+                color: t.color,
+                colorName: colorData[t.color]?.name || t.color,
+                cans: heightData[t.height]?.cans || 40
+              }))
+            },
+            addons: {
+              ...stackState.addons,
+              spigotEligible
+            },
+            outfitting: {
+              items: outfittingItems.map(i => ({ id: i.id, num: i.num, name: i.name, price: Number(i.price) || 0 })),
+              subtotal: bundle.subtotal,
+              savings: bundle.savings,
+              total: bundle.total,
+              discountMsg: bundle.discountMsg
+            },
+            studioCustomization: studioData,
+            totals: {
+              paidAddonsTotal: paidAddons,
+              outfittingTotal: bundle.total,
+              upgradesAndOutfittingTotal: paidAddons + bundle.total
+            }
+          };
+
+          const specText = buildSpecSheetText(record);
+          activeReservationContext.latestSpecText = specText;
+          activeReservationContext.latestFileName = `KingOfKoolers_${randomKey.replace('#', '')}.txt`;
+
+          try {
+            const rawPrev = localStorage.getItem('kok_vip_reservations');
+            const prevList = rawPrev ? JSON.parse(rawPrev) : [];
+            const nextList = Array.isArray(prevList) ? [record, ...prevList].slice(0, 25) : [record];
+            localStorage.setItem('kok_vip_reservations', JSON.stringify(nextList));
+          } catch (storageErr) {
+            console.warn('Could not persist reservation locally:', storageErr);
+          }
+
           if (resKeyDisplay) resKeyDisplay.textContent = randomKey;
+          if (modalSuccessPreview) modalSuccessPreview.textContent = specText;
+          if (btnMailtoDispatch) btnMailtoDispatch.href = buildMailtoHref(record, specText);
+
           reserveForm.style.display = 'none';
           if (modalSuccess) modalSuccess.style.display = 'block';
+
+          if (KOK_RESERVE_ENDPOINT) {
+            if (reserveDeliveryStatus) reserveDeliveryStatus.textContent = 'Syncing VIP reservation to launch queue...';
+            try {
+              const resp = await fetch(KOK_RESERVE_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(record)
+              });
+              if (resp.ok) {
+                if (reserveDeliveryStatus) {
+                  reserveDeliveryStatus.textContent = `✓ Reservation ${randomKey} delivered to the VIP launch queue and saved in your browser. Download your .txt spec sheet below for your records.`;
+                }
+              } else {
+                throw new Error(`HTTP ${resp.status}`);
+              }
+            } catch (netErr) {
+              if (reserveDeliveryStatus) {
+                reserveDeliveryStatus.textContent = `Saved locally in this browser (${randomKey}). Network endpoint unavailable — click "Email VIP Reservation to Founder" or download your .txt spec sheet below.`;
+              }
+            }
+          } else if (reserveDeliveryStatus) {
+            reserveDeliveryStatus.textContent = `Saved locally in this browser (${randomKey}). Click "Email VIP Reservation to Founder" to dispatch a pre-filled reservation email, or download your .txt spec sheet below.`;
+          }
         });
       }
 
@@ -7017,27 +7532,139 @@
       }
 
       /* ------------------------------------------------------------------------
-         9. 3D STUDIO STATE SYNCHRONIZATION
+         9. 3D STUDIO & OUTFITTING CROSS-PAGE SYNCHRONIZATION
          ------------------------------------------------------------------------ */
-      try {
-        const studioRaw = localStorage.getItem('kok_studio_customization');
-        if (studioRaw) {
-          const studioData = JSON.parse(studioRaw);
-          const banner = document.getElementById('studio-sync-banner');
-          const summary = document.getElementById('studio-sync-summary');
-          const dismissBtn = document.getElementById('studio-sync-dismiss');
-          if (banner && summary) {
-            banner.style.display = 'flex';
-            summary.textContent = `Preset: ${String(studioData.stackType || '').toUpperCase()} · Theme: ${String(studioData.colorTheme || '').toUpperCase()} · Laser Engraving: "${studioData.engraveLine1 || 'CUSTOM'}"`;
-            if (dismissBtn) {
-              dismissBtn.addEventListener('click', () => {
-                banner.style.display = 'none';
-              });
-            }
+      const STUDIO_PRESET_MAP = {
+        'patriot-58': 'rwb',
+        'titan-72': 'titan',
+        'explorer-38': 'explorer',
+        'scout-30': 'scout'
+      };
+
+      const STUDIO_THEME_PALETTES = {
+        rwb: ['blue', 'white', 'red', 'white'],
+        stealth: ['black', 'gray', 'black', 'black'],
+        arctic: ['white', 'white', 'blue', 'white'],
+        olive: ['green', 'green', 'green', 'green'],
+        america: ['blue', 'white', 'red', 'white'],
+        camo: ['green', 'green', 'green', 'green'],
+        topo: ['gray', 'gray', 'black', 'gray'],
+        carbon: ['black', 'black', 'gray', 'black']
+      };
+
+      let latestStudioData = null;
+
+      function applyStudioCustomization(studioData, shouldApplyToBuilder) {
+        if (!studioData) return;
+        latestStudioData = studioData;
+
+        const banner = document.getElementById('studio-sync-banner');
+        const summary = document.getElementById('studio-sync-summary');
+        const themeKey = String(studioData.theme || studioData.colorTheme || 'rwb').toLowerCase();
+        const patternKey = String(studioData.pattern || 'none').toLowerCase();
+        const finishLabel = (patternKey && patternKey !== 'none')
+          ? `${patternKey.toUpperCase()} Hydro-Dip`
+          : themeKey.toUpperCase();
+        const stackLabel = studioData.stackLabel || String(studioData.stackType || 'PATRIOT-58').toUpperCase();
+        const engraveLabel = (studioData.engraveLine1 && studioData.engraveLine1.trim())
+          ? studioData.engraveLine1.trim()
+          : 'CUSTOM';
+        const priceLabel = (typeof studioData.estimatedPrice === 'number')
+          ? ` · Est. $${studioData.estimatedPrice.toFixed(2)}`
+          : '';
+
+        if (banner && summary) {
+          banner.style.display = 'flex';
+          summary.textContent = `Preset: ${stackLabel} · Finish: ${finishLabel} · Engraving: "${engraveLabel}"${priceLabel}`;
+        }
+
+        if (shouldApplyToBuilder) {
+          const presetKey = studioData.indexPreset || STUDIO_PRESET_MAP[studioData.stackType] || 'rwb';
+          applyPreset(presetKey);
+
+          const effectiveKey = (patternKey && patternKey !== 'none' && STUDIO_THEME_PALETTES[patternKey])
+            ? patternKey
+            : (STUDIO_THEME_PALETTES[themeKey] ? themeKey : 'rwb');
+          const palette = (effectiveKey === 'rwb' && stackState.tiers.length === 2)
+            ? ['blue', 'red']
+            : STUDIO_THEME_PALETTES[effectiveKey];
+
+          stackState.tiers.forEach((tier, i) => {
+            tier.color = palette[i % palette.length];
+          });
+
+          if (typeof studioData.showSolar === 'boolean') {
+            stackState.addons.solarLid = studioData.showSolar;
+          }
+          if (typeof studioData.showSpigot === 'boolean') {
+            const baseTier = stackState.tiers[0];
+            stackState.addons.spigot = Boolean(baseTier && (baseTier.height === 20 || baseTier.height === 28)) && studioData.showSpigot;
+          }
+          if (typeof studioData.showPizza === 'boolean') {
+            stackState.addons.pizzaVault = studioData.showPizza;
+          }
+
+          const leadColor = stackState.tiers[0]?.color;
+          if (leadColor && colorData[leadColor]) {
+            stackState.currentColor = leadColor;
+            document.querySelectorAll('.color-swatch-card').forEach(c => {
+              const matched = c.dataset.color === leadColor;
+              c.classList.toggle('active', matched);
+              c.setAttribute('aria-checked', String(matched));
+            });
+            if (singleStackPreviewImg) singleStackPreviewImg.src = colorData[leadColor].thumb;
+            if (singleStackColorTitle) singleStackColorTitle.textContent = `${colorData[leadColor].name} Finish`;
+            if (singleStackColorDesc) singleStackColorDesc.textContent = colorData[leadColor].desc;
+          }
+
+          syncAddonCheckboxes();
+          updateConfiguratorUI();
+
+          if (studioData.applyPending) {
+            try {
+              const updated = { ...studioData, applyPending: false };
+              localStorage.setItem('kok_studio_customization', JSON.stringify(updated));
+              latestStudioData = updated;
+            } catch (e) {}
           }
         }
+      }
+
+      try {
+        const banner = document.getElementById('studio-sync-banner');
+        const dismissBtn = document.getElementById('studio-sync-dismiss');
+        const reapplyBtn = document.getElementById('studio-sync-reapply');
+
+        if (dismissBtn && banner) {
+          dismissBtn.addEventListener('click', () => {
+            banner.style.display = 'none';
+          });
+        }
+        if (reapplyBtn) {
+          reapplyBtn.addEventListener('click', () => {
+            if (!latestStudioData) return;
+            applyStudioCustomization(latestStudioData, true);
+            const orig = reapplyBtn.textContent;
+            reapplyBtn.textContent = 'Applied ✓';
+            setTimeout(() => { reapplyBtn.textContent = orig; }, 1600);
+          });
+        }
+
+        const initialStudio = loadStudioCustomization();
+        if (initialStudio) {
+          applyStudioCustomization(initialStudio, Boolean(initialStudio.applyPending));
+        }
+
+        window.addEventListener('storage', (ev) => {
+          if (ev.key === 'kok_outfitting_cart') {
+            updateConfiguratorUI();
+          } else if (ev.key === 'kok_studio_customization') {
+            const refreshed = loadStudioCustomization();
+            if (refreshed) applyStudioCustomization(refreshed, Boolean(refreshed.applyPending));
+          }
+        });
       } catch (err) {
-        console.warn('Studio sync check error:', err);
+        console.warn('Studio & outfitting sync check error:', err);
       }
 
     })();

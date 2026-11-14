@@ -1545,17 +1545,93 @@
       return texture;
     }
 
-    // 2. Build Procedural 3D Cooler Hierarchy
+    // 2. Stack Preset Definitions & Build Hierarchy
+    const STACK_PRESETS = {
+      'patriot-58': {
+        label: '3-Tier Patriot (58")',
+        indexPreset: 'rwb',
+        heightIn: 58,
+        quarts: 160,
+        dryLbs: 46,
+        basePrice: 389,
+        tiers: [28, 18, 12]
+      },
+      'titan-72': {
+        label: '4-Tier Titan Max (72")',
+        indexPreset: 'titan',
+        heightIn: 72,
+        quarts: 215,
+        dryLbs: 68,
+        basePrice: 549,
+        tiers: [28, 20, 12, 12]
+      },
+      'explorer-38': {
+        label: '2-Tier Explorer Duo (38")',
+        indexPreset: 'explorer',
+        heightIn: 38,
+        quarts: 110,
+        dryLbs: 34,
+        basePrice: 289,
+        tiers: [20, 18]
+      },
+      'scout-30': {
+        label: '2-Tier Solo Scout (30")',
+        indexPreset: 'scout',
+        heightIn: 30,
+        quarts: 80,
+        dryLbs: 28,
+        basePrice: 239,
+        tiers: [18, 12]
+      }
+    };
+
+    const hudHeight = document.getElementById('hud-height');
+    const hudQuarts = document.getElementById('hud-quarts');
+    const consoleTotalPrice = document.getElementById('console-total-price');
+    const breakdownDryLabel = document.getElementById('breakdown-dry')?.previousElementSibling;
+    const breakdownDryVal = document.getElementById('breakdown-dry');
+
+    function getActivePreset() {
+      return STACK_PRESETS[studioState.stackType] || STACK_PRESETS['patriot-58'];
+    }
+
+    function computeStudioPrice() {
+      const preset = getActivePreset();
+      let total = preset.basePrice;
+      if (studioState.showPizza) total += 49;
+      if (studioState.pattern && studioState.pattern !== 'none') total += 59;
+      if ((studioState.engraveLine1 && studioState.engraveLine1.trim()) ||
+          (studioState.engraveLine2 && studioState.engraveLine2.trim())) {
+        total += 29;
+      }
+      if (!studioState.showSolar) total -= 40;
+      if (!studioState.showSpigot) total -= 25;
+      return Math.max(149, total);
+    }
+
+    function updateStudioHUD() {
+      const preset = getActivePreset();
+      const price = computeStudioPrice();
+      if (hudHeight) hudHeight.textContent = `${preset.heightIn}.0"`;
+      if (hudQuarts) hudQuarts.textContent = `${preset.quarts} QT`;
+      if (consoleTotalPrice) consoleTotalPrice.textContent = `$${price.toFixed(2)}`;
+      if (breakdownDryLabel) breakdownDryLabel.textContent = `Dry Stack Weight (${preset.tiers.length} Tiers + Lid):`;
+      if (breakdownDryVal) breakdownDryVal.textContent = `${preset.dryLbs} lbs`;
+    }
+
+    // Build Procedural 3D Cooler Hierarchy
     const coolerRoot = new THREE.Group();
     scene.add(coolerRoot);
 
-    // Groups for explosion animation
+    // Groups for explosion animation (supports 2, 3, or 4 tiers)
     const baseGroup = new THREE.Group();
     const midGroup = new THREE.Group();
+    const upperMidGroup = new THREE.Group();
     const topGroup = new THREE.Group();
     const lidGroup = new THREE.Group();
     coolerRoot.add(baseGroup);
     coolerRoot.add(midGroup);
+    coolerRoot.add(upperMidGroup);
     coolerRoot.add(topGroup);
     coolerRoot.add(lidGroup);
 
@@ -1626,7 +1702,7 @@
       innerMesh.position.y = 0.5;
       tierGroup.add(innerMesh);
 
-      // Top Circumferential Collar Rim (45° Bayonet Cam Lugs)
+      // Top Circumferential Collar Rim (20-Start Spiral Helix Rim)
       const rimGeo = new THREE.TorusGeometry(RADIUS_OUTER, 0.55, 12, 48);
       const rimMesh = new THREE.Mesh(rimGeo, collarMat);
       rimMesh.rotation.x = Math.PI / 2;
@@ -1733,41 +1809,99 @@
       return lid;
     }
 
-    // Assemble Full 3D Stack
-    let baseMesh, midMesh, topMesh, lidMesh;
+    // Assemble Full 3D Stack Dynamically From Preset
+    let baseMesh, midMesh, upperMidMesh, topMesh, lidMesh, bodyPlateMesh;
     let iceMeshGroup, cansMeshGroup;
 
     function buildFullStack() {
-      // Clear previous children
-      while(baseGroup.children.length > 0) baseGroup.remove(baseGroup.children[0]);
-      while(midGroup.children.length > 0) midGroup.remove(midGroup.children[0]);
-      while(topGroup.children.length > 0) topGroup.remove(topGroup.children[0]);
-      while(lidGroup.children.length > 0) lidGroup.remove(lidGroup.children[0]);
+      // Clear previous children across all animation groups
+      [baseGroup, midGroup, upperMidGroup, topGroup, lidGroup].forEach(g => {
+        while (g.children.length > 0) g.remove(g.children[0]);
+      });
 
       initMaterials();
 
-      // Tier 1: Bunker Base (28" tall scaled ~ 14 units)
-      const H_BASE = 14;
+      const preset = getActivePreset();
+      const tiers = preset.tiers;
+      const tierHeights = tiers.map(h => h * 0.5); // 28" -> 14, 20" -> 10, 18" -> 9, 12" -> 6
+
+      let runningY = 0;
+
+      // Base Tier (index 0)
+      const H_BASE = tierHeights[0];
       baseMesh = buildCoolerTier(H_BASE, baseMat, studioState.showSpigot, true);
       baseMesh.position.y = H_BASE / 2;
       baseGroup.add(baseMesh);
+      runningY += H_BASE;
 
-      // Tier 2: Mid Provision (18" tall scaled ~ 9 units)
-      const H_MID = 9;
-      midMesh = buildCoolerTier(H_MID, midMat, false, true);
-      midMesh.position.y = H_BASE + H_MID / 2;
-      midGroup.add(midMesh);
+      // Optional Middle Tiers (for 3-tier or 4-tier stacks)
+      if (tierHeights.length >= 3) {
+        const H_MID = tierHeights[1];
+        midMesh = buildCoolerTier(H_MID, midMat, false, true);
+        midMesh.position.y = runningY + H_MID / 2;
+        midGroup.add(midMesh);
+        runningY += H_MID;
+      }
 
-      // Tier 3: Top Vault (12" tall scaled ~ 6 units)
-      const H_TOP = 6;
-      topMesh = buildCoolerTier(H_TOP, topMat, false, true);
-      topMesh.position.y = H_BASE + H_MID + H_TOP / 2;
+      if (tierHeights.length >= 4) {
+        const H_UPPER_MID = tierHeights[2];
+        upperMidMesh = buildCoolerTier(H_UPPER_MID, baseMat, false, true);
+        upperMidMesh.position.y = runningY + H_UPPER_MID / 2;
+        upperMidGroup.add(upperMidMesh);
+        runningY += H_UPPER_MID;
+      }
+
+      // Top Vault Tier (always last index)
+      const H_TOP = tierHeights[tierHeights.length - 1];
+      topMesh = buildCoolerTier(H_TOP, tierHeights.length === 2 ? midMat : topMat, false, true);
+      topMesh.position.y = runningY + H_TOP / 2;
       topGroup.add(topMesh);
+
+      // Optional Front Wall Laser Engraving Badge when 'body' placement active
+      if (studioState.engraveLocation === 'body') {
+        const bodyTex = generateEngraveTexture('body');
+        const badgeGeo = new THREE.CylinderGeometry(RADIUS_OUTER + 0.08, RADIUS_OUTER + 0.08, Math.min(H_BASE * 0.65, 6.4), 32, 1, true, -Math.PI / 5, (Math.PI * 2) / 5);
+        const badgeMat = new THREE.MeshStandardMaterial({ map: bodyTex, roughness: 0.4, side: THREE.DoubleSide });
+        bodyPlateMesh = new THREE.Mesh(badgeGeo, badgeMat);
+        bodyPlateMesh.position.y = H_BASE / 2;
+        baseGroup.add(bodyPlateMesh);
+      }
+
+      // Optional Pizza Vault Insert Inside Top Vault Cavity
+      if (studioState.showPizza) {
+        const bagGroup = new THREE.Group();
+        const pizzaBag = new THREE.Mesh(
+          new THREE.CylinderGeometry(RADIUS_INNER - 0.6, RADIUS_INNER - 0.6, Math.max(H_TOP - 1.4, 3.8), 32),
+          new THREE.MeshStandardMaterial({ color: 0xb91c1c, roughness: 0.7 })
+        );
+        bagGroup.add(pizzaBag);
+        const rimStrap = new THREE.Mesh(
+          new THREE.TorusGeometry(RADIUS_INNER - 0.55, 0.25, 10, 32),
+          new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.6 })
+        );
+        rimStrap.rotation.x = Math.PI / 2;
+        rimStrap.position.y = 1.1;
+        bagGroup.add(rimStrap);
+        bagGroup.position.y = runningY + H_TOP / 2 + 0.3;
+        topGroup.add(bagGroup);
+      }
+
+      runningY += H_TOP;
 
       // Lid
       lidMesh = buildLid();
-      lidMesh.position.y = H_BASE + H_MID + H_TOP + 0.9;
+      lidMesh.position.y = runningY + 0.9;
       lidGroup.add(lidMesh);
+
+      // Center Drain Core Sleeve inside Base
+      if (studioState.showDrain) {
+        const drainSleeve = new THREE.Mesh(
+          new THREE.CylinderGeometry(1.3, 1.3, H_BASE - 1.2, 24),
+          new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.7, roughness: 0.25 })
+        );
+        drainSleeve.position.y = H_BASE / 2;
+        baseGroup.add(drainSleeve);
+      }
 
       // Internal Ice Cubes & Cans
       iceMeshGroup = new THREE.Group();
@@ -1785,9 +1919,9 @@
         const iceGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
         for (let i = 0; i < 60; i++) {
           const cube = new THREE.Mesh(iceGeo, iceMat);
-          const rad = Math.random() * (RADIUS_INNER - 1.5);
+          const rad = 2.0 + Math.random() * (RADIUS_INNER - 3.5);
           const ang = Math.random() * Math.PI * 2;
-          cube.position.set(Math.cos(ang) * rad, 3 + Math.random() * 8, Math.sin(ang) * rad);
+          cube.position.set(Math.cos(ang) * rad, 2.5 + Math.random() * Math.max(4, H_BASE - 5.5), Math.sin(ang) * rad);
           cube.rotation.set(Math.random(), Math.random(), Math.random());
           iceMeshGroup.add(cube);
         }
@@ -1799,13 +1933,18 @@
         const canGeo = new THREE.CylinderGeometry(0.9, 0.9, 2.8, 16);
         for (let i = 0; i < 18; i++) {
           const can = new THREE.Mesh(canGeo, canMat);
-          const rad = 2 + Math.random() * (RADIUS_INNER - 3);
+          const rad = 2.6 + Math.random() * (RADIUS_INNER - 3.6);
           const ang = (i / 18) * Math.PI * 2;
-          can.position.set(Math.cos(ang) * rad, 6 + (i % 2) * 1.5, Math.sin(ang) * rad);
+          can.position.set(Math.cos(ang) * rad, Math.max(3.5, H_BASE * 0.45) + (i % 2) * 1.4, Math.sin(ang) * rad);
           cansMeshGroup.add(can);
         }
       }
       baseGroup.add(cansMeshGroup);
+
+      updateStudioHUD();
+      if (typeof updateErgonomicsGauge === 'function') {
+        updateErgonomicsGauge();
+      }
     }
 
     // Initial Stack Build
@@ -1916,6 +2055,38 @@
       });
     });
 
+    // Stack Presets, Interior Chamber & Hardware Listeners
+    function selectStackPreset(stackKey) {
+      if (!STACK_PRESETS[stackKey]) return;
+      studioState.stackType = stackKey;
+      document.querySelectorAll('[data-stack]').forEach(b => {
+        b.classList.toggle('active', b.dataset.stack === stackKey);
+      });
+      const preset = getActivePreset();
+      controls.target.set(0, Math.max(11, preset.heightIn * 0.28), 0);
+      buildFullStack();
+    }
+
+    document.querySelectorAll('[data-stack]').forEach(btn => {
+      btn.addEventListener('click', () => selectStackPreset(btn.dataset.stack));
+    });
+
+    function bindChamberToggle(id, stateKey, labelText) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('click', () => {
+        studioState[stateKey] = !studioState[stateKey];
+        el.classList.toggle('active', studioState[stateKey]);
+        el.textContent = studioState[stateKey] ? `✓ ${labelText}` : labelText;
+        buildFullStack();
+      });
+    }
+
+    bindChamberToggle('btn-toggle-ice', 'showIce', 'Crystal Ice');
+    bindChamberToggle('btn-toggle-cans', 'showCans', 'Craft Cans');
+    bindChamberToggle('btn-toggle-pizza', 'showPizza', 'Pizza Vault Box');
+    bindChamberToggle('btn-toggle-drain', 'showDrain', 'Center Drain Core');
+
     // Hydro-Dip Wraps
     document.querySelectorAll('[data-pattern]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1959,16 +2130,32 @@
       });
     }
 
-    // 7. Laser Engraving Input Listeners
+    // 7. Laser Engraving Input & Surface Placement Listeners
     const inputLine1 = document.getElementById('engrave-line1');
     const inputLine2 = document.getElementById('engrave-line2');
 
     function updateEngraving() {
       studioState.engraveLine1 = inputLine1.value.toUpperCase();
       studioState.engraveLine2 = inputLine2.value.toUpperCase();
-      bambooMat.map = generateEngraveTexture(studioState.engraveLocation);
-      bambooMat.map.needsUpdate = true;
+      if (bambooMat) {
+        bambooMat.map = generateEngraveTexture('lid');
+        bambooMat.map.needsUpdate = true;
+      }
+      if (studioState.engraveLocation === 'body') {
+        buildFullStack();
+      } else {
+        updateStudioHUD();
+      }
     }
+
+    document.querySelectorAll('[data-engrave-loc]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-engrave-loc]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        studioState.engraveLocation = btn.dataset.engraveLoc;
+        buildFullStack();
+      });
+    });
 
     inputLine1.addEventListener('input', updateEngraving);
     inputLine2.addEventListener('input', updateEngraving);
@@ -1989,10 +2176,15 @@
     const daysVal = document.getElementById('calc-days-val');
     const cansResult = document.getElementById('calc-cans-result');
     const iceResult = document.getElementById('calc-ice-result');
+    const calcStackResult = document.getElementById('calc-stack-result');
+    const btnApplyCalc = document.getElementById('btn-apply-calc');
+    let recommendedStackKey = 'patriot-58';
 
     function runCapacityCalculator() {
       const party = parseInt(partyRange.value, 10);
       const days = parseInt(daysRange.value, 10);
+      studioState.partySize = party;
+      studioState.tripDays = days;
       partyVal.textContent = `${party} ${party === 1 ? 'Adult' : 'Adults'}`;
       daysVal.textContent = `${days} ${days === 1 ? 'Day' : 'Days'}`;
 
@@ -2007,7 +2199,24 @@
       cansResult.textContent = `${totalCans} Cans / Bottles`;
       iceResult.textContent = `${iceWeight} LBS Crushed Ice`;
 
+      if (totalCans <= 36) recommendedStackKey = 'scout-30';
+      else if (totalCans <= 72) recommendedStackKey = 'explorer-38';
+      else if (totalCans <= 140) recommendedStackKey = 'patriot-58';
+      else recommendedStackKey = 'titan-72';
+
+      if (calcStackResult) {
+        calcStackResult.textContent = STACK_PRESETS[recommendedStackKey].label;
+      }
+
       updateErgonomicsGauge();
+    }
+
+    if (btnApplyCalc) {
+      btnApplyCalc.addEventListener('click', () => {
+        selectStackPreset(recommendedStackKey);
+        const tab3d = document.querySelector('.console-tab-btn[data-tab="tab-3d"]');
+        if (tab3d) tab3d.click();
+      });
     }
 
     partyRange.addEventListener('input', runCapacityCalculator);
@@ -2022,7 +2231,8 @@
     const hudWeight = document.getElementById('hud-weight');
 
     function updateErgonomicsGauge() {
-      const dryStack = 46; // 3-tier dry weight
+      const preset = getActivePreset();
+      const dryStack = preset.dryLbs;
       const ice = studioState.iceLbs;
       const drinks = Math.round(studioState.cansCount * 0.78);
       const gross = dryStack + ice + drinks;
@@ -2110,16 +2320,14 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Smooth LERP explosion animation
+      // Smooth LERP explosion animation across 2, 3, or 4 tiers
       currentExplosion += (targetExplosion - currentExplosion) * 0.1;
 
-      // Base remains stationary
-      // Mid moves up
+      const tierCount = getActivePreset().tiers.length;
       midGroup.position.y = currentExplosion * 14;
-      // Top moves up further
-      topGroup.position.y = currentExplosion * 28;
-      // Lid moves up highest
-      lidGroup.position.y = currentExplosion * 44;
+      upperMidGroup.position.y = currentExplosion * 26;
+      topGroup.position.y = currentExplosion * (tierCount === 2 ? 16 : tierCount === 3 ? 28 : 38);
+      lidGroup.position.y = currentExplosion * (tierCount === 2 ? 28 : tierCount === 3 ? 44 : 56);
 
       controls.update();
       renderer.render(scene, camera);
@@ -2128,19 +2336,31 @@
     animate();
     runCapacityCalculator();
 
-    // 10. Sync Studio State to Reservation Configurator
+    // 10. Sync Studio State to Reservation Configurator (fixes studioState.theme export)
     const btnSaveRes = document.getElementById('btn-save-reservation');
     if (btnSaveRes) {
-      btnSaveRes.addEventListener('click', (e) => {
+      btnSaveRes.addEventListener('click', () => {
         try {
+          const preset = getActivePreset();
           const payload = {
             stackType: studioState.stackType,
-            colorTheme: studioState.colorTheme,
+            indexPreset: preset.indexPreset,
+            stackLabel: preset.label,
+            heightIn: preset.heightIn,
+            dryLbs: preset.dryLbs,
+            estimatedPrice: computeStudioPrice(),
+            theme: studioState.theme,
+            colorTheme: studioState.theme,
+            pattern: studioState.pattern,
+            showSolar: studioState.showSolar,
+            showSpigot: studioState.showSpigot,
+            showPizza: studioState.showPizza,
             engraveLocation: studioState.engraveLocation,
             engraveLine1: studioState.engraveLine1,
             engraveLine2: studioState.engraveLine2,
             partySize: studioState.partySize,
             tripDays: studioState.tripDays,
+            applyPending: true,
             timestamp: Date.now()
           };
           localStorage.setItem('kok_studio_customization', JSON.stringify(payload));
