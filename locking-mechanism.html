@@ -1060,12 +1060,22 @@
         const lidShiftX = sliderLocked ? 0 : upperShiftX;
         const lidLiftY = sliderLocked ? 0 : upperLiftY;
 
-        // 1. Draw Bottom Patriot Blue Cooler
+        // 1. Draw Bottom Patriot Blue Cooler (Upright)
+        // Left & Right Flat Horizontal Side Handles on Blue Cooler
+        ctx.fillStyle = '#1539a8';
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(cx - w/2 - 18, baseTopY + 18, 18, 10, [5, 0, 0, 5]);
+        ctx.roundRect(cx + w/2, baseTopY + 18, 18, 10, [0, 5, 5, 0]);
+        ctx.fill();
+        ctx.stroke();
+
         ctx.fillStyle = '#1e4bd7';
         ctx.strokeStyle = 'rgba(255,255,255,0.25)';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.roundRect(cx - w/2, baseTopY, w, 120, [0, 0, 14, 14]);
+        ctx.roundRect(cx - w/2, baseTopY, w, 115, [0, 0, 14, 14]);
         ctx.fill();
         ctx.stroke();
 
@@ -1094,7 +1104,7 @@
         ctx.textAlign = 'center';
         ctx.fillText('BOTTOM COOLER (20-START HELIX COLLAR)', cx, baseTopY + 65);
 
-        // 2. Draw Patriot Red Lid
+        // 2. Draw Patriot Red Lid (with Top Recessed Stacking Ring for Upper Cooler's Feet)
         const lidY = baseTopY - 38 + lidLiftY;
         ctx.save();
         ctx.translate(lidShiftX, 0);
@@ -1107,9 +1117,13 @@
         ctx.fill();
         ctx.stroke();
 
+        // Top Recessed Interlocking Channel on Red Lid
+        ctx.fillStyle = '#991b1b';
+        ctx.fillRect(cx - w/2 + 14, lidY, w - 28, 7);
+
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 12px sans-serif';
-        ctx.fillText('PATRIOT RED LID (1/20 TURN HELIX)', cx, lidY + 22);
+        ctx.fillText('PATRIOT RED LID (1/20 TURN HELIX)', cx, lidY + 24);
 
         // Draw External Vertical Deadbolt Slider on the right side of the Red Lid
         const sliderY = sliderLocked ? (lidY + 20) : (lidY + 4);
@@ -1129,26 +1143,73 @@
 
         ctx.restore();
 
-        // 3. Draw Stacked Alpine White Upper Cooler
-        const upperY = baseTopY - 155 + upperLiftY;
+        // 3. Draw Stacked Alpine White Upper Cooler (NORMAL UPRIGHT ORIENTATION)
+        const upperY = baseTopY - 148 + upperLiftY;
         ctx.save();
         ctx.translate(upperShiftX, 0);
 
+        // 3a. Bottom Interlocking Feet protruding from the underside of the White Cooler into the Red Lid
+        ctx.fillStyle = '#cbd5e1';
+        ctx.strokeStyle = '#64748b';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(cx - w/2 + 16, upperY + 96, w - 32, 16, [0, 0, 6, 6]);
+        ctx.fill();
+        ctx.stroke();
+
+        // 20-Start Helix Interlocking Lugs on the Bottom Feet
+        for (let i = 0; i < 9; i++) {
+          const fx = cx - w/2 + 24 + i * 24;
+          ctx.strokeStyle = '#0284c7';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(fx, upperY + 110);
+          ctx.lineTo(fx + 12, upperY + 99);
+          ctx.stroke();
+        }
+
+        // 3b. Left & Right Flat Horizontal Side Handles near the TOP shoulder of the Upright White Cooler
+        ctx.fillStyle = '#e2e8f0';
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(cx - w/2 - 18, upperY + 16, 18, 10, [5, 0, 0, 5]);
+        ctx.roundRect(cx + w/2, upperY + 16, 18, 10, [0, 5, 5, 0]);
+        ctx.fill();
+        ctx.stroke();
+
+        // 3c. Upright White Cooler Main Body (Flat top collar, rounded bottom shoulders [0, 0, 14, 14])
         ctx.fillStyle = '#f0f4fa';
         ctx.strokeStyle = '#94a3b8';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.roundRect(cx - w/2, upperY, w, 112, [12, 12, 6, 6]);
+        ctx.roundRect(cx - w/2, upperY, w, 98, [0, 0, 14, 14]);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#0f172a';
+        // 3d. Upper Cooler's Own Top Lid & Rim at the TOP of the White Cooler
+        ctx.fillStyle = '#e1232d';
+        ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(cx - w/2 - 3, upperY - 18, w + 6, 18, [6, 6, 2, 2]);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
         ctx.textAlign = 'center';
+        ctx.font = 'bold 9.5px monospace';
+        ctx.fillText('UPPER COOLER TOP LID', cx, upperY - 6);
+
+        ctx.fillStyle = '#0f172a';
         ctx.font = 'bold 13px sans-serif';
-        ctx.fillText('STACKED UPPER COOLER TIER', cx, upperY + 52);
-        ctx.font = 'bold 11px monospace';
+        ctx.fillText('UPRIGHT WHITE COOLER TIER', cx, upperY + 42);
+        ctx.font = 'bold 10.5px monospace';
         ctx.fillStyle = '#1e4bd7';
-        ctx.fillText('↺ TWIST 1/20TH CIRCLE (18° CCW) TO REMOVE', cx, upperY + 74);
+        ctx.fillText('↺ TWIST 1/20TH CIRCLE (18° CCW) TO UNSTACK', cx, upperY + 62);
+        ctx.fillStyle = '#475569';
+        ctx.font = 'bold 10px monospace';
+        ctx.fillText('▼ BOTTOM INTERLOCKING FEET LOCK INTO RED LID ▼', cx, upperY + 84);
 
         ctx.restore();
 
