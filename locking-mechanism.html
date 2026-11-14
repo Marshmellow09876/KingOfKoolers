@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patented 20-Helix & Vertical Deadbolt Lock — King of Koolers</title>
+  <meta name="description" content="Explore the patented King of Koolers 20-Start Spiral Thread Helix (1/20th turn lock) and External Vertical Anti-Rotation Deadbolt Slider.">
+  <style>
+    :root {
+      --bg-obsidian: #030508;
+      --bg-card: #0a0e17;
+      --bg-elevated: #111726;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-cyan: #00f0ff;
+      --accent-blue: #1e4bd7;
+      --accent-red: #e1232d;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-cyan: rgba(0, 240, 255, 0.35);
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --radius-full: 9999px;
+      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: "SF Mono", "JetBrains Mono", "Fira Code", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-obsidian);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-obsidian);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Sticky Apple-Style Navbar */
+    .global-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(3, 5, 8, 0.85);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-container {
+      max-width: 1380px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent-cyan);
+    }
+
+    .nav-links a.active {
+      font-weight: 700;
+      position: relative;
+    }
+
+    .nav-links a.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -19px;
+      height: 2px;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--accent-cyan), #00b4d8);
+      color: #000;
+      font-weight: 700;
+      font-size: 12.5px;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.45);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: 130px 0 70px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 15%, rgba(0, 240, 255, 0.12) 0%, transparent 55%),
+        radial-gradient(circle at 20% 60%, rgba(30, 75, 215, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 80% 60%, rgba(225, 35, 45, 0.1) 0%, transparent 45%);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .eyebrow-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid var(--border-cyan);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .hero-title {
+      font-size: clamp(36px, 5.5vw, 68px);
+      font-weight: 800;
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+      max-width: 980px;
+      margin: 0 auto 22px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(90deg, #ffffff 0%, var(--accent-cyan) 55%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(17px, 2vw, 21px);
+      color: var(--text-secondary);
+      max-width: 820px;
+      margin: 0 auto 40px;
+    }
+
+    /* Key KPI Strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .kpi-card {
+      background: rgba(17, 23, 38, 0.75);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    .kpi-val {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .kpi-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .kpi-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* Section Headings */
+    .section {
+      padding: 90px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 56px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.12;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 17px;
+      color: var(--text-secondary);
+    }
+
+    /* 6-Photo Gallery Grid */
+    .photo-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    .photo-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .photo-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-cyan);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 240, 255, 0.1);
+    }
+
+    .photo-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #050811;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .photo-card:hover .photo-frame img {
+      transform: scale(1.03);
+    }
+
+    .angle-pill {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(3, 5, 8, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-cyan);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.06em;
+    }
+
+    .zoom-hint {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      background: rgba(3, 5, 8, 0.8);
+      color: #fff;
+      font-size: 11.5px;
+      padding: 5px 11px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .photo-body {
+      padding: 28px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .photo-title {
+      font-size: 21px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .photo-desc {
+      font-size: 14.5px;
+      color: var(--text-secondary);
+      margin-bottom: 18px;
+    }
+
+    .spec-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .spec-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: #cbd5e1;
+    }
+
+    /* Interactive Mechanical Simulator */
+    .simulator-box {
+      background: linear-gradient(180deg, #0b101d 0%, #060911 100%);
+      border: 1px solid var(--border-cyan);
+      border-radius: var(--radius-xl);
+      padding: 36px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 36px;
+      align-items: center;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
+    }
+
+    .sim-canvas-wrap {
+      background: #04060b;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    #lock-sim-canvas {
+      width: 100%;
+      max-width: 560px;
+      height: 400px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .sim-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sim-panel {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+
+    .sim-panel-title {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-cyan);
+      margin-bottom: 10px;
+    }
+
+    .sim-btn {
+      width: 100%;
+      padding: 13px 18px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-cyan);
+      background: rgba(0, 240, 255, 0.1);
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sim-btn:hover {
+      background: rgba(0, 240, 255, 0.2);
+    }
+
+    .sim-btn.locked-state {
+      background: rgba(16, 185, 129, 0.16);
+      border-color: var(--accent-green);
+      color: #a7f3d0;
+    }
+
+    .sim-btn.unlocked-state {
+      background: rgba(245, 158, 11, 0.16);
+      border-color: var(--accent-amber);
+      color: #fde68a;
+    }
+
+    .sim-status-banner {
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    /* Engineering Plan & Specs Table */
+    .plan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .plan-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+    }
+
+    .plan-step-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 8px;
+    }
+
+    .plan-card h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .plan-card p {
+      font-size: 14.5px;
+      color: var(--text-secondary);
+    }
+
+    .spec-table-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+
+    table.spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    table.spec-table th,
+    table.spec-table td {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 14px;
+    }
+
+    table.spec-table th {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    table.spec-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Lightbox Modal */
+    .lightbox-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 4, 8, 0.92);
+      backdrop-filter: blur(16px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+
+    .lightbox-modal.open {
+      display: flex;
+    }
+
+    .lightbox-content {
+      max-width: 1100px;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-cyan);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .lightbox-content img {
+      width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+      background: #030508;
+      display: block;
+    }
+
+    .lightbox-caption {
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border-subtle);
+      background: rgba(3, 5, 8, 0.85);
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 980px) {
+      .kpi-grid,
+      .photo-gallery-grid,
+      .simulator-box,
+      .plan-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="global-nav" aria-label="Main Navigation">
+    <div class="nav-container">
+      <a href="./index.html#overview" class="nav-brand">
+        <span class="nav-brand-badge">♛</span>
+        <span>King of Koolers</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="./index.html#overview">Overview</a></li>
+        <li><a href="./index.html#stack-and-sit">Twist &amp; Lock</a></li>
+        <li><a href="./locking-mechanism.html" class="active">Patented Lock</a></li>
+        <li><a href="./index.html#thermodynamics">Thermodynamics</a></li>
+        <li><a href="./index.html#modular-stack">Modular Stack</a></li>
+        <li><a href="./index.html#configurator">Configurator</a></li>
+        <li><a href="./accessories.html">Accessories</a></li>
+        <li><a href="./customizer.html">3D Studio</a></li>
+      </ul>
+      <a href="./index.html#configurator" class="nav-cta">Build Your Stack</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="container">
+      <div class="eyebrow-badge">
+        <span>PATENT-PENDING MECHANICAL ARCHITECTURE</span>
+        <span>·</span>
+        <span>20-START HELIX + VERTICAL DEADBOLT</span>
+      </div>
+      <h1 class="hero-title">
+        Twist <span>1/20th of a Circle.</span><br>
+        Slide Down to Anchor.
+      </h1>
+      <p class="hero-subtitle">
+        Inspired by multi-start water bottle closures, the King of Koolers collar uses <strong>20 parallel spiral starting threads</strong> so the lid locks in a tiny <strong>18° (1/20th turn)</strong> nudge. And with the integrated <strong>External Vertical Deadbolt Slider</strong>, you can mechanically lock the lid into the lower cooler body—allowing stacked coolers above it to twist off without ever unscrewing the lid underneath.
+      </p>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-val">20 Starts</div>
+          <div class="kpi-label">Spiral Thread Helix</div>
+          <div class="kpi-sub">Simultaneous 360° perimeter engagement</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">1/20 Turn</div>
+          <div class="kpi-label">18° Locking Arc</div>
+          <div class="kpi-sub">Only 3.64" of linear wrist travel at the rim</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">12 mm</div>
+          <div class="kpi-label">Vertical Slider Throw</div>
+          <div class="kpi-sub">Slides down from lid into base receiver slot</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">100%</div>
+          <div class="kpi-label">Anti-Unthread Isolation</div>
+          <div class="kpi-sub">Remove upper coolers without loosening lower lid</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 6-Photo Multi-Angle Engineering Showcase -->
+  <section class="section" id="six-angle-gallery">
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow-badge">6-ANGLE VISUAL ENGINEERING BREAKDOWN</div>
+        <h2 class="section-title">Every Angle of the 20-Helix &amp; Vertical Slider.</h2>
+        <p class="section-desc">
+          Inspect how the 20 spiral starting threads engage in 1/20th of a rotation and how the external vertical sliding deadbolt anchors the lid to the lower cooler body so upper stacked tiers unthread independently.
+        </p>
+      </div>
+
+      <div class="photo-gallery-grid">
+        <!-- Photo 1 -->
+        <article class="photo-card">
+          <div class="photo-frame" data-full="./assets/images/lock_01_20_helix_overview.jpg" data-caption="Angle 1 — 3/4 Elevated View: 20-Start Spiral Thread Helix Collar & Lid (1/20th Turn / 18° Lock)">
+            <span class="angle-pill">ANGLE 01 · 3/4 ELEVATED HELIX OVERVIEW</span>
+            <img src="./assets/images/lock_01_20_helix_overview.jpg" alt="Angle 1: 3/4 Elevated Studio View of the 20-Start Spiral Thread Helix Rim and Lid">
+            <span class="zoom-hint">🔍 Click to Enlarge</span>
+          </div>
+          <div class="photo-body">
+            <div>
+              <h3 class="photo-title">1. 20-Start Spiral Helix Collar Overview</h3>
+              <p class="photo-desc">
+                Around the entire 24-inch circular collar of the cooler body sit <strong>20 evenly spaced spiral starting threads</strong> (every 18°). Just like a multi-start water bottle cap, you never have to hunt for a starting point—drop the lid down at any angle and twist just <strong>1/20th of a circle (18°)</strong> to lock all 20 threads simultaneously.
+              </p>
+            </div>
+            <div class="spec-tags">
+              <span class="spec-tag">20 Parallel Thread Starts</span>
+              <span class="spec-tag">18° Engagement Arc</span>
+              <span class="spec-tag">Self-Indexing Drop-In</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Photo 2 -->
+        <article class="photo-card">
+          <div class="photo-frame" data-full="./assets/images/lock_02_macro_helix_engagement.jpg" data-caption="Angle 2 — Extreme Macro Close-Up: Multi-Start Helical Threads Intermeshing & Compressing EPDM Gasket">
+            <span class="angle-pill">ANGLE 02 · EXTREME MACRO THREAD MESH</span>
+            <img src="./assets/images/lock_02_macro_helix_engagement.jpg" alt="Angle 2: Extreme Macro Close-Up of the 20-Start Spiral Helix Threads Intermeshing">
+            <span class="zoom-hint">🔍 Click to Enlarge</span>
+          </div>
+          <div class="photo-body">
+            <div>
+              <h3 class="photo-title">2. Macro Multi-Helix Thread Intermeshing</h3>
+              <p class="photo-desc">
+                A close-up inspection of the modified 30° stub-buttress helical ramps. With a shallow <strong>4.94° helix angle</strong>, a short 1/20th turn generates an <strong>11.5:1 axial clamping advantage</strong>, drawing the lid down 8 mm to evenly crush the black EPDM cryo-gasket across all 360 degrees.
+              </p>
+            </div>
+            <div class="spec-tags">
+              <span class="spec-tag">4.94° Helix Pitch</span>
+              <span class="spec-tag">11.5:1 Clamping Force</span>
+              <span class="spec-tag">360° Gasket Crush</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Photo 3 -->
+        <article class="photo-card">
+          <div class="photo-frame" data-full="./assets/images/lock_03_vertical_slider_unlocked.jpg" data-caption="Angle 3 — Side Macro (UNLOCKED): External Vertical Slider in UP Position Allowing 1/20th Turn Lid Removal">
+            <span class="angle-pill">ANGLE 03 · VERTICAL SLIDER UP (UNLOCKED)</span>
+            <img src="./assets/images/lock_03_vertical_slider_unlocked.jpg" alt="Angle 3: Side-Profile Macro of the External Vertical Slider in UP Unlocked Position">
+            <span class="zoom-hint">🔍 Click to Enlarge</span>
+          </div>
+          <div class="photo-body">
+            <div>
+              <h3 class="photo-title">3. External Vertical Slider — UP (Unlocked State)</h3>
+              <p class="photo-desc">
+                Recessed flush into the outer wall of the Patriot Red lid is the tactile <strong>Vertical Anti-Rotation Slider</strong>. When flicked into the <strong>UP position</strong>, its lower deadbolt tongue clears the vertical receiver notch on the Patriot Blue cooler rim below, allowing the lid to twist 18° and lift right off.
+              </p>
+            </div>
+            <div class="spec-tags">
+              <span class="spec-tag">Slider Position: UP</span>
+              <span class="spec-tag">Keyway Cleared</span>
+              <span class="spec-tag">Free 18° Lid Rotation</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Photo 4 -->
+        <article class="photo-card">
+          <div class="photo-frame" data-full="./assets/images/lock_04_vertical_slider_locked.jpg" data-caption="Angle 4 — Side Macro (LOCKED): External Vertical Slider Pushed DOWN into Bottom Cooler Receiver Slot">
+            <span class="angle-pill">ANGLE 04 · VERTICAL SLIDER DOWN (ANCHORED)</span>
+            <img src="./assets/images/lock_04_vertical_slider_locked.jpg" alt="Angle 4: Side-Profile Macro of the External Vertical Slider Pushed DOWN into Bottom Cooler">
+            <span class="zoom-hint">🔍 Click to Enlarge</span>
+          </div>
+          <div class="photo-body">
+            <div>
+              <h3 class="photo-title">4. External Vertical Slider — DOWN (Anchored to Base)</h3>
+              <p class="photo-desc">
+                Once the lid is twisted 1/20th of a turn onto the cooler, pushing the external slider straight <strong>DOWN (12 mm stroke)</strong> drives the hardened locking tongue across the seam into the aligned vertical receiver slot in the bottom cooler. <strong>The lid is now physically keyed and cannot twist off.</strong>
+              </p>
+            </div>
+            <div class="spec-tags">
+              <span class="spec-tag">Slider Position: DOWN</span>
+              <span class="spec-tag">12 mm Axial Deadbolt</span>
+              <span class="spec-tag">420+ ft-lb Torque Lock</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Photo 5 -->
+        <article class="photo-card">
+          <div class="photo-frame" data-full="./assets/images/lock_05_stacked_selective_unthread.jpg" data-caption="Angle 5 — Selective Stack Disassembly: Upper Cooler Twists Off While Anchored Lid Stays Locked on Base">
+            <span class="angle-pill">ANGLE 05 · SELECTIVE STACK UNTHREADING</span>
+            <img src="./assets/images/lock_05_stacked_selective_unthread.jpg" alt="Angle 5: Full Two-Tier Stack Demonstrating Selective Upper-Cooler Removal">
+            <span class="zoom-hint">🔍 Click to Enlarge</span>
+          </div>
+          <div class="photo-body">
+            <div>
+              <h3 class="photo-title">5. Selective Upper-Cooler Unstacking in Action</h3>
+              <p class="photo-desc">
+                Here is why the vertical slider is a game-changer: when the Alpine White upper cooler is stacked onto the Patriot Red lid, twisting the upper cooler counter-clockwise removes <strong>only the upper cooler</strong>. Because the red lid's vertical slider is pushed down into the blue base cooler, the lid never accidentally unscrews with the top cooler.
+              </p>
+            </div>
+            <div class="spec-tags">
+              <span class="spec-tag">Zero Lid Back-Out</span>
+              <span class="spec-tag">Independent Tier Removal</span>
+              <span class="spec-tag">One-Hand 18° Release</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Photo 6 -->
+        <article class="photo-card">
+          <div class="photo-frame" data-full="./assets/images/lock_06_cad_cross_section_blueprint.jpg" data-caption="Angle 6 — Engineering Cross-Section & CAD Cutaway: 20-Start Helix + EPDM Gasket + Vertical Deadbolt Pin">
+            <span class="angle-pill">ANGLE 06 · CAD CROSS-SECTION &amp; BLUEPRINT</span>
+            <img src="./assets/images/lock_06_cad_cross_section_blueprint.jpg" alt="Angle 6: Technical CAD Cutaway and Blueprint Cross-Section">
+            <span class="zoom-hint">🔍 Click to Enlarge</span>
+          </div>
+          <div class="photo-body">
+            <div>
+              <h3 class="photo-title">6. Internal CAD Cross-Section &amp; Force Vector Blueprint</h3>
+              <p class="photo-desc">
+                Engineering cutaway revealing all three concentric load paths: (1) the internal <strong>20-start spiral helix threads</strong> carrying vertical tension, (2) the compressed <strong>dual-durometer EPDM cryo-gasket</strong> blocking thermal transfer, and (3) the outer <strong>vertical deadbolt slider pin</strong> locking out rotational shear.
+              </p>
+            </div>
+            <div class="spec-tags">
+              <span class="spec-tag">Concentric Load Path</span>
+              <span class="spec-tag">Dual-Durometer EPDM</span>
+              <span class="spec-tag">20 Indexing Receivers</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Mechanical Torque & Slider Simulator -->
+  <section class="section" id="interactive-simulator">
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow-badge">INTERACTIVE KINEMATIC TESTBENCH</div>
+        <h2 class="section-title">Test the Vertical Anti-Rotation Slider Live.</h2>
+        <p class="section-desc">
+          Toggle the lid's external vertical slider between <strong>DOWN (Anchored)</strong> and <strong>UP (Unlocked)</strong>, then twist the upper stacked cooler counter-clockwise to see how the vertical slider prevents the bottom lid from unscrewing.
+        </p>
+      </div>
+
+      <div class="simulator-box">
+        <div class="sim-canvas-wrap">
+          <canvas id="lock-sim-canvas" width="600" height="420"></canvas>
+        </div>
+
+        <div class="sim-controls">
+          <div class="sim-panel">
+            <div class="sim-panel-title">STEP 1 · EXTERNAL VERTICAL LID SLIDER</div>
+            <button id="btn-sim-slider" class="sim-btn locked-state">
+              <span>🔒 Vertical Slider: PUSHED DOWN (Anchored)</span>
+              <span style="font-family: var(--font-mono); font-size: 12px;">Click to Toggle</span>
+            </button>
+          </div>
+
+          <div class="sim-panel">
+            <div class="sim-panel-title">STEP 2 · TEST UNSTACKING ROTATION (1/20TH TURN / 18° CCW)</div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <button id="btn-sim-twist-upper" class="sim-btn">
+                <span>↺ Twist Top White Cooler 18° CCW (Remove Upper Tier)</span>
+                <span style="font-family: var(--font-mono); font-size: 12px;">1/20 Circle</span>
+              </button>
+              <button id="btn-sim-reset" class="sim-btn" style="background: rgba(255,255,255,0.04); border-color: var(--border-subtle);">
+                <span>⟳ Reset Stacked Assembly</span>
+                <span style="font-family: var(--font-mono); font-size: 12px;">Restack</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="sim-status-box" class="sim-status-banner" style="background: rgba(16, 185, 129, 0.12); border: 1px solid var(--accent-green); color: #a7f3d0;">
+            ✅ <strong>LID ANCHORED TO BOTTOM COOLER:</strong> The vertical slider is pushed DOWN into the blue cooler's collar slot. Twisting the top white cooler 18° CCW will cleanly remove ONLY the top cooler while the red lid stays 100% locked!
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Detailed Engineering Plan & Specifications -->
+  <section class="section" id="engineering-plan">
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow-badge">DETAILED MECHANICAL ENGINEERING PLAN</div>
+        <h2 class="section-title">How the 20-Start Helix &amp; Vertical Slider Work Together.</h2>
+        <p class="section-desc">
+          Engineered specifically for 24-inch rotomolded modular coolers so any tier can stack onto any lid—and unstack effortlessly with one hand.
+        </p>
+      </div>
+
+      <div class="plan-grid">
+        <div class="plan-card">
+          <div class="plan-step-num">MECHANISM 01 · 20-START HELIX</div>
+          <h3>1/20th Circle (18°) Multi-Start Thread</h3>
+          <p>
+            Traditional single-start threaded lids require 360° to 720° of awkward twisting and cross-thread easily. By molding <strong>20 parallel spiral starting threads</strong> spaced every <strong>18°</strong> around the 24″ rim, the lid catches immediately at any drop-in angle and locks tight in just <strong>1/20th of a rotation (3.64 inches of rim travel)</strong>.
+          </p>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-step-num">MECHANISM 02 · VERTICAL DEADBOLT SLIDER</div>
+          <h3>Anti-Rotation Lid-to-Base Anchor</h3>
+          <p>
+            Built into the exterior side wall of the lid is a vertical sliding deadbolt. Once the lid is twisted 18° closed, pushing the slider <strong>12 mm straight down</strong> drives a hardened locking tongue into one of 20 matching vertical receiver slots on the lower cooler's collar—physically preventing the lid from rotating.
+          </p>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-step-num">MECHANISM 03 · SELECTIVE UNSTACKING</div>
+          <h3>Stack &amp; Unstack Without Unscrewing the Lid</h3>
+          <p>
+            When a second cooler is twisted onto the top of the bottom cooler's lid, removing that top cooler applies counter-clockwise unscrewing torque. Because the bottom lid's vertical slider is anchored into the bottom cooler, <strong>the bottom lid cannot unscrew</strong>—allowing the top cooler to twist 18° and lift right off.
+          </p>
+        </div>
+      </div>
+
+      <div class="spec-table-wrap">
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Engineering Parameter</th>
+              <th>Specification</th>
+              <th>Mechanical Advantage &amp; Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Thread Architecture</strong></td>
+              <td>20-Start Parallel Spiral Helix</td>
+              <td>Water-bottle-style multi-start closure; engages at 20 points around 360° simultaneously</td>
+            </tr>
+            <tr>
+              <td><strong>Angular Pitch &amp; Turn Arc</strong></td>
+              <td>18.0° (1/20th of a Circle)</td>
+              <td>Maximum 9° blind indexing; locks completely with a 3.64″ (92.5 mm) wrist nudge</td>
+            </tr>
+            <tr>
+              <td><strong>Helix Ramp Lead &amp; Angle</strong></td>
+              <td>8.0 mm Axial Draw / 4.94° Ramp Slope</td>
+              <td>11.5 : 1 mechanical force multiplication for effortless EPDM cryo-gasket compression</td>
+            </tr>
+            <tr>
+              <td><strong>External Vertical Slider Stroke</strong></td>
+              <td>12.0 mm Vertical Push-Down Throw</td>
+              <td>UP = Free 18° lid twist; DOWN = Keys lid skirt directly into lower cooler collar rim</td>
+            </tr>
+            <tr>
+              <td><strong>Collar Receiver Keyways</strong></td>
+              <td>20 Vertical Keyway Slots (Every 18°)</td>
+              <td>Guarantees deadbolt alignment at every possible 20-start thread lock position</td>
+            </tr>
+            <tr>
+              <td><strong>Rotational Shear Rating</strong></td>
+              <td>420+ ft-lbs (570 N·m) Anti-Rotation Lock</td>
+              <td>Prevents lower lid from backing out when twisting a stacked upper cooler counter-clockwise</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox Modal for 6 Photos -->
+  <div class="lightbox-modal" id="lightbox-modal" role="dialog" aria-modal="true" aria-label="Image Zoom Viewer">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close Zoom">&times;</button>
+      <img id="lightbox-img" src="" alt="Enlarged Engineering View">
+      <div class="lightbox-caption">
+        <strong id="lightbox-caption-text" style="color: #fff; font-size: 15px;"></strong>
+        <span style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 12px;">ESC or Click Outside to Close</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // 1. Lightbox Modal for the 6 Engineering Photos
+      const modal = document.getElementById('lightbox-modal');
+      const modalImg = document.getElementById('lightbox-img');
+      const modalCap = document.getElementById('lightbox-caption-text');
+      const closeBtn = document.getElementById('lightbox-close');
+
+      document.querySelectorAll('.photo-frame').forEach(frame => {
+        frame.addEventListener('click', () => {
+          modalImg.src = frame.dataset.full;
+          modalCap.textContent = frame.dataset.caption;
+          modal.classList.add('open');
+        });
+      });
+
+      function closeModal() {
+        modal.classList.remove('open');
+      }
+
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      // 2. Interactive 20-Helix & Vertical Deadbolt Simulator
+      const canvas = document.getElementById('lock-sim-canvas');
+      const ctx = canvas.getContext('2d');
+      const btnSlider = document.getElementById('btn-sim-slider');
+      const btnTwistUpper = document.getElementById('btn-sim-twist-upper');
+      const btnReset = document.getElementById('btn-sim-reset');
+      const statusBox = document.getElementById('sim-status-box');
+
+      let sliderLocked = true; // true = pushed DOWN into bottom cooler
+      let animProgress = 0;    // 0 = stacked, 1 = unthreaded & lifted
+      let animating = false;
+
+      function updateStatusUI() {
+        if (sliderLocked) {
+          btnSlider.className = 'sim-btn locked-state';
+          btnSlider.innerHTML = '<span>🔒 Vertical Slider: PUSHED DOWN (Anchored)</span><span style="font-family: var(--font-mono); font-size: 12px;">Click to Unlock</span>';
+          statusBox.style.background = 'rgba(16, 185, 129, 0.12)';
+          statusBox.style.borderColor = '#10b981';
+          statusBox.style.color = '#a7f3d0';
+          statusBox.innerHTML = '✅ <strong>LID ANCHORED TO BOTTOM COOLER:</strong> The vertical slider is pushed DOWN into the blue cooler\'s collar slot. Twisting the top white cooler 18° CCW removes <strong>ONLY the top cooler</strong> while the red lid stays locked!';
+        } else {
+          btnSlider.className = 'sim-btn unlocked-state';
+          btnSlider.innerHTML = '<span>🔓 Vertical Slider: PULLED UP (Unlocked)</span><span style="font-family: var(--font-mono); font-size: 12px;">Click to Anchor</span>';
+          statusBox.style.background = 'rgba(245, 158, 11, 0.12)';
+          statusBox.style.borderColor = '#f59e0b';
+          statusBox.style.color = '#fde68a';
+          statusBox.innerHTML = '⚠️ <strong>LID UNLOCKED (NO ANTI-ROTATION ANCHOR):</strong> With the vertical slider UP, twisting the top white cooler CCW causes the red lid to accidentally unthread along with the top cooler!';
+        }
+      }
+
+      btnSlider.addEventListener('click', () => {
+        sliderLocked = !sliderLocked;
+        animProgress = 0;
+        updateStatusUI();
+      });
+
+      btnTwistUpper.addEventListener('click', () => {
+        if (animating) return;
+        animating = true;
+        const start = performance.now();
+        function step(now) {
+          const t = Math.min((now - start) / 900, 1);
+          animProgress = 0.5 - Math.cos(t * Math.PI) / 2;
+          if (t < 1) {
+            requestAnimationFrame(step);
+          } else {
+            animating = false;
+          }
+        }
+        requestAnimationFrame(step);
+      });
+
+      btnReset.addEventListener('click', () => {
+        animProgress = 0;
+      });
+
+      function drawSimulator() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const cx = 300;
+        const baseTopY = 275;
+        const w = 260;
+
+        // Calculate displacements during 18° CCW unthreading
+        const twistPhase = Math.min(animProgress * 2, 1); // first half is 18° twist
+        const liftPhase = Math.max((animProgress - 0.35) / 0.65, 0); // second half is vertical lift
+        const upperShiftX = twistPhase * -18; // visual 1/20th turn shift
+        const upperLiftY = liftPhase * -68;
+
+        // If slider is unlocked, the lid gets dragged along with the upper cooler!
+        const lidShiftX = sliderLocked ? 0 : upperShiftX;
+        const lidLiftY = sliderLocked ? 0 : upperLiftY;
+
+        // 1. Draw Bottom Patriot Blue Cooler
+        ctx.fillStyle = '#1e4bd7';
+        ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(cx - w/2, baseTopY, w, 120, [0, 0, 14, 14]);
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw 20-Start Helix Collar Teeth on top of Blue Cooler
+        ctx.fillStyle = '#1539a8';
+        ctx.fillRect(cx - w/2 + 8, baseTopY - 14, w - 16, 14);
+        for (let i = 0; i < 10; i++) {
+          const tx = cx - w/2 + 16 + i * 24;
+          ctx.strokeStyle = '#00f0ff';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(tx, baseTopY - 2);
+          ctx.lineTo(tx + 14, baseTopY - 12);
+          ctx.stroke();
+        }
+
+        // Receiver Slot on right side of Blue Cooler Collar
+        ctx.fillStyle = '#050811';
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(cx + w/2 - 14, baseTopY + 2, 10, 18);
+        ctx.strokeRect(cx + w/2 - 14, baseTopY + 2, 10, 18);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 13px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('BOTTOM COOLER (20-START HELIX COLLAR)', cx, baseTopY + 65);
+
+        // 2. Draw Patriot Red Lid
+        const lidY = baseTopY - 38 + lidLiftY;
+        ctx.save();
+        ctx.translate(lidShiftX, 0);
+
+        ctx.fillStyle = '#e1232d';
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(cx - w/2 - 4, lidY, w + 8, 36, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText('PATRIOT RED LID (1/20 TURN HELIX)', cx, lidY + 22);
+
+        // Draw External Vertical Deadbolt Slider on the right side of the Red Lid
+        const sliderY = sliderLocked ? (lidY + 20) : (lidY + 4);
+        ctx.fillStyle = sliderLocked ? '#10b981' : '#f59e0b';
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(cx + w/2 - 15, sliderY, 12, 28, 3);
+        ctx.fill();
+        ctx.stroke();
+
+        // Callout label for Vertical Slider
+        ctx.textAlign = 'left';
+        ctx.font = 'bold 11.5px monospace';
+        ctx.fillStyle = sliderLocked ? '#10b981' : '#f59e0b';
+        ctx.fillText(sliderLocked ? '◀ SLIDER DOWN (ANCHORED)' : '◀ SLIDER UP (UNLOCKED)', cx + w/2 + 6, sliderY + 16);
+
+        ctx.restore();
+
+        // 3. Draw Stacked Alpine White Upper Cooler
+        const upperY = baseTopY - 155 + upperLiftY;
+        ctx.save();
+        ctx.translate(upperShiftX, 0);
+
+        ctx.fillStyle = '#f0f4fa';
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(cx - w/2, upperY, w, 112, [12, 12, 6, 6]);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#0f172a';
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 13px sans-serif';
+        ctx.fillText('STACKED UPPER COOLER TIER', cx, upperY + 52);
+        ctx.font = 'bold 11px monospace';
+        ctx.fillStyle = '#1e4bd7';
+        ctx.fillText('↺ TWIST 1/20TH CIRCLE (18° CCW) TO REMOVE', cx, upperY + 74);
+
+        ctx.restore();
+
+        requestAnimationFrame(drawSimulator);
+      }
+
+      updateStatusUI();
+      drawSimulator();
+    })();
+  </script>
+</body>
+</html>
