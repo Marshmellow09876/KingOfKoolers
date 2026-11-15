@@ -123,6 +123,15 @@ html[data-theme="light"] .pillar-title {
   color: #1d1d1f !important;
 }
 
+html[data-theme="light"] h1,
+html[data-theme="light"] h1 span,
+html[data-theme="light"] .hero-title,
+html[data-theme="light"] .headline-hero {
+  background: linear-gradient(135deg, #0f172a 0%, #0071e3 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
 html[data-theme="light"] .nav-links a.active,
 html[data-theme="light"] .sub-nav-links a.active {
   color: #0071e3 !important;
@@ -177,16 +186,21 @@ html[data-theme="light"] .apple-footer a {
 }
 
 /* Nav Utility Pills (Theme + Command Palette + Docs) */
+.nav-actions .btn,
+.nav-actions .nav-cta {
+  white-space: nowrap;
+}
+
 .kok-nav-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 11px;
+  gap: 5px;
+  padding: 5px 10px;
   border-radius: 999px;
   border: 1px solid var(--kok-border);
   background: var(--kok-surface-card);
   color: var(--kok-ink);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.18s ease, border-color 0.2s ease, background 0.2s ease;
