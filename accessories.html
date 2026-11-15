@@ -4,8 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>King of Koolers | Official Modular Accessories & Outfitting Ecosystem</title>
-  <meta name="description" content="Explore all 15 official modular accessories for the King of Koolers 24-inch rotomolded stacking cooler. Bluetooth audio lids, pressurized draft beer taps, 360° LED ring lighting, bamboo prep discs, and off-road balloon sand wagons.">
+  <meta name="description" content="Explore all 30 official modular accessories for the King of Koolers 24-inch rotomolded stacking cooler. Bluetooth audio lids, pressurized draft beer taps, 360° LED ring lighting, bamboo prep discs, and off-road balloon sand wagons.">
   <meta name="theme-color" content="#000000">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="King of Koolers">
+  <meta property="og:title" content="King of Koolers | Modular Accessories &amp; 24&quot; Outfitting Store">
+  <meta property="og:description" content="Explore 30 precision-engineered &amp; 3D-printable modules for the 24-inch King of Koolers platform—from the 360° Marine Bluetooth Speaker Lid to internal food carousels and off-road carts.">
+  <meta property="og:image" content="./assets/images/accessory_01_bluetooth_lid.jpg">
+  <meta property="og:image:alt" content="King of Koolers 24-Inch Modular Outfitting and Accessories Ecosystem">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="King of Koolers | Modular Accessories &amp; 24&quot; Outfitting Store">
+  <meta name="twitter:description" content="Explore 30 precision-engineered &amp; 3D-printable modules for the 24-inch King of Koolers platform—from Bluetooth lids to pressurized beer taps.">
+  <meta name="twitter:image" content="./assets/images/accessory_01_bluetooth_lid.jpg">
+  <meta name="twitter:image:alt" content="King of Koolers 24-Inch Modular Outfitting and Accessories Ecosystem">
 
   <style>
     /* ==========================================================================
@@ -61,6 +74,10 @@
 
     img, video, svg, canvas {
       max-inline-size: 100%;
+    }
+
+    picture {
+      display: contents;
     }
 
     img, video {
@@ -1232,6 +1249,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="./assets/css/apple-polish.css">
 </head>
 <body>
 
@@ -1259,7 +1277,7 @@
         <button type="button" class="cart-trigger-btn" id="open-cart-btn" aria-label="View Modular Outfitting Cart">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span>Outfitting</span>
-          <span class="cart-count-badge" id="nav-cart-count">0</span>
+          <span class="cart-count-badge" id="nav-cart-count" aria-live="polite" aria-atomic="true">0</span>
         </button>
         <a href="./index.html#configurator" class="btn-cyan nav-cta-desktop">Build Your Kooler</a>
         <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
@@ -1345,7 +1363,7 @@
           <h2>Official King of Koolers Outfitting</h2>
           <p>Precision-molded &amp; 3D-printable accessories designed exclusively for the 24-inch cylindrical platform</p>
         </div>
-        <div style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-cyan);">
+        <div aria-live="polite" aria-atomic="true" style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-cyan);">
           Showing <span id="displayed-count">30</span> Modules
         </div>
       </div>
@@ -1360,11 +1378,11 @@
        FLOATING BUNDLE BAR
        ========================================================================== -->
   <div class="bundle-bar-floating" id="floating-bundle-bar">
-    <div class="bundle-summary-text">
+    <div class="bundle-summary-text" aria-live="polite" aria-atomic="true">
       <span class="bundle-items-count"><span id="bundle-qty">0</span> Accessories Selected</span>
       <span class="bundle-discount-pill" id="bundle-discount-text">Bundle 2 for 10% Off · 3 for 15% Off</span>
     </div>
-    <div class="bundle-total-price" id="bundle-total">$0.00</div>
+    <div class="bundle-total-price" id="bundle-total" aria-live="polite" aria-atomic="true">$0.00</div>
     <button class="btn-cyan" id="bundle-review-btn">Review Bundle</button>
   </div>
 
@@ -1372,10 +1390,10 @@
        CART / OUTIFTING SLIDE-OVER DRAWER
        ========================================================================== -->
   <div class="cart-drawer-overlay" id="cart-drawer-overlay">
-    <div class="cart-drawer">
+    <div class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
       <div class="drawer-header">
-        <h3>My Modular Outfitting</h3>
-        <button class="drawer-close-btn" id="close-drawer-btn" aria-label="Close Drawer">&times;</button>
+        <h3 id="drawer-title">My Modular Outfitting</h3>
+        <button type="button" class="drawer-close-btn" id="close-drawer-btn" aria-label="Close Drawer">&times;</button>
       </div>
 
       <div class="drawer-items-list" id="drawer-items-list">
@@ -1383,22 +1401,22 @@
       </div>
 
       <div class="drawer-footer">
-        <div class="discount-banner" id="discount-banner" style="display: none;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <div class="discount-banner" id="discount-banner" style="display: none;" role="status" aria-live="polite" aria-atomic="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <span id="discount-applied-msg">Bundle discount applied!</span>
         </div>
 
         <div class="drawer-summary-row">
           <span>Subtotal</span>
-          <span id="drawer-subtotal">$0.00</span>
+          <span id="drawer-subtotal" aria-live="polite" aria-atomic="true">$0.00</span>
         </div>
         <div class="drawer-summary-row" id="drawer-discount-row" style="display: none; color: var(--accent-green);">
           <span>Bundle Savings</span>
-          <span id="drawer-savings">-$0.00</span>
+          <span id="drawer-savings" aria-live="polite" aria-atomic="true">-$0.00</span>
         </div>
         <div class="drawer-summary-row total">
           <span>Total Outfitting</span>
-          <span id="drawer-total">$0.00</span>
+          <span id="drawer-total" aria-live="polite" aria-atomic="true">$0.00</span>
         </div>
 
         <a href="./index.html#configurator" class="btn-cyan" style="width: 100%; justify-content: center; margin-top: 18px; padding: 14px 20px;">
@@ -1412,13 +1430,13 @@
        TECHNICAL SPEC SHEET MODAL
        ========================================================================== -->
   <div class="spec-modal-overlay" id="spec-modal-overlay">
-    <div class="spec-modal-card">
+    <div class="spec-modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <div class="spec-modal-header">
         <div>
           <span class="badge-mod-num" id="modal-mod-num">MOD-01</span>
           <h3 id="modal-title" style="margin-top: 4px; font-size: 18px; color: #fff;">Accessory Title</h3>
         </div>
-        <button class="drawer-close-btn" id="close-spec-modal-btn">&times;</button>
+        <button type="button" class="drawer-close-btn" id="close-spec-modal-btn" aria-label="Close Specification Modal">&times;</button>
       </div>
       <div class="spec-modal-body">
         <p id="modal-desc" style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;"></p>
@@ -2291,7 +2309,10 @@
               <span class="badge-mod-num">MODULE ${item.num}</span>
               <span class="badge-compat">${item.compat}</span>
             </div>
-            <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.style.display='none'; this.parentElement.insertAdjacentHTML('beforeend', '<div style=\'display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:24px;text-align:center;background:radial-gradient(circle at 50% 50%, rgba(0,210,255,0.08), rgba(4,6,10,0.95));color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;\'><span style=\'color:var(--accent-cyan);font-weight:700;margin-bottom:6px;\'>8K Ultra-Realistic Photo Queued</span><span>Awaiting AI Image Quota Reset (No Slop Placeholder)</span></div>');">
+            <picture style="display:contents;">
+              <source srcset="${item.image.replace(/\.(jpg|png)$/i, '.webp')}" type="image/webp">
+              <img src="${item.image}" alt="${item.name}" loading="lazy" decoding="async" onerror="this.style.display='none'; var wrap = this.closest('.card-media-wrapper'); if (wrap) wrap.insertAdjacentHTML('beforeend', '<div style=\'display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:24px;text-align:center;background:radial-gradient(circle at 50% 50%, rgba(0,210,255,0.08), rgba(4,6,10,0.95));color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;\'><span style=\'color:var(--accent-cyan);font-weight:700;margin-bottom:6px;\'>8K Ultra-Realistic Photo Queued</span><span>Awaiting AI Image Quota Reset (No Slop Placeholder)</span></div>');">
+            </picture>
           </div>
           <div class="card-content">
             <div class="card-header-row">
@@ -2380,12 +2401,15 @@
           const div = document.createElement('div');
           div.className = 'drawer-item';
           div.innerHTML = `
-            <img src="${item.image}" alt="${item.name}">
+            <picture style="display:contents;">
+              <source srcset="${item.image.replace(/\.(jpg|png)$/i, '.webp')}" type="image/webp">
+              <img src="${item.image}" alt="${item.name}" loading="lazy" decoding="async">
+            </picture>
             <div class="drawer-item-info">
               <div class="drawer-item-name">${item.name}</div>
               <div class="drawer-item-price">$${item.price.toFixed(2)}</div>
             </div>
-            <button class="drawer-item-remove" data-index="${index}" title="Remove Item">&times;</button>
+            <button type="button" class="drawer-item-remove" data-index="${index}" aria-label="Remove ${item.name}" title="Remove Item">&times;</button>
           `;
           drawerList.appendChild(div);
         });
@@ -2408,6 +2432,51 @@
       try {
         localStorage.setItem('kok_outfitting_cart', JSON.stringify(cart));
       } catch(e) {}
+    }
+
+    const specOverlay = document.getElementById('spec-modal-overlay');
+    const closeDrawerBtn = document.getElementById('close-drawer-btn');
+    const closeSpecModalBtn = document.getElementById('close-spec-modal-btn');
+    let drawerTriggerEl = null;
+    let specTriggerEl = null;
+
+    function syncOverlayInert() {
+      const anyOpen = cartOverlay.classList.contains('open') || specOverlay.classList.contains('open');
+      Array.from(document.body.children).forEach(el => {
+        if (el === cartOverlay || el === specOverlay || el.tagName === 'SCRIPT') return;
+        if (anyOpen) {
+          el.setAttribute('inert', '');
+        } else {
+          el.removeAttribute('inert');
+        }
+      });
+    }
+
+    function openCartDrawer(triggerEl) {
+      drawerTriggerEl = triggerEl || document.activeElement;
+      cartOverlay.classList.add('open');
+      syncOverlayInert();
+      setTimeout(() => closeDrawerBtn && closeDrawerBtn.focus(), 25);
+    }
+
+    function closeCartDrawer() {
+      if (!cartOverlay.classList.contains('open')) return;
+      cartOverlay.classList.remove('open');
+      syncOverlayInert();
+      if (drawerTriggerEl && typeof drawerTriggerEl.focus === 'function') {
+        drawerTriggerEl.focus();
+      }
+      drawerTriggerEl = null;
+    }
+
+    function closeSpecModal() {
+      if (!specOverlay.classList.contains('open')) return;
+      specOverlay.classList.remove('open');
+      syncOverlayInert();
+      if (specTriggerEl && typeof specTriggerEl.focus === 'function') {
+        specTriggerEl.focus();
+      }
+      specTriggerEl = null;
     }
 
     // Event Handlers
@@ -2439,16 +2508,20 @@
         const idx = parseInt(btn.dataset.index, 10);
         cart.splice(idx, 1);
         renderCatalog();
+        if (cartOverlay.classList.contains('open') && closeDrawerBtn) {
+          closeDrawerBtn.focus();
+        }
       }
 
       // Open Cart Drawer
       if (e.target.closest('#open-cart-btn') || e.target.closest('#bundle-review-btn')) {
-        cartOverlay.classList.add('open');
+        const trigger = e.target.closest('#open-cart-btn') || e.target.closest('#bundle-review-btn');
+        openCartDrawer(trigger);
       }
 
       // Close Cart Drawer
       if (e.target.closest('#close-drawer-btn') || e.target === cartOverlay) {
-        cartOverlay.classList.remove('open');
+        closeCartDrawer();
       }
 
       // Open Spec Modal
@@ -2457,13 +2530,13 @@
         const id = btn.dataset.id;
         const item = ACCESSORIES_DATA.find(a => a.id === id);
         if (item) {
-          openSpecModal(item);
+          openSpecModal(item, btn);
         }
       }
 
       // Close Spec Modal
-      if (e.target.closest('#close-spec-modal-btn') || e.target === document.getElementById('spec-modal-overlay')) {
-        document.getElementById('spec-modal-overlay').classList.remove('open');
+      if (e.target.closest('#close-spec-modal-btn') || e.target === specOverlay) {
+        closeSpecModal();
       }
 
       // Category filter pill click
@@ -2499,7 +2572,8 @@
     });
 
     // Spec Modal Populate
-    function openSpecModal(item) {
+    function openSpecModal(item, triggerEl) {
+      specTriggerEl = triggerEl || document.activeElement;
       document.getElementById('modal-mod-num').textContent = `MODULE ${item.num}`;
       document.getElementById('modal-title').textContent = item.name;
       document.getElementById('modal-desc').textContent = item.hook;
@@ -2522,8 +2596,21 @@
         </tbody>
       `;
 
-      document.getElementById('spec-modal-overlay').classList.add('open');
+      specOverlay.classList.add('open');
+      syncOverlayInert();
+      setTimeout(() => closeSpecModalBtn && closeSpecModalBtn.focus(), 25);
     }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (specOverlay.classList.contains('open')) {
+        e.preventDefault();
+        closeSpecModal();
+      } else if (cartOverlay.classList.contains('open')) {
+        e.preventDefault();
+        closeCartDrawer();
+      }
+    });
 
     // Initial render
     renderCatalog();
@@ -2557,5 +2644,6 @@
       }, { passive: true });
     })();
   </script>
+  <script src="./assets/js/apple-polish.js" defer></script>
 </body>
 </html>

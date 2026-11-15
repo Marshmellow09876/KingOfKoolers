@@ -6,6 +6,19 @@
   <title>King of Koolers | 3D Interactive Studio & Digital Lab</title>
   <meta name="description" content="Experience the 24-inch King of Koolers in full interactive 3D. Explode tiers to look inside, customize rotomolded colors and hydro-dips, simulate laser engraving, calculate ice-to-can trip capacity, and monitor live payload weight ergonomics.">
   <meta name="theme-color" content="#000000">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="King of Koolers">
+  <meta property="og:title" content="King of Koolers | 3D Customizer &amp; Capacity Studio">
+  <meta property="og:description" content="Build and inspect your custom 24-inch modular cooler tower in interactive 3D. Customize tier heights, molded finishes, exploded views, and real-time beverage &amp; ice loadouts.">
+  <meta property="og:image" content="./assets/images/render_red_white_blue_stacked.jpg">
+  <meta property="og:image:alt" content="King of Koolers 3D Customizer and Modular Stack Studio">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="King of Koolers | 3D Customizer &amp; Capacity Studio">
+  <meta name="twitter:description" content="Build and inspect your custom 24-inch modular cooler tower in interactive 3D. Customize tier heights, molded finishes, exploded views, and real-time loadouts.">
+  <meta name="twitter:image" content="./assets/images/render_red_white_blue_stacked.jpg">
+  <meta name="twitter:image:alt" content="King of Koolers 3D Customizer and Modular Stack Studio">
 
   <!-- Local Three.js and OrbitControls with CDN fallback -->
   <script src="./assets/js/three.min.js"></script>
@@ -988,6 +1001,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="./assets/css/apple-polish.css">
 </head>
 <body>
 
@@ -1036,14 +1050,22 @@
     <section class="viewport-container" id="viewport-container" aria-label="3D Cooler Viewport">
       <canvas id="webgl-canvas"></canvas>
 
+      <!-- 18. Studio Lighting & Environment Switcher -->
+      <div class="studio-env-bar" role="group" aria-label="3D Studio Lighting Environment">
+        <button type="button" class="studio-env-btn active" data-env="obsidian">Obsidian</button>
+        <button type="button" class="studio-env-btn" data-env="studio">Apple White</button>
+        <button type="button" class="studio-env-btn" data-env="sunset">Sunset Overland</button>
+        <button type="button" class="studio-env-btn" data-env="boat">Boat Deck</button>
+      </div>
+
       <!-- Viewport Top HUD -->
       <div class="viewport-hud-top">
         <div class="hud-title-box">
           <div class="hud-kpi-row">
             <span class="hud-kpi">DIAMETER: <strong>24.0" OD</strong></span>
-            <span class="hud-kpi">HEIGHT: <strong id="hud-height">58.0"</strong></span>
-            <span class="hud-kpi">VOLUME: <strong id="hud-quarts">160 QT</strong></span>
-            <span class="hud-kpi">PAYLOAD: <strong id="hud-weight">84 LBS</strong></span>
+            <span class="hud-kpi">HEIGHT: <strong id="hud-height" aria-live="polite" aria-atomic="true">58.0"</strong></span>
+            <span class="hud-kpi">VOLUME: <strong id="hud-quarts" aria-live="polite" aria-atomic="true">160 QT</strong></span>
+            <span class="hud-kpi">PAYLOAD: <strong id="hud-weight" aria-live="polite" aria-atomic="true">84 LBS</strong></span>
           </div>
         </div>
 
@@ -1058,11 +1080,11 @@
       <!-- Viewport Bottom HUD: Vertical Exploder Slider -->
       <div class="viewport-hud-bottom">
         <div class="exploder-label">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>
           <span>Explode Tiers</span>
         </div>
-        <input type="range" class="exploder-slider" id="explode-slider" min="0" max="100" value="0">
-        <button class="btn-toggle-explode" id="btn-toggle-explode">Explode View</button>
+        <input type="range" class="exploder-slider" id="explode-slider" min="0" max="100" value="0" aria-label="Explode tiers vertical separation">
+        <button type="button" class="btn-toggle-explode" id="btn-toggle-explode" aria-pressed="false">Explode View</button>
       </div>
     </section>
 
@@ -1217,6 +1239,14 @@
               <button class="preset-chip" data-crest="compass">Compass Rose</button>
             </div>
           </div>
+
+          <div class="control-card">
+            <div class="control-label">Custom Team / Company Logo (PNG, SVG, JPG)</div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <input type="file" id="engrave-logo-upload" accept="image/*" style="font-size:12px;color:var(--text-muted);max-width:100%;">
+              <button type="button" class="preset-chip" id="engrave-logo-clear" style="padding:6px 10px;font-size:11px;">Clear Logo</button>
+            </div>
+          </div>
         </div>
 
         <!-- TAB 4: COOLER CAPACITY & ICE CALCULATOR -->
@@ -1247,11 +1277,11 @@
             <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
               <div style="display: flex; justify-content: space-between;">
                 <span style="color: var(--text-muted);">Beverage Payload:</span>
-                <strong id="calc-cans-result" style="color: #fff;">48 Cans / Bottles</strong>
+                <strong id="calc-cans-result" style="color: #fff;" aria-live="polite" aria-atomic="true">48 Cans / Bottles</strong>
               </div>
               <div style="display: flex; justify-content: space-between;">
                 <span style="color: var(--text-muted);">Recommended Ice Ratio (2:1):</span>
-                <strong id="calc-ice-result" style="color: #fff;">38 LBS Crushed Ice</strong>
+                <strong id="calc-ice-result" style="color: #fff;" aria-live="polite" aria-atomic="true">38 LBS Crushed Ice</strong>
               </div>
               <div style="display: flex; justify-content: space-between;">
                 <span style="color: var(--text-muted);">Guaranteed Cold Hold:</span>
@@ -1259,7 +1289,7 @@
               </div>
               <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
                 <span style="color: var(--text-muted);">Recommended Stack:</span>
-                <strong id="calc-stack-result" style="color: var(--accent-cyan);">3-Tier Patriot (58")</strong>
+                <strong id="calc-stack-result" style="color: var(--accent-cyan);" aria-live="polite" aria-atomic="true">3-Tier Patriot (58")</strong>
               </div>
             </div>
             <button class="btn-apply-checkout" id="btn-apply-calc" style="margin-top: 10px; font-size: 12.5px; padding: 10px 14px;">
@@ -1279,7 +1309,7 @@
             <div style="display: flex; justify-content: space-between; align-items: baseline;">
               <div>
                 <div style="font-size: 12px; color: var(--text-muted); font-family: var(--font-mono);">GROSS LOADED WEIGHT</div>
-                <div style="font-size: 32px; font-weight: 800; color: #fff; font-family: var(--font-mono);" id="gauge-gross-lbs">84 LBS</div>
+                <div style="font-size: 32px; font-weight: 800; color: #fff; font-family: var(--font-mono);" id="gauge-gross-lbs" aria-live="polite" aria-atomic="true">84 LBS</div>
               </div>
               <div style="text-align: right;">
                 <div style="font-size: 12px; color: var(--text-muted); font-family: var(--font-mono);">METRIC EQUIV</div>
@@ -1291,8 +1321,8 @@
               <div class="weight-meter-fill" id="gauge-meter-fill"></div>
             </div>
 
-            <div id="ergo-alert-box" class="ergo-alert-badge ergo-yellow">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div id="ergo-alert-box" class="ergo-alert-badge ergo-yellow" role="status" aria-live="polite" aria-atomic="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
               <span id="ergo-alert-text">Two-Person Team Lift Required (45 - 110 lbs). Use molded side loop handles.</span>
             </div>
           </div>
@@ -1326,7 +1356,7 @@
       <div class="console-footer">
         <div class="footer-summary-row">
           <span>Configured Stack Value</span>
-          <div class="footer-total-price" id="console-total-price">$389.00</div>
+          <div class="footer-total-price" id="console-total-price" aria-live="polite" aria-atomic="true">$389.00</div>
         </div>
         <a href="./index.html#configurator" class="btn-apply-checkout" id="btn-save-reservation">
           <span>Apply to Dream Cooler Reservation &rarr;</span>
@@ -1453,6 +1483,18 @@
       } else {
         ctx.fillStyle = studioState.baseColor;
         ctx.fillRect(0, 0, 1024, 1024);
+      }
+
+      // Custom uploaded logo projection (24. Custom Laser-Engraving Logo)
+      if (studioState.customLogoImg) {
+        ctx.save();
+        const maxDim = 240;
+        const ratio = Math.min(maxDim / studioState.customLogoImg.width, maxDim / studioState.customLogoImg.height);
+        const w = studioState.customLogoImg.width * ratio;
+        const h = studioState.customLogoImg.height * ratio;
+        ctx.globalAlpha = loc === 'lid' ? 0.82 : 0.92;
+        ctx.drawImage(studioState.customLogoImg, 512 - w / 2, 240 - h / 2, w, h);
+        ctx.restore();
       }
 
       // Engraving text & emblem (only render when user enters text)
@@ -1998,16 +2040,25 @@
       targetExplosion = val;
     }
 
+    let isExploded = false;
+
+    function syncExplodeButtonState(exploded) {
+      isExploded = exploded;
+      btnToggleExplode.textContent = isExploded ? 'Assemble Stack' : 'Explode View';
+      btnToggleExplode.setAttribute('aria-pressed', String(isExploded));
+    }
+
     explodeSlider.addEventListener('input', (e) => {
-      applyExplosion(parseFloat(e.target.value) / 100);
+      const val = parseFloat(e.target.value) / 100;
+      applyExplosion(val);
+      syncExplodeButtonState(val >= 0.5);
     });
 
-    let isExploded = false;
     btnToggleExplode.addEventListener('click', () => {
-      isExploded = !isExploded;
-      targetExplosion = isExploded ? 1.0 : 0.0;
+      const next = !isExploded;
+      targetExplosion = next ? 1.0 : 0.0;
       explodeSlider.value = targetExplosion * 100;
-      btnToggleExplode.textContent = isExploded ? 'Assemble Stack' : 'Explode View';
+      syncExplodeButtonState(next);
     });
 
     // 4. Camera Presets
@@ -2209,6 +2260,57 @@
       });
     });
 
+    const logoInput = document.getElementById('engrave-logo-upload');
+    const logoClear = document.getElementById('engrave-logo-clear');
+    if (logoInput) {
+      logoInput.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            studioState.customLogoImg = img;
+            updateEngraving();
+            if (studioState.engraveLocation === 'body') buildFullStack();
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    if (logoClear) {
+      logoClear.addEventListener('click', () => {
+        studioState.customLogoImg = null;
+        if (logoInput) logoInput.value = '';
+        updateEngraving();
+        if (studioState.engraveLocation === 'body') buildFullStack();
+      });
+    }
+
+    // 18. Studio Lighting & Environment Switcher Logic
+    const STUDIO_ENVS = {
+      obsidian: { bg: 0x060910, fog: 0x060910, ambient: [0xffffff, 0.65], key: [0xffffff, 1.2], fill: [0x00f0ff, 0.7], rim: [0xffffff, 0.9], floor: 0x05070d, grid: [0x00f0ff, 0x141f33] },
+      studio:   { bg: 0xf2f4f7, fog: 0xf2f4f7, ambient: [0xffffff, 0.95], key: [0xffffff, 1.35], fill: [0xe0f2fe, 0.45], rim: [0xffffff, 0.75], floor: 0xe5e7eb, grid: [0x94a3b8, 0xd1d5db] },
+      sunset:   { bg: 0x1c1218, fog: 0x1c1218, ambient: [0xffedd5, 0.6], key: [0xff9e5e, 1.4], fill: [0xf43f5e, 0.55], rim: [0xfbbf24, 0.95], floor: 0x181014, grid: [0xf59e0b, 0x3b1f2b] },
+      boat:     { bg: 0x091d2c, fog: 0x091d2c, ambient: [0xe0f2fe, 0.78], key: [0xfef9c3, 1.3], fill: [0x38bdf8, 0.85], rim: [0xffffff, 0.9], floor: 0x0d283b, grid: [0x38bdf8, 0x16425b] }
+    };
+    document.querySelectorAll('[data-env]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-env]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cfg = STUDIO_ENVS[btn.dataset.env];
+        if (!cfg) return;
+        scene.background = new THREE.Color(cfg.bg);
+        scene.fog = new THREE.FogExp2(cfg.fog, 0.012);
+        ambientLight.color.setHex(cfg.ambient[0]); ambientLight.intensity = cfg.ambient[1];
+        keyLight.color.setHex(cfg.key[0]); keyLight.intensity = cfg.key[1];
+        cyanFillLight.color.setHex(cfg.fill[0]); cyanFillLight.intensity = cfg.fill[1];
+        rimLight.color.setHex(cfg.rim[0]); rimLight.intensity = cfg.rim[1];
+        floorMat.color.setHex(cfg.floor);
+      });
+    });
+
     // 8. Capacity & Ice Calculator Engine
     const partyRange = document.getElementById('calc-party-range');
     const daysRange = document.getElementById('calc-days-range');
@@ -2305,18 +2407,28 @@
       a.click();
     });
 
-    // Responsive 3D Canvas Resize Handler (Desktop split-screen + Mobile stacked)
-    function updateViewportSize() {
-      const w = container.clientWidth;
-      const h = container.clientHeight;
+    // Responsive 3D Canvas Resize Handler (Desktop split-screen + Mobile stacked + Orientation Change)
+    function updateViewportSize(entries) {
+      let w = container.clientWidth;
+      let h = container.clientHeight;
+      if (Array.isArray(entries) && entries.length > 0 && entries[0].contentRect) {
+        w = Math.round(entries[0].contentRect.width) || w;
+        h = Math.round(entries[0].contentRect.height) || h;
+      }
       if (w <= 0 || h <= 0) return;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h, false);
+      renderer.render(scene, camera);
     }
-    window.addEventListener('resize', updateViewportSize);
+    window.addEventListener('resize', () => updateViewportSize(), { passive: true });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => updateViewportSize(), 60);
+    }, { passive: true });
     if (typeof ResizeObserver !== 'undefined') {
-      new ResizeObserver(updateViewportSize).observe(container);
+      const viewportResizeObserver = new ResizeObserver((entries) => updateViewportSize(entries));
+      viewportResizeObserver.observe(container);
     }
 
     // Mobile Navigation Drawer Toggle
@@ -2404,5 +2516,6 @@
       });
     }
   </script>
+  <script src="./assets/js/apple-polish.js" defer></script>
 </body>
 </html>
