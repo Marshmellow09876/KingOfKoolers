@@ -758,6 +758,7 @@
         inset: 0;
         width: 100% !important;
         height: 100% !important;
+        max-width: 100% !important;
         display: block;
       }
       .studio-console {
@@ -788,18 +789,51 @@
         flex-direction: column;
         height: auto;
         min-height: 0;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: clip;
       }
       .viewport-container {
+        position: relative;
         width: 100%;
+        max-width: 100%;
         height: clamp(320px, 50dvh, 480px);
         min-height: 320px;
         flex: none;
+        overflow: hidden;
+      }
+      .viewport-container canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        display: block;
       }
       .studio-console {
         width: 100%;
+        max-width: 100%;
+        min-width: 0;
         height: auto;
         border-left: none;
         border-top: 1px solid var(--border-subtle);
+      }
+      .viewport-hud-top {
+        max-width: calc(100% - 20px);
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .hud-title-box,
+      .hud-kpi-row,
+      .hud-view-presets {
+        max-width: 100%;
+        flex-wrap: wrap;
+      }
+      .viewport-hud-bottom {
+        max-width: calc(100% - 20px);
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px 10px;
       }
       .console-body {
         overflow-y: visible;
@@ -1590,6 +1624,12 @@
     const consoleTotalPrice = document.getElementById('console-total-price');
     const breakdownDryLabel = document.getElementById('breakdown-dry')?.previousElementSibling;
     const breakdownDryVal = document.getElementById('breakdown-dry');
+    const gaugeGrossLbs = document.getElementById('gauge-gross-lbs');
+    const gaugeGrossKg = document.getElementById('gauge-gross-kg');
+    const gaugeMeterFill = document.getElementById('gauge-meter-fill');
+    const ergoAlertBox = document.getElementById('ergo-alert-box');
+    const ergoAlertText = document.getElementById('ergo-alert-text');
+    const hudWeight = document.getElementById('hud-weight');
 
     function getActivePreset() {
       return STACK_PRESETS[studioState.stackType] || STACK_PRESETS['patriot-58'];
@@ -2222,13 +2262,7 @@
     partyRange.addEventListener('input', runCapacityCalculator);
     daysRange.addEventListener('input', runCapacityCalculator);
 
-    // 9. Weight & Ergonomics Gauge Engine
-    const gaugeGrossLbs = document.getElementById('gauge-gross-lbs');
-    const gaugeGrossKg = document.getElementById('gauge-gross-kg');
-    const gaugeMeterFill = document.getElementById('gauge-meter-fill');
-    const ergoAlertBox = document.getElementById('ergo-alert-box');
-    const ergoAlertText = document.getElementById('ergo-alert-text');
-    const hudWeight = document.getElementById('hud-weight');
+    // 9. Weight & Ergonomics Gauge Engine (DOM refs hoisted above buildFullStack)
 
     function updateErgonomicsGauge() {
       const preset = getActivePreset();

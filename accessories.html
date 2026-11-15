@@ -673,12 +673,12 @@
     .cart-drawer-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.78);
       backdrop-filter: blur(8px);
       z-index: 2000;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.12s ease;
     }
 
     .cart-drawer-overlay.open {
@@ -1058,11 +1058,14 @@
       width: min(100dvw, 440px);
       height: 100dvh;
       max-height: 100dvh;
+      background: #0d121c;
       visibility: hidden;
     }
 
+    .cart-drawer-overlay.open .cart-drawer,
     .cart-drawer.open {
       visibility: visible;
+      transform: translateX(0);
     }
 
     .drawer-footer {
