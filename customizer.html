@@ -19,6 +19,7 @@
   <meta name="twitter:description" content="Build and inspect your custom 24-inch modular cooler tower in interactive 3D. Customize tier heights, molded finishes, exploded views, and real-time loadouts.">
   <meta name="twitter:image" content="./assets/images/render_red_white_blue_stacked.jpg">
   <meta name="twitter:image:alt" content="King of Koolers 3D Customizer and Modular Stack Studio">
+  <link rel="manifest" href="./manifest.json">
 
   <!-- Local Three.js and OrbitControls with CDN fallback -->
   <script src="./assets/js/three.min.js"></script>
@@ -288,29 +289,50 @@
       border-color: var(--accent-cyan);
     }
 
-    /* Floating Bottom Exploder Controls */
+    /* Floating Bottom Exploder & X-Ray Cutaway Controls */
     .viewport-hud-bottom {
       position: absolute;
-      bottom: 20px;
+      bottom: 18px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 16, 28, 0.9);
+      max-width: calc(100% - 28px);
+      background: rgba(10, 16, 28, 0.92);
       backdrop-filter: blur(16px);
       border: 1px solid var(--border-cyan);
-      border-radius: var(--radius-full);
-      padding: 10px 24px;
+      border-radius: 22px;
+      padding: 10px 18px;
       display: flex;
       align-items: center;
-      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 16px;
       z-index: 10;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 240, 255, 0.15);
+    }
+
+    .hud-control-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hud-divider-v {
+      width: 1px;
+      height: 22px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    @media (max-width: 1280px) {
+      .hud-divider-v {
+        display: none;
+      }
     }
 
     .exploder-label {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 12.5px;
+      gap: 6px;
+      font-size: 12px;
       font-weight: 700;
       color: #fff;
       white-space: nowrap;
@@ -318,11 +340,111 @@
 
     .exploder-slider {
       -webkit-appearance: none;
-      width: 180px;
+      width: 120px;
       height: 6px;
       border-radius: 3px;
       background: rgba(255, 255, 255, 0.15);
       outline: none;
+    }
+
+    .exploder-slider.xray-slider::-webkit-slider-thumb {
+      background: #f59e0b;
+      box-shadow: 0 0 10px #f59e0b;
+    }
+
+    .xray-pct-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #f59e0b;
+      min-width: 34px;
+      text-align: right;
+    }
+
+    .cad-part-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cad-part-card {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+    }
+
+    .cad-part-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(0, 240, 255, 0.35);
+      color: #fff;
+    }
+
+    .cad-part-card.active {
+      background: rgba(0, 240, 255, 0.14);
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+
+    .cad-fmt-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: var(--accent-cyan);
+      flex-shrink: 0;
+    }
+
+    .cad-telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .cad-tel-cell {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+    }
+
+    .cad-tel-k {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .cad-tel-v {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 2px;
+      word-break: break-word;
+    }
+
+    .studio-env-bar {
+      top: 66px !important;
+      right: 20px !important;
+    }
+
+    @media (max-width: 768px) {
+      .studio-env-bar {
+        display: none !important;
+      }
     }
 
     .exploder-slider::-webkit-slider-thumb {
@@ -380,13 +502,13 @@
 
     .console-tab-btn {
       flex: 1;
-      min-width: 90px;
-      padding: 14px 10px;
+      min-width: 72px;
+      padding: 12px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
       color: var(--text-muted);
       border-bottom: 2px solid transparent;
@@ -1074,17 +1196,30 @@
           <button class="hud-btn" data-view="front" title="Front Elevation">Front</button>
           <button class="hud-btn" data-view="top" title="Top-Down Interior">Look Inside</button>
           <button class="hud-btn" data-view="reset" title="Reset Camera">Reset</button>
+          <button class="hud-btn" id="btn-hud-cad-inspector" type="button" title="Inspect real .3MF / .STL / .OBJ CAD files">📐 CAD Meshes</button>
         </div>
       </div>
 
-      <!-- Viewport Bottom HUD: Vertical Exploder Slider -->
+      <!-- Viewport Bottom HUD: Vertical Exploder & X-Ray Cutaway Sliders -->
       <div class="viewport-hud-bottom">
-        <div class="exploder-label">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>
-          <span>Explode Tiers</span>
+        <div class="hud-control-cluster">
+          <div class="exploder-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>
+            <span>Explode</span>
+          </div>
+          <input type="range" class="exploder-slider" id="explode-slider" min="0" max="100" value="0" aria-label="Explode tiers vertical separation">
+          <button type="button" class="btn-toggle-explode" id="btn-toggle-explode" aria-pressed="false">Explode View</button>
         </div>
-        <input type="range" class="exploder-slider" id="explode-slider" min="0" max="100" value="0" aria-label="Explode tiers vertical separation">
-        <button type="button" class="btn-toggle-explode" id="btn-toggle-explode" aria-pressed="false">Explode View</button>
+        <div class="hud-divider-v" aria-hidden="true"></div>
+        <div class="hud-control-cluster">
+          <div class="exploder-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="M5 6h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5"/></svg>
+            <span>X-Ray Cutaway</span>
+          </div>
+          <input type="range" class="exploder-slider xray-slider" id="xray-slider" min="0" max="100" value="0" aria-label="Vertical X-Ray cutaway section slider">
+          <span class="xray-pct-badge" id="xray-pct-val" aria-live="polite">0%</span>
+          <button type="button" class="btn-toggle-explode" id="btn-toggle-xray" aria-pressed="false" style="border-color: rgba(245, 158, 11, 0.55); color: #fbbf24; background: rgba(245, 158, 11, 0.14);">Slice Half</button>
+        </div>
       </div>
     </section>
 
@@ -1098,7 +1233,7 @@
         </button>
         <button class="console-tab-btn" data-tab="tab-colors">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12A10 10 0 0 1 12 2z"/></svg>
-          <span>Colors &amp; Wrap</span>
+          <span>Colors</span>
         </button>
         <button class="console-tab-btn" data-tab="tab-engrave">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -1112,6 +1247,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>
           <span>Ergonomics</span>
         </button>
+        <button class="console-tab-btn" data-tab="tab-cad" id="tab-btn-cad">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><line x1="12" y1="12" x2="12" y2="22"/></svg>
+          <span>CAD Mesh</span>
+        </button>
       </div>
 
       <!-- Tab Panels Content -->
@@ -1120,35 +1259,89 @@
         <!-- TAB 1: 3D MODEL EXPLODER & STACK BUILDER -->
         <div class="tool-panel active" id="tab-3d">
           <div class="panel-header">
-            <h3>3D Stack Architecture</h3>
-            <p>Customize tier heights, explode layers vertically, or inspect internal chambers.</p>
+            <h3>V12 24" Prototype &amp; Stack Studio</h3>
+            <p>Inspect the Next-Gen 24" OD V12 Large-Scale Prototype built from Austin's real .3MF CAD assets, explode the 5 split rings &amp; 24 alignment pins, or slice via X-Ray Cutaway.</p>
           </div>
 
-          <div class="control-card">
-            <div class="control-label">Stack Preset Configuration</div>
+          <div class="control-card" style="background: rgba(0, 240, 255, 0.06); border-color: var(--border-cyan);">
+            <div class="control-label" style="color: var(--accent-cyan);">
+              <span>V12 Large-Scale 24" Prototype &amp; Stack Presets</span>
+              <span>Ø 24.0" OD</span>
+            </div>
             <div class="pill-grid">
-              <button class="preset-chip active" data-stack="patriot-58">Patriot RWB (58")</button>
+              <button class="preset-chip active" data-stack="v12-split">👑 V12 Split Prototype (24" CAD)</button>
+              <button class="preset-chip" data-stack="v12-onepiece">🔩 V12 One-Piece CAD (24")</button>
+              <button class="preset-chip" data-stack="patriot-58">Patriot RWB (58")</button>
               <button class="preset-chip" data-stack="titan-72">Titan Max (72")</button>
               <button class="preset-chip" data-stack="explorer-38">Explorer Duo (38")</button>
               <button class="preset-chip" data-stack="scout-30">Solo Scout (30")</button>
             </div>
           </div>
 
-          <div class="control-card">
-            <div class="control-label">Interior Chamber Contents</div>
-            <div class="pill-grid">
-              <button class="preset-chip active" id="btn-toggle-ice">✓ Crystal Ice</button>
-              <button class="preset-chip active" id="btn-toggle-cans">✓ Craft Cans</button>
-              <button class="preset-chip" id="btn-toggle-pizza">Pizza Vault Box</button>
-              <button class="preset-chip active" id="btn-toggle-drain">Center Drain Core</button>
+          <div class="control-card" id="v12-height-card" style="background: rgba(56, 189, 248, 0.06); border-color: rgba(56, 189, 248, 0.32);">
+            <div class="control-label" style="color: #38bdf8;">
+              <span>V12 Vessel Height Variable (Parametric Z)</span>
+              <span id="v12-height-badge">20.0" Tall (508.0 mm)</span>
+            </div>
+            <div class="pill-grid" style="grid-template-columns: repeat(4, 1fr);">
+              <button type="button" class="preset-chip" data-v12-height="12">12" Tall</button>
+              <button type="button" class="preset-chip" data-v12-height="18">18" Tall</button>
+              <button type="button" class="preset-chip active" data-v12-height="20">20" Tall</button>
+              <button type="button" class="preset-chip" data-v12-height="24">24" Tall</button>
             </div>
           </div>
 
           <div class="control-card">
-            <div class="control-label">Base Hardware &amp; Spigot</div>
+            <div class="control-label">Interior Chamber &amp; Cutaway Inserts</div>
+            <div class="pill-grid">
+              <button class="preset-chip active" id="btn-toggle-ice">✓ Crown ICE Pack</button>
+              <button class="preset-chip active" id="btn-toggle-cans">✓ Craft Cans</button>
+              <button class="preset-chip" id="btn-toggle-pizza">Pizza Vault Box</button>
+              <button class="preset-chip active" id="btn-toggle-drain">✓ Center All-Thread</button>
+              <button class="preset-chip active" id="btn-toggle-carousel">✓ Crown &amp; Hex Dishes</button>
+              <button class="preset-chip active" id="btn-toggle-spiral">✓ Spiral Ramp #29</button>
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">X-Ray Anatomy &amp; Real CAD Lab</div>
+            <div class="pill-grid">
+              <button class="preset-chip" type="button" id="btn-panel-xray">⚡ Half-View Cutaway (50%)</button>
+              <button class="preset-chip" type="button" id="btn-panel-open-cad">📐 Inspect 14 V12 CAD Parts</button>
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Base Hardware, Solar Bays &amp; Dovetail Chassis</div>
             <div class="pill-grid">
               <button class="preset-chip active" id="btn-toggle-spigot">✓ Fast-Flow Water Spigot</button>
-              <button class="preset-chip active" id="btn-toggle-solar">✓ 10W USB Solar Lid</button>
+              <button class="preset-chip active" id="btn-toggle-solar">✓ Dual 10W Solar Batteries</button>
+            </div>
+          </div>
+
+          <div class="control-card" style="background: rgba(16, 185, 129, 0.07); border-color: rgba(16, 185, 129, 0.35);">
+            <div class="control-label" style="color: #34d399;">
+              <span>Download Full-Scale 24" V12 CAD Files</span>
+              <span id="dl-v12-height-tag">20" Tall · Slicer Ready</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <a id="dl-v12-split-3mf" href="./assets/cad/v12_prototype/KingOfKoolers_V12_20in_Tall_Split_Kit.3mf" download class="btn-apply-checkout" style="font-size:12px;padding:9px 12px;text-decoration:none;text-align:center;">
+                &#11015; Download 20" Split-Print Kit (.3MF · 5 Rings + 24 Pins)
+              </a>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+                <a id="dl-v12-full-3mf" href="./assets/cad/v12_prototype/KingOfKoolers_V12_20in_Tall_24od_Assembly.3mf" download class="preset-chip" style="text-align:center;text-decoration:none;font-size:11.5px;padding:8px 6px;">
+                  &#11015; Full Assembly (.3MF)
+                </a>
+                <a id="dl-v12-full-obj" href="./assets/cad/v12_prototype/KingOfKoolers_V12_20in_Tall_24od.obj" download class="preset-chip" style="text-align:center;text-decoration:none;font-size:11.5px;padding:8px 6px;">
+                  &#11015; Full Assembly (.OBJ)
+                </a>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:2px;">
+                <a href="./assets/cad/v12_prototype/v12_one_piece_body_12in_tall_24od.stl" download class="preset-chip" style="text-align:center;text-decoration:none;font-size:10.5px;padding:6px 4px;">&#11015; 12" .STL</a>
+                <a href="./assets/cad/v12_prototype/v12_one_piece_body_18in_tall_24od.stl" download class="preset-chip" style="text-align:center;text-decoration:none;font-size:10.5px;padding:6px 4px;">&#11015; 18" .STL</a>
+                <a href="./assets/cad/v12_prototype/v12_one_piece_body_20in_tall_24od.stl" download class="preset-chip" style="text-align:center;text-decoration:none;font-size:10.5px;padding:6px 4px;">&#11015; 20" .STL</a>
+                <a href="./assets/cad/v12_prototype/v12_one_piece_body_24in_tall_24od.stl" download class="preset-chip" style="text-align:center;text-decoration:none;font-size:10.5px;padding:6px 4px;">&#11015; 24" .STL</a>
+              </div>
             </div>
           </div>
         </div>
@@ -1350,6 +1543,68 @@
           </div>
         </div>
 
+        <!-- TAB 6: REAL CAD MESH INSPECTOR (.3MF / .STL / .OBJ) -->
+        <div class="tool-panel" id="tab-cad">
+          <div class="panel-header" style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">
+            <div>
+              <h3>CAD Mesh Inspector</h3>
+              <p>Inspect Austin Marshall’s real .3MF, .STL &amp; .OBJ manufacturing meshes directly in WebGL.</p>
+            </div>
+            <button type="button" class="preset-chip" id="btn-cad-back-to-stack" style="font-size:11.5px;padding:6px 10px;">
+              &larr; Return to Cooler Stack
+            </button>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">Select Real CAD Component</div>
+            <div class="cad-part-list" id="cad-parts-grid">
+              <!-- Populated dynamically from window.KOK_CAD_MESHES -->
+            </div>
+          </div>
+
+          <div class="control-card">
+            <div class="control-label">CAD Viewport Shader &amp; Turntable</div>
+            <div class="pill-grid">
+              <button type="button" class="preset-chip active" data-cad-shader="solid">Solid Metallic CAD</button>
+              <button type="button" class="preset-chip" data-cad-shader="wire">Cyan Blueprint Wireframe</button>
+              <button type="button" class="preset-chip" data-cad-shader="xray">Translucent X-Ray Shell</button>
+              <button type="button" class="preset-chip active" id="btn-cad-spin">✓ Auto-Turntable</button>
+            </div>
+          </div>
+
+          <div class="control-card" id="cad-telemetry-card" style="background: rgba(0, 240, 255, 0.05); border-color: var(--border-cyan);" aria-live="polite" aria-atomic="true">
+            <div class="control-label" style="color: var(--accent-cyan);">
+              <span id="cad-tel-category">V12 24" Master Vessel</span>
+              <span id="cad-tel-format">.STL / .3MF</span>
+            </div>
+            <div style="font-size: 14px; font-weight: 700; color: #fff;" id="cad-tel-name">V12 Full-Scale 24" OD One-Piece Rotomolded Body</div>
+            <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;" id="cad-tel-desc">
+              Unified 24.0-inch outer diameter rotomolded vessel (28.56" handle-to-handle span, 17.65" body height) combining the indexing foot, lower spigot boss, mid extension, molded loop handles, and 20-start spiral helix thread collar.
+            </div>
+            <div class="cad-telemetry-grid">
+              <div class="cad-tel-cell">
+                <div class="cad-tel-k">Source CAD File</div>
+                <div class="cad-tel-v" id="cad-tel-file">v12_one_piece_body_24od.stl</div>
+              </div>
+              <div class="cad-tel-cell">
+                <div class="cad-tel-k">Mesh Density</div>
+                <div class="cad-tel-v" id="cad-tel-tris">69,870 tris (21,950 WebGL)</div>
+              </div>
+              <div class="cad-tel-cell">
+                <div class="cad-tel-k">Dimensions (mm)</div>
+                <div class="cad-tel-v" id="cad-tel-mm">725.4 × 448.3 × 609.6 mm</div>
+              </div>
+              <div class="cad-tel-cell">
+                <div class="cad-tel-k">Dimensions (in)</div>
+                <div class="cad-tel-v" id="cad-tel-in">28.56 × 17.65 × 24.0 in</div>
+              </div>
+            </div>
+            <a id="cad-download-link" href="./assets/cad/v12_prototype/v12_one_piece_body_24od.stl" download="v12_one_piece_body_24od.stl" class="btn-apply-checkout" style="margin-top: 6px; font-size: 12.5px; padding: 10px 14px; text-decoration: none;">
+              &#11015; Download V12 CAD File (.STL)
+            </a>
+          </div>
+        </div>
+
       </div>
 
       <!-- Sticky Console Action Bar -->
@@ -1366,14 +1621,15 @@
 
   </main>
 
-  <!-- ==========================================================================
-       THREE.JS 3D ENGINE & STUDIO LOGIC
-       ========================================================================== */ -->
+  <!-- Real CAD Mesh Bundle (.3MF/.STL/.OBJ) & Local Three.js Engine -->
+  <script src="./assets/js/cad-meshes.js"></script>
   <script>
     // Global State
     const studioState = {
-      stackType: 'patriot-58',
+      stackType: 'v12-split',
+      v12HeightIn: 20,
       explodeProgress: 0,
+      xrayCut: 0,
       theme: 'rwb',
       pattern: 'none',
       baseColor: '#1e4bd7',
@@ -1384,6 +1640,8 @@
       showCans: true,
       showPizza: false,
       showDrain: true,
+      showCarousel: true,
+      showSpiral: true,
       showSpigot: true,
       showSolar: true,
       engraveLocation: 'lid',
@@ -1401,6 +1659,10 @@
     const canvas = document.getElementById('webgl-canvas');
     const explodeSlider = document.getElementById('explode-slider');
     const btnToggleExplode = document.getElementById('btn-toggle-explode');
+    const xraySlider = document.getElementById('xray-slider');
+    const xrayPctVal = document.getElementById('xray-pct-val');
+    const btnToggleXray = document.getElementById('btn-toggle-xray');
+    const btnPanelXray = document.getElementById('btn-panel-xray');
 
     // 1. Three.js Scene Setup
     const scene = new THREE.Scene();
@@ -1415,6 +1677,11 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.localClippingEnabled = true;
+
+    // Interactive X-Ray Cutaway Plane (slices along X axis: x <= constant kept)
+    const clipPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 100);
+    const clipPlaneArray = [clipPlane];
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -1623,6 +1890,28 @@
 
     // 2. Stack Preset Definitions & Build Hierarchy
     const STACK_PRESETS = {
+      'v12-split': {
+        label: 'V12 Split Prototype (24" CAD)',
+        indexPreset: 'rwb',
+        heightIn: 22.4,
+        quarts: 65,
+        dryLbs: 24,
+        basePrice: 249,
+        tiers: [20],
+        isV12Cad: true,
+        v12Mode: 'split'
+      },
+      'v12-onepiece': {
+        label: 'V12 One-Piece Prototype (24" CAD)',
+        indexPreset: 'rwb',
+        heightIn: 22.4,
+        quarts: 65,
+        dryLbs: 22,
+        basePrice: 229,
+        tiers: [20],
+        isV12Cad: true,
+        v12Mode: 'onepiece'
+      },
       'patriot-58': {
         label: '3-Tier Patriot (58")',
         indexPreset: 'rwb',
@@ -1677,9 +1966,19 @@
       return STACK_PRESETS[studioState.stackType] || STACK_PRESETS['patriot-58'];
     }
 
+    const V12_HEIGHT_SPECS = {
+      12: { quarts: 38, dryLbs: 18, priceDelta: -30, mm: 304.8 },
+      18: { quarts: 58, dryLbs: 22, priceDelta: -10, mm: 457.2 },
+      20: { quarts: 65, dryLbs: 24, priceDelta: 0,   mm: 508.0 },
+      24: { quarts: 80, dryLbs: 28, priceDelta: 25,  mm: 609.6 }
+    };
+
     function computeStudioPrice() {
       const preset = getActivePreset();
       let total = preset.basePrice;
+      if (preset.isV12Cad && V12_HEIGHT_SPECS[studioState.v12HeightIn]) {
+        total += V12_HEIGHT_SPECS[studioState.v12HeightIn].priceDelta;
+      }
       if (studioState.showPizza) total += 49;
       if (studioState.pattern && studioState.pattern !== 'none') total += 59;
       if ((studioState.engraveLine1 && studioState.engraveLine1.trim()) ||
@@ -1694,16 +1993,35 @@
     function updateStudioHUD() {
       const preset = getActivePreset();
       const price = computeStudioPrice();
-      if (hudHeight) hudHeight.textContent = `${preset.heightIn}.0"`;
-      if (hudQuarts) hudQuarts.textContent = `${preset.quarts} QT`;
+      const hSpec = V12_HEIGHT_SPECS[studioState.v12HeightIn] || V12_HEIGHT_SPECS[20];
+      const dispHeight = preset.isV12Cad ? studioState.v12HeightIn : preset.heightIn;
+      const dispQuarts = preset.isV12Cad ? hSpec.quarts : preset.quarts;
+      const dispDryLbs = preset.isV12Cad ? hSpec.dryLbs : preset.dryLbs;
+
+      if (hudHeight) hudHeight.textContent = `${dispHeight}"`;
+      if (hudQuarts) hudQuarts.textContent = `${dispQuarts} QT`;
       if (consoleTotalPrice) consoleTotalPrice.textContent = `$${price.toFixed(2)}`;
-      if (breakdownDryLabel) breakdownDryLabel.textContent = `Dry Stack Weight (${preset.tiers.length} Tiers + Lid):`;
-      if (breakdownDryVal) breakdownDryVal.textContent = `${preset.dryLbs} lbs`;
+      if (breakdownDryLabel) {
+        breakdownDryLabel.textContent = preset.isV12Cad
+          ? `Dry Prototype Weight (24" OD × ${studioState.v12HeightIn}" Tall V12 CAD):`
+          : `Dry Stack Weight (${preset.tiers.length} Tiers + Lid):`;
+      }
+      if (breakdownDryVal) breakdownDryVal.textContent = `${dispDryLbs} lbs`;
     }
 
     // Build Procedural 3D Cooler Hierarchy
     const coolerRoot = new THREE.Group();
     scene.add(coolerRoot);
+
+    // V12 Real CAD Prototype Assembly Group
+    const v12AssemblyGroup = new THREE.Group();
+    coolerRoot.add(v12AssemblyGroup);
+    let v12ExplodableMeshes = [];
+
+    // CAD Mesh Inspector Group (hidden until user activates 6. CAD Mesh Inspector)
+    const cadInspectorGroup = new THREE.Group();
+    cadInspectorGroup.visible = false;
+    scene.add(cadInspectorGroup);
 
     // Groups for explosion animation (supports 2, 3, or 4 tiers)
     const baseGroup = new THREE.Group();
@@ -1717,8 +2035,11 @@
     coolerRoot.add(topGroup);
     coolerRoot.add(lidGroup);
 
+    // Tracked R-8 foam cutaway cap meshes updated dynamically when slider moves
+    let foamSectionSlices = [];
+
     // Materials
-    let baseMat, midMat, topMat, collarMat, lidMat, bambooMat;
+    let baseMat, midMat, topMat, collarMat, lidMat, bambooMat, foamMat;
 
     function initMaterials() {
       const patternTex = generatePatternTexture(studioState.pattern);
@@ -1727,62 +2048,141 @@
         color: patternTex ? 0xffffff : new THREE.Color(studioState.baseColor),
         map: patternTex,
         roughness: 0.45,
-        metalness: 0.05
+        metalness: 0.05,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
       });
 
       midMat = new THREE.MeshStandardMaterial({
         color: patternTex ? 0xffffff : new THREE.Color(studioState.midColor),
         map: patternTex,
         roughness: 0.45,
-        metalness: 0.05
+        metalness: 0.05,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
       });
 
       topMat = new THREE.MeshStandardMaterial({
         color: patternTex ? 0xffffff : new THREE.Color(studioState.topColor),
         map: patternTex,
         roughness: 0.45,
-        metalness: 0.05
+        metalness: 0.05,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
       });
 
       collarMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(studioState.topColor),
         roughness: 0.35,
-        metalness: 0.1
+        metalness: 0.1,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
       });
 
       bambooMat = new THREE.MeshStandardMaterial({
         map: generateEngraveTexture('lid'),
-        roughness: 0.55
+        roughness: 0.55,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
       });
 
       lidMat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(studioState.lidColor),
         roughness: 0.45,
-        metalness: 0.05
+        metalness: 0.05,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
+      });
+
+      foamMat = new THREE.MeshStandardMaterial({
+        color: 0xf59e0b,
+        emissive: 0x78350f,
+        emissiveIntensity: 0.25,
+        roughness: 0.85,
+        metalness: 0.02,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
       });
     }
 
-    // Helper: Build a Cylinder Tier with Molded Loop Handles & Cam Lugs
+    // Helper: Build a Cylinder Tier with Molded Loop Handles, R-8 Foam Wall & Cam Lugs
     const RADIUS_OUTER = 12.0; // 24" OD scaled
-    const WALL_THICK = 1.75;
+    const WALL_THICK = 1.75;   // 3.5" scaled R-8 insulation thickness
     const RADIUS_INNER = RADIUS_OUTER - WALL_THICK;
 
     function buildCoolerTier(height, material, hasSpigot, hasFoot) {
       const tierGroup = new THREE.Group();
 
-      // Outer Shell
-      const outerGeo = new THREE.CylinderGeometry(RADIUS_OUTER, RADIUS_OUTER, height, 48);
+      // Open-ended Outer Rotomolded Shell (allows crisp hollow X-Ray cross section)
+      const outerGeo = new THREE.CylinderGeometry(RADIUS_OUTER, RADIUS_OUTER, height, 48, 1, true);
       const outerMesh = new THREE.Mesh(outerGeo, material);
       outerMesh.castShadow = true;
       outerMesh.receiveShadow = true;
       tierGroup.add(outerMesh);
 
-      // Hollow Interior Cavity
-      const innerGeo = new THREE.CylinderGeometry(RADIUS_INNER, RADIUS_INNER, height - 1.0, 36);
-      const innerMat = new THREE.MeshStandardMaterial({ color: 0xedf2f7, roughness: 0.3 });
+      // Outer Bottom Floor Base Plate
+      const outerFloor = new THREE.Mesh(new THREE.CircleGeometry(RADIUS_OUTER, 48), material);
+      outerFloor.rotation.x = Math.PI / 2;
+      outerFloor.position.y = -height / 2;
+      tierGroup.add(outerFloor);
+
+      // Inner Cavity Liner (Open-ended cylinder + inner floor at y = -height/2 + 0.85)
+      const innerH = Math.max(height - 0.85, 2.0);
+      const innerGeo = new THREE.CylinderGeometry(RADIUS_INNER, RADIUS_INNER, innerH, 36, 1, true);
+      const innerMat = new THREE.MeshStandardMaterial({
+        color: 0xedf2f7,
+        roughness: 0.3,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
+      });
       const innerMesh = new THREE.Mesh(innerGeo, innerMat);
-      innerMesh.position.y = 0.5;
+      innerMesh.position.y = 0.425;
       tierGroup.add(innerMesh);
+
+      const innerFloor = new THREE.Mesh(new THREE.CircleGeometry(RADIUS_INNER, 36), innerMat);
+      innerFloor.rotation.x = -Math.PI / 2;
+      innerFloor.position.y = -height / 2 + 0.85;
+      tierGroup.add(innerFloor);
+
+      // 3.5" R-8 Closed-Cell Polyurethane Foam Core Cap + Cut-Plane Solid Cross-Section Bars
+      const foamAnnulus = new THREE.Mesh(
+        new THREE.RingGeometry(RADIUS_INNER + 0.04, RADIUS_OUTER - 0.08, 48),
+        foamMat
+      );
+      foamAnnulus.rotation.x = -Math.PI / 2;
+      foamAnnulus.position.y = height / 2 - 0.02;
+      tierGroup.add(foamAnnulus);
+
+      // Two dynamic vertical cross-section slabs positioned right on x = clipPlane.constant when slicing
+      const sliceMat = new THREE.MeshStandardMaterial({
+        color: 0xfbbf24,
+        emissive: 0x92400e,
+        emissiveIntensity: 0.28,
+        roughness: 0.8,
+        side: THREE.DoubleSide
+      });
+      const sliceMeshFront = new THREE.Mesh(new THREE.PlaneGeometry(1, height - 0.1), sliceMat);
+      sliceMeshFront.rotation.y = Math.PI / 2;
+      sliceMeshFront.visible = false;
+      tierGroup.add(sliceMeshFront);
+
+      const sliceMeshBack = new THREE.Mesh(new THREE.PlaneGeometry(1, height - 0.1), sliceMat);
+      sliceMeshBack.rotation.y = Math.PI / 2;
+      sliceMeshBack.visible = false;
+      tierGroup.add(sliceMeshBack);
+
+      const sliceMeshBottom = new THREE.Mesh(new THREE.PlaneGeometry(1, 0.85), sliceMat);
+      sliceMeshBottom.rotation.y = Math.PI / 2;
+      sliceMeshBottom.position.y = -height / 2 + 0.425;
+      sliceMeshBottom.visible = false;
+      tierGroup.add(sliceMeshBottom);
+
+      foamSectionSlices.push({
+        front: sliceMeshFront,
+        back: sliceMeshBack,
+        bottom: sliceMeshBottom,
+        height: height
+      });
 
       // Top Circumferential Collar Rim (20-Start Spiral Helix Rim)
       const rimGeo = new THREE.TorusGeometry(RADIUS_OUTER, 0.55, 12, 48);
@@ -1823,14 +2223,14 @@
         const spigotGroup = new THREE.Group();
         const spigotBody = new THREE.Mesh(
           new THREE.CylinderGeometry(0.8, 0.8, 2.2, 16),
-          new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2, metalness: 0.3 })
+          new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2, metalness: 0.3, clippingPlanes: clipPlaneArray })
         );
         spigotBody.rotation.x = Math.PI / 2;
         spigotGroup.add(spigotBody);
 
         const valveHandle = new THREE.Mesh(
           new THREE.BoxGeometry(0.5, 1.6, 0.4),
-          new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.3 })
+          new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.3, clippingPlanes: clipPlaneArray })
         );
         valveHandle.position.set(0, 0.8, 1.1);
         spigotGroup.add(valveHandle);
@@ -1868,7 +2268,9 @@
         const solarMat = new THREE.MeshStandardMaterial({
           map: generateSolarTexture(),
           roughness: 0.18,
-          metalness: 0.35
+          metalness: 0.35,
+          clippingPlanes: clipPlaneArray,
+          side: THREE.DoubleSide
         });
         const solarDisc = new THREE.Mesh(
           new THREE.CylinderGeometry(7.9, 7.9, 0.34, 48),
@@ -1881,7 +2283,7 @@
         // Anodized Aluminum Bezel Frame around Solar Panel
         const bezelRing = new THREE.Mesh(
           new THREE.TorusGeometry(7.9, 0.24, 12, 48),
-          new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.35, metalness: 0.7 })
+          new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.35, metalness: 0.7, clippingPlanes: clipPlaneArray })
         );
         bezelRing.rotation.x = Math.PI / 2;
         bezelRing.position.y = 1.05;
@@ -1895,15 +2297,184 @@
     let baseMesh, midMesh, upperMidMesh, topMesh, lidMesh, bodyPlateMesh;
     let iceMeshGroup, cansMeshGroup;
 
+    function buildV12PrototypeAssembly(preset) {
+      if (!window.KOK_CAD_MESHES) return;
+      const isSplit = preset.v12Mode === 'split';
+      const hIn = studioState.v12HeightIn || 20;
+      const deltaIn = hIn - 20.0; // Height offset relative to default 20" Tall V12 baseline
+      const MM_TO_IN = 1.0 / 25.4;
+      const Y_FLOOR_OFFSET_MM = 61.68; // Lifts wheeled wagon base bottom (-61.68 mm) cleanly onto y = 0 floor
+
+      const clippedKeys = new Set([
+        'v12_one_piece_body',
+        'v12_one_piece_12in',
+        'v12_one_piece_18in',
+        'v12_one_piece_24in',
+        'v12_crown_lid',
+        'v12_sec1_foot',
+        'v12_sec2_lower',
+        'v12_sec3_mid',
+        'v12_sec4_handles',
+        'v12_sec5_collar',
+        'v12_wagon_base'
+      ]);
+
+      const activeOnePieceKey = hIn === 20 ? 'v12_one_piece_body' : `v12_one_piece_${hIn}in`;
+
+      Object.values(window.KOK_CAD_MESHES).forEach(part => {
+        if (isSplit) {
+          if (!part.inSplitKit) return;
+        } else {
+          if (part.key === 'v12_one_piece_body' && activeOnePieceKey !== 'v12_one_piece_body' && window.KOK_CAD_MESHES[activeOnePieceKey]) {
+            return;
+          }
+          if (part.key !== activeOnePieceKey && !part.inOnePiece) return;
+        }
+
+        // Interactive hardware/internal visibility toggles
+        if (part.key === 'v12_solar_batteries' && !studioState.showSolar) return;
+        if ((part.key === 'v12_top_dish_logo' || part.key === 'v12_lower_dish_hex') && !studioState.showCarousel) return;
+        if (part.key === 'v12_allthread_post' && !studioState.showDrain && !studioState.showCarousel) return;
+        if (part.key === 'v12_ice_and_cans' && !studioState.showIce && !studioState.showCans) return;
+
+        const geo = buildCadBufferGeometry(part);
+        const isClipped = clippedKeys.has(part.key);
+
+        let mat;
+        if (part.key.startsWith('v12_one_piece') || part.key === 'v12_sec2_lower' || part.key === 'v12_sec4_handles') {
+          mat = baseMat.clone();
+          mat.clippingPlanes = isClipped ? clipPlaneArray : null;
+        } else if (part.key === 'v12_sec3_mid') {
+          mat = midMat.clone();
+          mat.clippingPlanes = isClipped ? clipPlaneArray : null;
+        } else if (part.key === 'v12_sec5_collar') {
+          mat = topMat.clone();
+          mat.clippingPlanes = isClipped ? clipPlaneArray : null;
+        } else if (part.key === 'v12_crown_lid') {
+          mat = (isSplit ? lidMat : topMat).clone();
+          mat.roughness = 0.34;
+          mat.metalness = 0.14;
+          mat.clippingPlanes = isClipped ? clipPlaneArray : null;
+        } else if (part.key === 'v12_sec1_foot') {
+          mat = lidMat.clone();
+          mat.clippingPlanes = isClipped ? clipPlaneArray : null;
+        } else if (part.key === 'v12_ice_and_cans') {
+          mat = new THREE.MeshPhysicalMaterial({
+            color: new THREE.Color('#22d3ee'),
+            roughness: 0.18,
+            metalness: 0.1,
+            transmission: 0.38,
+            transparent: true,
+            opacity: 0.9,
+            side: THREE.DoubleSide
+          });
+        } else if (part.key === 'v12_alignment_pins' || part.key === 'v12_allthread_post' || part.key === 'v12_solar_batteries') {
+          mat = new THREE.MeshStandardMaterial({
+            color: new THREE.Color(part.color || '#f59e0b'),
+            roughness: 0.28,
+            metalness: 0.65,
+            flatShading: true,
+            side: THREE.DoubleSide
+          });
+        } else {
+          mat = new THREE.MeshStandardMaterial({
+            color: new THREE.Color(part.color || '#38bdf8'),
+            roughness: 0.35,
+            metalness: 0.25,
+            clippingPlanes: isClipped ? clipPlaneArray : null,
+            side: THREE.DoubleSide
+          });
+        }
+
+        const mesh = new THREE.Mesh(geo, mat);
+        let scaleY = MM_TO_IN;
+        const cx = (part.centerMmYUp ? part.centerMmYUp[0] : 0) * MM_TO_IN;
+        let cy = ((part.centerMmYUp ? part.centerMmYUp[1] : 0) + Y_FLOOR_OFFSET_MM) * MM_TO_IN;
+        const cz = (part.centerMmYUp ? part.centerMmYUp[2] : 0) * MM_TO_IN;
+
+        // Apply parametric height offset `deltaIn` to upper/middle components when hIn != 20
+        if (deltaIn !== 0) {
+          if (part.key === 'v12_crown_lid' || part.key === 'v12_solar_batteries' || part.key === 'v12_sec4_handles' || part.key === 'v12_sec5_collar') {
+            cy += deltaIn;
+          } else if (part.key === 'v12_sec3_mid') {
+            // Scale Mid Extension ring vertically to absorb deltaIn while keeping top & bottom mated
+            const origMidH = 6.12;
+            const newMidH = Math.max(1.2, origMidH + deltaIn);
+            scaleY = MM_TO_IN * (newMidH / origMidH);
+            cy += deltaIn * 0.5;
+          } else if (part.key === 'v12_top_dish_logo') {
+            cy += deltaIn * 0.72;
+          } else if (part.key === 'v12_lower_dish_hex') {
+            cy += deltaIn * 0.32;
+          } else if (part.key === 'v12_allthread_post') {
+            const origRodH = 14.16;
+            const newRodH = Math.max(6.8, origRodH + deltaIn * 0.85);
+            scaleY = MM_TO_IN * (newRodH / origRodH);
+            cy += (newRodH - origRodH) * 0.5;
+          } else if (part.key === 'v12_alignment_pins') {
+            const origPinSpan = 16.59;
+            const newPinSpan = Math.max(8.5, origPinSpan + deltaIn);
+            scaleY = MM_TO_IN * (newPinSpan / origPinSpan);
+            cy += deltaIn * 0.5;
+          }
+        }
+
+        mesh.scale.set(MM_TO_IN, scaleY, MM_TO_IN);
+        mesh.position.set(cx, cy, cz);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
+        const layer = typeof part.explodeLayer === 'number' ? part.explodeLayer : 2.0;
+        mesh.userData = {
+          partKey: part.key,
+          baseY: cy,
+          explodeDeltaY: (layer - 1.2) * 3.8
+        };
+
+        v12AssemblyGroup.add(mesh);
+        v12ExplodableMeshes.push(mesh);
+      });
+
+      // Optional Custom Laser Engraving Badge on V12 Prototype Body
+      if (studioState.engraveLocation === 'body') {
+        const bodyTex = generateEngraveTexture('body');
+        const badgeGeo = new THREE.CylinderGeometry(RADIUS_OUTER + 0.12, RADIUS_OUTER + 0.12, 4.6, 32, 1, true, -Math.PI / 5, (Math.PI * 2) / 5);
+        const badgeMat = new THREE.MeshStandardMaterial({ map: bodyTex, roughness: 0.4, side: THREE.DoubleSide, clippingPlanes: clipPlaneArray });
+        bodyPlateMesh = new THREE.Mesh(badgeGeo, badgeMat);
+        const badgeY = Math.max(7.2, 10.5 + deltaIn * 0.5);
+        bodyPlateMesh.position.y = badgeY;
+        bodyPlateMesh.userData = { baseY: badgeY, explodeDeltaY: (2.6 - 1.2) * 3.8 };
+        v12AssemblyGroup.add(bodyPlateMesh);
+        v12ExplodableMeshes.push(bodyPlateMesh);
+      }
+    }
+
     function buildFullStack() {
       // Clear previous children across all animation groups
-      [baseGroup, midGroup, upperMidGroup, topGroup, lidGroup].forEach(g => {
-        while (g.children.length > 0) g.remove(g.children[0]);
+      [baseGroup, midGroup, upperMidGroup, topGroup, lidGroup, v12AssemblyGroup].forEach(g => {
+        while (g.children.length > 0) {
+          const child = g.children[0];
+          g.remove(child);
+        }
       });
+      foamSectionSlices = [];
+      v12ExplodableMeshes = [];
 
       initMaterials();
 
       const preset = getActivePreset();
+      if (preset.isV12Cad) {
+        buildV12PrototypeAssembly(preset);
+        updateStudioHUD();
+        if (typeof applyXRayCutaway === 'function') {
+          applyXRayCutaway(studioState.xrayCut * 100);
+        }
+        if (typeof updateErgonomicsGauge === 'function') {
+          updateErgonomicsGauge();
+        }
+        return;
+      }
+
       const tiers = preset.tiers;
       const tierHeights = tiers.map(h => h * 0.5); // 28" -> 14, 20" -> 10, 18" -> 9, 12" -> 6
 
@@ -1917,8 +2488,11 @@
       runningY += H_BASE;
 
       // Optional Middle Tiers (for 3-tier or 4-tier stacks)
+      let midStartY = 0;
+      let H_MID = 0;
       if (tierHeights.length >= 3) {
-        const H_MID = tierHeights[1];
+        H_MID = tierHeights[1];
+        midStartY = runningY;
         midMesh = buildCoolerTier(H_MID, midMat, false, true);
         midMesh.position.y = runningY + H_MID / 2;
         midGroup.add(midMesh);
@@ -1943,13 +2517,13 @@
       if (studioState.engraveLocation === 'body') {
         const bodyTex = generateEngraveTexture('body');
         const badgeGeo = new THREE.CylinderGeometry(RADIUS_OUTER + 0.08, RADIUS_OUTER + 0.08, Math.min(H_BASE * 0.65, 6.4), 32, 1, true, -Math.PI / 5, (Math.PI * 2) / 5);
-        const badgeMat = new THREE.MeshStandardMaterial({ map: bodyTex, roughness: 0.4, side: THREE.DoubleSide });
+        const badgeMat = new THREE.MeshStandardMaterial({ map: bodyTex, roughness: 0.4, side: THREE.DoubleSide, clippingPlanes: clipPlaneArray });
         bodyPlateMesh = new THREE.Mesh(badgeGeo, badgeMat);
         bodyPlateMesh.position.y = H_BASE / 2;
         baseGroup.add(bodyPlateMesh);
       }
 
-      // Optional Pizza Vault Insert Inside Top Vault Cavity
+      // Optional Pizza Vault Insert Inside Top Vault Cavity (unclipped so exposed in X-Ray)
       if (studioState.showPizza) {
         const bagGroup = new THREE.Group();
         const pizzaBag = new THREE.Mesh(
@@ -1978,14 +2552,97 @@
       // Center Drain Core Sleeve inside Base
       if (studioState.showDrain) {
         const drainSleeve = new THREE.Mesh(
-          new THREE.CylinderGeometry(1.3, 1.3, H_BASE - 1.2, 24),
+          new THREE.CylinderGeometry(1.15, 1.15, H_BASE - 1.2, 24),
           new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.7, roughness: 0.25 })
         );
         drainSleeve.position.y = H_BASE / 2;
         baseGroup.add(drainSleeve);
       }
 
-      // Internal Ice Cubes & Cans
+      // Accessory #16: Internal All-Thread Deli Carousel (mounted in midGroup or topGroup)
+      if (studioState.showCarousel) {
+        const carouselHost = tierHeights.length >= 3 ? midGroup : topGroup;
+        const cHeight = tierHeights.length >= 3 ? H_MID : H_TOP;
+        const cBaseY = tierHeights.length >= 3 ? midStartY : runningY - H_TOP;
+        const carouselGroup = new THREE.Group();
+
+        const rodMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.85, roughness: 0.22 });
+        const threadMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.6, roughness: 0.35 });
+        const trayMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.35, metalness: 0.15 });
+
+        const post = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.38, cHeight - 0.8, 16), rodMat);
+        post.position.y = cBaseY + cHeight / 2;
+        carouselGroup.add(post);
+
+        const dishCount = 3;
+        for (let d = 0; d < dishCount; d++) {
+          const dy = cBaseY + 1.6 + (d / (dishCount - 1 || 1)) * Math.max(cHeight - 3.0, 2.2);
+          const dish = new THREE.Mesh(new THREE.CylinderGeometry(RADIUS_INNER - 1.35, RADIUS_INNER - 1.45, 0.26, 36), trayMat);
+          dish.position.y = dy;
+          carouselGroup.add(dish);
+
+          const dishLip = new THREE.Mesh(new THREE.TorusGeometry(RADIUS_INNER - 1.38, 0.18, 8, 36), rodMat);
+          dishLip.rotation.x = Math.PI / 2;
+          dishLip.position.y = dy + 0.16;
+          carouselGroup.add(dishLip);
+
+          const lockNut = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.45, 6), threadMat);
+          lockNut.position.y = dy - 0.32;
+          carouselGroup.add(lockNut);
+        }
+        carouselHost.add(carouselGroup);
+      }
+
+      // Accessory #29: Internal Gravity-Fed Spiral Can Dispenser Ramp inside Base
+      if (studioState.showSpiral) {
+        const spiralGroup = new THREE.Group();
+        const ptsInner = [];
+        const ptsOuter = [];
+        const rMid = RADIUS_INNER - 2.1;
+        const turns = 1.65;
+        const segs = 56;
+        const yBot = 2.1;
+        const yTop = Math.max(6.2, H_BASE - 1.6);
+
+        for (let s = 0; s <= segs; s++) {
+          const t = s / segs;
+          const ang = t * Math.PI * 2 * turns;
+          const yy = yBot + t * (yTop - yBot);
+          ptsInner.push(new THREE.Vector3(Math.cos(ang) * (rMid - 0.9), yy, Math.sin(ang) * (rMid - 0.9)));
+          ptsOuter.push(new THREE.Vector3(Math.cos(ang) * (rMid + 0.9), yy, Math.sin(ang) * (rMid + 0.9)));
+        }
+
+        const railMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.72, roughness: 0.25 });
+        const railInner = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(ptsInner), 64, 0.16, 8, false), railMat);
+        const railOuter = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(ptsOuter), 64, 0.16, 8, false), railMat);
+        spiralGroup.add(railInner, railOuter);
+
+        // Rolling 330ml craft cans seated along the helical dispenser track
+        const trackCurve = new THREE.CatmullRomCurve3(
+          ptsInner.map((p, i) => p.clone().add(ptsOuter[i]).multiplyScalar(0.5))
+        );
+        const canGeo = new THREE.CylinderGeometry(0.7, 0.7, 2.2, 16);
+        const canColors = [0x0ea5e9, 0xe11d48, 0xf59e0b, 0x10b981];
+        for (let c = 0; c < 10; c++) {
+          const u = 0.08 + (c / 9) * 0.84;
+          const pos = trackCurve.getPointAt(u);
+          const canMat = new THREE.MeshStandardMaterial({
+            color: canColors[c % canColors.length],
+            metalness: 0.78,
+            roughness: 0.22
+          });
+          const can = new THREE.Mesh(canGeo, canMat);
+          can.position.copy(pos).add(new THREE.Vector3(0, 0.65, 0));
+          // Orient radially horizontally like a rolling can
+          const radialAngle = Math.atan2(pos.z, pos.x);
+          can.rotation.z = Math.PI / 2;
+          can.rotation.y = -radialAngle;
+          spiralGroup.add(can);
+        }
+        baseGroup.add(spiralGroup);
+      }
+
+      // Internal Ice Cubes & Upright Beverage Cans
       iceMeshGroup = new THREE.Group();
       cansMeshGroup = new THREE.Group();
 
@@ -1998,19 +2655,19 @@
           transparent: true,
           opacity: 0.85
         });
-        const iceGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+        const iceGeo = new THREE.BoxGeometry(1.15, 1.15, 1.15);
         for (let i = 0; i < 60; i++) {
           const cube = new THREE.Mesh(iceGeo, iceMat);
-          const rad = 2.0 + Math.random() * (RADIUS_INNER - 3.5);
+          const rad = 1.8 + Math.random() * (RADIUS_INNER - 4.4);
           const ang = Math.random() * Math.PI * 2;
-          cube.position.set(Math.cos(ang) * rad, 2.5 + Math.random() * Math.max(4, H_BASE - 5.5), Math.sin(ang) * rad);
+          cube.position.set(Math.cos(ang) * rad, 1.8 + Math.random() * Math.max(3.0, H_BASE * 0.45), Math.sin(ang) * rad);
           cube.rotation.set(Math.random(), Math.random(), Math.random());
           iceMeshGroup.add(cube);
         }
       }
       baseGroup.add(iceMeshGroup);
 
-      if (studioState.showCans) {
+      if (studioState.showCans && !studioState.showSpiral) {
         const canMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.8, roughness: 0.2 });
         const canGeo = new THREE.CylinderGeometry(0.9, 0.9, 2.8, 16);
         for (let i = 0; i < 18; i++) {
@@ -2024,6 +2681,9 @@
       baseGroup.add(cansMeshGroup);
 
       updateStudioHUD();
+      if (typeof applyXRayCutaway === 'function') {
+        applyXRayCutaway(studioState.xrayCut * 100);
+      }
       if (typeof updateErgonomicsGauge === 'function') {
         updateErgonomicsGauge();
       }
@@ -2060,6 +2720,93 @@
       explodeSlider.value = targetExplosion * 100;
       syncExplodeButtonState(next);
     });
+
+    // 3B. Interactive X-Ray / Cutaway Shader Slider (reveals 3.5" R-8 Foam, #16 Deli Carousel, #29 Spiral Ramp & Ice Bed)
+    function applyXRayCutaway(pctRaw) {
+      const pct = Math.max(0, Math.min(100, parseFloat(pctRaw) || 0));
+      studioState.xrayCut = pct / 100;
+
+      if (xraySlider && Number(xraySlider.value) !== Math.round(pct)) {
+        xraySlider.value = Math.round(pct);
+      }
+      if (xrayPctVal) xrayPctVal.textContent = `${Math.round(pct)}%`;
+      const isSliced = pct > 0;
+      if (btnToggleXray) {
+        btnToggleXray.textContent = isSliced ? 'Close Cutaway' : 'Slice Half';
+        btnToggleXray.setAttribute('aria-pressed', String(isSliced));
+      }
+      if (btnPanelXray) {
+        btnPanelXray.classList.toggle('active', isSliced);
+        btnPanelXray.textContent = isSliced ? `✓ X-Ray Cutaway (${Math.round(pct)}%)` : '⚡ Half-View Cutaway (50%)';
+      }
+
+      if (pct <= 0) {
+        clipPlane.constant = 100;
+        foamSectionSlices.forEach(s => {
+          s.front.visible = false;
+          s.back.visible = false;
+          s.bottom.visible = false;
+        });
+        return;
+      }
+
+      // Sweep cut X from +13.0 (edge) through 0.0 (50% half-cut) to -12.6 (100%)
+      const c = 13.0 - (pct / 100) * 25.6;
+      clipPlane.constant = c;
+
+      // Dynamically resize and align solid amber R-8 Foam cross-section caps at x = c
+      const absC = Math.abs(c);
+      foamSectionSlices.forEach(s => {
+        if (absC >= RADIUS_OUTER - 0.1) {
+          s.front.visible = false;
+          s.back.visible = false;
+          s.bottom.visible = false;
+          return;
+        }
+        const zOut = Math.sqrt(Math.max(0, RADIUS_OUTER * RADIUS_OUTER - c * c)) - 0.04;
+        if (absC >= RADIUS_INNER) {
+          // Cut passes through outer foam shell wall only: one continuous span [-zOut, +zOut]
+          const fullW = Math.max(0.1, zOut * 2);
+          s.front.visible = true;
+          s.front.position.set(c - 0.01, 0, 0);
+          s.front.scale.set(fullW, 1, 1);
+          s.back.visible = false;
+          s.bottom.visible = true;
+          s.bottom.position.set(c - 0.01, -s.height / 2 + 0.425, 0);
+          s.bottom.scale.set(fullW, 1, 1);
+        } else {
+          const zIn = Math.sqrt(Math.max(0, RADIUS_INNER * RADIUS_INNER - c * c)) + 0.02;
+          const wallSpan = Math.max(0.1, zOut - zIn);
+          const zMid = (zOut + zIn) * 0.5;
+          s.front.visible = true;
+          s.front.position.set(c - 0.01, 0, zMid);
+          s.front.scale.set(wallSpan, 1, 1);
+          s.back.visible = true;
+          s.back.position.set(c - 0.01, 0, -zMid);
+          s.back.scale.set(wallSpan, 1, 1);
+          // Bottom R-8 insulated base floor slab spans [-zIn, +zIn]
+          s.bottom.visible = true;
+          s.bottom.position.set(c - 0.01, -s.height / 2 + 0.425, 0);
+          s.bottom.scale.set(Math.max(0.1, zIn * 2), 1, 1);
+        }
+      });
+    }
+
+    if (xraySlider) {
+      xraySlider.addEventListener('input', (e) => {
+        if (typeof isCadInspectorMode !== 'undefined' && isCadInspectorMode) exitCadInspectorMode();
+        applyXRayCutaway(e.target.value);
+      });
+    }
+
+    function toggleHalfCutaway() {
+      if (typeof isCadInspectorMode !== 'undefined' && isCadInspectorMode) exitCadInspectorMode();
+      const next = studioState.xrayCut > 0 ? 0 : 50;
+      applyXRayCutaway(next);
+    }
+
+    if (btnToggleXray) btnToggleXray.addEventListener('click', toggleHalfCutaway);
+    if (btnPanelXray) btnPanelXray.addEventListener('click', toggleHalfCutaway);
 
     // 4. Camera Presets
     document.querySelectorAll('[data-view]').forEach(btn => {
@@ -2099,18 +2846,35 @@
       requestAnimationFrame(step);
     }
 
-    // 5. Console Tabs Logic
+    // 5. Console Tabs Logic & CAD Mesh Inspector Integration
+    let isCadInspectorMode = false;
+
+    function activateConsoleTab(tabId) {
+      document.querySelectorAll('.console-tab-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tabId);
+      });
+      document.querySelectorAll('.tool-panel').forEach(p => {
+        p.classList.toggle('active', p.id === tabId);
+      });
+      if (tabId === 'tab-cad') {
+        enterCadInspectorMode();
+      } else if (isCadInspectorMode) {
+        exitCadInspectorMode();
+      }
+    }
+
     document.querySelectorAll('.console-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.console-tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
-
-        btn.classList.add('active');
-        const tabId = btn.dataset.tab;
-        const panel = document.getElementById(tabId);
-        if (panel) panel.classList.add('active');
+        activateConsoleTab(btn.dataset.tab);
       });
     });
+
+    const btnHudCad = document.getElementById('btn-hud-cad-inspector');
+    const btnPanelOpenCad = document.getElementById('btn-panel-open-cad');
+    const btnCadBack = document.getElementById('btn-cad-back-to-stack');
+    if (btnHudCad) btnHudCad.addEventListener('click', () => activateConsoleTab('tab-cad'));
+    if (btnPanelOpenCad) btnPanelOpenCad.addEventListener('click', () => activateConsoleTab('tab-cad'));
+    if (btnCadBack) btnCadBack.addEventListener('click', () => activateConsoleTab('tab-3d'));
 
     // 6. Theme & Color Swatches Listeners
     document.querySelectorAll('[data-theme]').forEach(btn => {
@@ -2162,6 +2926,43 @@
       btn.addEventListener('click', () => selectStackPreset(btn.dataset.stack));
     });
 
+    // Parametric V12 Height Variable Switcher (12", 18", 20", 24")
+    const v12HeightBadge = document.getElementById('v12-height-badge');
+    const dlV12HeightTag = document.getElementById('dl-v12-height-tag');
+    const dlV12Split3mf = document.getElementById('dl-v12-split-3mf');
+    const dlV12Full3mf = document.getElementById('dl-v12-full-3mf');
+    const dlV12FullObj = document.getElementById('dl-v12-full-obj');
+
+    function selectV12Height(heightIn) {
+      const h = parseInt(heightIn, 10) || 20;
+      studioState.v12HeightIn = h;
+      document.querySelectorAll('[data-v12-height]').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.v12Height, 10) === h);
+      });
+      const spec = V12_HEIGHT_SPECS[h] || V12_HEIGHT_SPECS[20];
+      if (v12HeightBadge) v12HeightBadge.textContent = `${h}.0" Tall (${spec.mm} mm)`;
+      if (dlV12HeightTag) dlV12HeightTag.textContent = `${h}" Tall · Slicer Ready`;
+      if (dlV12Split3mf) {
+        dlV12Split3mf.href = `./assets/cad/v12_prototype/KingOfKoolers_V12_${h}in_Tall_Split_Kit.3mf`;
+        dlV12Split3mf.innerHTML = `&#11015; Download ${h}" Split-Print Kit (.3MF · 5 Rings + 24 Pins)`;
+      }
+      if (dlV12Full3mf) {
+        dlV12Full3mf.href = `./assets/cad/v12_prototype/KingOfKoolers_V12_${h}in_Tall_24od_Assembly.3mf`;
+      }
+      if (dlV12FullObj) {
+        dlV12FullObj.href = `./assets/cad/v12_prototype/KingOfKoolers_V12_${h}in_Tall_24od.obj`;
+      }
+      if (!getActivePreset().isV12Cad) {
+        selectStackPreset('v12-onepiece');
+      } else {
+        buildFullStack();
+      }
+    }
+
+    document.querySelectorAll('[data-v12-height]').forEach(btn => {
+      btn.addEventListener('click', () => selectV12Height(btn.dataset.v12Height));
+    });
+
     function bindChamberToggle(id, stateKey, labelText) {
       const el = document.getElementById(id);
       if (!el) return;
@@ -2177,6 +2978,8 @@
     bindChamberToggle('btn-toggle-cans', 'showCans', 'Craft Cans');
     bindChamberToggle('btn-toggle-pizza', 'showPizza', 'Pizza Vault Box');
     bindChamberToggle('btn-toggle-drain', 'showDrain', 'Center Drain Core');
+    bindChamberToggle('btn-toggle-carousel', 'showCarousel', 'Deli Carousel #16');
+    bindChamberToggle('btn-toggle-spiral', 'showSpiral', 'Spiral Ramp #29');
 
     // Hydro-Dip Wraps
     document.querySelectorAll('[data-pattern]').forEach(btn => {
@@ -2462,6 +3265,206 @@
       }, { passive: true });
     })();
 
+    // 10B. Real CAD Mesh Inspector Mode (.3MF / .STL / .OBJ)
+    const cadPartsGrid = document.getElementById('cad-parts-grid');
+    const cadTelCategory = document.getElementById('cad-tel-category');
+    const cadTelFormat = document.getElementById('cad-tel-format');
+    const cadTelName = document.getElementById('cad-tel-name');
+    const cadTelDesc = document.getElementById('cad-tel-desc');
+    const cadTelFile = document.getElementById('cad-tel-file');
+    const cadTelTris = document.getElementById('cad-tel-tris');
+    const cadTelMm = document.getElementById('cad-tel-mm');
+    const cadTelIn = document.getElementById('cad-tel-in');
+    const cadDownloadLink = document.getElementById('cad-download-link');
+    const btnCadSpin = document.getElementById('btn-cad-spin');
+
+    let activeCadKey = 'v12_one_piece_body';
+    let cadShaderMode = 'solid'; // 'solid' | 'wire' | 'xray'
+    let cadAutoSpin = true;
+    let currentCadMeshObj = null;
+
+    function b64ToUint8Array(b64) {
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return bytes;
+    }
+
+    function buildCadBufferGeometry(part) {
+      const vBytes = b64ToUint8Array(part.vB64);
+      const i16 = new Int16Array(vBytes.buffer);
+      const pos = new Float32Array(i16.length);
+      const invScale = part.scaleHalfExt / 32760.0;
+      for (let i = 0; i < i16.length; i++) {
+        pos[i] = i16[i] * invScale;
+      }
+
+      const tBytes = b64ToUint8Array(part.tB64);
+      const u16 = new Uint16Array(tBytes.buffer);
+
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      geo.setIndex(new THREE.BufferAttribute(u16, 1));
+      geo.computeVertexNormals();
+      geo.computeBoundingBox();
+      return geo;
+    }
+
+    function renderActiveCadMesh() {
+      if (!window.KOK_CAD_MESHES) return;
+      const part = window.KOK_CAD_MESHES[activeCadKey];
+      if (!part) return;
+
+      while (cadInspectorGroup.children.length > 0) {
+        const child = cadInspectorGroup.children[0];
+        cadInspectorGroup.remove(child);
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) child.material.dispose();
+      }
+      cadInspectorGroup.rotation.y = 0;
+
+      const geo = buildCadBufferGeometry(part);
+      const box = geo.boundingBox;
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z, 0.001);
+      const fitScale = 24.0 / maxDim;
+
+      let mat;
+      if (cadShaderMode === 'wire') {
+        mat = new THREE.MeshBasicMaterial({
+          color: 0x00f0ff,
+          wireframe: true
+        });
+      } else if (cadShaderMode === 'xray') {
+        mat = new THREE.MeshPhysicalMaterial({
+          color: 0x38bdf8,
+          emissive: 0x0284c7,
+          emissiveIntensity: 0.3,
+          transparent: true,
+          opacity: 0.45,
+          roughness: 0.15,
+          metalness: 0.25,
+          side: THREE.DoubleSide
+        });
+      } else {
+        mat = new THREE.MeshStandardMaterial({
+          color: new THREE.Color(part.color || '#38bdf8'),
+          roughness: 0.35,
+          metalness: 0.22,
+          side: THREE.DoubleSide
+        });
+      }
+
+      currentCadMeshObj = new THREE.Mesh(geo, mat);
+      currentCadMeshObj.scale.setScalar(fitScale);
+      currentCadMeshObj.position.y = Math.max(2.0, (-box.min.y * fitScale) + 0.8);
+      currentCadMeshObj.castShadow = true;
+      currentCadMeshObj.receiveShadow = true;
+      cadInspectorGroup.add(currentCadMeshObj);
+
+      if (cadShaderMode === 'xray') {
+        const wireMat = new THREE.MeshBasicMaterial({
+          color: 0x00f0ff,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.28
+        });
+        const wireOverlay = new THREE.Mesh(geo, wireMat);
+        wireOverlay.scale.copy(currentCadMeshObj.scale);
+        wireOverlay.position.copy(currentCadMeshObj.position);
+        cadInspectorGroup.add(wireOverlay);
+      }
+
+      // Update Telemetry UI
+      if (cadTelCategory) cadTelCategory.textContent = part.category;
+      if (cadTelFormat) cadTelFormat.textContent = part.format;
+      if (cadTelName) cadTelName.textContent = part.name;
+      if (cadTelDesc) cadTelDesc.textContent = part.desc;
+      if (cadTelFile) cadTelFile.textContent = part.fileLabel;
+      if (cadTelTris) cadTelTris.textContent = `${part.origTris.toLocaleString()} tris (${part.meshTris.toLocaleString()} WebGL)`;
+      if (cadTelMm) cadTelMm.textContent = `${part.dimsMm[0]} × ${part.dimsMm[1]} × ${part.dimsMm[2]} mm`;
+      if (cadTelIn) cadTelIn.textContent = `${part.dimsIn[0]} × ${part.dimsIn[1]} × ${part.dimsIn[2]} in`;
+      if (cadDownloadLink) {
+        cadDownloadLink.href = part.downloadUrl;
+        cadDownloadLink.setAttribute('download', part.downloadName);
+      }
+
+      if (hudHeight) hudHeight.textContent = `${part.dimsIn[1]}" H`;
+      if (hudQuarts) hudQuarts.textContent = `${part.origTris.toLocaleString()} TRIS`;
+      if (hudWeight) hudWeight.textContent = part.format;
+
+      const centerY = currentCadMeshObj.position.y + (box.max.y + box.min.y) * 0.5 * fitScale;
+      gsapMoveCamera(26, Math.max(16, centerY + 10), 34, 0, Math.max(4, centerY), 0);
+    }
+
+    function populateCadPartsList() {
+      if (!cadPartsGrid || !window.KOK_CAD_MESHES) return;
+      cadPartsGrid.innerHTML = '';
+      Object.values(window.KOK_CAD_MESHES).forEach(part => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cad-part-card' + (part.key === activeCadKey ? ' active' : '');
+        btn.dataset.cadPart = part.key;
+        btn.innerHTML = `
+          <div style="min-width:0;">
+            <div style="font-size:12.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${part.fileLabel}</div>
+            <div style="font-size:11px;color:var(--text-muted);">${part.name} · ${part.origTris.toLocaleString()} tris</div>
+          </div>
+          <span class="cad-fmt-badge">${part.format}</span>
+        `;
+        btn.addEventListener('click', () => {
+          activeCadKey = part.key;
+          cadPartsGrid.querySelectorAll('.cad-part-card').forEach(c => c.classList.toggle('active', c.dataset.cadPart === activeCadKey));
+          if (!isCadInspectorMode) enterCadInspectorMode();
+          else renderActiveCadMesh();
+        });
+        cadPartsGrid.appendChild(btn);
+      });
+    }
+
+    function enterCadInspectorMode() {
+      isCadInspectorMode = true;
+      coolerRoot.visible = false;
+      cadInspectorGroup.visible = true;
+      if (btnHudCad) btnHudCad.classList.add('active');
+      renderActiveCadMesh();
+    }
+
+    function exitCadInspectorMode() {
+      isCadInspectorMode = false;
+      coolerRoot.visible = true;
+      cadInspectorGroup.visible = false;
+      if (btnHudCad) btnHudCad.classList.remove('active');
+      updateStudioHUD();
+      if (typeof updateErgonomicsGauge === 'function') updateErgonomicsGauge();
+      const preset = getActivePreset();
+      gsapMoveCamera(38, 28, 55, 0, Math.max(11, preset.heightIn * 0.28), 0);
+    }
+
+    populateCadPartsList();
+
+    document.querySelectorAll('[data-cad-shader]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-cad-shader]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        cadShaderMode = btn.dataset.cadShader;
+        renderActiveCadMesh();
+      });
+    });
+
+    if (btnCadSpin) {
+      btnCadSpin.addEventListener('click', () => {
+        cadAutoSpin = !cadAutoSpin;
+        btnCadSpin.classList.toggle('active', cadAutoSpin);
+        btnCadSpin.textContent = cadAutoSpin ? '✓ Auto-Turntable' : 'Auto-Turntable';
+      });
+    }
+
+    if (window.location.hash === '#cad-inspector') {
+      setTimeout(() => activateConsoleTab('tab-cad'), 120);
+    }
+
     // 11. Render Animation Loop
     function animate() {
       requestAnimationFrame(animate);
@@ -2474,6 +3477,19 @@
       upperMidGroup.position.y = currentExplosion * 26;
       topGroup.position.y = currentExplosion * (tierCount === 2 ? 16 : tierCount === 3 ? 28 : 38);
       lidGroup.position.y = currentExplosion * (tierCount === 2 ? 28 : tierCount === 3 ? 44 : 56);
+
+      if (v12ExplodableMeshes.length > 0) {
+        for (let i = 0; i < v12ExplodableMeshes.length; i++) {
+          const m = v12ExplodableMeshes[i];
+          if (m && m.userData) {
+            m.position.y = m.userData.baseY + currentExplosion * m.userData.explodeDeltaY;
+          }
+        }
+      }
+
+      if (isCadInspectorMode && cadAutoSpin) {
+        cadInspectorGroup.rotation.y += 0.0055;
+      }
 
       controls.update();
       renderer.render(scene, camera);

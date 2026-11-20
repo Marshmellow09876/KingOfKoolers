@@ -186,9 +186,42 @@ html[data-theme="light"] .apple-footer a {
 }
 
 /* Nav Utility Pills (Theme + Command Palette + Docs) */
+.nav-content {
+  gap: 12px;
+}
+
+.nav-links {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 .nav-actions .btn,
 .nav-actions .nav-cta {
   white-space: nowrap;
+}
+
+@media (max-width: 1520px) and (min-width: 993px) {
+  .nav-actions .patent-badge {
+    display: none;
+  }
+  .nav-links {
+    gap: 18px !important;
+  }
+  .kok-nav-pill {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  .nav-actions .btn-sm {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
 }
 
 .kok-nav-pill {
@@ -678,4 +711,290 @@ html[data-theme="light"] .kok-drawer {
 .studio-env-btn.active {
   background: #00f0ff;
   color: #06090e;
+}
+
+/* 11. Cross-Page My Build Navbar Pill & Inline CAD/PDF Previewer */
+.kok-build-pill {
+  background: rgba(0, 240, 255, 0.12);
+  border-color: rgba(0, 240, 255, 0.42);
+  color: #00f0ff;
+}
+
+html[data-theme="light"] .kok-build-pill {
+  background: rgba(0, 113, 227, 0.1);
+  border-color: rgba(0, 113, 227, 0.35);
+  color: #0071e3;
+}
+
+.kok-pdf-preview-wrap {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--kok-border);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 10px;
+}
+
+.kok-pdf-preview-wrap.open {
+  display: flex;
+}
+
+.kok-pdf-preview-frame {
+  width: 100%;
+  height: 320px;
+  border: 1px solid var(--kok-border);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+/* 12. Kickstarter Early-Bird Launch Tiers */
+.kickstarter-section-wrap {
+  margin-top: var(--space-8);
+}
+
+.kickstarter-tiers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 1120px) {
+  .kickstarter-tiers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .kickstarter-tiers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ks-tier-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 24px 20px;
+  border-radius: 20px;
+  background: var(--kok-surface-card);
+  border: 1px solid var(--kok-border);
+  transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+}
+
+.ks-tier-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.38);
+}
+
+.ks-tier-card.featured {
+  border-color: rgba(0, 240, 255, 0.55);
+  background: linear-gradient(160deg, rgba(0, 240, 255, 0.08) 0%, rgba(16, 22, 36, 0.85) 100%);
+}
+
+html[data-theme="light"] .ks-tier-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="light"] .ks-tier-card.featured {
+  background: linear-gradient(160deg, rgba(0, 113, 227, 0.08) 0%, #ffffff 100%);
+  border-color: #0071e3;
+}
+
+.ks-tier-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  color: var(--kok-accent);
+}
+
+.ks-tier-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.ks-tier-price {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--kok-ink);
+}
+
+.ks-tier-msrp {
+  font-size: 13px;
+  color: var(--kok-ink-muted);
+  text-decoration: line-through;
+}
+
+.ks-tier-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--kok-ink-muted);
+  line-height: 1.45;
+}
+
+/* 13. Investor Unit-Economics Simulator & Launch Roadmap */
+.unit-econ-card {
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  border-radius: 20px;
+  background: var(--kok-surface-card);
+  border: 1px solid var(--kok-border);
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .unit-econ-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+html[data-theme="light"] .unit-econ-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.econ-sliders-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.econ-slider-group label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.econ-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 520px) {
+  .econ-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.econ-kpi-box {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(0, 240, 255, 0.04);
+  border: 1px solid var(--kok-border);
+}
+
+.econ-kpi-val {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--kok-accent);
+  margin: 4px 0;
+}
+
+.econ-kpi-sub {
+  font-size: 11.5px;
+  color: var(--kok-ink-muted);
+}
+
+.roadmap-timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: var(--space-3);
+}
+
+@media (max-width: 960px) {
+  .roadmap-timeline-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .roadmap-timeline-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.roadmap-phase-card {
+  padding: 18px;
+  border-radius: 16px;
+  background: var(--kok-surface-card);
+  border: 1px solid var(--kok-border);
+}
+
+html[data-theme="light"] .roadmap-phase-card {
+  background: #ffffff;
+}
+
+.roadmap-status-pill {
+  display: inline-block;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.roadmap-status-pill.done {
+  background: rgba(16, 185, 129, 0.16);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.roadmap-status-pill.active {
+  background: rgba(0, 240, 255, 0.14);
+  color: var(--kok-accent);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+}
+
+/* 14. VIP Reservation SVG QR Build Pass */
+.vip-qr-pass-box {
+  margin: 14px auto 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(0, 240, 255, 0.06);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  text-align: left;
+  max-width: 100%;
+}
+
+.vip-qr-frame {
+  background: #ffffff;
+  padding: 6px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

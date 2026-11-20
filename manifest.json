@@ -1,0 +1,22 @@
+{
+  "name": "King of Koolers — 24\" Modular Stacking Cooler Platform",
+  "short_name": "King of Koolers",
+  "description": "Patent-pending 24-inch cylindrical modular stacking cooler with 20-Helix Twist-Lock, 3D Studio, CAD Inspector & 31 modular accessories.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#060910",
+  "theme_color": "#00f0ff",
+  "icons": [
+    {
+      "src": "./assets/images/render_red_white_blue_stacked.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "./assets/images/apple_hero_plastic_rwb.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

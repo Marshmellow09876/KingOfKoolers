@@ -21,6 +21,7 @@
   <meta name="twitter:image:alt" content="King of Koolers 3-Tier Patriot Red, Alpine White, and Deep Blue Stacked Cylindrical Cooler System">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="./manifest.json">
 
   <style>
     /* ==========================================================================
@@ -525,36 +526,112 @@
     .hero-content {
       position: relative;
       z-index: 1;
-      max-width: 900px;
+      max-width: min(96vw, 1440px);
+      width: 100%;
       margin: 0 auto;
     }
 
     .hero-media-wrapper {
       position: relative;
-      margin: 40px auto 30px auto;
-      max-width: 880px;
+      margin: 28px auto 26px auto;
+      max-width: min(96vw, 1380px);
       width: 100%;
       z-index: 1;
     }
 
     .hero-image-frame {
       position: relative;
+      width: 100%;
       border-radius: var(--radius-xl);
       overflow: hidden;
-      box-shadow: 0 25px 80px -15px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 240, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 30px 90px -15px rgba(0, 0, 0, 0.92), 0 0 60px rgba(0, 240, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       background: #050508;
     }
 
-    .hero-image-frame img {
+    .hero-image-frame img,
+    .hero-image-frame video.hero-sizzle-video {
       width: 100%;
       height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
       display: block;
-      transition: transform 0.6s var(--ease-apple);
     }
 
-    .hero-image-frame:hover img {
-      transform: scale(1.02);
+    .hero-external-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+      padding: 0 4px;
+    }
+
+    .hero-video-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hero-vid-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(8, 12, 20, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .hero-vid-btn:hover {
+      background: rgba(0, 240, 255, 0.2);
+      border-color: var(--accent-cyan);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .hero-vid-btn.active-audio {
+      background: rgba(0, 240, 255, 0.22);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .hero-chapter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 14px;
+    }
+
+    .hero-chapter-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .hero-chapter-pill:hover,
+    .hero-chapter-pill.active {
+      color: #05070c;
+      background: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
     }
 
     /* Floating callout badges on hero */
@@ -3491,35 +3568,39 @@
 
       <div class="hero-media-wrapper">
         <div class="hero-image-frame">
-          <picture>
-            <source srcset="./assets/images/apple_hero_plastic_rwb.webp" type="image/webp">
-            <img src="./assets/images/apple_hero_plastic_rwb.jpg" alt="King of Koolers 24-Inch Wide Rotomolded Cylindrical Modular Stacking Cooler with Flat Recessed-Handle Lid in Patriotic Red, White, and Blue" loading="eager" fetchpriority="high" decoding="async" width="1376" height="768">
-          </picture>
+          <video
+            id="hero-sizzle-video"
+            class="hero-sizzle-video"
+            src="./assets/videos/gemini_generated_video_first10sec.mp4"
+            autoplay
+            muted
+            playsinline
+            preload="auto"
+            poster="./assets/images/apple_hero_plastic_rwb.jpg"
+            width="1280"
+            height="720"
+            aria-label="King of Koolers Hero Video Playlist auto-playing 3 clips back to back on loop"
+          ></video>
         </div>
 
-        <!-- Floating Apple Badges -->
-        <div class="hero-float-badge hero-badge-1">
-          <div class="badge-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
+        <!-- External Below-Video Bar (Zero overlays covering the video frame) -->
+        <div class="hero-external-bar">
+          <div class="hero-chapter-bar" id="hero-chapter-bar" style="margin-top: 0;" role="tablist" aria-label="3-Clip Hero Video Playlist">
+            <button type="button" class="hero-chapter-pill active" data-clip-idx="0">Clip 1 · 5-Tier Studio Drop</button>
+            <button type="button" class="hero-chapter-pill" data-clip-idx="1">Clip 2 · Park Picnic &amp; Deli</button>
+            <button type="button" class="hero-chapter-pill" data-clip-idx="2">Clip 3 · SUV Trunk Toss</button>
           </div>
-          <div>
-            <div style="font-weight: 600;">10-Day Ice Retention</div>
-            <div style="font-size: 11px; color: var(--text-muted);">In 95°F Desert Ambient Conditions</div>
-          </div>
-        </div>
 
-        <div class="hero-float-badge hero-badge-2">
-          <div class="badge-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-            </svg>
-          </div>
-          <div>
-            <div style="font-weight: 600;">24" Circle Advantage</div>
-            <div style="font-size: 11px; color: var(--text-muted);">Zero 90° Corner Thermal Bridges</div>
+          <div class="hero-video-controls" aria-label="Launch Film Controls">
+            <button type="button" class="hero-vid-btn" id="btn-hero-audio" aria-pressed="false" title="Toggle Audio">
+              🔊 <span id="hero-audio-label">Unmute Audio</span>
+            </button>
+            <button type="button" class="hero-vid-btn" id="btn-hero-play" aria-pressed="true" title="Pause or Resume Video">
+              ⏸ <span id="hero-play-label">Pause</span>
+            </button>
+            <button type="button" class="hero-vid-btn" id="btn-hero-fullscreen" title="Watch Fullscreen">
+              ⛶ <span>Fullscreen</span>
+            </button>
           </div>
         </div>
       </div>
@@ -3983,7 +4064,11 @@
   <section class="chapter-divider" aria-label="Overland Expedition Chapter">
     <picture>
       <source srcset="./assets/images/apple_lifestyle_overland.webp" type="image/webp">
+      <picture>
+      <source srcset="./assets/images/apple_lifestyle_overland-800w.avif 800w, ./assets/images/apple_lifestyle_overland.avif 1600w" sizes="100vw" type="image/avif">
+      <source srcset="./assets/images/apple_lifestyle_overland-800w.webp 800w, ./assets/images/apple_lifestyle_overland.webp 1600w" sizes="100vw" type="image/webp">
       <img class="chapter-bg" src="./assets/images/apple_lifestyle_overland.jpg" alt="King of Koolers Overland Expedition" loading="lazy" decoding="async">
+    </picture>
     </picture>
     <div class="chapter-scrim" aria-hidden="true"></div>
     <div class="chapter-content">
@@ -4018,7 +4103,11 @@
             <button class="view-mode-btn" data-view="cad" role="tab" aria-selected="false">CAD Section View</button>
           </div>
 
-          <img id="stack-main-image" src="./assets/images/apple_exploded_clean.jpg" alt="King of Koolers Exploded Modular Stacking Diagram" width="896" height="1200">
+          <picture>
+            <source srcset="./assets/images/apple_exploded_clean-800w.avif 800w, ./assets/images/apple_exploded_clean.avif 896w" sizes="(max-width: 800px) 100vw, 896px" type="image/avif">
+            <source srcset="./assets/images/apple_exploded_clean-800w.webp 800w, ./assets/images/apple_exploded_clean.webp 896w" sizes="(max-width: 800px) 100vw, 896px" type="image/webp">
+            <img id="stack-main-image" src="./assets/images/apple_exploded_clean.jpg" alt="King of Koolers Exploded Modular Stacking Diagram" width="896" height="1200" loading="lazy" decoding="async">
+          </picture>
         </div>
 
         <!-- Interactive Tier Selection -->
@@ -4853,7 +4942,11 @@
   <section class="chapter-divider" aria-label="Sunset Basecamp Chapter">
     <picture>
       <source srcset="./assets/images/apple_lifestyle_sunset.webp" type="image/webp">
+      <picture>
+      <source srcset="./assets/images/apple_lifestyle_sunset-800w.avif 800w, ./assets/images/apple_lifestyle_sunset.avif 1600w" sizes="100vw" type="image/avif">
+      <source srcset="./assets/images/apple_lifestyle_sunset-800w.webp 800w, ./assets/images/apple_lifestyle_sunset.webp 1600w" sizes="100vw" type="image/webp">
       <img class="chapter-bg" src="./assets/images/apple_lifestyle_sunset.jpg" alt="King of Koolers Sunset Basecamp" loading="lazy" decoding="async">
+    </picture>
     </picture>
     <div class="chapter-scrim" aria-hidden="true"></div>
     <div class="chapter-content">
@@ -4978,6 +5071,105 @@
     </div>
   </section>
 
+  <!-- ==========================================================================
+       SECTION 6.8: KICKSTARTER EARLY-BIRD LAUNCH PLEDGE TIERS
+       ========================================================================== -->
+  <section class="section scroll-reveal" id="kickstarter-tiers" style="padding-bottom: 24px;">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="eyebrow">
+          <span class="eyebrow-pill">KICKSTARTER LAUNCH TIERS · VIP EARLY-BIRD</span>
+        </div>
+        <h2 class="headline-large">Reserve Your Production Tier.</h2>
+        <p class="subheadline subheadline-center">
+          No credit card charged today. Lock in early-bird Kickstarter pricing and serialized Founder badges before the rotomold run closes.
+        </p>
+      </div>
+
+      <div class="kickstarter-tiers-grid">
+        <div class="ks-tier-card">
+          <div>
+            <span class="ks-tier-badge">Digital CAD Maker Pack</span>
+            <h3 class="headline-medium" style="font-size: 20px; margin-top: 10px;">Maker 3D-Print STL / 3MF Suite</h3>
+            <div class="ks-tier-price-row">
+              <span class="ks-tier-price">$29</span>
+              <span class="ks-tier-msrp">$59 MSRP</span>
+            </div>
+            <ul class="ks-tier-list" style="margin-top: 14px;">
+              <li>&#10003; Full print-ready .3MF / .STL bundle (#16–#31)</li>
+              <li>&#10003; All-Thread Deli Carousel &amp; Koozy Sculpt</li>
+              <li>&#10003; Wagon Dovetail Wheel Base Files</li>
+              <li>&#10003; Lifetime Parametric CAD Updates</li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-glass btn-sm" data-ks-tier="maker" data-ks-label="Tier 1: Maker 3D-Print STL/3MF Digital Pack ($29 Early Bird)" style="width:100%;justify-content:center;">
+            Reserve Maker Pack &rarr;
+          </button>
+        </div>
+
+        <div class="ks-tier-card">
+          <div>
+            <span class="ks-tier-badge">2-Tier · 30" Compact</span>
+            <h3 class="headline-medium" style="font-size: 20px; margin-top: 10px;">Solo Scout 30" Daypack</h3>
+            <div class="ks-tier-price-row">
+              <span class="ks-tier-price">$239</span>
+              <span class="ks-tier-msrp">$349 MSRP</span>
+            </div>
+            <ul class="ks-tier-list" style="margin-top: 14px;">
+              <li>&#10003; 18" Cold Vault + 12" Dry Top Tier</li>
+              <li>&#10003; 80 QT Combined Capacity (28 lbs dry)</li>
+              <li>&#10003; 20-Helix Twist-Lock &amp; Deadbolt Lock</li>
+              <li>&#10003; Free Bamboo Prep Crown Board</li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-glass btn-sm" data-ks-tier="scout" data-ks-label="Tier 2: Solo Scout 30&quot; 2-Tier Early Bird ($239)" style="width:100%;justify-content:center;">
+            Reserve Solo Scout &rarr;
+          </button>
+        </div>
+
+        <div class="ks-tier-card featured">
+          <div>
+            <span class="ks-tier-badge" style="background: rgba(0, 240, 255, 0.22);">Most Popular · 58" Flagship</span>
+            <h3 class="headline-medium" style="font-size: 20px; margin-top: 10px;">Patriot RWB 58" 3-Tier Stack</h3>
+            <div class="ks-tier-price-row">
+              <span class="ks-tier-price">$389</span>
+              <span class="ks-tier-msrp">$549 MSRP</span>
+            </div>
+            <ul class="ks-tier-list" style="margin-top: 14px;">
+              <li>&#10003; 28" Base + 18" Mid + 12" Top Vault</li>
+              <li>&#10003; 10W USB Solar Crown Lid ($149 value)</li>
+              <li>&#10003; 316 Stainless Fast-Flow Water Bib</li>
+              <li>&#10003; Serialized Stainless Founder Badge</li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-cyan btn-sm" data-ks-tier="rwb" data-ks-label="Tier 3: Flagship Patriot RWB 58&quot; 3-Tier + 10W Solar ($389)" style="width:100%;justify-content:center;">
+            Lock In Patriot 58" &rarr;
+          </button>
+        </div>
+
+        <div class="ks-tier-card">
+          <div>
+            <span class="ks-tier-badge">72" + Wagon Bundle</span>
+            <h3 class="headline-medium" style="font-size: 20px; margin-top: 10px;">Founder's Titan Max 72" Pro</h3>
+            <div class="ks-tier-price-row">
+              <span class="ks-tier-price">$549</span>
+              <span class="ks-tier-msrp">$799 MSRP</span>
+            </div>
+            <ul class="ks-tier-list" style="margin-top: 14px;">
+              <li>&#10003; Full 4-Tier 72" (215 QT) Expedition Tower</li>
+              <li>&#10003; Module #31 3-Wheel Wagon Dolly Included</li>
+              <li>&#10003; The Pizza Vault™ 22" Insert Included</li>
+              <li>&#10003; Priority #001–#250 Mold Run Allocation</li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-glass btn-sm" data-ks-tier="titan" data-ks-label="Tier 4: Founder's Titan Max 72&quot; + 3-Wheel Wagon &amp; Pizza Vault ($549)" style="width:100%;justify-content:center;">
+            Reserve Titan Bundle &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section scroll-reveal" id="investors">
     <div class="container">
       <div class="section-header text-center">
@@ -5078,6 +5270,82 @@
           </div>
         </div>
       </div>
+
+      <!-- Interactive Investor Unit-Economics & Royalty Margin Simulator -->
+      <div class="unit-econ-card" id="unit-econ-simulator">
+        <div class="econ-sliders-col">
+          <div>
+            <div class="bento-eyebrow">INTERACTIVE UNIT-ECONOMICS MODEL</div>
+            <h3 class="headline-medium" style="margin:0 0 6px;">Rotomold Scale &amp; Ecosystem Margin</h3>
+            <p style="font-size:13px;color:var(--kok-ink-muted);line-height:1.5;margin:0;">
+              Adjust annual production volume and accessory attach rate to inspect blended unit COGS, direct gross margin, and 5% OEM licensing royalties.
+            </p>
+          </div>
+
+          <div class="econ-slider-group">
+            <label for="econ-vol-range">
+              <span>Annual Stack Production Volume</span>
+              <strong id="econ-vol-val" style="color:var(--kok-accent);font-family:var(--font-mono);">10,000 units</strong>
+            </label>
+            <input type="range" class="range-input" id="econ-vol-range" min="1000" max="50000" step="1000" value="10000" style="width:100%;accent-color:#00f0ff;">
+          </div>
+
+          <div class="econ-slider-group">
+            <label for="econ-attach-range">
+              <span>Avg. Modular Accessories per Stack</span>
+              <strong id="econ-attach-val" style="color:var(--kok-accent);font-family:var(--font-mono);">2.5 modules ($172)</strong>
+            </label>
+            <input type="range" class="range-input" id="econ-attach-range" min="0" max="6" step="0.5" value="2.5" style="width:100%;accent-color:#00f0ff;">
+          </div>
+        </div>
+
+        <div class="econ-kpi-grid" aria-live="polite" aria-atomic="true">
+          <div class="econ-kpi-box">
+            <div class="bento-eyebrow">BLENDED UNIT COGS</div>
+            <div class="econ-kpi-val" id="econ-cogs-val">$112</div>
+            <div class="econ-kpi-sub" id="econ-cogs-sub">3-Tier Rotomold + Foam + 316 SS</div>
+          </div>
+          <div class="econ-kpi-box">
+            <div class="bento-eyebrow">BLENDED ORDER AOV</div>
+            <div class="econ-kpi-val" id="econ-aov-val">$561</div>
+            <div class="econ-kpi-sub">Flagship Stack + Attach Bundle</div>
+          </div>
+          <div class="econ-kpi-box">
+            <div class="bento-eyebrow">PROJECTED GROSS MARGIN</div>
+            <div class="econ-kpi-val" id="econ-gm-val">68.2% ($3.83M)</div>
+            <div class="econ-kpi-sub" id="econ-rev-sub">Annual Gross Revenue: $5.61M</div>
+          </div>
+          <div class="econ-kpi-box">
+            <div class="bento-eyebrow">5% OEM ROYALTY EQUIV.</div>
+            <div class="econ-kpi-val" id="econ-royalty-val">$280.5K</div>
+            <div class="econ-kpi-sub">Asset-Light IP Licensing Scenario</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4-Phase Manufacturing & Commercial Launch Roadmap -->
+      <div class="roadmap-timeline-grid">
+        <div class="roadmap-phase-card">
+          <span class="roadmap-status-pill done">PHASE 1 · COMPLETE</span>
+          <div class="bento-title" style="font-size:15px;">Full-Scale Prototypes &amp; USPTO</div>
+          <div class="bento-desc" style="font-size:12.5px;">24" 3D-printed functional vessels, 20-helix twist-lock, 3-wheel wagon dovetails &amp; patent-pending filing.</div>
+        </div>
+        <div class="roadmap-phase-card">
+          <span class="roadmap-status-pill active">PHASE 2 · Q2 TARGET</span>
+          <div class="bento-title" style="font-size:15px;">CNC Rotomold Tooling</div>
+          <div class="bento-desc" style="font-size:12.5px;">Cast-aluminum 2-piece rotational molds, 120 PSI polyurethane foam fixtures &amp; 10-day ASTM thermal certification.</div>
+        </div>
+        <div class="roadmap-phase-card">
+          <span class="roadmap-status-pill active">PHASE 3 · Q3 TARGET</span>
+          <div class="bento-title" style="font-size:15px;">Kickstarter &amp; Founding Dealers</div>
+          <div class="bento-desc" style="font-size:12.5px;">Global crowdfunding campaign launch, Serialized #001–#250 Founder deliveries &amp; 4 regional demo hubs.</div>
+        </div>
+        <div class="roadmap-phase-card">
+          <span class="roadmap-status-pill active">PHASE 4 · Q4 SCALE</span>
+          <div class="bento-title" style="font-size:15px;">Retail Rollout &amp; OEM Licensing</div>
+          <div class="bento-desc" style="font-size:12.5px;">Multi-mold 50k+ annual production capacity, 31-module accessory attach flywheel &amp; strategic licensing.</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -5152,6 +5420,14 @@
         <p id="reserve-delivery-status" role="status" aria-live="polite" aria-atomic="true" style="color: var(--text-muted); font-size: 12.5px; margin-top: 8px; line-height: 1.5;">
           Saved to your browser VIP Pass. Send your build to the founder or download your spec sheet below to lock in founder pricing.
         </p>
+        <div class="vip-qr-pass-box" id="vip-qr-pass-box">
+          <div class="vip-qr-frame" id="vip-qr-svg-wrap" aria-label="Serialized VIP Reservation QR Pass"></div>
+          <div>
+            <div style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;color:var(--accent-cyan);text-transform:uppercase;">SERIALIZED VIP BACKER PASS</div>
+            <div style="font-size:13.5px;font-weight:700;color:#fff;margin-top:2px;" id="vip-qr-pass-label">Founder Priority Queue</div>
+            <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;" id="vip-qr-pass-sub">Scan at demo hubs to load build telemetry</div>
+          </div>
+        </div>
         <div id="modal-success-summary-preview" style="margin-top: 14px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 10px 12px; text-align: left; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); max-height: 110px; overflow-y: auto; white-space: pre-wrap;"></div>
         <div class="modal-action-grid">
           <a id="btn-mailto-dispatch" href="mailto:marshall.austin@gmail.com" class="btn btn-cyan btn-sm">Email VIP Reservation to Founder &rarr;</a>
@@ -7106,6 +7382,7 @@
             invoiceMsrpNote.textContent = 'Estimated Complete Stack MSRP: $549 – $749 (Modular cylindrical architecture provides 34% better thermal retention than standard rectangular boxes).';
           }
         }
+        window.dispatchEvent(new CustomEvent('kok:build-updated'));
       }
 
       // Global function to select a tier by clicking it in the SVG
@@ -7583,6 +7860,94 @@
         btnTitaniumAlert.addEventListener('click', () => openModalWithBuildSummary('Titanium Pro Edition · Polar Expedition Priority Alert Queue'));
       }
 
+      document.querySelectorAll('[data-ks-tier]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tier = btn.dataset.ksTier;
+          const label = btn.dataset.ksLabel || 'VIP Early-Bird Reservation';
+          if (tier === 'scout' || tier === 'rwb' || tier === 'titan') {
+            applyPreset(tier);
+          }
+          openModalWithBuildSummary(label);
+          if (backerNotesInput) {
+            const prevLines = backerNotesInput.value
+              .split('\n')
+              .map(l => l.trim())
+              .filter(l => l && !l.startsWith('Kickstarter Tier:'));
+            backerNotesInput.value = [`Kickstarter Tier: ${label}`, ...prevLines].join('\n');
+          }
+        });
+      });
+
+      function renderVipQrPass(record) {
+        const wrap = document.getElementById('vip-qr-svg-wrap');
+        const labelEl = document.getElementById('vip-qr-pass-label');
+        const subEl = document.getElementById('vip-qr-pass-sub');
+        if (!wrap) return;
+
+        const size = 21;
+        const grid = Array.from({ length: size }, () => Array(size).fill(-1));
+        const placeFinder = (r0, c0) => {
+          for (let r = -1; r <= 7; r++) {
+            for (let c = -1; c <= 7; c++) {
+              const rr = r0 + r;
+              const cc = c0 + c;
+              if (rr < 0 || rr >= size || cc < 0 || cc >= size) continue;
+              if (r === -1 || r === 7 || c === -1 || c === 7) {
+                grid[rr][cc] = 0;
+              } else {
+                const isOuter = r === 0 || r === 6 || c === 0 || c === 6;
+                const isInner = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+                grid[rr][cc] = (isOuter || isInner) ? 1 : 0;
+              }
+            }
+          }
+        };
+        placeFinder(0, 0);
+        placeFinder(0, size - 7);
+        placeFinder(size - 7, 0);
+
+        for (let i = 8; i < size - 8; i++) {
+          grid[6][i] = i % 2 === 0 ? 1 : 0;
+          grid[i][6] = i % 2 === 0 ? 1 : 0;
+        }
+        grid[size - 8][8] = 1;
+
+        const payload = `${record.reservationKey}|${record.name || 'VIP'}|${record.stackSummary.totalHeightIn}|${record.summaryLine || ''}`;
+        let h1 = 2166136261 >>> 0;
+        let h2 = 3735928559 >>> 0;
+        for (let i = 0; i < payload.length; i++) {
+          const ch = payload.charCodeAt(i);
+          h1 = Math.imul(h1 ^ ch, 16777619) >>> 0;
+          h2 = Math.imul(h2 ^ (ch + i), 2246822519) >>> 0;
+        }
+        let bitIdx = 0;
+        for (let r = 0; r < size; r++) {
+          for (let c = 0; c < size; c++) {
+            if (grid[r][c] !== -1) continue;
+            h1 = (Math.imul(h1 ^ (r * 31 + c), 16777619) + h2) >>> 0;
+            h2 = ((h2 << 7) | (h2 >>> 25)) ^ h1;
+            grid[r][c] = ((h1 >>> (bitIdx % 16)) ^ (bitIdx % 3 === 0 ? 1 : 0)) & 1;
+            bitIdx++;
+          }
+        }
+
+        const rects = [];
+        for (let r = 0; r < size; r++) {
+          for (let c = 0; c < size; c++) {
+            if (grid[r][c] === 1) {
+              rects.push(`<rect x="${c}" y="${r}" width="1" height="1"/>`);
+            }
+          }
+        }
+        wrap.innerHTML = `<svg viewBox="-1 -1 23 23" width="92" height="92" shape-rendering="crispEdges" role="img" aria-label="VIP QR Pass ${record.reservationKey}" style="display:block;border-radius:6px;background:#ffffff;"><rect x="-1" y="-1" width="23" height="23" fill="#ffffff"/><g fill="#0f172a">${rects.join('')}</g></svg>`;
+        if (labelEl) {
+          labelEl.textContent = `${record.reservationKey} · ${record.stackSummary.totalHeightIn}" Build`;
+        }
+        if (subEl) {
+          subEl.textContent = `${record.name || 'Founder VIP'} · ${record.stackSummary.totalCans} Cans · Priority Queue`;
+        }
+      }
+
       if (modalCloseX && reserveDialog) {
         modalCloseX.addEventListener('click', () => reserveDialog.close());
       }
@@ -7714,6 +8079,7 @@
           if (resKeyDisplay) resKeyDisplay.textContent = randomKey;
           if (modalSuccessPreview) modalSuccessPreview.textContent = specText;
           if (btnMailtoDispatch) btnMailtoDispatch.href = buildMailtoHref(record, specText);
+          renderVipQrPass(record);
 
           reserveForm.style.display = 'none';
           if (modalSuccess) modalSuccess.style.display = 'block';
@@ -8070,6 +8436,159 @@
           }
         });
       });
+
+      /* 37. Investor Unit-Economics & Royalty Margin Simulator */
+      const econVolRange = document.getElementById('econ-vol-range');
+      const econAttachRange = document.getElementById('econ-attach-range');
+      const econVolVal = document.getElementById('econ-vol-val');
+      const econAttachVal = document.getElementById('econ-attach-val');
+      const econCogsVal = document.getElementById('econ-cogs-val');
+      const econCogsSub = document.getElementById('econ-cogs-sub');
+      const econAovVal = document.getElementById('econ-aov-val');
+      const econGmVal = document.getElementById('econ-gm-val');
+      const econRevSub = document.getElementById('econ-rev-sub');
+      const econRoyaltyVal = document.getElementById('econ-royalty-val');
+
+      function fmtCompactDollars(n) {
+        if (n >= 1e6) return `$${(n / 1e6).toFixed(2)}M`;
+        if (n >= 1e3) return `$${(n / 1e3).toFixed(1)}K`;
+        return `$${Math.round(n).toLocaleString()}`;
+      }
+
+      function updateUnitEconSimulator() {
+        if (!econVolRange || !econAttachRange) return;
+        const vol = Math.max(1000, Number(econVolRange.value) || 10000);
+        const attach = Math.max(0, Number(econAttachRange.value) || 0);
+
+        const baseCogs = Math.round(85 + 57 * Math.exp(-(vol - 1000) / 11900));
+        const attachRev = Math.floor(attach * 69);
+        const aov = 389 + attachRev;
+        const unitAttachCogs = 27.5 - ((vol - 1000) / 49000) * 5.0;
+        const blendedOrderCogs = baseCogs + attach * unitAttachCogs;
+
+        const annualRev = vol * aov;
+        const annualMargin = vol * (aov - blendedOrderCogs);
+        const gmPct = Math.max(0, ((aov - blendedOrderCogs) / aov) * 100);
+        const royalty = annualRev * 0.05;
+
+        if (econVolVal) econVolVal.textContent = `${vol.toLocaleString()} units`;
+        if (econAttachVal) econAttachVal.textContent = `${attach.toFixed(1)} modules ($${attachRev})`;
+        if (econCogsVal) econCogsVal.textContent = `$${baseCogs}`;
+        if (econCogsSub) {
+          econCogsSub.textContent = vol >= 25000
+            ? 'Full CNC Rotomold + High-Volume Foam Line'
+            : (vol >= 10000 ? '3-Tier Rotomold + Foam + 316 SS' : 'Bridge Tooling + Small-Batch Run');
+        }
+        if (econAovVal) econAovVal.textContent = `$${aov.toLocaleString()}`;
+        if (econGmVal) econGmVal.textContent = `${gmPct.toFixed(1)}% (${fmtCompactDollars(annualMargin)})`;
+        if (econRevSub) econRevSub.textContent = `Annual Gross Revenue: ${fmtCompactDollars(annualRev)}`;
+        if (econRoyaltyVal) econRoyaltyVal.textContent = fmtCompactDollars(royalty);
+      }
+
+      if (econVolRange && econAttachRange) {
+        econVolRange.addEventListener('input', updateUnitEconSimulator);
+        econAttachRange.addEventListener('input', updateUnitEconSimulator);
+        updateUnitEconSimulator();
+      }
+
+      /* 38. 3-Clip Hero Video Back-to-Back Auto-Play & Continuous Loop Controller */
+      const HERO_CLIPS = [
+        './assets/videos/gemini_generated_video_first10sec.mp4',
+        './assets/videos/gemini_generated_video_first10_20sec_v2.mp4',
+        './assets/videos/gemini_generated_video_first0_30sec_v3.mp4'
+      ];
+      let currentHeroClipIdx = 0;
+
+      const heroVid = document.getElementById('hero-sizzle-video');
+      const btnHeroAudio = document.getElementById('btn-hero-audio');
+      const heroAudioLabel = document.getElementById('hero-audio-label');
+      const btnHeroPlay = document.getElementById('btn-hero-play');
+      const heroPlayLabel = document.getElementById('hero-play-label');
+      const btnHeroFs = document.getElementById('btn-hero-fullscreen');
+      const chapterPills = document.querySelectorAll('#hero-chapter-bar .hero-chapter-pill');
+
+      // Preload all 3 clips in background for instant gapless back-to-back transitions
+      HERO_CLIPS.forEach(url => {
+        const pre = document.createElement('video');
+        pre.preload = 'auto';
+        pre.muted = true;
+        pre.src = url;
+      });
+
+      function playHeroClip(idx) {
+        if (!heroVid) return;
+        currentHeroClipIdx = ((idx % HERO_CLIPS.length) + HERO_CLIPS.length) % HERO_CLIPS.length;
+        const wasMuted = heroVid.muted;
+        heroVid.src = HERO_CLIPS[currentHeroClipIdx];
+        heroVid.muted = wasMuted;
+        heroVid.load();
+        heroVid.play().catch(() => {});
+        if (btnHeroPlay) {
+          btnHeroPlay.innerHTML = '⏸ <span id="hero-play-label">Pause</span>';
+          btnHeroPlay.setAttribute('aria-pressed', 'true');
+        }
+        chapterPills.forEach((p, i) => p.classList.toggle('active', i === currentHeroClipIdx));
+      }
+
+      if (heroVid) {
+        // Automatically advance to the next clip when current clip ends, looping 1 -> 2 -> 3 -> 1 forever
+        heroVid.addEventListener('ended', () => {
+          playHeroClip(currentHeroClipIdx + 1);
+        });
+
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          heroVid.pause();
+          if (heroPlayLabel) heroPlayLabel.textContent = 'Play';
+          if (btnHeroPlay) btnHeroPlay.setAttribute('aria-pressed', 'false');
+        }
+
+        if (btnHeroAudio) {
+          btnHeroAudio.addEventListener('click', () => {
+            heroVid.muted = !heroVid.muted;
+            if (!heroVid.muted && heroVid.paused) heroVid.play().catch(() => {});
+            btnHeroAudio.classList.toggle('active-audio', !heroVid.muted);
+            btnHeroAudio.setAttribute('aria-pressed', String(!heroVid.muted));
+            if (heroAudioLabel) {
+              heroAudioLabel.textContent = heroVid.muted ? 'Unmute Audio' : 'Audio On';
+            }
+          });
+        }
+
+        if (btnHeroPlay) {
+          btnHeroPlay.addEventListener('click', () => {
+            if (heroVid.paused) {
+              heroVid.play().catch(() => {});
+              btnHeroPlay.innerHTML = '⏸ <span id="hero-play-label">Pause</span>';
+              btnHeroPlay.setAttribute('aria-pressed', 'true');
+            } else {
+              heroVid.pause();
+              btnHeroPlay.innerHTML = '▶ <span id="hero-play-label">Play</span>';
+              btnHeroPlay.setAttribute('aria-pressed', 'false');
+            }
+          });
+        }
+
+        if (btnHeroFs) {
+          btnHeroFs.addEventListener('click', () => {
+            heroVid.muted = false;
+            if (btnHeroAudio) {
+              btnHeroAudio.classList.add('active-audio');
+              btnHeroAudio.setAttribute('aria-pressed', 'true');
+            }
+            if (heroAudioLabel) heroAudioLabel.textContent = 'Audio On';
+            heroVid.play().catch(() => {});
+            if (heroVid.requestFullscreen) heroVid.requestFullscreen();
+            else if (heroVid.webkitRequestFullscreen) heroVid.webkitRequestFullscreen();
+          });
+        }
+
+        chapterPills.forEach(pill => {
+          pill.addEventListener('click', () => {
+            const clipIdx = parseInt(pill.dataset.clipIdx, 10) || 0;
+            playHeroClip(clipIdx);
+          });
+        });
+      }
     })();
   </script>
   <script src="./assets/js/apple-polish.js" defer></script>

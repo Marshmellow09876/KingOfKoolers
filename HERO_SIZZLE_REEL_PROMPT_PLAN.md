@@ -2,15 +2,16 @@
 **First-Visit Landing Page Video Architecture (6 Scenes × 10 Seconds = 60 Seconds)**
 *Target Placement: Top-of-Page Hero Intro (`index.html`) | Export File Target: `./assets/videos/hero_sizzle_reel_60s.mp4`*
 
-### Keyframe Generation Status (`5 of 7` Completed)
-- **Completed (`assets/images/hero_keyframes/`)**:
+### Keyframe & Video Build Status (`7 of 7` Keyframes + `60s MP4` Completed & Live on `index.html`)
+- **Final Encoded Launch Film (`11.71 MB`, `1376×768 @ 30fps` H.264 + Stereo AAC)**:
+  - `assets/videos/hero_sizzle_reel_60s.mp4` — Wired into `<header class="hero-section" id="overview">` on `index.html` with 6-Scene chapter jump pills, stereo audio toggle, and fullscreen cinema playback.
+- **Completed Keyframes (`assets/images/hero_keyframes/`)**:
   - `hero_keyframe_01a_studio_base.jpg` — Scene 1 Start-Frame A (Pre-Drop `28"` Patriot Blue Base)
   - `hero_keyframe_01b_studio_5tier_stack.jpg` — Scene 1 End-Frame B (5-Cooler Studio Stack)
-  - `hero_keyframe_02_park_picnic.jpg` — Scene 2 Start-Frame (Park Picnic & Deli Carousel; note: background white stool cooler still shows 2 small black latches — schedule optional clean-up pass if desired)
+  - `hero_keyframe_02_park_picnic.jpg` — Scene 2 Start-Frame (Park Picnic & Deli Carousel)
+  - `hero_keyframe_03_suv_trunk_toss.jpg` — Scene 3 Start-Frame (SUV Trunk Toss Impact Test)
   - `hero_keyframe_04_deadbolt_macro.jpg` — Scene 4 Start-Frame (Vertical Deadbolt & `1/20th` Turn Macro)
   - `hero_keyframe_05_circle_advantage_solar_spigot.jpg` — Scene 5 Start-Frame (`10W` Solar Lid & `360° Flow-Tap` Spigot Sunset Dock)
-- **Remaining (Blocked by `gemini-3.1-flash-image` `429 RESOURCE_EXHAUSTED` quota reset at `2026-11-14T23:36:43Z`)**:
-  - `hero_keyframe_03_suv_trunk_toss.jpg` — Scene 3 Start-Frame (SUV Trunk Toss Impact Test)
   - `hero_keyframe_06_expedition_fleet_finale.jpg` — Scene 6 Start-Frame (Alpine Lake Twilight Expedition Fleet Panorama)
 
 ---

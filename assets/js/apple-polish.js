@@ -70,11 +70,53 @@
       applyTheme(next);
     });
 
+    const buildPill = document.createElement('button');
+    buildPill.type = 'button';
+    buildPill.id = 'kok-build-pill';
+    buildPill.className = 'kok-nav-pill kok-build-pill';
+    buildPill.title = 'View your synced Custom Cooler Stack & Outfitting Kit';
+    buildPill.addEventListener('click', () => {
+      haptic();
+      const cfgSection = document.getElementById('configurator');
+      if (cfgSection) {
+        cfgSection.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.location.href = './index.html#configurator';
+      }
+    });
+
+    target.prepend(buildPill);
     target.prepend(themeBtn);
     target.prepend(docsBtn);
     target.prepend(cmdBtn);
     applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+    refreshBuildPill();
   }
+
+  function refreshBuildPill() {
+    const pill = document.getElementById('kok-build-pill');
+    if (!pill) return;
+    let heightLabel = '58"';
+    let accCount = 0;
+    try {
+      const studioRaw = localStorage.getItem('kok_studio_customization');
+      if (studioRaw) {
+        const s = JSON.parse(studioRaw);
+        if (s && s.heightIn) heightLabel = `${s.heightIn}"`;
+      }
+      const cartRaw = localStorage.getItem('kok_outfitting_cart');
+      if (cartRaw) {
+        const c = JSON.parse(cartRaw);
+        if (Array.isArray(c)) accCount = c.length;
+      }
+    } catch (_) {}
+    pill.innerHTML = accCount > 0
+      ? `🧊 <span>${heightLabel} · ${accCount} Acc</span>`
+      : `🧊 <span>${heightLabel} Build</span>`;
+  }
+  window.kokRefreshBuildPill = refreshBuildPill;
+  window.addEventListener('storage', refreshBuildPill);
+  window.addEventListener('kok:build-updated', refreshBuildPill);
 
   /* ------------------------------------------------------------------------
      3. GLOBAL COMMAND PALETTE (Cmd+K / Ctrl+K)
@@ -87,9 +129,14 @@
     { title: 'Engineering Bento Grid & Specs', cat: 'Specs', url: './index.html#specs' },
     { title: 'Pizza Vault™ 16" Heated/Chilled Tier', cat: 'Feature', url: './index.html#pizza-vault' },
     { title: 'Investor Pitch, Market Chart & Dealer Map', cat: 'Investors', url: './index.html#investors' },
+    { title: 'Kickstarter Early-Bird Pledge Tiers', cat: 'Launch', url: './index.html#kickstarter-tiers' },
+    { title: 'Investor Unit-Economics Simulator', cat: 'Investors', url: './index.html#unit-econ-simulator' },
     { title: 'Patented 20-Helix & Vertical Deadbolt Lock', cat: 'Page', url: './locking-mechanism.html' },
     { title: '3D Interactive Studio & Laser Engraving', cat: '3D Lab', url: './customizer.html' },
-    { title: 'All 30 Modular Accessories Ecosystem', cat: 'Catalog', url: './accessories.html' },
+    { title: 'V12 Full-Scale 24" OD Prototype Assembly (.3MF Download)', cat: 'V12 CAD', url: './assets/cad/v12_prototype/KingOfKoolers_V12_Full_Prototype_24in_Assembly.3mf', external: true },
+    { title: 'V12 Split 5-Ring Printable Kit w/ 24 Alignment Pins (.3MF)', cat: 'V12 CAD', url: './assets/cad/v12_prototype/KingOfKoolers_V12_Split_Printable_Kit_24in.3mf', external: true },
+    { title: 'Real CAD Mesh Inspector (.3MF / .STL / .OBJ)', cat: 'CAD 3D', url: './customizer.html#cad-inspector' },
+    { title: 'All 31 Modular Accessories Ecosystem (incl. 3-Wheel Wagon)', cat: 'Catalog', url: './accessories.html' },
     { title: 'Acc #01 — Bluetooth Lid Speaker', cat: 'Accessory', url: './accessories.html' },
     { title: 'Acc #02 — Bamboo Cutting Board', cat: 'Accessory', url: './accessories.html' },
     { title: 'Acc #08 — Draft Beer Tap System', cat: 'Accessory', url: './accessories.html' },
@@ -246,29 +293,73 @@
           Official Austin Marshall engineering drawings, cross-sections, investor materials, and printable 1-page specification sheet.
         </p>
 
-        <a class="kok-doc-item" href="./assets/docs/Ful_Scale_King_Of_Koolers_Drawing_v1.pdf" target="_blank" rel="noopener">
+        <a class="kok-doc-item" href="./customizer.html#cad-inspector">
           <div>
-            <div style="font-weight:700;font-size:14px;">Full-Scale Engineering CAD (v1)</div>
-            <div style="font-size:12px;color:var(--kok-ink-muted);">24" cylindrical tolerances &amp; wall thickness • PDF</div>
+            <div style="font-weight:700;font-size:14px;">Interactive 3D CAD Mesh Inspector</div>
+            <div style="font-size:12px;color:var(--kok-ink-muted);">Inspect all 14 V12 24" OD .3MF, .STL &amp; .OBJ parts in WebGL</div>
           </div>
-          <span class="kok-nav-pill">Open ↗</span>
+          <span class="kok-nav-pill">Launch 3D &rarr;</span>
         </a>
 
-        <a class="kok-doc-item" href="./assets/docs/Ful_Scale_King_Of_Koolers_Drawing_half_view.pdf" target="_blank" rel="noopener">
-          <div>
-            <div style="font-weight:700;font-size:14px;">Half-View Cross-Section Drawing</div>
-            <div style="font-size:12px;color:var(--kok-ink-muted);">20-helix thread pitch &amp; R-8 foam core • PDF</div>
+        <div class="kok-doc-item" style="flex-direction:column;align-items:stretch;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+            <div>
+              <div style="font-weight:700;font-size:14px;">V12 Full-Scale 24" OD Prototype Assembly (.3MF / .OBJ)</div>
+              <div style="font-size:12px;color:var(--kok-ink-muted);">609.6 mm (24.0") OD • One-Piece + Split 5-Ring Kit w/ 24 Alignment Pins</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-shrink:0;">
+              <a class="kok-nav-pill" href="./assets/cad/v12_prototype/KingOfKoolers_V12_Full_Prototype_24in_Assembly.3mf" download>Full .3MF ⬇</a>
+              <a class="kok-nav-pill" href="./assets/cad/v12_prototype/KingOfKoolers_V12_Split_Printable_Kit_24in.3mf" download>Split .3MF ⬇</a>
+            </div>
           </div>
-          <span class="kok-nav-pill">Open ↗</span>
-        </a>
+        </div>
 
-        <a class="kok-doc-item" href="./assets/docs/King_of_Koolers_Investor_Pitch.pdf" target="_blank" rel="noopener">
-          <div>
-            <div style="font-weight:700;font-size:14px;">Investor Pitch Deck</div>
-            <div style="font-size:12px;color:var(--kok-ink-muted);">Market sizing, unit economics &amp; IP roadmap • PDF</div>
+        <div class="kok-doc-item" style="flex-direction:column;align-items:stretch;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+            <div>
+              <div style="font-weight:700;font-size:14px;">Full-Scale Engineering CAD (v1)</div>
+              <div style="font-size:12px;color:var(--kok-ink-muted);">24" cylindrical tolerances &amp; wall thickness • PDF</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-shrink:0;">
+              <button type="button" class="kok-nav-pill kok-pdf-preview-btn" data-pdf="./assets/docs/Ful_Scale_King_Of_Koolers_Drawing_v1.pdf">Preview</button>
+              <a class="kok-nav-pill" href="./assets/docs/Ful_Scale_King_Of_Koolers_Drawing_v1.pdf" target="_blank" rel="noopener">Open ↗</a>
+            </div>
           </div>
-          <span class="kok-nav-pill">Open ↗</span>
-        </a>
+        </div>
+
+        <div class="kok-doc-item" style="flex-direction:column;align-items:stretch;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+            <div>
+              <div style="font-weight:700;font-size:14px;">Half-View Cross-Section Drawing</div>
+              <div style="font-size:12px;color:var(--kok-ink-muted);">20-helix thread pitch &amp; R-8 foam core • PDF</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-shrink:0;">
+              <button type="button" class="kok-nav-pill kok-pdf-preview-btn" data-pdf="./assets/docs/Ful_Scale_King_Of_Koolers_Drawing_half_view.pdf">Preview</button>
+              <a class="kok-nav-pill" href="./assets/docs/Ful_Scale_King_Of_Koolers_Drawing_half_view.pdf" target="_blank" rel="noopener">Open ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="kok-doc-item" style="flex-direction:column;align-items:stretch;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+            <div>
+              <div style="font-weight:700;font-size:14px;">Investor Pitch Deck</div>
+              <div style="font-size:12px;color:var(--kok-ink-muted);">Market sizing, unit economics &amp; IP roadmap • PDF</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-shrink:0;">
+              <button type="button" class="kok-nav-pill kok-pdf-preview-btn" data-pdf="./assets/docs/King_of_Koolers_Investor_Pitch.pdf">Preview</button>
+              <a class="kok-nav-pill" href="./assets/docs/King_of_Koolers_Investor_Pitch.pdf" target="_blank" rel="noopener">Open ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="kok-pdf-preview-wrap" id="kok-pdf-preview-wrap">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">
+            <strong id="kok-pdf-preview-label">Document Preview</strong>
+            <button type="button" class="kok-nav-pill" id="kok-pdf-preview-close">Hide Preview</button>
+          </div>
+          <iframe class="kok-pdf-preview-frame" id="kok-inline-pdf-frame" title="Inline CAD or Pitch PDF Preview"></iframe>
+        </div>
 
         <div class="kok-doc-item" id="kok-print-spec-btn" role="button" tabindex="0" style="cursor:pointer;">
           <div>
@@ -285,6 +376,27 @@
     });
     document.getElementById('kok-docs-close').addEventListener('click', closeDocsDrawer);
     document.getElementById('kok-print-spec-btn').addEventListener('click', printOnePageSpecSheet);
+
+    const previewWrap = document.getElementById('kok-pdf-preview-wrap');
+    const previewFrame = document.getElementById('kok-inline-pdf-frame');
+    const previewLabel = document.getElementById('kok-pdf-preview-label');
+    const previewClose = document.getElementById('kok-pdf-preview-close');
+    docsBackdrop.querySelectorAll('.kok-pdf-preview-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        haptic();
+        if (previewFrame && previewWrap) {
+          previewFrame.src = btn.dataset.pdf;
+          previewWrap.classList.add('open');
+          if (previewLabel) previewLabel.textContent = btn.dataset.pdf.split('/').pop();
+        }
+      });
+    });
+    if (previewClose && previewWrap) {
+      previewClose.addEventListener('click', () => {
+        previewWrap.classList.remove('open');
+        if (previewFrame) previewFrame.src = '';
+      });
+    }
   }
 
   function printOnePageSpecSheet() {
