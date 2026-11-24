@@ -1,0 +1,18 @@
+2026-11-24 15:33:27.758: [INFO] CurrentProfilePath: E:\Documents\AiPrograms\KingOfKoolers\v2\.taste-skill\diag-prof\Default
+2026-11-24 15:33:27.758: [INFO] Profiles total count: 1
+2026-11-24 15:33:27.758: [INFO] Profile: name=Profile 1 path=E:\Documents\AiPrograms\KingOfKoolers\v2\.taste-skill\diag-prof\Default lastActive=null
+2026-11-24 15:33:27.758: [INFO] LastUsedProfileDir: E:\Documents\AiPrograms\KingOfKoolers\v2\.taste-skill\diag-prof\Default
+2026-11-24 15:33:27.758: [INFO] VisibilityChanged: 0
+2026-11-24 15:33:27.825: [INFO] OnDoneLoading sync enabled: 0
+2026-11-24 15:33:27.825: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-24 15:33:27.825: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-24 15:33:27.825: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-24 15:33:27.900: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-11-24 15:33:31.242: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-11-24 15:33:31.254: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-11-24 15:33:31.259: [INFO] Primary account changed.
+2026-11-24 15:33:31.259: [INFO] OnPrimaryAccountChanged PrimaryAccountChangeEvent::Type::kSet
+2026-11-24 15:33:31.277: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-11-24 15:33:31.306: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-11-24 15:33:36.137: [INFO] BookmarkBarPrefChanged showBar=0 showBarNTP=1
+2026-11-24 15:33:36.269: [INFO] Sync initialization duration: 4787ms

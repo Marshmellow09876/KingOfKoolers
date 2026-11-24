@@ -1,0 +1,243 @@
+{
+ "start": "2026-11-24T07:57:05.424Z",
+ "round": 2,
+ "idle": 0,
+ "errors": 0,
+ "status": "pass",
+ "history": [
+  {
+   "at": "2026-11-24T15:09:52.678Z",
+   "mode": "manual",
+   "status": "fail",
+   "fails": 2,
+   "round": 1,
+   "reused": false,
+   "stopHookActive": false
+  },
+  {
+   "at": "2026-11-24T15:13:03.565Z",
+   "mode": "manual",
+   "status": "fail",
+   "fails": 1,
+   "round": 2,
+   "reused": false,
+   "stopHookActive": false
+  },
+  {
+   "at": "2026-11-24T15:15:56.081Z",
+   "mode": "manual",
+   "status": "pass",
+   "fails": 0,
+   "round": 2,
+   "reused": false,
+   "stopHookActive": false
+  }
+ ],
+ "max": 3,
+ "marker": {
+  "page": "index.html",
+  "url": null,
+  "root": null,
+  "kind": "product",
+  "category": "24-inch cylindrical modular stacking cooler",
+  "primary": "Reserve a stack",
+  "rounds": 3,
+  "start": "2026-11-24T07:57:05.424Z",
+  "by": "gate.mjs --start"
+ },
+ "manual": true,
+ "roundKey": "00214833ef842a40:da39a3ee",
+ "roundFree": false,
+ "idleFree": false,
+ "blockKey": null,
+ "fp": "1ed264a483f0afed",
+ "page": "index.html",
+ "found": {
+  "fails": [],
+  "warns": [
+   {
+    "check": "scroll-reveal",
+    "where": "section#physics > div.wrap > p.mo-wh__text \"Rectangles lose cold through four expose\"",
+    "msg": "starts \"color\" (0.2 s) the moment it is scrolled into view (an IntersectionObserver) on span.mo-w:nth-of-type(1) (inside a dealt moment's section, [data-moment]: an enter moment is expected on every kind; its still is judged under reduced motion)",
+    "fix": "show it at rest: no fade, rise or unmask when it is scrolled into view",
+    "widths": [
+     1440,
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "pinned",
+    "where": "section#chapters > div.wrap.mo-ph \"Modular 4-tier cooler system Four interl\"",
+    "msg": "held on screen for 2.9 screens of scroll (position: sticky) while the page moves on (inside a dealt moment's section, [data-moment]: expected on every kind, two moments at most, house rule; its still is judged under reduced motion)",
+    "fix": "let the section scroll with the page",
+    "widths": [
+     1440,
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "no-visual",
+    "where": "section#tiers \"Four modular cooler editions\"",
+    "msg": "pictures, effects and mocks cover 23% of this section; a feature section needs a visual (about 25% or more)",
+    "fix": "give the section a visual: a UI fragment on a ground, real icons, or a photograph that fits",
+    "widths": [
+     1440,
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "section-gaps",
+    "where": "main#top > section.hero.hero--product / section#chapters",
+    "msg": "231px between these sections, -34% against the median 350px",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "section-gaps",
+    "where": "section#tiers / footer#contact",
+    "msg": "244px between these sections, -30% against the median 350px of gaps at a change of ground",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     1440,
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "photo-set",
+    "where": "img#thermal-flir-img \"thermal_flir_still.webp\"",
+    "msg": "11 photographs in more than one look: lightness from 0.22 to 0.71; saturation from 0.24 to 0.61; warm and cool photographs mixed (b* -18 to +22); the odd one out is thermal_flir_still.webp",
+    "fix": "grade the photographs to one look (light, colour, warmth), or replace the odd one out",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "nav-labels",
+    "where": "header.nav.nav--split > div.wrap.nav__bar > a.nav__logo \"King of Koolers\"",
+    "msg": "\"King of Koolers\" opens a section headed \"24-inch cylindrical stacking cooler\"",
+    "fix": "name each nav link after the heading of the section it opens",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "empty-area",
+    "where": "section#thermal \"Thermal advantage of cylindrical coolers\"",
+    "msg": "35% of the section is empty: 208px under its last (div.thermal-metric.thermal-metric--cyl), 6% beside content that covers under half the container, in its 720px of rows (WARN over 35%, FAIL over 50%)",
+    "fix": "fill the section: a picture or a second column beside the words, or more of its own content; the section stays one or two screens tall (T-height)",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "action-repeat",
+    "where": "header.nav.nav--split > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary \"reserve a stack\"",
+    "msg": "\"reserve a stack\" shows 2 times on the first screen at 1440px (nav, hero): the nav's button and the hero's; nothing else on the screen may repeat it",
+    "fix": "show the action once a screen besides the nav's button: the hero's, the close's or the phone bar's, never all at once",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "form-send",
+    "where": "form#tier-reserve-form \"mailto:reservations@kingofkoolers.exampl\"",
+    "msg": "the form opens a mail to reservations@kingofkoolers.example: a stand-in until the client gives its form address; list it in the report",
+    "fix": "send the form to the client's address (data-endpoint) and show the confirmation only after it answers; list a mailto stand-in in the report",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "section-air",
+    "where": "section#thermal \"Thermal advantage of cylindrical coolers\"",
+    "msg": "the content fills 53.6% of the section's height (483 of 900px): 55% or more (40% WARN) (SR-3)",
+    "fix": "fill the section to 55%: more content, a picture or a background layer, or merge it into the section above as its last block",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "flush",
+    "where": "h2#colorways-h \"Six rotomolded colorways on one 24-inch \"",
+    "msg": "its first line sits 16px under the top edge of section#colorways, where the ground changes",
+    "fix": "give the section its padding at the edge where the ground changes (the closing call keeps a clear gap above the footer)",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "button-styles",
+    "where": "div.span-6:nth-of-type(1) > div.edition-list > div.edition-row:nth-of-type(3) > button.btn.btn--secondary \"Order Patriot 58\"\"",
+    "msg": "on the phone 3 buttons run the full width of their column, but  \"Order Patriot 58\"\" is 122px of 342px: one action in two sizes",
+    "fix": "give every button the same width rule on the phone: all full width, or all at their own width",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "section-gaps",
+    "where": "section#thermal / section#colorways",
+    "msg": "114px between these sections, +36% against the median 84px of gaps at a change of ground",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "proximity",
+    "where": "section#tiers > div.wrap > div.grid.grid--top > aside.tier-reserve-box.span-6 \"How does the 18-degree cooler lock stay \"",
+    "msg": "stacked at this width, the visual starts 18px under the text and buttons above it (\"How does the 18-degree cooler \"): it reads glued to them",
+    "fix": "give the stacked split the section's own gap between text and visual (40px or more on a phone)",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "photo-set",
+    "where": "article.card.card--row:nth-of-type(2) > div.panel.specs-exploded-panel > picture > img.frame__img \"apple_exploded_clean-600w.webp\"",
+    "msg": "13 photographs in more than one look: lightness from 0.16 to 0.55; saturation from 0.15 to 0.59; warm and cool photographs mixed (b* -9 to +22); the odd one out is apple_exploded_clean-600w.webp",
+    "fix": "grade the photographs to one look (light, colour, warmth), or replace the odd one out",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "grounds",
+    "where": "section#thermal \"Thermal advantage of cylindrical coolers\"",
+    "msg": "4 flat grounds across the page (#ffffff section x6, #f2f2f2 band x2, #d92b21 section, #000000 footer): three at most (the base, a surface, an inverse)",
+    "fix": "three flat grounds at most (the base, one surface, one inverse): lay the other bands on one of them",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   }
+  ],
+  "crashed": [],
+  "seconds": {
+   "consistency": 142,
+   "layout": 5
+  }
+ },
+ "open": [],
+ "waived": [],
+ "warnCount": 17,
+ "at": "2026-11-24T15:15:56.083Z"
+}

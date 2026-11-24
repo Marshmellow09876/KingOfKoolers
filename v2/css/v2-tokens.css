@@ -1,0 +1,42 @@
+/* King of Koolers V2 — Dealt Design Tokens & Motion Curves */
+/* Theme: Alpine Stone & Patriot Blue | Type: bricolage | Radius: soft */
+
+:root {
+  --p-bg: #f4f5f7;
+  --p-surface: #e6e9ef;
+  --p-ink: #0f141e;
+  --p-muted: #525b6c;
+  --p-accent: #1e4bd7;
+  --p-accent-ink: #ffffff;
+  --p-action: #1e4bd7;
+  --p-action-ink: #ffffff;
+  --p-inv-bg: #0b0f17;
+  --p-inv-surface: #141b29;
+  --p-inv-ink: #f4f6fa;
+  --p-inv-muted: #94a3b8;
+  --p-inv-accent: #3b82f6;
+  --p-inv-accent-ink: #ffffff;
+  --p-inv-action: #3b82f6;
+  --p-inv-action-ink: #ffffff;
+
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-text: "Figtree", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --display-weight: 400;
+  --display-tracking: -0.03em;
+  --display-tracking-xl: -0.04em;
+  --display-stretch: 96%;
+
+  /* Emil Kowalski custom easing curves */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Canonical King of Koolers rotomolded LLDPE colorways */
+  --kok-blue: #1E4BD7;
+  --kok-white: #F0F4FA;
+  --kok-red: #E1232D;
+  --kok-charcoal: #1E222B;
+  --kok-olive: #3A4B3A;
+  --kok-orange: #F45B24;
+}

@@ -1,0 +1,52 @@
+KING OF KOOLERS V2 — TASTE-SKILL DESIGN DEAL SUMMARY
+====================================================
+Page Type:      product   (<html lang="en" data-type="product" data-radius="soft" data-buttons="solid" data-motion>)
+Meta Tags:      <meta name="site-kind" content="other"> <meta name="page-type" content="product">
+Hero:           product   (.hero.hero--product, data-enter)
+Palette:        white-signal-red
+  --p-bg:           #ffffff
+  --p-surface:      #f2f2f2
+  --p-ink:          #0a0a0a
+  --p-muted:        #6b6b6b
+  --p-accent:       #d92b21
+  --p-accent-ink:   #ffffff
+  --p-action:       #d92b21
+  --p-action-ink:   #ffffff
+  --p-inv-bg:       #000000
+  --p-inv-surface:  #010101
+  --p-inv-ink:      #ffffff
+  --p-inv-muted:    #868686
+  --p-inv-accent:   #d92b21
+  --p-inv-accent-ink: #ffffff
+  --p-inv-action:   #d92b21
+  --p-inv-action-ink: #ffffff
+  Why it fits: White alpine ground and Signal Red accent directly mirror King of Koolers' rotomolded Alpine White and Patriot Red modular shells.
+Typography:     bricolage
+  Google Fonts link:
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..700&family=Figtree:wght@400..600&display=swap" rel="stylesheet">
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-text: "Figtree", system-ui, sans-serif;
+  --display-weight: 400;
+  --display-tracking: -0.03em;
+  --display-tracking-xl: -0.04em;
+  --display-stretch: 96%;
+Radius:         soft      (data-radius="soft")
+Buttons:        solid     (data-buttons="solid")
+Nav:            nav-split (header.nav.nav--split — 4 concise words left, centered logo with data-mark="arc", primary action right)
+Footer:         footer-dark (footer.closing.footer--dark.ground-inverse)
+Close:          close-photo (.closing__cta.close--photo — split head + landscape product photograph)
+Rhythm:         brand-band (one .ground-brand section in the second half; flat #ffffff and #f2f2f2 elsewhere; NO extra dark band right above footer--dark!)
+Mark:           arc       (<span class="mark" data-mark="arc" aria-hidden="true"></span>)
+Moments (2):
+  1. photo-chapters (data-moment="photo-chapters") — Stack, Twist, Sit, Vault (4 chapters, 4 unique photos, omits --h)
+  2. word-highlight (data-moment="word-highlight") — 12-40 word thermal physics statement with <strong> accent word
+Primary Action: "Reserve a stack"
+Category:       "24-inch cylindrical modular stacking cooler"
+Hard Rules:
+  - NO #00f0ff neon cyan, NO violet/lavender/purple anywhere.
+  - NO captions or text overlays under images on index.html.
+  - NO repeating the same image file across multiple sections on index.html.
+  - NEVER edit taste-skill kit files (assets/system.css, system.js, motion/*, layout/*, moments/*).
+  - Never override .btn transform or transition in custom CSS on index.html.

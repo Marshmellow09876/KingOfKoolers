@@ -1,0 +1,84 @@
+# King of Koolers V12 Large-Scale Prototype Materials
+newmtl mat_v12_one_piece_24in
+Kd 0.145 0.388 0.922
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_crown_lid
+Kd 0.882 0.114 0.282
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_solar_batteries
+Kd 0.961 0.620 0.043
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_sec1_foot
+Kd 0.118 0.161 0.231
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_sec2_lower_24in
+Kd 0.114 0.306 0.847
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_sec3_mid_24in
+Kd 0.973 0.980 0.988
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_sec4_handles
+Kd 0.145 0.388 0.922
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_sec5_collar
+Kd 0.863 0.149 0.149
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_alignment_pins
+Kd 0.063 0.725 0.506
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_top_dish_logo
+Kd 0.024 0.714 0.831
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_lower_dish_hex
+Kd 0.545 0.361 0.965
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_allthread_24in
+Kd 0.918 0.702 0.031
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_ice_and_cans
+Kd 0.220 0.741 0.973
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0
+
+newmtl mat_v12_wagon_base
+Kd 0.392 0.455 0.545
+Ka 0.150 0.150 0.150
+Ks 0.250 0.250 0.250
+Ns 32.0

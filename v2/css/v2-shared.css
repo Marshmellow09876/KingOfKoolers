@@ -1,0 +1,319 @@
+/* King of Koolers V2 — Shared Native Dialogs, Top-Layer Motion, Toasts & Subpage Controls */
+
+/* ==========================================================================
+   1. Native <dialog> Modals & Slide-Over Drawers (modern-web-guidance)
+   ========================================================================== */
+
+dialog.v2-dialog {
+  border: 1px solid var(--line, rgba(10, 10, 10, 0.14));
+  border-radius: var(--r-lg, 20px);
+  background: var(--p-bg, #ffffff);
+  color: var(--p-ink, #0a0a0a);
+  padding: 0;
+  margin: auto;
+  width: min(92vw, 600px);
+  max-height: min(88dvh, 820px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-shadow: 0 24px 60px rgba(10, 10, 10, 0.22);
+
+  opacity: 0;
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 240ms;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: scale(0.95);
+  }
+}
+
+dialog.v2-dialog--wide {
+  width: min(94vw, 960px);
+}
+
+dialog.v2-dialog--drawer {
+  margin: 0 0 0 auto;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: min(100vw, 460px);
+  border-radius: var(--r-lg, 20px) 0 0 var(--r-lg, 20px);
+  border-right: none;
+  transition-duration: 320ms;
+  transition-timing-function: var(--ease-drawer);
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateX(100%);
+  }
+}
+
+dialog.v2-dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog.v2-dialog::backdrop {
+  background-color: rgba(10, 10, 10, 0);
+  overflow: hidden;
+  overscroll-behavior: contain;
+  transition-property: background-color, display, overlay;
+  transition-duration: 240ms;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+}
+
+/* Open state + Firefox/Safari data-closing exit fallback selector */
+dialog.v2-dialog[open]:where(:not([data-closing])) {
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: scale(1);
+
+    @starting-style {
+      transform: scale(0.95);
+    }
+  }
+}
+
+dialog.v2-dialog--drawer[open]:where(:not([data-closing])) {
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateX(0);
+
+    @starting-style {
+      transform: translateX(100%);
+    }
+  }
+}
+
+dialog.v2-dialog[open]:where(:not([data-closing]))::backdrop {
+  background-color: rgba(10, 10, 10, 0.56);
+
+  @starting-style {
+    background-color: rgba(10, 10, 10, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.v2-dialog,
+  dialog.v2-dialog::backdrop {
+    transition-duration: 120ms;
+  }
+}
+
+.v2-dialog__head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-4, 16px);
+  padding: var(--s-6, 32px) var(--s-6, 32px) var(--s-4, 16px);
+  background: var(--p-bg, #ffffff);
+  border-bottom: 1px solid var(--line, rgba(10, 10, 10, 0.12));
+}
+
+.v2-dialog__title {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight, 400);
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.15;
+  letter-spacing: var(--display-tracking, -0.03em);
+  margin: 0;
+}
+
+.v2-dialog__subtitle {
+  margin: var(--s-1, 4px) 0 0;
+  font-size: 14px;
+  color: var(--p-muted, #6b6b6b);
+}
+
+.v2-dialog__close {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-sm, 8px);
+  border: 1px solid var(--line-strong, rgba(10, 10, 10, 0.22));
+  background: var(--p-surface, #f2f2f2);
+  color: var(--p-ink, #0a0a0a);
+  cursor: pointer;
+  transition: transform 140ms var(--ease-out), background-color 140ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .v2-dialog__close:hover {
+    background: color-mix(in oklab, var(--p-surface, #f2f2f2) 86%, var(--p-ink, #0a0a0a));
+  }
+}
+
+.v2-dialog__close:active {
+  transform: scale(0.97);
+}
+
+.v2-dialog__body {
+  padding: var(--s-6, 32px);
+}
+
+/* ==========================================================================
+   2. Tactile Control Surface Helpers (Non-.btn interactive widgets)
+   ========================================================================== */
+
+.v2-pressable {
+  transition: transform 150ms var(--ease-out), background-color 150ms var(--ease-out), border-color 150ms var(--ease-out);
+}
+
+.v2-pressable:active {
+  transform: scale(0.97);
+}
+
+/* Form validation & spacing helpers inside V2 dialogs */
+.v2-form {
+  display: grid;
+  gap: var(--s-4, 16px);
+}
+
+.v2-field {
+  display: grid;
+  gap: 6px;
+}
+
+.v2-field label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--p-ink, #0a0a0a);
+}
+
+.v2-field input,
+.v2-field select,
+.v2-field textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  font: 400 16px/1.4 var(--font-text);
+  color: var(--p-ink, #0a0a0a);
+  background: var(--p-bg, #ffffff);
+  border: 1px solid var(--line-strong, rgba(10, 10, 10, 0.24));
+  border-radius: var(--r-sm, 8px);
+  transition: border-color 140ms var(--ease-out), box-shadow 140ms var(--ease-out);
+}
+
+.v2-field input:focus-visible,
+.v2-field select:focus-visible,
+.v2-field textarea:focus-visible {
+  outline: 2px solid var(--p-action, #d92b21);
+  outline-offset: 2px;
+}
+
+.v2-field__error {
+  font-size: 13px;
+  color: var(--p-accent, #d92b21);
+  margin: 0;
+}
+
+.v2-form__status {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--p-ink, #0a0a0a);
+  background: var(--p-surface, #f2f2f2);
+  border-left: 3px solid var(--p-accent, #d92b21);
+  padding: 12px 16px;
+  border-radius: var(--r-sm, 8px);
+}
+
+/* ==========================================================================
+   3. Interruptible Toast Region (Sonner-inspired)
+   ========================================================================== */
+
+.v2-toast-region {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2000;
+  display: grid;
+  gap: 10px;
+  max-width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.v2-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  background: var(--p-ink, #0a0a0a);
+  color: var(--p-bg, #ffffff);
+  border-radius: var(--r-md, 12px);
+  font: 500 14px/1.35 var(--font-text);
+  box-shadow: 0 12px 32px rgba(10, 10, 10, 0.24);
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 280ms ease, transform 320ms var(--ease-out);
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.v2-toast[data-leaving] {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.v2-toast__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--p-accent, #d92b21);
+}
+
+/* ==========================================================================
+   4. Shared Subpage Content Frame (for customizer, locking-mechanism, accessories)
+   ========================================================================== */
+
+.subpage-main {
+  padding-top: var(--nav, 72px);
+  min-height: 100dvh;
+}
+
+@media (max-width: 639px) {
+  .subpage-main {
+    padding-top: var(--nav, 56px);
+  }
+}
+
+.subpage-hero {
+  padding-block: clamp(44px, 6vw, 76px) clamp(32px, 4vw, 52px);
+  border-bottom: 1px solid var(--line, rgba(10, 10, 10, 0.1));
+}
+
+.subpage-hero h1 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight, 400);
+  font-size: clamp(36px, 4.8vw, 64px);
+  line-height: 1.04;
+  letter-spacing: var(--display-tracking-xl, -0.04em);
+  margin: 0;
+  max-width: 18ch;
+}
+
+.subpage-hero__lead {
+  margin: var(--s-4, 16px) 0 0;
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.5;
+  color: var(--p-muted, #6b6b6b);
+  max-width: 58ch;
+}
+
+.subpage-band {
+  padding-block: clamp(48px, 6vw, 88px);
+}

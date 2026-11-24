@@ -1,0 +1,25 @@
+{
+  "moments": [
+    {
+      "id": "photo-chapters",
+      "at": "2026-11-24T07:57:05.899Z",
+      "seed": "7b1d20c4"
+    },
+    {
+      "id": "word-highlight",
+      "at": "2026-11-24T07:57:05.899Z",
+      "seed": "7b1d20c4"
+    }
+  ],
+  "palettes": [
+    "white-signal-red"
+  ],
+  "types": [
+    "bricolage"
+  ],
+  "dealt": [
+    "bricolage",
+    "fraunces",
+    "archivo"
+  ]
+}

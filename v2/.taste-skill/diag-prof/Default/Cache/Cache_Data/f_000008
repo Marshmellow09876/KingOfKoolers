@@ -1,0 +1,2737 @@
+// King of Koolers V2 — Interactive 3D Stack Studio & CAD Lab
+import { showToast } from './v2-core.js';
+
+(function initCustomizerStudio() {
+  'use strict';
+
+  // =========================================================================
+  // 1. Canonical Product Catalog & Specifications (24.0" OD Architecture)
+  // =========================================================================
+  const MAX_STACK_HEIGHT = 72;
+  const RADIUS_OUTER = 12.0; // 24.0" OD -> 12.0" radius (1 Three.js unit = 1 inch)
+  const RADIUS_INNER = 10.15;
+  const MM_TO_IN = 1.0 / 25.4;
+
+  const TIERS_CATALOG = {
+    12: { height: 12, name: '12" Vault', role: 'Dry Vault', quarts: 38, cans: 30, iceLbs: 16, dryLbs: 12, price: 119, allowsSpigot: false },
+    18: { height: 18, name: '18" Provision', role: 'Provision Core', quarts: 55, cans: 50, iceLbs: 24, dryLbs: 15, price: 149, allowsSpigot: false },
+    20: { height: 20, name: '20" Expedition', role: 'Expedition Tier', quarts: 65, cans: 60, iceLbs: 28, dryLbs: 17, price: 169, allowsSpigot: true },
+    28: { height: 28, name: '28" Bunker Base', role: 'Bunker Base', quarts: 95, cans: 80, iceLbs: 38, dryLbs: 21, price: 219, allowsSpigot: true }
+  };
+
+  const COLORWAYS = {
+    blue:     { id: 'blue',     name: 'Patriot Blue',     hex: '#1E4BD7' },
+    white:    { id: 'white',    name: 'Alpine White',     hex: '#F0F4FA' },
+    red:      { id: 'red',      name: 'Patriot Red',      hex: '#E1232D' },
+    charcoal: { id: 'charcoal', name: 'Stealth Charcoal', hex: '#1E222B' },
+    olive:    { id: 'olive',    name: 'Tactical Olive',   hex: '#3A4B3A' },
+    orange:   { id: 'orange',   name: 'Blaze Orange',     hex: '#F45B24' }
+  };
+
+  const LID_MODULES = {
+    solar:    { id: 'solar',    name: '10W USB Solar Crown Lid',   weightLbs: 6, price: 69, desc: 'Monocrystalline solar array + dual USB bays' },
+    bamboo:   { id: 'bamboo',   name: 'Acacia & Bamboo Prep Disc', weightLbs: 5, price: 39, desc: 'Butcher block cutting disc + juice groove' },
+    standard: { id: 'standard', name: 'Flush Standard Seat Lid',   weightLbs: 4, price: 0,  desc: 'Flush center handle · 500 lb seat rated' }
+  };
+
+  const WAGON_PRICE = 129;
+  const WAGON_WEIGHT = 14;
+  const ENGRAVE_PRICE = 29;
+
+  const STACK_PRESETS = {
+    'patriot-58': {
+      label: 'Patriot RWB (58")',
+      mode: 'modular',
+      tiers: [
+        { height: 28, color: 'blue' },
+        { height: 18, color: 'white' },
+        { height: 12, color: 'red' }
+      ],
+      lid: 'solar'
+    },
+    'titan-72': {
+      label: 'Titan Max (72")',
+      mode: 'modular',
+      tiers: [
+        { height: 28, color: 'blue' },
+        { height: 20, color: 'white' },
+        { height: 12, color: 'red' },
+        { height: 12, color: 'charcoal' }
+      ],
+      lid: 'solar'
+    },
+    'explorer-38': {
+      label: 'Explorer Duo (38")',
+      mode: 'modular',
+      tiers: [
+        { height: 20, color: 'olive' },
+        { height: 18, color: 'charcoal' }
+      ],
+      lid: 'bamboo'
+    },
+    'scout-30': {
+      label: 'Solo Scout (30")',
+      mode: 'modular',
+      tiers: [
+        { height: 18, color: 'blue' },
+        { height: 12, color: 'white' }
+      ],
+      lid: 'standard'
+    },
+    'v12-split': {
+      label: 'V12 CAD Split (20")',
+      mode: 'v12-split',
+      v12HeightIn: 20,
+      tiers: [{ height: 20, color: 'blue' }],
+      lid: 'solar'
+    },
+    'v12-onepiece': {
+      label: 'V12 CAD One-Piece',
+      mode: 'v12-onepiece',
+      v12HeightIn: 20,
+      tiers: [{ height: 20, color: 'blue' }],
+      lid: 'solar'
+    }
+  };
+
+  const V12_HEIGHT_SPECS = {
+    12: { quarts: 38, cans: 30, iceLbs: 16, dryLbs: 18, price: 189, mm: 304.8 },
+    18: { quarts: 58, cans: 50, iceLbs: 24, dryLbs: 22, price: 219, mm: 457.2 },
+    20: { quarts: 65, cans: 60, iceLbs: 28, dryLbs: 24, price: 239, mm: 508.0 },
+    24: { quarts: 80, cans: 74, iceLbs: 34, dryLbs: 28, price: 264, mm: 609.6 }
+  };
+
+  const STUDIO_ENVS = {
+    daylight: {
+      bg: 0xF2F1EC,
+      fog: 0xF2F1EC,
+      fogDensity: 0.0022,
+      hemiSky: 0xFFFFFF,
+      hemiGround: 0xDCDAD2,
+      hemiInt: 0.85,
+      keyColor: 0xFFFDF8,
+      keyInt: 1.18,
+      fillColor: 0xEAEFF4,
+      fillInt: 0.5,
+      rimColor: 0xFFFFFF,
+      rimInt: 0.56,
+      shadowOpacity: 0.14,
+      ringColor: 0xD4D2CA
+    },
+    dusk: {
+      bg: 0x22201E,
+      fog: 0x22201E,
+      fogDensity: 0.0028,
+      hemiSky: 0xB8C7D6,
+      hemiGround: 0x2A2520,
+      hemiInt: 0.58,
+      keyColor: 0xFFD9A6,
+      keyInt: 1.32,
+      fillColor: 0x9BB2C9,
+      fillInt: 0.44,
+      rimColor: 0xFFB870,
+      rimInt: 0.62,
+      shadowOpacity: 0.42,
+      ringColor: 0x4A453E
+    }
+  };
+
+  // =========================================================================
+  // 2. Mutable Application State
+  // =========================================================================
+  let nextUid = 1;
+  const makeTier = (height, color) => ({ uid: nextUid++, height, color });
+
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const isReducedMotion = () => reducedMotionQuery.matches;
+
+  const state = {
+    mode: 'modular', // 'modular' | 'v12-split' | 'v12-onepiece' | 'cad-part'
+    activePresetKey: 'patriot-58',
+    v12HeightIn: 20,
+    tiers: [
+      makeTier(28, 'blue'),
+      makeTier(18, 'white'),
+      makeTier(12, 'red')
+    ],
+    selectedTierIndex: 2, // defaults to top tier (12" Red)
+    colorScope: 'tier',   // 'tier' | 'all'
+    lidModule: 'solar',   // 'solar' | 'bamboo' | 'standard'
+    showSpigot: true,
+    showWagon: false,
+    showCarousel: true,
+    showIceAndCans: true,
+    explodeTarget: 0,     // 0..1
+    xrayPct: 0,           // 0..100
+    env: 'daylight',      // 'daylight' | 'dusk'
+    turntable: false,
+    activeTabId: 'panel-build',
+    activeCadKey: 'v12_one_piece_body',
+    cadShaderMode: 'solid', // 'solid' | 'wire' | 'xray'
+    partySize: 4,
+    tripDays: 3,
+    engraveLoc: 'lid',
+    engraveLine1: '',
+    engraveLine2: '',
+    crest: 'crown',
+    customLogoImg: null
+  };
+
+  // =========================================================================
+  // 3. DOM References
+  // =========================================================================
+  const viewportEl = document.getElementById('studio-viewport');
+  const canvasEl = document.getElementById('studio-canvas');
+  const fallbackEl = document.getElementById('viewport-fallback');
+
+  const hudHeight = document.getElementById('hud-height');
+  const hudQuarts = document.getElementById('hud-quarts');
+  const hudWeight = document.getElementById('hud-weight');
+
+  const explodeSlider = document.getElementById('explode-slider');
+  const explodeOutput = document.getElementById('explode-val');
+  const xraySlider = document.getElementById('xray-slider');
+  const xrayVal = document.getElementById('xray-val');
+  const btnExplodeToggle = document.getElementById('btn-explode-toggle');
+  const btnSliceHalf = document.getElementById('btn-slice-half');
+  const hudBtnExplode = document.getElementById('hud-btn-explode');
+  const hudBtnCutaway = document.getElementById('hud-btn-cutaway');
+  const btnTurntable = document.getElementById('btn-turntable');
+  const btnSnapshot = document.getElementById('btn-snapshot');
+
+  const v12HeightGroup = document.getElementById('v12-height-group');
+  const v12HeightReadout = document.getElementById('v12-height-readout');
+  const activeModeBadge = document.getElementById('active-mode-badge');
+
+  const tierListEl = document.getElementById('tier-list');
+  const heightLimitReadout = document.getElementById('height-limit-readout');
+  const heightMeterFill = document.getElementById('height-meter-fill');
+  const stackLimitNote = document.getElementById('stack-limit-note');
+  const colorTargetLabel = document.getElementById('color-target-label');
+
+  const swSpigot = document.getElementById('sw-spigot');
+  const spigotRuleNote = document.getElementById('spigot-rule-note');
+  const swWagon = document.getElementById('sw-wagon');
+  const swCarousel = document.getElementById('sw-carousel');
+  const swIce = document.getElementById('sw-ice');
+
+  const roHeight = document.getElementById('ro-height');
+  const roQuarts = document.getElementById('ro-quarts');
+  const roCans = document.getElementById('ro-cans');
+  const roDry = document.getElementById('ro-dry');
+  const roLoaded = document.getElementById('ro-loaded');
+
+  const railFooterSummary = document.getElementById('rail-footer-summary');
+  const railFooterPrice = document.getElementById('rail-footer-price');
+  const btnRailReserve = document.getElementById('btn-rail-reserve');
+
+  const partyRange = document.getElementById('calc-party-range');
+  const daysRange = document.getElementById('calc-days-range');
+  const partyVal = document.getElementById('calc-party-val');
+  const daysVal = document.getElementById('calc-days-val');
+  const calcCansResult = document.getElementById('calc-cans-result');
+  const calcIceResult = document.getElementById('calc-ice-result');
+  const calcStackResult = document.getElementById('calc-stack-result');
+  const btnApplyCalc = document.getElementById('btn-apply-calc');
+  const ergoTripLbs = document.getElementById('ergo-trip-lbs');
+  const ergoTripKg = document.getElementById('ergo-trip-kg');
+  const ergoMeterFill = document.getElementById('ergo-meter-fill');
+  const ergoStatusBox = document.getElementById('ergo-status-box');
+  const ergoDryVal = document.getElementById('ergo-dry-val');
+  const ergoIceVal = document.getElementById('ergo-ice-val');
+  const ergoDrinksVal = document.getElementById('ergo-drinks-val');
+
+  const cadPartsList = document.getElementById('cad-parts-list');
+  const cadPartCount = document.getElementById('cad-part-count');
+  const cadTelCategory = document.getElementById('cad-tel-category');
+  const cadTelFormat = document.getElementById('cad-tel-format');
+  const cadTelName = document.getElementById('cad-tel-name');
+  const cadTelDesc = document.getElementById('cad-tel-desc');
+  const cadTelFile = document.getElementById('cad-tel-file');
+  const cadTelTris = document.getElementById('cad-tel-tris');
+  const cadTelMm = document.getElementById('cad-tel-mm');
+  const cadTelIn = document.getElementById('cad-tel-in');
+  const cadDownloadLink = document.getElementById('cad-download-link');
+  const btnCadReturn = document.getElementById('btn-cad-return');
+
+  const inputLine1 = document.getElementById('engrave-line1');
+  const inputLine2 = document.getElementById('engrave-line2');
+  const logoUpload = document.getElementById('engrave-logo-upload');
+  const logoClear = document.getElementById('engrave-logo-clear');
+
+  const specDialog = document.getElementById('spec-sheet-dialog');
+  const btnOpenSpecSheet = document.getElementById('btn-open-spec-sheet');
+  const specDialogSubtitle = document.getElementById('spec-dialog-subtitle');
+  const specDialogKpis = document.getElementById('spec-dialog-kpis');
+  const specDialogRows = document.getElementById('spec-dialog-rows');
+  const specDialogHardware = document.getElementById('spec-dialog-hardware');
+  const btnCopySpecs = document.getElementById('btn-copy-specs');
+  const btnModalSnapshot = document.getElementById('btn-modal-snapshot');
+  const btnModalReserve = document.getElementById('btn-modal-reserve');
+
+  // =========================================================================
+  // 4. Metrics & Engineering Calculations
+  // =========================================================================
+  function isV12Mode() {
+    return state.mode === 'v12-split' || state.mode === 'v12-onepiece';
+  }
+
+  function hasBaseSpigotCapability() {
+    if (isV12Mode()) {
+      return state.v12HeightIn >= 20;
+    }
+    const baseTier = state.tiers[0];
+    return Boolean(baseTier && TIERS_CATALOG[baseTier.height]?.allowsSpigot);
+  }
+
+  function computeMetrics() {
+    const lid = LID_MODULES[state.lidModule] || LID_MODULES.solar;
+    const wagonPrice = state.showWagon ? WAGON_PRICE : 0;
+    const wagonLbs = state.showWagon ? WAGON_WEIGHT : 0;
+    const hasEngraving = Boolean(state.engraveLine1.trim() || state.engraveLine2.trim() || state.customLogoImg);
+    const engravePrice = hasEngraving ? ENGRAVE_PRICE : 0;
+
+    if (isV12Mode()) {
+      const spec = V12_HEIGHT_SPECS[state.v12HeightIn] || V12_HEIGHT_SPECS[20];
+      const heightIn = state.v12HeightIn;
+      const heightCm = +(heightIn * 2.54).toFixed(1);
+      const dryLbs = spec.dryLbs + (lid.weightLbs - 4) + wagonLbs;
+      const fullLoadedLbs = dryLbs + spec.iceLbs + Math.round(spec.cans * 0.82);
+      const totalPrice = spec.price + lid.price + wagonPrice + engravePrice;
+      return {
+        heightIn,
+        heightCm,
+        quarts: spec.quarts,
+        cans: spec.cans,
+        iceLbs: spec.iceLbs,
+        dryLbs,
+        fullLoadedLbs,
+        totalPrice,
+        tierCount: 1,
+        spigotActive: hasBaseSpigotCapability() && state.showSpigot,
+        hasEngraving
+      };
+    }
+
+    let heightIn = 0;
+    let quarts = 0;
+    let cans = 0;
+    let iceLbs = 0;
+    let dryTiersLbs = 0;
+    let tiersPrice = 0;
+
+    for (const tier of state.tiers) {
+      const cat = TIERS_CATALOG[tier.height];
+      if (!cat) continue;
+      heightIn += cat.height;
+      quarts += cat.quarts;
+      cans += cat.cans;
+      iceLbs += cat.iceLbs;
+      dryTiersLbs += cat.dryLbs;
+      tiersPrice += cat.price;
+    }
+
+    const heightCm = +(heightIn * 2.54).toFixed(1);
+    const dryLbs = dryTiersLbs + lid.weightLbs + wagonLbs;
+    const fullLoadedLbs = dryLbs + iceLbs + Math.round(cans * 0.82);
+    const totalPrice = tiersPrice + lid.price + wagonPrice + engravePrice;
+
+    return {
+      heightIn,
+      heightCm,
+      quarts,
+      cans,
+      iceLbs,
+      dryLbs,
+      fullLoadedLbs,
+      totalPrice,
+      tierCount: state.tiers.length,
+      spigotActive: hasBaseSpigotCapability() && state.showSpigot,
+      hasEngraving
+    };
+  }
+
+  function syncRangeCSS(input, valuetext) {
+    if (!input) return;
+    input.style.setProperty('--attr-min', input.min || '0');
+    input.style.setProperty('--attr-max', input.max || '100');
+    input.style.setProperty('--control-value', input.value);
+    if (valuetext) input.setAttribute('aria-valuetext', valuetext);
+  }
+
+  // =========================================================================
+  // 5. Three.js Architectural Light-Studio Engine
+  // =========================================================================
+  let scene = null;
+  let camera = null;
+  let renderer = null;
+  let controls = null;
+  let webglReady = false;
+
+  let hemiLight = null;
+  let keyLight = null;
+  let fillLight = null;
+  let rimLight = null;
+  let floorMesh = null;
+  let floorMat = null;
+  let floorMarkingsGroup = null;
+  let floorRingMats = [];
+
+  let clipPlane = null;
+  let clipPlaneArray = [];
+  let coolerRoot = null;
+  let modularGroup = null;
+  let v12AssemblyGroup = null;
+  let cadInspectorGroup = null;
+  let wagonGroup = null;
+
+  let tierGroups = []; // bottom-to-top { group, baseY, height, sliceMeshes }
+  let lidGroupObj = { group: null, baseY: 0 };
+  let v12ExplodableMeshes = [];
+  let foamSectionSlices = [];
+
+  let lldpeBumpTex = null;
+  let cadGeometryCache = new Map();
+
+  // Damped spring state for Explode motion
+  let explodeVal = 0;
+  let explodeVel = 0;
+
+  // Smooth Camera Animation
+  let hasUserOrbited = false;
+  const camAnim = {
+    active: false,
+    startTime: 0,
+    duration: 560,
+    startPos: null,
+    endPos: null,
+    startTarget: null,
+    endTarget: null
+  };
+
+  function generateStippleBumpTexture() {
+    const cvs = document.createElement('canvas');
+    cvs.width = 256;
+    cvs.height = 256;
+    const ctx = cvs.getContext('2d');
+    const imgData = ctx.createImageData(256, 256);
+    const d = imgData.data;
+    // Deterministic pseudo-random MT-11010 matte grain
+    let seed = 1337;
+    for (let i = 0; i < d.length; i += 4) {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      const v = 112 + ((seed >>> 24) & 31);
+      d[i] = v;
+      d[i + 1] = v;
+      d[i + 2] = v;
+      d[i + 3] = 255;
+    }
+    ctx.putImageData(imgData, 0, 0);
+    const tex = new THREE.CanvasTexture(cvs);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(6, 3);
+    return tex;
+  }
+
+  function generateSolarTexture() {
+    const cvs = document.createElement('canvas');
+    cvs.width = 512;
+    cvs.height = 512;
+    const ctx = cvs.getContext('2d');
+    ctx.fillStyle = '#0F1522';
+    ctx.fillRect(0, 0, 512, 512);
+
+    ctx.strokeStyle = 'rgba(210, 220, 232, 0.24)';
+    ctx.lineWidth = 2;
+    for (let x = 0; x <= 512; x += 64) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, 512);
+      ctx.stroke();
+    }
+    for (let y = 0; y <= 512; y += 64) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(512, y);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = 'rgba(210, 220, 232, 0.1)';
+    ctx.lineWidth = 1;
+    for (let x = 16; x < 512; x += 32) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, 512);
+      ctx.stroke();
+    }
+    return new THREE.CanvasTexture(cvs);
+  }
+
+  function generateEngraveTexture(loc, baseHex = '#1E4BD7') {
+    const cvs = document.createElement('canvas');
+    cvs.width = 1024;
+    cvs.height = 1024;
+    const ctx = cvs.getContext('2d');
+
+    if (loc === 'lid') {
+      // Warm Acacia & Bamboo end-grain wood rings + perimeter juice groove
+      ctx.fillStyle = '#B78C56';
+      ctx.fillRect(0, 0, 1024, 1024);
+
+      for (let i = 0; i < 42; i++) {
+        ctx.strokeStyle = i % 2 === 0 ? 'rgba(98, 62, 28, 0.14)' : 'rgba(224, 186, 132, 0.12)';
+        ctx.beginPath();
+        ctx.arc(512, 512, 24 + i * 23, 0, Math.PI * 2);
+        ctx.lineWidth = 3 + (i % 4);
+        ctx.stroke();
+      }
+      // Juice groove
+      ctx.strokeStyle = 'rgba(72, 44, 18, 0.38)';
+      ctx.lineWidth = 14;
+      ctx.beginPath();
+      ctx.arc(512, 512, 446, 0, Math.PI * 2);
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = baseHex;
+      ctx.fillRect(0, 0, 1024, 1024);
+    }
+
+    if (state.customLogoImg) {
+      ctx.save();
+      const maxDim = 220;
+      const ratio = Math.min(maxDim / state.customLogoImg.width, maxDim / state.customLogoImg.height);
+      const w = state.customLogoImg.width * ratio;
+      const h = state.customLogoImg.height * ratio;
+      ctx.globalAlpha = loc === 'lid' ? 0.86 : 0.94;
+      ctx.drawImage(state.customLogoImg, 512 - w / 2, 250 - h / 2, w, h);
+      ctx.restore();
+    }
+
+    const l1 = state.engraveLine1.trim();
+    const l2 = state.engraveLine2.trim();
+    if (l1 || l2) {
+      const darkWood = loc === 'lid';
+      ctx.fillStyle = darkWood ? 'rgba(42, 24, 10, 0.88)' : (baseHex === '#F0F4FA' ? 'rgba(10, 10, 10, 0.86)' : 'rgba(255, 255, 255, 0.92)');
+      ctx.textAlign = 'center';
+
+      const crestMap = {
+        crown: '♛',
+        stars: '★ ★ ★',
+        peaks: '▲ ▲ ▲',
+        compass: '✦'
+      };
+      ctx.font = 'bold 78px sans-serif';
+      ctx.fillText(crestMap[state.crest] || '♛', 512, 435);
+
+      if (l1) {
+        ctx.font = 'bold 46px "Figtree", system-ui, sans-serif';
+        ctx.fillText(l1.toUpperCase(), 512, 540);
+      }
+      if (l2) {
+        ctx.font = '500 26px ui-monospace, monospace';
+        ctx.fillText(l2.toUpperCase(), 512, 594);
+      }
+    }
+
+    return new THREE.CanvasTexture(cvs);
+  }
+
+  function makeLLDPEMaterial(hex, isClipped = true) {
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color(hex),
+      roughness: 0.72,
+      metalness: 0.04,
+      bumpMap: lldpeBumpTex,
+      bumpScale: 0.028,
+      clippingPlanes: isClipped ? clipPlaneArray : null,
+      side: THREE.DoubleSide
+    });
+  }
+
+  function decodeCadGeometry(part) {
+    if (!part) return null;
+    if (cadGeometryCache.has(part.key)) {
+      return cadGeometryCache.get(part.key);
+    }
+    const vBin = atob(part.vB64);
+    const vBytes = new Uint8Array(vBin.length);
+    for (let i = 0; i < vBin.length; i++) vBytes[i] = vBin.charCodeAt(i);
+    const i16 = new Int16Array(vBytes.buffer);
+    const pos = new Float32Array(i16.length);
+    const invScale = part.scaleHalfExt / 32760.0;
+    for (let i = 0; i < i16.length; i++) pos[i] = i16[i] * invScale;
+
+    const tBin = atob(part.tB64);
+    const tBytes = new Uint8Array(tBin.length);
+    for (let i = 0; i < tBin.length; i++) tBytes[i] = tBin.charCodeAt(i);
+    const u16 = new Uint16Array(tBytes.buffer);
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setIndex(new THREE.BufferAttribute(u16, 1));
+    geo.computeVertexNormals();
+    geo.computeBoundingBox();
+    geo.userData.isSharedCad = true;
+    cadGeometryCache.set(part.key, geo);
+    return geo;
+  }
+
+  function disposeGroupChildren(group) {
+    if (!group) return;
+    while (group.children.length > 0) {
+      const child = group.children[0];
+      group.remove(child);
+      child.traverse((obj) => {
+        if (obj.geometry && !obj.geometry.userData?.isSharedCad) {
+          obj.geometry.dispose();
+        }
+        if (obj.material) {
+          if (Array.isArray(obj.material)) {
+            obj.material.forEach((m) => {
+              if (m.map && m.map !== lldpeBumpTex) m.map.dispose();
+              m.dispose();
+            });
+          } else {
+            if (obj.material.map && obj.material.map !== lldpeBumpTex) obj.material.map.dispose();
+            obj.material.dispose();
+          }
+        }
+      });
+    }
+  }
+
+  function buildArchitecturalFloorMarkings() {
+    floorMarkingsGroup = new THREE.Group();
+    floorRingMats = [];
+
+    const createCircleLine = (radius, opacity = 0.85) => {
+      const pts = [];
+      const segs = 96;
+      for (let i = 0; i <= segs; i++) {
+        const a = (i / segs) * Math.PI * 2;
+        pts.push(new THREE.Vector3(Math.cos(a) * radius, 0.02, Math.sin(a) * radius));
+      }
+      const geo = new THREE.BufferGeometry().setFromPoints(pts);
+      const mat = new THREE.LineBasicMaterial({
+        color: STUDIO_ENVS.daylight.ringColor,
+        transparent: true,
+        opacity
+      });
+      floorRingMats.push(mat);
+      return new THREE.LineLoop(geo, mat);
+    };
+
+    floorMarkingsGroup.add(createCircleLine(12.2, 0.95)); // 24.0" OD datum ring
+    floorMarkingsGroup.add(createCircleLine(18.0, 0.72)); // 36" handle clearance ring
+    floorMarkingsGroup.add(createCircleLine(28.0, 0.52)); // 56" studio stage ring
+
+    const crossMat = new THREE.LineBasicMaterial({
+      color: STUDIO_ENVS.daylight.ringColor,
+      transparent: true,
+      opacity: 0.55
+    });
+    floorRingMats.push(crossMat);
+
+    const axisX = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-32, 0.018, 0),
+      new THREE.Vector3(32, 0.018, 0)
+    ]);
+    const axisZ = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(0, 0.018, -32),
+      new THREE.Vector3(0, 0.018, 32)
+    ]);
+    floorMarkingsGroup.add(new THREE.Line(axisX, crossMat));
+    floorMarkingsGroup.add(new THREE.Line(axisZ, crossMat));
+    scene.add(floorMarkingsGroup);
+  }
+
+  function buildSpigotValveAssembly() {
+    const spigotGroup = new THREE.Group();
+    const valveBodyMat = new THREE.MeshStandardMaterial({
+      color: 0xF5F6F8,
+      roughness: 0.35,
+      metalness: 0.15,
+      clippingPlanes: clipPlaneArray
+    });
+    const valveHandleMat = new THREE.MeshStandardMaterial({
+      color: 0xD92B21,
+      roughness: 0.4,
+      metalness: 0.08,
+      clippingPlanes: clipPlaneArray
+    });
+
+    const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.68, 1.85, 20), valveBodyMat);
+    nozzle.rotation.x = Math.PI / 2;
+    nozzle.castShadow = true;
+    spigotGroup.add(nozzle);
+
+    const spout = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.36, 1.05, 16), valveBodyMat);
+    spout.position.set(0, -0.45, 0.72);
+    spout.castShadow = true;
+    spigotGroup.add(spout);
+
+    const lever = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.32, 1.5), valveHandleMat);
+    lever.position.set(0, 0.72, 0.45);
+    lever.castShadow = true;
+    spigotGroup.add(lever);
+
+    return spigotGroup;
+  }
+
+  function createFoamCutawaySlices(height, tierGroup, baseOffsetY) {
+    const sliceMat = new THREE.MeshStandardMaterial({
+      color: 0xD69E36,
+      roughness: 0.88,
+      metalness: 0.02,
+      side: THREE.DoubleSide
+    });
+    const sliceFront = new THREE.Mesh(new THREE.PlaneGeometry(1, Math.max(1, height - 0.16)), sliceMat);
+    sliceFront.rotation.y = Math.PI / 2;
+    sliceFront.visible = false;
+    tierGroup.add(sliceFront);
+
+    const sliceBack = new THREE.Mesh(new THREE.PlaneGeometry(1, Math.max(1, height - 0.16)), sliceMat);
+    sliceBack.rotation.y = Math.PI / 2;
+    sliceBack.visible = false;
+    tierGroup.add(sliceBack);
+
+    const sliceBottom = new THREE.Mesh(new THREE.PlaneGeometry(1, 1.1), sliceMat);
+    sliceBottom.rotation.y = Math.PI / 2;
+    sliceBottom.position.y = baseOffsetY + 0.55;
+    sliceBottom.visible = false;
+    tierGroup.add(sliceBottom);
+
+    foamSectionSlices.push({
+      front: sliceFront,
+      back: sliceBack,
+      bottom: sliceBottom,
+      height,
+      centerY: baseOffsetY + height / 2,
+      bottomY: baseOffsetY + 0.55
+    });
+  }
+
+  function buildModularTier(tier, index, totalTiers) {
+    const H = tier.height;
+    const cat = TIERS_CATALOG[H] || TIERS_CATALOG[20];
+    const hex = COLORWAYS[tier.color]?.hex || '#1E4BD7';
+    const shellMat = makeLLDPEMaterial(hex, true);
+    const tierGroup = new THREE.Group();
+
+    const cad = window.KOK_CAD_MESHES || null;
+    const hasFullCadRings = Boolean(
+      cad &&
+      cad.v12_sec1_foot &&
+      cad.v12_sec2_lower &&
+      cad.v12_sec3_mid &&
+      cad.v12_sec4_handles &&
+      cad.v12_sec5_collar
+    );
+
+    // Product Continuity Rule: Drain spigot strictly on 20" & 28" base modules (never 12" or 18")
+    const renderSpigot = Boolean(cat.allowsSpigot && index === 0 && state.showSpigot);
+
+    if (hasFullCadRings) {
+      // 1. Concentric Indexing Foot (0.00" -> 0.92")
+      const footGeo = decodeCadGeometry(cad.v12_sec1_foot);
+      const footMesh = new THREE.Mesh(footGeo, shellMat);
+      footMesh.scale.set(MM_TO_IN, MM_TO_IN, MM_TO_IN);
+      footMesh.position.set(0, 0.46, 0);
+      footMesh.castShadow = true;
+      footMesh.receiveShadow = true;
+      tierGroup.add(footMesh);
+
+      const handleRingBottom = H - 4.39;
+      if (renderSpigot) {
+        // 2a. Lower Body w/ Integrated Spigot Boss (0.92" -> 8.21")
+        const lowGeo = decodeCadGeometry(cad.v12_sec2_lower);
+        const lowMesh = new THREE.Mesh(lowGeo, shellMat);
+        lowMesh.scale.set(MM_TO_IN, MM_TO_IN, MM_TO_IN);
+        lowMesh.position.set(0, 4.56, 1.18);
+        lowMesh.castShadow = true;
+        lowMesh.receiveShadow = true;
+        tierGroup.add(lowMesh);
+
+        // Precision Quarter-Turn Spigot Valve
+        const spigot = buildSpigotValveAssembly();
+        spigot.position.set(0, 3.35, 13.0);
+        tierGroup.add(spigot);
+
+        // 2b. Smooth Mid Wall Extension (8.21" -> handleRingBottom)
+        const midSpan = Math.max(1.0, handleRingBottom - 8.21);
+        const midGeo = decodeCadGeometry(cad.v12_sec3_mid);
+        const midMesh = new THREE.Mesh(midGeo, shellMat);
+        midMesh.scale.set(MM_TO_IN, MM_TO_IN * (midSpan / 7.4), MM_TO_IN);
+        midMesh.position.set(0, 8.21 + midSpan * 0.5, 0);
+        midMesh.castShadow = true;
+        midMesh.receiveShadow = true;
+        tierGroup.add(midMesh);
+      } else {
+        // 2. Spigot-Free Seamless Mid Cylindrical Wall (0.92" -> handleRingBottom)
+        const midSpan = Math.max(1.2, handleRingBottom - 0.92);
+        const midGeo = decodeCadGeometry(cad.v12_sec3_mid);
+        const midMesh = new THREE.Mesh(midGeo, shellMat);
+        midMesh.scale.set(MM_TO_IN, MM_TO_IN * (midSpan / 7.4), MM_TO_IN);
+        midMesh.position.set(0, 0.92 + midSpan * 0.5, 0);
+        midMesh.castShadow = true;
+        midMesh.receiveShadow = true;
+        tierGroup.add(midMesh);
+      }
+
+      // 3. Upper Molded Loop Handles Ring (H - 4.395" -> H - 0.925")
+      const handleGeo = decodeCadGeometry(cad.v12_sec4_handles);
+      const handleMesh = new THREE.Mesh(handleGeo, shellMat);
+      handleMesh.scale.set(MM_TO_IN, MM_TO_IN, MM_TO_IN);
+      handleMesh.position.set(0, H - 2.66, 0);
+      handleMesh.castShadow = true;
+      handleMesh.receiveShadow = true;
+      tierGroup.add(handleMesh);
+
+      // 4. Top 20-Start Twist-Lock Bayonet Collar Rim (H - 1.48" -> H)
+      const collarGeo = decodeCadGeometry(cad.v12_sec5_collar);
+      const collarMesh = new THREE.Mesh(collarGeo, shellMat);
+      collarMesh.scale.set(MM_TO_IN, MM_TO_IN, MM_TO_IN);
+      collarMesh.position.set(0, H - 0.74, 0);
+      collarMesh.castShadow = true;
+      collarMesh.receiveShadow = true;
+      tierGroup.add(collarMesh);
+    } else {
+      // Parametric Procedural Fallback Cylinder Tier (when CAD bundle unavailable)
+      const outerGeo = new THREE.CylinderGeometry(RADIUS_OUTER, RADIUS_OUTER, H, 56, 1, true);
+      const outerMesh = new THREE.Mesh(outerGeo, shellMat);
+      outerMesh.position.y = H / 2;
+      outerMesh.castShadow = true;
+      outerMesh.receiveShadow = true;
+      tierGroup.add(outerMesh);
+
+      const outerBottom = new THREE.Mesh(new THREE.CircleGeometry(RADIUS_OUTER, 56), shellMat);
+      outerBottom.rotation.x = Math.PI / 2;
+      outerBottom.position.y = 0.05;
+      tierGroup.add(outerBottom);
+
+      const collarRing = new THREE.Mesh(new THREE.TorusGeometry(RADIUS_OUTER - 0.15, 0.58, 12, 56), shellMat);
+      collarRing.rotation.x = Math.PI / 2;
+      collarRing.position.y = H - 0.58;
+      tierGroup.add(collarRing);
+
+      const handleGeo = new THREE.TorusGeometry(2.3, 0.52, 12, 24, Math.PI);
+      const hLeft = new THREE.Mesh(handleGeo, shellMat);
+      hLeft.rotation.order = 'YXZ';
+      hLeft.rotation.x = Math.PI / 2;
+      hLeft.rotation.y = -Math.PI / 2;
+      hLeft.position.set(-RADIUS_OUTER + 0.35, H - 2.6, 0);
+      hLeft.castShadow = true;
+      tierGroup.add(hLeft);
+
+      const hRight = new THREE.Mesh(handleGeo, shellMat);
+      hRight.rotation.order = 'YXZ';
+      hRight.rotation.x = Math.PI / 2;
+      hRight.rotation.y = Math.PI / 2;
+      hRight.position.set(RADIUS_OUTER - 0.35, H - 2.6, 0);
+      hRight.castShadow = true;
+      tierGroup.add(hRight);
+
+      const foot = new THREE.Mesh(new THREE.CylinderGeometry(RADIUS_OUTER - 1.1, RADIUS_OUTER - 1.1, 0.9, 48), shellMat);
+      foot.position.y = 0.45;
+      tierGroup.add(foot);
+
+      if (renderSpigot) {
+        const spigot = buildSpigotValveAssembly();
+        spigot.position.set(0, 3.35, RADIUS_OUTER + 0.7);
+        tierGroup.add(spigot);
+      }
+    }
+
+    // Inner Food-Grade Liner & Insulated Base Floor (Clipped for Cutaway)
+    const linerMat = new THREE.MeshStandardMaterial({
+      color: 0xF0F4FA,
+      roughness: 0.42,
+      metalness: 0.02,
+      clippingPlanes: clipPlaneArray,
+      side: THREE.DoubleSide
+    });
+    const innerCylinder = new THREE.Mesh(
+      new THREE.CylinderGeometry(RADIUS_INNER, RADIUS_INNER, Math.max(2, H - 1.35), 48, 1, true),
+      linerMat
+    );
+    innerCylinder.position.y = H / 2 + 0.38;
+    innerCylinder.castShadow = false;
+    innerCylinder.receiveShadow = false;
+    tierGroup.add(innerCylinder);
+
+    const innerFloor = new THREE.Mesh(new THREE.CircleGeometry(RADIUS_INNER, 48), linerMat);
+    innerFloor.rotation.x = -Math.PI / 2;
+    innerFloor.position.y = 1.05;
+    innerFloor.receiveShadow = false;
+    tierGroup.add(innerFloor);
+
+    // Top R-8 Foam Collar Annulus (exposed in Cutaway or Explode)
+    const foamMat = new THREE.MeshStandardMaterial({
+      color: 0xD69E36,
+      roughness: 0.88,
+      metalness: 0.02,
+      clippingPlanes: clipPlaneArray,
+      side: THREE.DoubleSide
+    });
+    const foamRing = new THREE.Mesh(new THREE.RingGeometry(RADIUS_INNER, 11.72, 48), foamMat);
+    foamRing.rotation.x = -Math.PI / 2;
+    foamRing.position.y = H - 0.25;
+    tierGroup.add(foamRing);
+
+    // Dual-Barrier Hermetic Gasket System (Black EPDM Lip + Patriot Red Silicone O-Ring)
+    const epdmMat = new THREE.MeshStandardMaterial({
+      color: 0x1A1D22,
+      roughness: 0.82,
+      metalness: 0.02,
+      clippingPlanes: clipPlaneArray
+    });
+    const epdmRing = new THREE.Mesh(new THREE.TorusGeometry(11.15, 0.2, 10, 56), epdmMat);
+    epdmRing.rotation.x = Math.PI / 2;
+    epdmRing.position.y = H - 0.08;
+    tierGroup.add(epdmRing);
+
+    const redOSealMat = new THREE.MeshStandardMaterial({
+      color: 0xD92B21,
+      roughness: 0.48,
+      metalness: 0.04,
+      clippingPlanes: clipPlaneArray
+    });
+    const oRing = new THREE.Mesh(new THREE.TorusGeometry(10.82, 0.11, 8, 56), redOSealMat);
+    oRing.rotation.x = Math.PI / 2;
+    oRing.position.y = H - 0.22;
+    tierGroup.add(oRing);
+
+    // Dynamic Cutaway Foam Cross-Section Caps
+    createFoamCutawaySlices(H, tierGroup, 0);
+
+    // Front Wall Laser Engraving Badge (when 'body' placement active on base tier)
+    if (index === 0 && state.engraveLoc === 'body' && (state.engraveLine1.trim() || state.engraveLine2.trim() || state.customLogoImg)) {
+      const bodyTex = generateEngraveTexture('body', hex);
+      const badgeGeo = new THREE.CylinderGeometry(
+        RADIUS_OUTER + 0.08,
+        RADIUS_OUTER + 0.08,
+        Math.min(H * 0.45, 7.2),
+        36,
+        1,
+        true,
+        -Math.PI / 5,
+        (Math.PI * 2) / 5
+      );
+      const badgeMat = new THREE.MeshStandardMaterial({
+        map: bodyTex,
+        roughness: 0.7,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
+      });
+      const badge = new THREE.Mesh(badgeGeo, badgeMat);
+      badge.position.y = H * 0.56;
+      badge.rotation.y = renderSpigot ? Math.PI : 0; // avoid front spigot boss if present
+      tierGroup.add(badge);
+    }
+
+    // Internal Hardware inside Base Tier (Ice Bed, Craft Cans, All-Thread Deli Carousel)
+    if (index === 0) {
+      if (state.showCarousel) {
+        addInternalCarousel(tierGroup, H);
+      }
+      if (state.showIceAndCans) {
+        addInternalIceAndCans(tierGroup, H);
+      }
+    } else if (state.showCarousel && index === totalTiers - 1 && H >= 12) {
+      // Optional upper carousel tray inside upper tier
+      addUpperCarouselTray(tierGroup, H);
+    }
+
+    return tierGroup;
+  }
+
+  function addInternalCarousel(hostGroup, tierH) {
+    const cad = window.KOK_CAD_MESHES;
+    if (cad && cad.v12_allthread_post && cad.v12_lower_dish_hex) {
+      const rodGeo = decodeCadGeometry(cad.v12_allthread_post);
+      const rodMat = new THREE.MeshStandardMaterial({ color: 0x9CA3AF, roughness: 0.35, metalness: 0.72 });
+      const rod = new THREE.Mesh(rodGeo, rodMat);
+      const rodScale = Math.max(0.45, (tierH - 3.5) / 15.85);
+      rod.scale.set(MM_TO_IN, MM_TO_IN * rodScale, MM_TO_IN);
+      rod.position.set(0, 1.5 + (tierH - 3.5) * 0.5, 0);
+      hostGroup.add(rod);
+
+      const hexGeo = decodeCadGeometry(cad.v12_lower_dish_hex);
+      const hexMat = new THREE.MeshStandardMaterial({ color: 0xE5E7EB, roughness: 0.5, metalness: 0.08 });
+      const dish = new THREE.Mesh(hexGeo, hexMat);
+      dish.scale.set(MM_TO_IN * 0.90, MM_TO_IN, MM_TO_IN * 0.90);
+      dish.position.set(0, Math.max(5.5, tierH * 0.62), 0);
+      hostGroup.add(dish);
+
+      if (cad.v12_top_dish_logo && tierH >= 18) {
+        const topDishGeo = decodeCadGeometry(cad.v12_top_dish_logo);
+        const topDish = new THREE.Mesh(topDishGeo, hexMat);
+        topDish.scale.set(MM_TO_IN * 0.90, MM_TO_IN, MM_TO_IN * 0.90);
+        topDish.position.set(0, tierH - 4.2, 0);
+        hostGroup.add(topDish);
+      }
+    } else {
+      const post = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.4, 0.4, tierH - 3.2, 16),
+        new THREE.MeshStandardMaterial({ color: 0x9CA3AF, metalness: 0.75, roughness: 0.3 })
+      );
+      post.position.y = tierH / 2;
+      hostGroup.add(post);
+
+      const dish = new THREE.Mesh(
+        new THREE.CylinderGeometry(RADIUS_INNER - 0.8, RADIUS_INNER - 0.9, 0.4, 36),
+        new THREE.MeshStandardMaterial({ color: 0xE5E7EB, roughness: 0.45 })
+      );
+      dish.position.y = tierH * 0.62;
+      hostGroup.add(dish);
+    }
+  }
+
+  function addUpperCarouselTray(hostGroup, tierH) {
+    const cad = window.KOK_CAD_MESHES;
+    if (cad && cad.v12_top_dish_logo) {
+      const dishGeo = decodeCadGeometry(cad.v12_top_dish_logo);
+      const dishMat = new THREE.MeshStandardMaterial({ color: 0xE5E7EB, roughness: 0.48, metalness: 0.08 });
+      const dish = new THREE.Mesh(dishGeo, dishMat);
+      dish.scale.set(MM_TO_IN * 0.90, MM_TO_IN, MM_TO_IN * 0.90);
+      dish.position.set(0, tierH * 0.48, 0);
+      hostGroup.add(dish);
+    }
+  }
+
+  function addInternalIceAndCans(hostGroup, tierH) {
+    const cad = window.KOK_CAD_MESHES;
+    if (cad && cad.v12_ice_and_cans) {
+      const iceGeo = decodeCadGeometry(cad.v12_ice_and_cans);
+      const iceMat = new THREE.MeshPhysicalMaterial({
+        color: 0xDCEAF5,
+        roughness: 0.2,
+        metalness: 0.05,
+        transmission: 0.35,
+        transparent: true,
+        opacity: 0.92,
+        side: THREE.DoubleSide
+      });
+      const iceMesh = new THREE.Mesh(iceGeo, iceMat);
+      iceMesh.scale.set(MM_TO_IN * 0.92, MM_TO_IN, MM_TO_IN * 0.92);
+      iceMesh.position.set(0.6, 4.4, -2.5);
+      hostGroup.add(iceMesh);
+    }
+
+    // Crisp upright 12 oz cans arranged cleanly around inner ring
+    const canGeo = new THREE.CylinderGeometry(1.18, 1.18, 4.75, 20);
+    const canPalette = [0xD92B21, 0x1E4BD7, 0xC8CED6, 0x2B303A];
+    const ringCount = 8;
+    for (let i = 0; i < ringCount; i++) {
+      const angle = (i / ringCount) * Math.PI * 2 + 0.35;
+      const rad = 6.2;
+      const canMat = new THREE.MeshStandardMaterial({
+        color: canPalette[i % canPalette.length],
+        roughness: 0.32,
+        metalness: 0.55
+      });
+      const can = new THREE.Mesh(canGeo, canMat);
+      can.position.set(Math.cos(angle) * rad, Math.min(3.6, tierH * 0.25), Math.sin(angle) * rad);
+      hostGroup.add(can);
+    }
+  }
+
+  function buildLidAssembly() {
+    const lidGroup = new THREE.Group();
+    const topTier = state.tiers[state.tiers.length - 1] || { color: 'red' };
+    const topHex = COLORWAYS[topTier.color]?.hex || '#E1232D';
+    const lidMat = makeLLDPEMaterial(topHex, true);
+    const cad = window.KOK_CAD_MESHES || null;
+
+    if (cad && cad.v12_crown_lid) {
+      const lidGeo = decodeCadGeometry(cad.v12_crown_lid);
+      const lidMesh = new THREE.Mesh(lidGeo, lidMat);
+      lidMesh.scale.set(MM_TO_IN, MM_TO_IN, MM_TO_IN);
+      lidMesh.position.set(0, 0.21, 0);
+      lidMesh.castShadow = true;
+      lidMesh.receiveShadow = true;
+      lidGroup.add(lidMesh);
+
+      // External Deadbolt Slider Indicator Accents on Left/Right rim
+      const boltMat = new THREE.MeshStandardMaterial({
+        color: 0x1E222B,
+        roughness: 0.45,
+        metalness: 0.35,
+        clippingPlanes: clipPlaneArray
+      });
+      const boltGeo = new THREE.BoxGeometry(1.2, 1.4, 2.2);
+      const boltL = new THREE.Mesh(boltGeo, boltMat);
+      boltL.position.set(-12.1, -0.35, 0);
+      const boltR = new THREE.Mesh(boltGeo, boltMat);
+      boltR.position.set(12.1, -0.35, 0);
+      lidGroup.add(boltL, boltR);
+    } else {
+      const baseDisc = new THREE.Mesh(new THREE.CylinderGeometry(RADIUS_OUTER, RADIUS_OUTER, 2.2, 56), lidMat);
+      baseDisc.position.y = 0.2;
+      baseDisc.castShadow = true;
+      lidGroup.add(baseDisc);
+    }
+
+    // Lid Inlay Variant: Solar / Bamboo / Flush Standard
+    if (state.lidModule === 'solar') {
+      if (cad && cad.v12_solar_batteries) {
+        const batGeo = decodeCadGeometry(cad.v12_solar_batteries);
+        const batMat = new THREE.MeshStandardMaterial({
+          color: 0x1E222B,
+          roughness: 0.45,
+          metalness: 0.25,
+          clippingPlanes: clipPlaneArray
+        });
+        const batMesh = new THREE.Mesh(batGeo, batMat);
+        batMesh.scale.set(MM_TO_IN, MM_TO_IN, MM_TO_IN);
+        batMesh.position.set(0, 1.1, 0);
+        batMesh.castShadow = true;
+        lidGroup.add(batMesh);
+      }
+
+      const solarPanelMat = new THREE.MeshStandardMaterial({
+        map: generateSolarTexture(),
+        roughness: 0.22,
+        metalness: 0.38,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
+      });
+      const solarDisc = new THREE.Mesh(new THREE.CylinderGeometry(7.9, 7.9, 0.32, 48), solarPanelMat);
+      solarDisc.position.set(0, 1.58, 0);
+      solarDisc.castShadow = true;
+      lidGroup.add(solarDisc);
+
+      const bezel = new THREE.Mesh(
+        new THREE.TorusGeometry(7.95, 0.24, 12, 48),
+        new THREE.MeshStandardMaterial({ color: 0x1E222B, roughness: 0.38, metalness: 0.65, clippingPlanes: clipPlaneArray })
+      );
+      bezel.rotation.x = Math.PI / 2;
+      bezel.position.set(0, 1.66, 0);
+      lidGroup.add(bezel);
+    } else if (state.lidModule === 'bamboo') {
+      const bambooMat = new THREE.MeshStandardMaterial({
+        map: generateEngraveTexture('lid', topHex),
+        roughness: 0.62,
+        metalness: 0.02,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
+      });
+      const prepDisc = new THREE.Mesh(new THREE.CylinderGeometry(8.5, 8.5, 0.38, 48), bambooMat);
+      prepDisc.position.set(0, 1.56, 0);
+      prepDisc.castShadow = true;
+      lidGroup.add(prepDisc);
+    } else {
+      // Flush Standard Seat Lid center recess handle
+      const centerPlug = new THREE.Mesh(new THREE.CylinderGeometry(8.2, 8.2, 0.25, 48), lidMat);
+      centerPlug.position.set(0, 1.52, 0);
+      lidGroup.add(centerPlug);
+
+      const handleBar = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.42, 0.42, 5.2, 16),
+        new THREE.MeshStandardMaterial({ color: 0x9CA3AF, roughness: 0.35, metalness: 0.6, clippingPlanes: clipPlaneArray })
+      );
+      handleBar.rotation.z = Math.PI / 2;
+      handleBar.position.set(0, 1.68, 0);
+      lidGroup.add(handleBar);
+    }
+
+    return lidGroup;
+  }
+
+  function buildWagonBase() {
+    disposeGroupChildren(wagonGroup);
+    if (!state.showWagon) return;
+
+    const cad = window.KOK_CAD_MESHES;
+    if (cad && cad.v12_wagon_base) {
+      const geo = decodeCadGeometry(cad.v12_wagon_base);
+      const mat = makeLLDPEMaterial('#1E222B', true);
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.scale.set(MM_TO_IN, MM_TO_IN, MM_TO_IN);
+      mesh.position.set(0, 1.22, 0);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      wagonGroup.add(mesh);
+    }
+
+    // Three 8" Pneumatic Tires visual chassis cues
+    const tireMat = new THREE.MeshStandardMaterial({ color: 0x16181D, roughness: 0.85, metalness: 0.05 });
+    const hubMat = new THREE.MeshStandardMaterial({ color: 0xD92B21, roughness: 0.4, metalness: 0.25 });
+    const tireCoords = [
+      [0, 1.8, 10.6],
+      [-9.2, 1.8, -6.2],
+      [9.2, 1.8, -6.2]
+    ];
+    for (const [wx, wy, wz] of tireCoords) {
+      const wheel = new THREE.Mesh(new THREE.CylinderGeometry(1.85, 1.85, 1.4, 24), tireMat);
+      wheel.rotation.z = Math.PI / 2;
+      wheel.position.set(wx, wy, wz);
+      wheel.castShadow = true;
+      wagonGroup.add(wheel);
+
+      const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 1.46, 16), hubMat);
+      hub.rotation.z = Math.PI / 2;
+      hub.position.set(wx, wy, wz);
+      wagonGroup.add(hub);
+    }
+  }
+
+  function buildV12CadAssembly() {
+    const cad = window.KOK_CAD_MESHES;
+    if (!cad) return;
+
+    const isSplit = state.mode === 'v12-split';
+    const hIn = state.v12HeightIn || 20;
+    const deltaIn = hIn - 20.0;
+    const wagonOffset = state.showWagon ? 2.43 : 0;
+    const activeOnePieceKey = hIn === 20 ? 'v12_one_piece_body' : `v12_one_piece_${hIn}in`;
+
+    const baseHex = COLORWAYS[state.tiers[0]?.color || 'blue']?.hex || '#1E4BD7';
+    const midHex = '#F0F4FA';
+    const topHex = '#E1232D';
+
+    const clippedKeys = new Set([
+      'v12_one_piece_body',
+      'v12_one_piece_12in',
+      'v12_one_piece_18in',
+      'v12_one_piece_24in',
+      'v12_crown_lid',
+      'v12_sec1_foot',
+      'v12_sec2_lower',
+      'v12_sec3_mid',
+      'v12_sec4_handles',
+      'v12_sec5_collar',
+      'v12_wagon_base'
+    ]);
+
+    Object.values(cad).forEach((part) => {
+      if (isSplit) {
+        if (!part.inSplitKit) return;
+      } else {
+        if (part.key === 'v12_one_piece_body' && activeOnePieceKey !== 'v12_one_piece_body' && cad[activeOnePieceKey]) {
+          return;
+        }
+        if (part.key !== activeOnePieceKey && !part.inOnePiece) return;
+      }
+
+      if (part.key === 'v12_wagon_base' && !state.showWagon) return;
+      if (part.key === 'v12_solar_batteries' && state.lidModule !== 'solar') return;
+      if ((part.key === 'v12_top_dish_logo' || part.key === 'v12_lower_dish_hex' || part.key === 'v12_allthread_post') && !state.showCarousel) return;
+      if (part.key === 'v12_ice_and_cans' && !state.showIceAndCans) return;
+
+      const geo = decodeCadGeometry(part);
+      const isClipped = clippedKeys.has(part.key);
+
+      let mat;
+      if (part.key.startsWith('v12_one_piece') || part.key === 'v12_sec2_lower' || part.key === 'v12_sec4_handles') {
+        mat = makeLLDPEMaterial(baseHex, isClipped);
+      } else if (part.key === 'v12_sec3_mid') {
+        mat = makeLLDPEMaterial(isSplit ? midHex : baseHex, isClipped);
+      } else if (part.key === 'v12_sec5_collar' || part.key === 'v12_crown_lid') {
+        mat = makeLLDPEMaterial(isSplit ? topHex : baseHex, isClipped);
+      } else if (part.key === 'v12_sec1_foot' || part.key === 'v12_wagon_base') {
+        mat = makeLLDPEMaterial('#1E222B', isClipped);
+      } else if (part.key === 'v12_ice_and_cans') {
+        mat = new THREE.MeshPhysicalMaterial({
+          color: 0xDCEAF5,
+          roughness: 0.18,
+          metalness: 0.05,
+          transmission: 0.35,
+          transparent: true,
+          opacity: 0.9,
+          side: THREE.DoubleSide
+        });
+      } else if (part.key === 'v12_alignment_pins' || part.key === 'v12_allthread_post') {
+        mat = new THREE.MeshStandardMaterial({ color: 0x9CA3AF, roughness: 0.32, metalness: 0.72, side: THREE.DoubleSide });
+      } else if (part.key === 'v12_solar_batteries') {
+        mat = new THREE.MeshStandardMaterial({ color: 0x1E222B, roughness: 0.45, metalness: 0.28, side: THREE.DoubleSide });
+      } else {
+        mat = new THREE.MeshStandardMaterial({ color: 0xE5E7EB, roughness: 0.48, metalness: 0.12, side: THREE.DoubleSide });
+      }
+
+      const mesh = new THREE.Mesh(geo, mat);
+      let scaleY = MM_TO_IN;
+      const cx = (part.centerMmYUp ? part.centerMmYUp[0] : 0) * MM_TO_IN;
+      let cy = ((part.centerMmYUp ? part.centerMmYUp[1] : 0) * MM_TO_IN) + wagonOffset;
+      const cz = (part.centerMmYUp ? part.centerMmYUp[2] : 0) * MM_TO_IN;
+
+      if (deltaIn !== 0) {
+        if (part.key === 'v12_crown_lid' || part.key === 'v12_solar_batteries' || part.key === 'v12_sec4_handles' || part.key === 'v12_sec5_collar') {
+          cy += deltaIn;
+        } else if (part.key === 'v12_sec3_mid') {
+          const origMidH = 6.12;
+          const newMidH = Math.max(1.2, origMidH + deltaIn);
+          scaleY = MM_TO_IN * (newMidH / origMidH);
+          cy += deltaIn * 0.5;
+        } else if (part.key === 'v12_top_dish_logo') {
+          cy += deltaIn * 0.72;
+        } else if (part.key === 'v12_lower_dish_hex') {
+          cy += deltaIn * 0.32;
+        } else if (part.key === 'v12_allthread_post') {
+          const origRodH = 14.16;
+          const newRodH = Math.max(6.8, origRodH + deltaIn * 0.85);
+          scaleY = MM_TO_IN * (newRodH / origRodH);
+          cy += (newRodH - origRodH) * 0.5;
+        } else if (part.key === 'v12_alignment_pins') {
+          const origPinSpan = 16.59;
+          const newPinSpan = Math.max(8.5, origPinSpan + deltaIn);
+          scaleY = MM_TO_IN * (newPinSpan / origPinSpan);
+          cy += deltaIn * 0.5;
+        }
+      }
+
+      mesh.scale.set(MM_TO_IN, scaleY, MM_TO_IN);
+      mesh.position.set(cx, cy, cz);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+
+      const layer = typeof part.explodeLayer === 'number' ? part.explodeLayer : 2.0;
+      mesh.userData = {
+        partKey: part.key,
+        baseY: cy,
+        explodeDeltaY: (layer - 1.2) * 3.8
+      };
+
+      v12AssemblyGroup.add(mesh);
+      v12ExplodableMeshes.push(mesh);
+    });
+  }
+
+  function rebuildCoolerScene() {
+    if (!webglReady) return;
+
+    disposeGroupChildren(modularGroup);
+    disposeGroupChildren(v12AssemblyGroup);
+    buildWagonBase();
+
+    tierGroups = [];
+    v12ExplodableMeshes = [];
+    foamSectionSlices = [];
+
+    if (state.mode === 'cad-part') {
+      coolerRoot.visible = false;
+      cadInspectorGroup.visible = true;
+      renderActiveCadPart();
+      return;
+    }
+
+    coolerRoot.visible = true;
+    cadInspectorGroup.visible = false;
+
+    if (isV12Mode()) {
+      buildV12CadAssembly();
+      applyCutawayPlane(state.xrayPct);
+      return;
+    }
+
+    const wagonOffset = state.showWagon ? 2.43 : 0;
+    let runningY = wagonOffset;
+
+    state.tiers.forEach((tier, idx) => {
+      const tGroup = buildModularTier(tier, idx, state.tiers.length);
+      tGroup.position.y = runningY;
+      modularGroup.add(tGroup);
+      tierGroups.push({
+        group: tGroup,
+        baseY: runningY,
+        height: tier.height,
+        index: idx
+      });
+      runningY += tier.height;
+    });
+
+    const lid = buildLidAssembly();
+    lid.position.y = runningY;
+    modularGroup.add(lid);
+    lidGroupObj = { group: lid, baseY: runningY };
+
+    applyCutawayPlane(state.xrayPct);
+  }
+
+  function applyCutawayPlane(pctRaw) {
+    if (!webglReady || !clipPlane) return;
+    const pct = Math.max(0, Math.min(100, Number(pctRaw) || 0));
+    if (pct <= 0) {
+      clipPlane.constant = 100;
+      foamSectionSlices.forEach((s) => {
+        s.front.visible = false;
+        s.back.visible = false;
+        s.bottom.visible = false;
+      });
+      return;
+    }
+
+    const c = 13.0 - (pct / 100) * 25.6;
+    clipPlane.constant = c;
+    const absC = Math.abs(c);
+
+    foamSectionSlices.forEach((s) => {
+      if (absC >= RADIUS_OUTER - 0.15) {
+        s.front.visible = false;
+        s.back.visible = false;
+        s.bottom.visible = false;
+        return;
+      }
+      const zOut = Math.sqrt(Math.max(0, RADIUS_OUTER * RADIUS_OUTER - c * c)) - 0.1;
+      if (absC >= RADIUS_INNER) {
+        const fullW = Math.max(0.1, zOut * 2);
+        s.front.visible = true;
+        s.front.position.set(c - 0.02, s.centerY, 0);
+        s.front.scale.set(fullW, 1, 1);
+        s.back.visible = false;
+        s.bottom.visible = true;
+        s.bottom.position.set(c - 0.02, s.bottomY, 0);
+        s.bottom.scale.set(fullW, 1, 1);
+      } else {
+        const zIn = Math.sqrt(Math.max(0, RADIUS_INNER * RADIUS_INNER - c * c)) + 0.02;
+        const wallSpan = Math.max(0.15, zOut - zIn);
+        const zMid = (zOut + zIn) * 0.5;
+        s.front.visible = true;
+        s.front.position.set(c - 0.02, s.centerY, zMid);
+        s.front.scale.set(wallSpan, 1, 1);
+        s.back.visible = true;
+        s.back.position.set(c - 0.02, s.centerY, -zMid);
+        s.back.scale.set(wallSpan, 1, 1);
+        s.bottom.visible = true;
+        s.bottom.position.set(c - 0.02, s.bottomY, 0);
+        s.bottom.scale.set(Math.max(0.1, zIn * 2), 1, 1);
+      }
+    });
+  }
+
+  function renderActiveCadPart() {
+    if (!webglReady || !window.KOK_CAD_MESHES) return;
+    const part = window.KOK_CAD_MESHES[state.activeCadKey];
+    if (!part) return;
+
+    disposeGroupChildren(cadInspectorGroup);
+    cadInspectorGroup.rotation.y = 0;
+
+    const geo = decodeCadGeometry(part);
+    const box = geo.boundingBox;
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const maxDim = Math.max(size.x, size.y, size.z, 0.001);
+    const fitScale = 24.0 / maxDim;
+
+    let mat;
+    if (state.cadShaderMode === 'wire') {
+      mat = new THREE.MeshBasicMaterial({
+        color: state.env === 'dusk' ? 0xE5E7EB : 0x1E222B,
+        wireframe: true
+      });
+    } else if (state.cadShaderMode === 'xray') {
+      mat = new THREE.MeshPhysicalMaterial({
+        color: 0x64748B,
+        transparent: true,
+        opacity: 0.42,
+        roughness: 0.25,
+        metalness: 0.15,
+        side: THREE.DoubleSide
+      });
+    } else {
+      mat = makeLLDPEMaterial('#1E4BD7', false);
+    }
+
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.scale.setScalar(fitScale);
+    mesh.position.y = Math.max(1.5, (-box.min.y * fitScale) + 0.6);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    cadInspectorGroup.add(mesh);
+
+    if (state.cadShaderMode === 'xray') {
+      const wireOverlay = new THREE.Mesh(
+        geo,
+        new THREE.MeshBasicMaterial({
+          color: 0xD92B21,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.35
+        })
+      );
+      wireOverlay.scale.copy(mesh.scale);
+      wireOverlay.position.copy(mesh.position);
+      cadInspectorGroup.add(wireOverlay);
+    }
+
+    const centerY = mesh.position.y + (box.max.y + box.min.y) * 0.5 * fitScale;
+    animateCameraTo(26, Math.max(16, centerY + 10), 34, 0, Math.max(5, centerY), 0);
+  }
+
+  function animateCameraTo(cx, cy, cz, tx, ty, tz, immediate = false) {
+    if (!webglReady || !camera || !controls) return;
+    const endPos = new THREE.Vector3(cx, cy, cz);
+    const endTarget = new THREE.Vector3(tx, ty, tz);
+
+    if (immediate || isReducedMotion()) {
+      camera.position.copy(endPos);
+      controls.target.copy(endTarget);
+      controls.update();
+      camAnim.active = false;
+      return;
+    }
+
+    camAnim.active = true;
+    camAnim.startTime = performance.now();
+    camAnim.startPos = camera.position.clone();
+    camAnim.endPos = endPos;
+    camAnim.startTarget = controls.target.clone();
+    camAnim.endTarget = endTarget;
+  }
+
+  function frameCameraPreset(presetName, immediate = false) {
+    const metrics = computeMetrics();
+    const explodeLift = state.explodeTarget * (isV12Mode() ? 18 : metrics.tierCount * 9.0);
+    const totalH = metrics.heightIn + (state.showWagon ? 2.43 : 0) + explodeLift;
+    const aspect = camera && camera.aspect > 0 ? camera.aspect : 1.2;
+    const isNarrow = aspect < 1.05;
+    const hCenter = totalH * (isNarrow ? 0.51 : 0.48);
+
+    const vFovRad = (camera ? camera.fov : 38) * (Math.PI / 180);
+    const hFovRad = 2 * Math.atan(Math.tan(vFovRad / 2) * aspect);
+    const fitH = ((totalH + 8) / (2 * Math.tan(vFovRad / 2))) * (isNarrow ? 1.92 : 1.48);
+    const fitW = (30 / (2 * Math.tan(hFovRad / 2))) * 1.36;
+    const dist = Math.max(58, fitH, fitW);
+
+    if (presetName === 'top') {
+      animateCameraTo(0, totalH + Math.max(36, totalH * 0.65), 16, 0, totalH - 2, 0, immediate);
+    } else if (presetName === 'spigot') {
+      animateCameraTo(16, 10, 34, 0, 5.5, 9, immediate);
+    } else if (presetName === 'inside') {
+      if (state.xrayPct === 0) {
+        setXrayPct(50);
+      }
+      animateCameraTo(dist * 0.62, hCenter + dist * 0.16, dist * 0.56, 0, hCenter * 0.9, 0, immediate);
+    } else {
+      // 'three-quarter' or 'reset'
+      animateCameraTo(dist * 0.54, hCenter + dist * 0.22, dist * 0.78, 0, hCenter, 0, immediate);
+    }
+  }
+
+  function applyEnvironment(envKey) {
+    const cfg = STUDIO_ENVS[envKey] || STUDIO_ENVS.daylight;
+    state.env = envKey;
+    if (viewportEl) viewportEl.dataset.studioEnv = envKey;
+
+    document.querySelectorAll('[data-env]').forEach((btn) => {
+      btn.setAttribute('aria-pressed', String(btn.dataset.env === envKey));
+    });
+
+    if (!webglReady) return;
+    scene.background.setHex(cfg.bg);
+    scene.fog.color.setHex(cfg.fog);
+    scene.fog.density = cfg.fogDensity;
+    hemiLight.color.setHex(cfg.hemiSky);
+    hemiLight.groundColor.setHex(cfg.hemiGround);
+    hemiLight.intensity = cfg.hemiInt;
+    keyLight.color.setHex(cfg.keyColor);
+    keyLight.intensity = cfg.keyInt;
+    fillLight.color.setHex(cfg.fillColor);
+    fillLight.intensity = cfg.fillInt;
+    rimLight.color.setHex(cfg.rimColor);
+    rimLight.intensity = cfg.rimInt;
+    floorMat.opacity = cfg.shadowOpacity;
+    floorRingMats.forEach((m) => m.color.setHex(cfg.ringColor));
+
+    if (state.mode === 'cad-part' && state.cadShaderMode === 'wire') {
+      renderActiveCadPart();
+    }
+  }
+
+  function initThreeViewport() {
+    if (!window.THREE || !window.THREE.OrbitControls || !canvasEl || !viewportEl) {
+      if (fallbackEl) fallbackEl.hidden = false;
+      return;
+    }
+
+    try {
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(STUDIO_ENVS.daylight.bg);
+      scene.fog = new THREE.FogExp2(STUDIO_ENVS.daylight.fog, STUDIO_ENVS.daylight.fogDensity);
+
+      const w = Math.max(viewportEl.clientWidth, 320);
+      const h = Math.max(viewportEl.clientHeight, 320);
+
+      camera = new THREE.PerspectiveCamera(38, w / h, 0.25, 800);
+      camera.position.set(58, 56, 74);
+
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvasEl,
+        antialias: true,
+        preserveDrawingBuffer: true
+      });
+      renderer.setSize(w, h, false);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.localClippingEnabled = true;
+
+      clipPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 100);
+      clipPlaneArray = [clipPlane];
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.maxPolarAngle = Math.PI / 2 - 0.02;
+      controls.minDistance = 22;
+      controls.maxDistance = 360;
+      controls.target.set(0, 26, 0);
+      controls.addEventListener('start', () => {
+        camAnim.active = false;
+        hasUserOrbited = true;
+      });
+
+      // Architectural Neutral Studio Lights
+      hemiLight = new THREE.HemisphereLight(
+        STUDIO_ENVS.daylight.hemiSky,
+        STUDIO_ENVS.daylight.hemiGround,
+        STUDIO_ENVS.daylight.hemiInt
+      );
+      scene.add(hemiLight);
+
+      keyLight = new THREE.DirectionalLight(STUDIO_ENVS.daylight.keyColor, STUDIO_ENVS.daylight.keyInt);
+      keyLight.position.set(58, 96, 54);
+      keyLight.castShadow = true;
+      keyLight.shadow.mapSize.width = 2048;
+      keyLight.shadow.mapSize.height = 2048;
+      keyLight.shadow.camera.near = 10;
+      keyLight.shadow.camera.far = 260;
+      keyLight.shadow.camera.left = -48;
+      keyLight.shadow.camera.right = 48;
+      keyLight.shadow.camera.top = 92;
+      keyLight.shadow.camera.bottom = -48;
+      keyLight.shadow.bias = -0.0004;
+      scene.add(keyLight);
+
+      fillLight = new THREE.DirectionalLight(STUDIO_ENVS.daylight.fillColor, STUDIO_ENVS.daylight.fillInt);
+      fillLight.position.set(-56, 44, 34);
+      scene.add(fillLight);
+
+      rimLight = new THREE.DirectionalLight(STUDIO_ENVS.daylight.rimColor, STUDIO_ENVS.daylight.rimInt);
+      rimLight.position.set(-16, 62, -64);
+      scene.add(rimLight);
+
+      // Seamless Cyclorama Shadow Floor (zero horizon seam)
+      floorMat = new THREE.ShadowMaterial({
+        color: 0x0A0A0A,
+        opacity: STUDIO_ENVS.daylight.shadowOpacity
+      });
+      floorMesh = new THREE.Mesh(new THREE.PlaneGeometry(600, 600), floorMat);
+      floorMesh.rotation.x = -Math.PI / 2;
+      floorMesh.position.y = -0.02;
+      floorMesh.receiveShadow = true;
+      scene.add(floorMesh);
+
+      buildArchitecturalFloorMarkings();
+      lldpeBumpTex = generateStippleBumpTexture();
+
+      coolerRoot = new THREE.Group();
+      scene.add(coolerRoot);
+
+      wagonGroup = new THREE.Group();
+      modularGroup = new THREE.Group();
+      v12AssemblyGroup = new THREE.Group();
+      cadInspectorGroup = new THREE.Group();
+      cadInspectorGroup.visible = false;
+
+      coolerRoot.add(wagonGroup, modularGroup, v12AssemblyGroup);
+      scene.add(cadInspectorGroup);
+
+      webglReady = true;
+      if (fallbackEl) fallbackEl.hidden = true;
+
+      rebuildCoolerScene();
+      frameCameraPreset('three-quarter', true);
+
+      const handleResize = () => {
+        if (!webglReady) return;
+        const rw = viewportEl.clientWidth;
+        const rh = viewportEl.clientHeight;
+        if (rw <= 0 || rh <= 0) return;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        camera.aspect = rw / rh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(rw, rh, false);
+        if (!hasUserOrbited && state.mode !== 'cad-part') {
+          frameCameraPreset('three-quarter', true);
+        }
+      };
+
+      window.addEventListener('resize', handleResize, { passive: true });
+      if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(handleResize).observe(viewportEl);
+      }
+
+      // Render Loop with Damped Spring Explode Physics
+      let lastTs = performance.now();
+      function renderLoop(now) {
+        requestAnimationFrame(renderLoop);
+        const dt = Math.min((now - lastTs) / 1000, 0.05);
+        lastTs = now;
+
+        // Damped second-order spring for smooth explode separation
+        if (isReducedMotion()) {
+          explodeVal = state.explodeTarget;
+          explodeVel = 0;
+        } else {
+          const stiffness = 145;
+          const damping = 19;
+          const accel = (state.explodeTarget - explodeVal) * stiffness - explodeVel * damping;
+          explodeVel += accel * dt;
+          explodeVal += explodeVel * dt;
+          if (Math.abs(state.explodeTarget - explodeVal) < 0.0005 && Math.abs(explodeVel) < 0.0005) {
+            explodeVal = state.explodeTarget;
+            explodeVel = 0;
+          }
+        }
+
+        if (state.mode === 'modular') {
+          const gapPerTier = 9.0;
+          const twistScale = state.xrayPct > 0 ? 0 : Math.min(explodeVal * 1.4, 1);
+          for (let i = 0; i < tierGroups.length; i++) {
+            const tg = tierGroups[i];
+            tg.group.position.y = tg.baseY + i * explodeVal * gapPerTier;
+            // Subtle 18-degree twist-lock unlock rotation on upper tiers as they lift (suppressed when cutaway slice is active)
+            if (i > 0) {
+              const dir = i % 2 === 1 ? 1 : -1;
+              tg.group.rotation.y = dir * twistScale * (Math.PI / 10);
+            }
+          }
+          if (lidGroupObj.group) {
+            lidGroupObj.group.position.y = lidGroupObj.baseY + tierGroups.length * explodeVal * gapPerTier;
+            lidGroupObj.group.rotation.y = twistScale * (Math.PI / 10);
+          }
+        } else if (isV12Mode()) {
+          for (let i = 0; i < v12ExplodableMeshes.length; i++) {
+            const m = v12ExplodableMeshes[i];
+            if (m && m.userData) {
+              m.position.y = m.userData.baseY + explodeVal * m.userData.explodeDeltaY;
+            }
+          }
+        }
+
+        // Smooth eased camera preset transition
+        if (camAnim.active) {
+          const progress = Math.min((now - camAnim.startTime) / camAnim.duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          camera.position.lerpVectors(camAnim.startPos, camAnim.endPos, eased);
+          controls.target.lerpVectors(camAnim.startTarget, camAnim.endTarget, eased);
+          if (progress >= 1) camAnim.active = false;
+        }
+
+        // Auto-Turntable rotation
+        if (state.turntable && !isReducedMotion()) {
+          if (state.mode === 'cad-part') {
+            cadInspectorGroup.rotation.y += 0.42 * dt;
+          } else {
+            coolerRoot.rotation.y += 0.34 * dt;
+          }
+        }
+
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      requestAnimationFrame(renderLoop);
+    } catch (err) {
+      console.warn('3D Studio WebGL fallback:', err);
+      webglReady = false;
+      if (fallbackEl) fallbackEl.hidden = false;
+    }
+  }
+
+  // =========================================================================
+  // 6. UI Rendering & State Synchronization
+  // =========================================================================
+  function renderTierComposer() {
+    if (!tierListEl) return;
+    const metrics = computeMetrics();
+    const totalHeight = metrics.heightIn;
+
+    if (heightLimitReadout) {
+      heightLimitReadout.textContent = `${totalHeight}" / ${MAX_STACK_HEIGHT}" max`;
+    }
+    if (heightMeterFill) {
+      heightMeterFill.style.width = `${Math.min(100, (totalHeight / MAX_STACK_HEIGHT) * 100)}%`;
+    }
+
+    // Clamp selectedTierIndex safely
+    if (state.selectedTierIndex >= state.tiers.length) {
+      state.selectedTierIndex = Math.max(0, state.tiers.length - 1);
+    }
+
+    // Display Top-to-Bottom (reversed index order) so top row = top tier under lid
+    tierListEl.innerHTML = '';
+    for (let idx = state.tiers.length - 1; idx >= 0; idx--) {
+      const tier = state.tiers[idx];
+      const cat = TIERS_CATALOG[tier.height] || TIERS_CATALOG[20];
+      const colorInfo = COLORWAYS[tier.color] || COLORWAYS.blue;
+      const isSelected = idx === state.selectedTierIndex;
+      const isBase = idx === 0;
+      const isTop = idx === state.tiers.length - 1;
+      const posRole = state.tiers.length === 1 ? 'Single Module' : isBase ? 'Base Tier' : isTop ? 'Top Vault' : 'Mid Tier';
+      const hasDrainTag = cat.allowsSpigot && isBase && state.showSpigot ? ' · Drain Spigot' : cat.allowsSpigot ? ' · Spigot Ready' : ' · No Spigot';
+
+      const li = document.createElement('li');
+      li.className = 'tier-row' + (isSelected ? ' is-selected' : '');
+
+      const selectBtn = document.createElement('button');
+      selectBtn.type = 'button';
+      selectBtn.className = 'tier-select-btn';
+      selectBtn.setAttribute('aria-pressed', String(isSelected));
+      selectBtn.innerHTML = `
+        <span class="tier-color-pip" style="background-color: ${colorInfo.hex};"></span>
+        <span class="tier-info">
+          <span class="tier-info__top">
+            <span class="tier-info__name">${cat.name}</span>
+            <span class="tier-info__role">${posRole}</span>
+          </span>
+          <span class="tier-info__sub">${colorInfo.name} &middot; ${cat.quarts} QT${hasDrainTag}</span>
+        </span>
+      `;
+      selectBtn.addEventListener('click', () => {
+        state.selectedTierIndex = idx;
+        state.colorScope = 'tier';
+        syncAllUI();
+      });
+
+      const ctrlWrap = document.createElement('div');
+      ctrlWrap.className = 'tier-row__controls';
+
+      const upBtn = document.createElement('button');
+      upBtn.type = 'button';
+      upBtn.className = 'tier-ctrl-btn v2-pressable';
+      upBtn.title = 'Move tier up';
+      upBtn.setAttribute('aria-label', `Move ${cat.name} up`);
+      upBtn.disabled = isTop || isV12Mode();
+      upBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 10l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      upBtn.addEventListener('click', () => moveTier(idx, idx + 1));
+
+      const downBtn = document.createElement('button');
+      downBtn.type = 'button';
+      downBtn.className = 'tier-ctrl-btn v2-pressable';
+      downBtn.title = 'Move tier down';
+      downBtn.setAttribute('aria-label', `Move ${cat.name} down`);
+      downBtn.disabled = isBase || isV12Mode();
+      downBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      downBtn.addEventListener('click', () => moveTier(idx, idx - 1));
+
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'tier-ctrl-btn v2-pressable';
+      delBtn.title = 'Remove tier';
+      delBtn.setAttribute('aria-label', `Remove ${cat.name}`);
+      delBtn.disabled = state.tiers.length <= 1 || isV12Mode();
+      delBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+      delBtn.addEventListener('click', () => removeTier(idx));
+
+      ctrlWrap.append(upBtn, downBtn, delBtn);
+      li.append(selectBtn, ctrlWrap);
+      tierListEl.appendChild(li);
+    }
+
+    // Update Add Tier button availability against 72" max stack limit
+    let anyBlocked = false;
+    document.querySelectorAll('[data-add-tier]').forEach((btn) => {
+      const addH = Number(btn.dataset.addTier);
+      const effectiveCurrent = isV12Mode() ? 0 : totalHeight;
+      const exceeds = effectiveCurrent + addH > MAX_STACK_HEIGHT;
+      btn.disabled = exceeds;
+      if (exceeds) anyBlocked = true;
+    });
+
+    if (stackLimitNote) {
+      if (isV12Mode()) {
+        stackLimitNote.textContent = 'Adding any modular tier switches from V12 CAD prototype to modular stack composer.';
+        stackLimitNote.classList.remove('group-note--warn');
+      } else if (totalHeight >= MAX_STACK_HEIGHT) {
+        stackLimitNote.textContent = '72" maximum stack height reached. Remove or resize a tier to add another.';
+        stackLimitNote.classList.add('group-note--warn');
+      } else if (anyBlocked) {
+        const rem = MAX_STACK_HEIGHT - totalHeight;
+        stackLimitNote.textContent = `${rem}" remaining before 72" maximum stack ceiling.`;
+        stackLimitNote.classList.remove('group-note--warn');
+      } else {
+        stackLimitNote.textContent = `${MAX_STACK_HEIGHT - totalHeight}" headroom available under the 72" vertical limit.`;
+        stackLimitNote.classList.remove('group-note--warn');
+      }
+    }
+  }
+
+  function syncColorwayUI() {
+    document.querySelectorAll('[data-color-scope]').forEach((btn) => {
+      btn.setAttribute('aria-pressed', String(btn.dataset.colorScope === state.colorScope));
+    });
+
+    const targetTier = state.tiers[state.selectedTierIndex] || state.tiers[0];
+    const activeColorId = targetTier?.color || 'blue';
+    const activeColorInfo = COLORWAYS[activeColorId] || COLORWAYS.blue;
+
+    document.querySelectorAll('[data-color]').forEach((card) => {
+      card.setAttribute('aria-checked', String(card.dataset.color === activeColorId));
+    });
+
+    if (colorTargetLabel) {
+      if (state.colorScope === 'all') {
+        colorTargetLabel.textContent = `Applying across all ${state.tiers.length} stacked tiers — ${activeColorInfo.name}`;
+      } else {
+        const cat = TIERS_CATALOG[targetTier?.height || 28];
+        const pos = state.selectedTierIndex === 0 ? 'Base Tier' : state.selectedTierIndex === state.tiers.length - 1 ? 'Top Tier' : `Tier ${state.selectedTierIndex + 1}`;
+        colorTargetLabel.textContent = `Editing: ${pos} (${cat?.name || ''}) — ${activeColorInfo.name}`;
+      }
+    }
+  }
+
+  function syncLidUI() {
+    document.querySelectorAll('[data-lid]').forEach((card) => {
+      card.setAttribute('aria-checked', String(card.dataset.lid === state.lidModule));
+    });
+  }
+
+  function syncHardwareSwitchesUI() {
+    const spigotAllowed = hasBaseSpigotCapability();
+    if (swSpigot) {
+      swSpigot.disabled = !spigotAllowed;
+      swSpigot.setAttribute('aria-checked', String(spigotAllowed && state.showSpigot));
+      swSpigot.closest('.switch-row')?.classList.toggle('is-disabled', !spigotAllowed);
+    }
+    if (spigotRuleNote) {
+      if (spigotAllowed) {
+        spigotRuleNote.textContent = 'Active on 20" & 28" base modules (never mounted on 12" vaults).';
+      } else {
+        spigotRuleNote.textContent = 'Unavailable: Base tier is under 20". Spigots mount strictly on 20" & 28" bases.';
+      }
+    }
+    if (swWagon) swWagon.setAttribute('aria-checked', String(state.showWagon));
+    if (swCarousel) swCarousel.setAttribute('aria-checked', String(state.showCarousel));
+    if (swIce) swIce.setAttribute('aria-checked', String(state.showIceAndCans));
+  }
+
+  function syncReadoutAndHUD() {
+    const m = computeMetrics();
+    if (hudHeight) hudHeight.textContent = `${m.heightIn.toFixed(1)}"`;
+    if (hudQuarts) hudQuarts.textContent = `${m.quarts} QT`;
+    if (hudWeight) hudWeight.textContent = `${m.dryLbs} / ${m.fullLoadedLbs} lb`;
+
+    if (roHeight) roHeight.textContent = `${m.heightIn.toFixed(1)}" · ${m.heightCm} cm`;
+    if (roQuarts) roQuarts.textContent = `${m.quarts} QT`;
+    if (roCans) roCans.textContent = `${m.cans} Cans`;
+    if (roDry) roDry.textContent = `${m.dryLbs} lbs`;
+    if (roLoaded) roLoaded.textContent = `${m.fullLoadedLbs} lbs`;
+
+    if (railFooterSummary) {
+      const modeTag = isV12Mode() ? 'V12 CAD' : `${m.tierCount} ${m.tierCount === 1 ? 'Tier' : 'Tiers'}`;
+      railFooterSummary.textContent = `${modeTag} · ${m.heightIn.toFixed(1)}" · ${m.quarts} QT`;
+    }
+    if (railFooterPrice) {
+      railFooterPrice.textContent = `$${m.totalPrice.toFixed(2)}`;
+    }
+
+    if (v12HeightGroup) {
+      v12HeightGroup.hidden = !isV12Mode();
+    }
+    if (v12HeightReadout && V12_HEIGHT_SPECS[state.v12HeightIn]) {
+      v12HeightReadout.textContent = `${state.v12HeightIn}.0" Tall (${V12_HEIGHT_SPECS[state.v12HeightIn].mm} mm)`;
+    }
+    if (activeModeBadge) {
+      activeModeBadge.textContent = state.mode === 'v12-split'
+        ? 'V12 Split CAD'
+        : state.mode === 'v12-onepiece'
+        ? 'V12 One-Piece CAD'
+        : state.mode === 'cad-part'
+        ? 'CAD Part Isolation'
+        : 'Modular Stack';
+    }
+
+    document.querySelectorAll('[data-preset]').forEach((btn) => {
+      btn.setAttribute('aria-pressed', String(btn.dataset.preset === state.activePresetKey));
+    });
+    document.querySelectorAll('[data-v12-height]').forEach((btn) => {
+      btn.setAttribute('aria-pressed', String(Number(btn.dataset.v12Height) === state.v12HeightIn));
+    });
+
+    updateTripErgonomics();
+  }
+
+  function updateTripErgonomics() {
+    const m = computeMetrics();
+    const party = state.partySize;
+    const days = state.tripDays;
+    if (partyVal) partyVal.textContent = `${party} ${party === 1 ? 'Adult' : 'Adults'}`;
+    if (daysVal) daysVal.textContent = `${days} ${days === 1 ? 'Day' : 'Days'}`;
+
+    const cansNeeded = party * days * 4;
+    const iceNeeded = Math.round(cansNeeded * 0.8);
+    const drinksLbs = Math.round(cansNeeded * 0.78);
+
+    if (calcCansResult) calcCansResult.textContent = `${cansNeeded} Cans`;
+    if (calcIceResult) calcIceResult.textContent = `${iceNeeded} lbs Crushed Ice`;
+
+    let recKey = 'scout-30';
+    if (cansNeeded <= 36) recKey = 'scout-30';
+    else if (cansNeeded <= 72) recKey = 'explorer-38';
+    else if (cansNeeded <= 140) recKey = 'patriot-58';
+    else recKey = 'titan-72';
+
+    if (calcStackResult) {
+      calcStackResult.textContent = STACK_PRESETS[recKey].label;
+      calcStackResult.dataset.recKey = recKey;
+    }
+
+    const grossTripLbs = m.dryLbs + iceNeeded + drinksLbs;
+    const grossKg = (grossTripLbs * 0.453592).toFixed(1);
+    if (ergoTripLbs) ergoTripLbs.textContent = `${grossTripLbs} lbs`;
+    if (ergoTripKg) ergoTripKg.textContent = `${grossKg} kg`;
+    if (ergoDryVal) ergoDryVal.textContent = `${m.dryLbs} lbs`;
+    if (ergoIceVal) ergoIceVal.textContent = `${iceNeeded} lbs`;
+    if (ergoDrinksVal) ergoDrinksVal.textContent = `${drinksLbs} lbs`;
+
+    if (ergoMeterFill) {
+      ergoMeterFill.style.width = `${Math.min(100, (grossTripLbs / 220) * 100)}%`;
+    }
+    if (ergoStatusBox) {
+      ergoStatusBox.classList.remove('is-warn', 'is-heavy');
+      if (grossTripLbs < 45) {
+        ergoStatusBox.textContent = 'Solo Carry (<45 lbs): Comfortably portable by one person.';
+      } else if (grossTripLbs <= 110) {
+        ergoStatusBox.classList.add('is-warn');
+        ergoStatusBox.textContent = 'Two-Person Team Lift (45–110 lbs): Use opposing molded side loop handles (200 lb rated each).';
+      } else {
+        ergoStatusBox.classList.add('is-heavy');
+        ergoStatusBox.textContent = 'Heavy Expedition Load (>110 lbs): Unthread tiers before lifting or mount the 3-Wheel Wagon Dolly Base.';
+      }
+    }
+  }
+
+  function syncAllUI() {
+    renderTierComposer();
+    syncColorwayUI();
+    syncLidUI();
+    syncHardwareSwitchesUI();
+    syncReadoutAndHUD();
+  }
+
+  // =========================================================================
+  // 7. Stack Mutation Actions
+  // =========================================================================
+  function ensureModularMode() {
+    if (isV12Mode() || state.mode === 'cad-part') {
+      state.mode = 'modular';
+      state.activePresetKey = 'custom';
+    }
+  }
+
+  function addTier(heightIn) {
+    const addH = Number(heightIn);
+    if (!TIERS_CATALOG[addH]) return;
+
+    if (isV12Mode()) {
+      state.mode = 'modular';
+      state.tiers = [makeTier(addH, state.tiers[0]?.color || 'blue')];
+      state.selectedTierIndex = 0;
+      state.activePresetKey = 'custom';
+      rebuildCoolerScene();
+      syncAllUI();
+      frameCameraPreset('three-quarter');
+      return;
+    }
+
+    ensureModularMode();
+    const currentH = state.tiers.reduce((acc, t) => acc + t.height, 0);
+    if (currentH + addH > MAX_STACK_HEIGHT) {
+      showToast(`Cannot exceed ${MAX_STACK_HEIGHT}" maximum stack height.`);
+      return;
+    }
+
+    const colorCycle = ['blue', 'white', 'red', 'charcoal'];
+    const nextColor = colorCycle[state.tiers.length % colorCycle.length];
+    state.tiers.push(makeTier(addH, nextColor));
+    state.selectedTierIndex = state.tiers.length - 1;
+    state.activePresetKey = 'custom';
+
+    rebuildCoolerScene();
+    syncAllUI();
+    frameCameraPreset('three-quarter');
+  }
+
+  function removeTier(index) {
+    if (state.tiers.length <= 1) return;
+    ensureModularMode();
+    state.tiers.splice(index, 1);
+    state.selectedTierIndex = Math.min(state.selectedTierIndex, state.tiers.length - 1);
+    state.activePresetKey = 'custom';
+    rebuildCoolerScene();
+    syncAllUI();
+    frameCameraPreset('three-quarter');
+  }
+
+  function moveTier(fromIdx, toIdx) {
+    if (toIdx < 0 || toIdx >= state.tiers.length) return;
+    ensureModularMode();
+    const [moved] = state.tiers.splice(fromIdx, 1);
+    state.tiers.splice(toIdx, 0, moved);
+    state.selectedTierIndex = toIdx;
+    state.activePresetKey = 'custom';
+    rebuildCoolerScene();
+    syncAllUI();
+  }
+
+  function applyPreset(presetKey) {
+    const preset = STACK_PRESETS[presetKey];
+    if (!preset) return;
+    state.activePresetKey = presetKey;
+    state.mode = preset.mode;
+    if (preset.v12HeightIn) state.v12HeightIn = preset.v12HeightIn;
+    state.tiers = preset.tiers.map((t) => makeTier(t.height, t.color));
+    state.selectedTierIndex = state.tiers.length - 1;
+    state.lidModule = preset.lid;
+
+    rebuildCoolerScene();
+    syncAllUI();
+    frameCameraPreset('three-quarter');
+  }
+
+  // =========================================================================
+  // 8. Explode & Cutaway Helpers
+  // =========================================================================
+  function setExplodePct(pctRaw) {
+    const pct = Math.max(0, Math.min(100, Math.round(Number(pctRaw) || 0)));
+    state.explodeTarget = pct / 100;
+
+    if (explodeSlider) {
+      explodeSlider.value = String(pct);
+      syncRangeCSS(explodeSlider, `${pct} percent separated`);
+    }
+    if (explodeOutput) explodeOutput.textContent = `${pct}%`;
+
+    const active = pct >= 5;
+    if (btnExplodeToggle) {
+      btnExplodeToggle.setAttribute('aria-pressed', String(pct >= 50));
+      btnExplodeToggle.textContent = pct >= 50 ? 'Assemble Stack' : 'Explode Full (100%)';
+    }
+    if (hudBtnExplode) {
+      hudBtnExplode.setAttribute('aria-pressed', String(active));
+      hudBtnExplode.textContent = active ? 'Assemble' : 'Explode Tiers';
+    }
+  }
+
+  function setXrayPct(pctRaw) {
+    const pct = Math.max(0, Math.min(100, Math.round(Number(pctRaw) || 0)));
+    state.xrayPct = pct;
+
+    if (xraySlider) {
+      xraySlider.value = String(pct);
+      syncRangeCSS(xraySlider, `${pct} percent cutaway`);
+    }
+    if (xrayVal) xrayVal.textContent = `${pct}%`;
+
+    const active = pct > 0;
+    if (btnSliceHalf) {
+      btnSliceHalf.setAttribute('aria-pressed', String(active));
+      btnSliceHalf.textContent = active ? 'Close Cutaway' : 'Slice Half (50%)';
+    }
+    if (hudBtnCutaway) {
+      hudBtnCutaway.setAttribute('aria-pressed', String(active));
+      hudBtnCutaway.textContent = active ? `Cutaway (${pct}%)` : 'Cutaway X-Ray';
+    }
+
+    applyCutawayPlane(pct);
+  }
+
+  // =========================================================================
+  // 9. Accessible Single-Row Tabs + beforematch Support
+  // =========================================================================
+  const tabButtons = [...document.querySelectorAll('.rail-tab[role="tab"]')];
+  const tabPanels = [...document.querySelectorAll('.rail-tabpanel[role="tabpanel"]')];
+
+  function activateTab(panelId, moveFocus = false) {
+    const targetBtn = tabButtons.find((b) => b.dataset.panel === panelId);
+    if (!targetBtn) return;
+
+    state.activeTabId = panelId;
+    tabButtons.forEach((btn) => {
+      const selected = btn === targetBtn;
+      btn.setAttribute('aria-selected', String(selected));
+      btn.tabIndex = selected ? 0 : -1;
+    });
+
+    tabPanels.forEach((panel) => {
+      const match = panel.id === panelId;
+      panel.hidden = match ? false : 'until-found';
+    });
+
+    targetBtn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    if (moveFocus) targetBtn.focus();
+
+    if (panelId === 'panel-cad') {
+      if (state.mode !== 'cad-part') {
+        state.mode = 'cad-part';
+        rebuildCoolerScene();
+        syncReadoutAndHUD();
+        updateCadTelemetryUI();
+      }
+    } else if (state.mode === 'cad-part') {
+      exitCadInspectorMode();
+    }
+  }
+
+  function exitCadInspectorMode() {
+    state.mode = state.activePresetKey === 'v12-split' || state.activePresetKey === 'v12-onepiece'
+      ? state.activePresetKey
+      : 'modular';
+    rebuildCoolerScene();
+    syncAllUI();
+    frameCameraPreset('three-quarter');
+  }
+
+  tabButtons.forEach((btn, idx) => {
+    btn.addEventListener('click', () => activateTab(btn.dataset.panel, false));
+    btn.addEventListener('keydown', (e) => {
+      let nextIdx = null;
+      if (e.key === 'ArrowRight') nextIdx = (idx + 1) % tabButtons.length;
+      else if (e.key === 'ArrowLeft') nextIdx = (idx - 1 + tabButtons.length) % tabButtons.length;
+      else if (e.key === 'Home') nextIdx = 0;
+      else if (e.key === 'End') nextIdx = tabButtons.length - 1;
+      if (nextIdx !== null) {
+        e.preventDefault();
+        activateTab(tabButtons[nextIdx].dataset.panel, true);
+      }
+    });
+  });
+
+  tabPanels.forEach((panel) => {
+    panel.addEventListener('beforematch', () => activateTab(panel.id, false));
+  });
+
+  // =========================================================================
+  // 10. CAD Part Inspector List & Telemetry
+  // =========================================================================
+  function updateCadTelemetryUI() {
+    const cad = window.KOK_CAD_MESHES;
+    if (!cad) return;
+    const part = cad[state.activeCadKey];
+    if (!part) return;
+
+    if (cadTelCategory) cadTelCategory.textContent = part.category || 'CAD Part';
+    if (cadTelFormat) cadTelFormat.textContent = part.format || '.STL';
+    if (cadTelName) cadTelName.textContent = part.name;
+    if (cadTelDesc) cadTelDesc.textContent = part.desc;
+    if (cadTelFile) cadTelFile.textContent = part.fileLabel;
+    if (cadTelTris) cadTelTris.textContent = `${part.origTris.toLocaleString()} tris (${part.meshTris.toLocaleString()} WebGL)`;
+    if (cadTelMm) cadTelMm.textContent = `${part.dimsMm[0]} × ${part.dimsMm[1]} × ${part.dimsMm[2]} mm`;
+    if (cadTelIn) cadTelIn.textContent = `${part.dimsIn[0]} × ${part.dimsIn[1]} × ${part.dimsIn[2]} in`;
+    if (cadDownloadLink) {
+      cadDownloadLink.href = part.downloadUrl;
+      cadDownloadLink.setAttribute('download', part.downloadName);
+    }
+
+    document.querySelectorAll('.cad-part-btn').forEach((b) => {
+      b.setAttribute('aria-pressed', String(b.dataset.cadKey === state.activeCadKey));
+    });
+  }
+
+  function populateCadPartsBrowser() {
+    if (!cadPartsList) return;
+    const cad = window.KOK_CAD_MESHES;
+    if (!cad) {
+      if (cadPartCount) cadPartCount.textContent = '0 Parts';
+      cadPartsList.innerHTML = '<p class="group-note">CAD mesh bundle unavailable in this context.</p>';
+      return;
+    }
+
+    const parts = Object.values(cad);
+    if (cadPartCount) cadPartCount.textContent = `${parts.length} Parts`;
+    cadPartsList.innerHTML = '';
+
+    parts.forEach((part) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cad-part-btn v2-pressable';
+      btn.dataset.cadKey = part.key;
+      btn.setAttribute('aria-pressed', String(part.key === state.activeCadKey));
+      btn.innerHTML = `
+        <span class="cad-part-btn__text">
+          <span class="cad-part-btn__file">${part.fileLabel}</span>
+          <span class="cad-part-btn__name">${part.name} &middot; ${part.origTris.toLocaleString()} tris</span>
+        </span>
+        <span class="cad-part-btn__tag">${part.format}</span>
+      `;
+      btn.addEventListener('click', () => {
+        state.activeCadKey = part.key;
+        state.mode = 'cad-part';
+        updateCadTelemetryUI();
+        rebuildCoolerScene();
+        syncReadoutAndHUD();
+      });
+      cadPartsList.appendChild(btn);
+    });
+  }
+
+  // =========================================================================
+  // 11. Build Sheet Native Dialog & LocalStorage Export
+  // =========================================================================
+  function populateSpecSheetDialog() {
+    const m = computeMetrics();
+    const lid = LID_MODULES[state.lidModule] || LID_MODULES.solar;
+    const modeLabel = isV12Mode()
+      ? `V12 Prototype (${state.mode === 'v12-split' ? '5-Ring Split Kit' : 'One-Piece'} · ${state.v12HeightIn}")`
+      : `${m.tierCount}-Tier Modular Stack (${m.heightIn.toFixed(1)}" Tall)`;
+
+    if (specDialogSubtitle) {
+      specDialogSubtitle.textContent = `24.0" OD Architecture · ${modeLabel} · Estimated $${m.totalPrice.toFixed(2)}`;
+    }
+
+    if (specDialogKpis) {
+      specDialogKpis.innerHTML = `
+        <div class="spec-kpi-card"><dt>Stack Height</dt><dd>${m.heightIn.toFixed(1)}" (${m.heightCm} cm)</dd></div>
+        <div class="spec-kpi-card"><dt>Total Volume</dt><dd>${m.quarts} QT</dd></div>
+        <div class="spec-kpi-card"><dt>12 oz Cans (2:1 Ice)</dt><dd>${m.cans} Cans</dd></div>
+        <div class="spec-kpi-card"><dt>Dry / Loaded</dt><dd>${m.dryLbs} / ${m.fullLoadedLbs} lb</dd></div>
+      `;
+    }
+
+    if (specDialogRows) {
+      specDialogRows.innerHTML = '';
+      if (isV12Mode()) {
+        const spec = V12_HEIGHT_SPECS[state.v12HeightIn] || V12_HEIGHT_SPECS[20];
+        const col = COLORWAYS[state.tiers[0]?.color || 'blue'] || COLORWAYS.blue;
+        specDialogRows.innerHTML = `
+          <tr>
+            <td>V12 Vessel</td>
+            <td>${state.v12HeightIn}" Tall × 24.0" OD ${state.mode === 'v12-split' ? 'Split Prototype' : 'One-Piece'}</td>
+            <td><span class="spec-finish-pill"><span class="spec-finish-dot" style="background:${col.hex}"></span>${col.name}</span></td>
+            <td>${spec.quarts} QT · ${spec.cans} Cans${m.spigotActive ? ' · Spigot' : ''}</td>
+            <td>${spec.dryLbs} lb dry</td>
+            <td>$${spec.price.toFixed(2)}</td>
+          </tr>
+        `;
+      } else {
+        for (let i = state.tiers.length - 1; i >= 0; i--) {
+          const t = state.tiers[i];
+          const cat = TIERS_CATALOG[t.height] || TIERS_CATALOG[20];
+          const col = COLORWAYS[t.color] || COLORWAYS.blue;
+          const pos = state.tiers.length === 1 ? 'Single' : i === 0 ? 'Base Tier' : i === state.tiers.length - 1 ? 'Top Vault' : `Tier ${i + 1}`;
+          const drainText = cat.allowsSpigot && i === 0 && state.showSpigot ? 'Quarter-turn spigot' : 'Sealed core';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${pos}</td>
+            <td>${cat.name}</td>
+            <td><span class="spec-finish-pill"><span class="spec-finish-dot" style="background:${col.hex}"></span>${col.name}</span></td>
+            <td>${cat.quarts} QT · ${drainText}</td>
+            <td>${cat.dryLbs} lb</td>
+            <td>$${cat.price.toFixed(2)}</td>
+          `;
+          specDialogRows.appendChild(tr);
+        }
+      }
+    }
+
+    if (specDialogHardware) {
+      const items = [
+        `<strong>Crown Lid:</strong> ${lid.name} (${lid.price > 0 ? `+$${lid.price}` : 'Included'}) · 500 lb static seat rated`,
+        `<strong>Base Mobility &amp; Core:</strong> ${state.showWagon ? `3-Wheel Wagon Dolly (+$${WAGON_PRICE})` : 'Concentric Recessed Index Foot'} · ${state.showCarousel ? 'All-Thread Deli Carousel' : 'Open Cold Core'}`,
+        `<strong>Thermal Wall:</strong> 3.5" continuous rigid R-8 polyurethane foam inside UV-8 matte LLDPE`,
+        `<strong>Personalization:</strong> ${m.hasEngraving ? `Laser Engraving (${state.engraveLoc === 'lid' ? 'Bamboo Disc' : 'Front Wall'}) +$${ENGRAVE_PRICE}` : 'None selected'}`,
+        `<strong>Total Estimated Value:</strong> $${m.totalPrice.toFixed(2)}`
+      ];
+      specDialogHardware.innerHTML = items.join('<br>');
+    }
+  }
+
+  function buildPlainTextSpecs() {
+    const m = computeMetrics();
+    const lid = LID_MODULES[state.lidModule] || LID_MODULES.solar;
+    const lines = [
+      'KING OF KOOLERS — CONFIGURED 3D BUILD SHEET',
+      '============================================',
+      `Diameter: 24.0" OD (3.5" R-8 Polyurethane Foam Walls)`,
+      `Stack Height: ${m.heightIn.toFixed(1)}" (${m.heightCm} cm) / 72.0" Max`,
+      `Total Capacity: ${m.quarts} QT · ${m.cans} x 12 oz cans (2:1 ice ratio)`,
+      `Weight: ${m.dryLbs} lbs dry · ${m.fullLoadedLbs} lbs full loaded (2:1 ice)`,
+      `Seat Load Rating: 500 lb static compressive top load`,
+      '',
+      'MODULES (TOP TO BASE):'
+    ];
+    for (let i = state.tiers.length - 1; i >= 0; i--) {
+      const t = state.tiers[i];
+      const cat = TIERS_CATALOG[t.height] || TIERS_CATALOG[20];
+      const col = COLORWAYS[t.color] || COLORWAYS.blue;
+      const drain = cat.allowsSpigot && i === 0 && state.showSpigot ? ' + Quarter-Turn Spigot' : '';
+      lines.push(`- ${cat.name} | ${col.name} (${col.hex}) | ${cat.quarts} QT${drain} | $${cat.price}`);
+    }
+    lines.push('');
+    lines.push(`Crown Lid: ${lid.name} (${lid.price > 0 ? `+$${lid.price}` : 'Included'})`);
+    lines.push(`Wagon Base: ${state.showWagon ? `3-Wheel All-Terrain Dolly (+$${WAGON_PRICE})` : 'Standard Concentric Foot'}`);
+    lines.push(`Deli Carousel: ${state.showCarousel ? 'Included' : 'Omitted'}`);
+    if (m.hasEngraving) {
+      lines.push(`Engraving (${state.engraveLoc}): ${state.engraveLine1} / ${state.engraveLine2}`);
+    }
+    lines.push(`Estimated Total: $${m.totalPrice.toFixed(2)}`);
+    return lines.join('\n');
+  }
+
+  function saveCustomizationPayload() {
+    try {
+      const m = computeMetrics();
+      const payload = {
+        mode: state.mode,
+        stackType: state.activePresetKey,
+        stackLabel: isV12Mode() ? `V12 CAD (${state.v12HeightIn}")` : `${m.tierCount}-Tier Stack (${m.heightIn}")`,
+        tiers: state.tiers.map((t) => ({ height: t.height, color: t.color })),
+        heightIn: m.heightIn,
+        quarts: m.quarts,
+        cansCount: m.cans,
+        dryLbs: m.dryLbs,
+        loadedLbs: m.fullLoadedLbs,
+        estimatedPrice: m.totalPrice,
+        lidModule: state.lidModule,
+        showSpigot: m.spigotActive,
+        showWagon: state.showWagon,
+        engraveLoc: state.engraveLoc,
+        engraveLine1: state.engraveLine1,
+        engraveLine2: state.engraveLine2,
+        applyPending: true,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('kok_studio_customization', JSON.stringify(payload));
+    } catch (err) {
+      console.warn('localStorage save skipped:', err);
+    }
+  }
+
+  function downloadStudioSnapshot() {
+    if (!webglReady || !renderer) {
+      showToast('WebGL snapshot is unavailable without hardware canvas.');
+      return;
+    }
+    renderer.render(scene, camera);
+    const url = renderer.domElement.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.download = `KingOfKoolers_3D_Stack_${Date.now()}.png`;
+    a.href = url;
+    a.click();
+    showToast('3D studio snapshot downloaded as PNG.');
+  }
+
+  // =========================================================================
+  // 12. Wire All Event Listeners
+  // =========================================================================
+  function bindEvents() {
+    // Environment lighting toggle
+    document.querySelectorAll('[data-env]').forEach((btn) => {
+      btn.addEventListener('click', () => applyEnvironment(btn.dataset.env));
+    });
+
+    // Camera presets
+    document.querySelectorAll('[data-view]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const view = btn.dataset.view;
+        document.querySelectorAll('[data-view]').forEach((b) => {
+          b.setAttribute('aria-pressed', String(b === btn && view !== 'reset'));
+        });
+        if (view === 'reset') {
+          const first = document.querySelector('[data-view="three-quarter"]');
+          if (first) first.setAttribute('aria-pressed', 'true');
+        }
+        frameCameraPreset(view);
+      });
+    });
+
+    // Turntable & Snapshot
+    if (btnTurntable) {
+      btnTurntable.addEventListener('click', () => {
+        state.turntable = !state.turntable;
+        btnTurntable.setAttribute('aria-pressed', String(state.turntable));
+      });
+    }
+    if (btnSnapshot) {
+      btnSnapshot.addEventListener('click', downloadStudioSnapshot);
+    }
+
+    // Presets
+    document.querySelectorAll('[data-preset]').forEach((btn) => {
+      btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+    });
+
+    // V12 Height Buttons
+    document.querySelectorAll('[data-v12-height]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.v12HeightIn = Number(btn.dataset.v12Height) || 20;
+        if (!isV12Mode()) state.mode = 'v12-onepiece';
+        rebuildCoolerScene();
+        syncAllUI();
+        frameCameraPreset('three-quarter');
+      });
+    });
+
+    // Add tier buttons
+    document.querySelectorAll('[data-add-tier]').forEach((btn) => {
+      btn.addEventListener('click', () => addTier(btn.dataset.addTier));
+    });
+
+    // Color scope & Swatches
+    document.querySelectorAll('[data-color-scope]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.colorScope = btn.dataset.colorScope;
+        syncColorwayUI();
+      });
+    });
+
+    document.querySelectorAll('[data-color]').forEach((card) => {
+      card.addEventListener('click', () => {
+        const c = card.dataset.color;
+        if (!COLORWAYS[c]) return;
+        if (state.colorScope === 'all') {
+          state.tiers.forEach((t) => { t.color = c; });
+        } else {
+          const target = state.tiers[state.selectedTierIndex];
+          if (target) target.color = c;
+        }
+        rebuildCoolerScene();
+        syncAllUI();
+      });
+    });
+
+    // Lid Selector
+    document.querySelectorAll('[data-lid]').forEach((card) => {
+      card.addEventListener('click', () => {
+        const lidId = card.dataset.lid;
+        if (!LID_MODULES[lidId]) return;
+        state.lidModule = lidId;
+        rebuildCoolerScene();
+        syncAllUI();
+      });
+    });
+
+    // Explode & Cutaway sliders + buttons
+    if (explodeSlider) {
+      syncRangeCSS(explodeSlider, '0 percent separated');
+      explodeSlider.addEventListener('input', (e) => setExplodePct(e.target.value));
+    }
+    if (xraySlider) {
+      syncRangeCSS(xraySlider, '0 percent cutaway');
+      xraySlider.addEventListener('input', (e) => {
+        if (state.mode === 'cad-part') activateTab('panel-build');
+        setXrayPct(e.target.value);
+      });
+    }
+
+    const toggleExplode = () => {
+      setExplodePct(state.explodeTarget >= 0.5 ? 0 : 100);
+      if (state.mode !== 'cad-part') {
+        frameCameraPreset('three-quarter');
+      }
+    };
+    const toggleCutaway = () => {
+      if (state.mode === 'cad-part') activateTab('panel-build');
+      setXrayPct(state.xrayPct > 0 ? 0 : 50);
+    };
+
+    if (btnExplodeToggle) btnExplodeToggle.addEventListener('click', toggleExplode);
+    if (hudBtnExplode) hudBtnExplode.addEventListener('click', toggleExplode);
+    if (btnSliceHalf) btnSliceHalf.addEventListener('click', toggleCutaway);
+    if (hudBtnCutaway) hudBtnCutaway.addEventListener('click', toggleCutaway);
+
+    // Switches (preventDefault stops motion.js from double-flipping aria-checked)
+    if (swSpigot) {
+      swSpigot.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!hasBaseSpigotCapability()) return;
+        state.showSpigot = !state.showSpigot;
+        rebuildCoolerScene();
+        syncAllUI();
+      });
+    }
+    if (swWagon) {
+      swWagon.addEventListener('click', (e) => {
+        e.preventDefault();
+        state.showWagon = !state.showWagon;
+        rebuildCoolerScene();
+        syncAllUI();
+      });
+    }
+    if (swCarousel) {
+      swCarousel.addEventListener('click', (e) => {
+        e.preventDefault();
+        state.showCarousel = !state.showCarousel;
+        rebuildCoolerScene();
+        syncAllUI();
+      });
+    }
+    if (swIce) {
+      swIce.addEventListener('click', (e) => {
+        e.preventDefault();
+        state.showIceAndCans = !state.showIceAndCans;
+        rebuildCoolerScene();
+        syncAllUI();
+      });
+    }
+
+    // Trip Capacity Calculator
+    if (partyRange) {
+      syncRangeCSS(partyRange);
+      partyRange.addEventListener('input', (e) => {
+        state.partySize = Number(e.target.value) || 4;
+        syncRangeCSS(partyRange);
+        updateTripErgonomics();
+      });
+    }
+    if (daysRange) {
+      syncRangeCSS(daysRange);
+      daysRange.addEventListener('input', (e) => {
+        state.tripDays = Number(e.target.value) || 3;
+        syncRangeCSS(daysRange);
+        updateTripErgonomics();
+      });
+    }
+    if (btnApplyCalc) {
+      btnApplyCalc.addEventListener('click', () => {
+        const recKey = calcStackResult?.dataset.recKey || 'patriot-58';
+        applyPreset(recKey);
+        activateTab('panel-build');
+        showToast(`Applied ${STACK_PRESETS[recKey].label} to 3D viewport.`);
+      });
+    }
+
+    // CAD Inspector Controls
+    document.querySelectorAll('[data-cad-shader]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.cadShaderMode = btn.dataset.cadShader;
+        document.querySelectorAll('[data-cad-shader]').forEach((b) => {
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+        if (state.mode !== 'cad-part') {
+          state.mode = 'cad-part';
+          rebuildCoolerScene();
+        } else {
+          renderActiveCadPart();
+        }
+      });
+    });
+
+    if (btnCadReturn) {
+      btnCadReturn.addEventListener('click', () => activateTab('panel-build'));
+    }
+
+    // Laser Engraving
+    document.querySelectorAll('[data-engrave-loc]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.engraveLoc = btn.dataset.engraveLoc;
+        document.querySelectorAll('[data-engrave-loc]').forEach((b) => {
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+        if (state.engraveLoc === 'lid' && state.lidModule !== 'bamboo') {
+          state.lidModule = 'bamboo';
+        }
+        rebuildCoolerScene();
+        syncAllUI();
+      });
+    });
+
+    const handleTextEngrave = () => {
+      state.engraveLine1 = inputLine1?.value || '';
+      state.engraveLine2 = inputLine2?.value || '';
+      if (state.engraveLoc === 'lid' && state.lidModule === 'standard') {
+        state.lidModule = 'bamboo';
+      }
+      rebuildCoolerScene();
+      syncAllUI();
+    };
+    if (inputLine1) inputLine1.addEventListener('input', handleTextEngrave);
+    if (inputLine2) inputLine2.addEventListener('input', handleTextEngrave);
+
+    document.querySelectorAll('[data-crest]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.crest = btn.dataset.crest;
+        document.querySelectorAll('[data-crest]').forEach((b) => {
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+        rebuildCoolerScene();
+      });
+    });
+
+    if (logoUpload) {
+      logoUpload.addEventListener('change', (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            state.customLogoImg = img;
+            if (state.engraveLoc === 'lid') state.lidModule = 'bamboo';
+            rebuildCoolerScene();
+            syncAllUI();
+            showToast('Custom engraving graphic applied.');
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    if (logoClear) {
+      logoClear.addEventListener('click', () => {
+        state.customLogoImg = null;
+        if (logoUpload) logoUpload.value = '';
+        rebuildCoolerScene();
+        syncAllUI();
+      });
+    }
+
+    // Build Sheet Native Dialog & Copy Specs
+    if (btnOpenSpecSheet && specDialog) {
+      btnOpenSpecSheet.addEventListener('click', () => {
+        populateSpecSheetDialog();
+        if (!('commandForElement' in HTMLButtonElement.prototype) && !specDialog.open) {
+          // v2-core handles commandfor polyfill too; safeguard just in case
+          specDialog.showModal();
+        }
+      });
+    }
+
+    if (btnCopySpecs) {
+      btnCopySpecs.addEventListener('click', async () => {
+        const text = buildPlainTextSpecs();
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            throw new Error('Clipboard unavailable');
+          }
+          showToast('Build sheet copied to clipboard.');
+        } catch {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+          showToast('Build sheet copied to clipboard.');
+        }
+      });
+    }
+
+    if (btnModalSnapshot) {
+      btnModalSnapshot.addEventListener('click', downloadStudioSnapshot);
+    }
+
+    if (btnRailReserve) btnRailReserve.addEventListener('click', saveCustomizationPayload);
+    if (btnModalReserve) btnModalReserve.addEventListener('click', saveCustomizationPayload);
+  }
+
+  // =========================================================================
+  // 13. Bootstrap
+  // =========================================================================
+  populateCadPartsBrowser();
+  updateCadTelemetryUI();
+  syncAllUI();
+  bindEvents();
+  initThreeViewport();
+
+  if (window.location.hash === '#cad-inspector') {
+    activateTab('panel-cad');
+  }
+})();

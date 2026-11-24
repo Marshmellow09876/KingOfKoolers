@@ -1,0 +1,5 @@
+2026/11/24-08:33:30.410 69d8 Creating DB E:\Documents\AiPrograms\KingOfKoolers\v2\.taste-skill\diag-prof\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/11/24-08:33:30.450 69d8 Reusing MANIFEST E:\Documents\AiPrograms\KingOfKoolers\v2\.taste-skill\diag-prof\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/11/24-08:33:34.574 76a4 Level-0 table #5: started
+2026/11/24-08:33:34.580 76a4 Level-0 table #5: 683284 bytes OK
+2026/11/24-08:33:34.583 76a4 Delete type=0 #3
