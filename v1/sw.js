@@ -1,5 +1,6 @@
-/* King of Koolers V1 — Lightweight PWA App Shell Service Worker */
-const CACHE_NAME = 'kok-v1-shell-v1';
+/* King of Koolers V1 — Lightweight PWA App Shell + Runtime Image Cache Service Worker */
+const CACHE_NAME = 'kok-v1-shell-v2';
+const IMAGE_CACHE = 'kok-v1-images-v1';
 
 const PRECACHE_URLS = [
   './',
@@ -18,7 +19,8 @@ const PRECACHE_URLS = [
 ];
 
 const BYPASS_EXT_RE = /\.(mp4|webm|3mf|obj|stl|mtl|pdf)$/i;
-const SHELL_ASSET_RE = /\.(css|js|svg|json|png)$/i;
+const SHELL_ASSET_RE = /\.(css|js|json)$/i;
+const IMAGE_ASSET_RE = /\.(jpg|jpeg|webp|avif|png|gif|svg)$/i;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -32,7 +34,11 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(
+        keys
+          .filter((k) => k !== CACHE_NAME && k !== IMAGE_CACHE)
+          .map((k) => caches.delete(k))
+      ))
       .then(() => self.clients.claim())
   );
 });
@@ -67,7 +73,23 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Stale-While-Revalidate for lightweight local app-shell assets
+  // Stale-While-Revalidate for local image assets so visited photos keep rendering offline too
+  if (IMAGE_ASSET_RE.test(url.pathname)) {
+    event.respondWith(
+      caches.open(IMAGE_CACHE).then((cache) =>
+        cache.match(req).then((cached) => {
+          const networkFetch = fetch(req).then((res) => {
+            if (res && res.ok) cache.put(req, res.clone());
+            return res;
+          }).catch(() => cached);
+          return cached || networkFetch;
+        })
+      )
+    );
+    return;
+  }
+
+  // Stale-While-Revalidate for lightweight local app-shell CSS/JS/JSON assets
   if (SHELL_ASSET_RE.test(url.pathname)) {
     event.respondWith(
       caches.open(CACHE_NAME).then((cache) =>
