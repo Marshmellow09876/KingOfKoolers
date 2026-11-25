@@ -1440,6 +1440,19 @@
             </div>
           </div>
 
+          <div class="control-card" style="background: rgba(59, 130, 246, 0.07); border-color: rgba(59, 130, 246, 0.35);">
+            <div class="control-label" style="color: #60a5fa;">
+              <span>3-Wheel All-Terrain Wagon Base</span>
+              <span>Module 31 · +$129</span>
+            </div>
+            <button type="button" class="preset-chip active" id="btn-toggle-wagon" aria-pressed="true" style="width:100%;">
+              ✓ 3-Wheel All-Terrain Wagon Mounted (+$129)
+            </button>
+            <div style="font-size:11px;color:var(--text-muted);line-height:1.45;">
+              10.4" Rear + 7.2" Front Swivel Knobby Pneumatic Tires · Galvanized Y-Chassis · Telescoping Aluminum Handle (+18 lbs, +8.5" H)
+            </div>
+          </div>
+
           <div class="control-card" id="mix-match-card" style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.28);">
             <div class="control-label" style="color: #34d399;">
               <span>Mix &amp; Match Per-Height Tier Stacker</span>
@@ -1816,7 +1829,7 @@
   </main>
 
   <!-- Real CAD Mesh Bundle (.3MF/.STL/.OBJ) & Local Three.js Engine -->
-  <script src="./assets/js/cad-meshes.js"></script>
+  <script src="./assets/js/cad-meshes.js?v=3wheel-v1"></script>
   <script>
     // Global State
     const studioState = {
@@ -1838,6 +1851,7 @@
       showSpiral: true,
       showSpigot: true,
       showSolar: true,
+      showWagon: true,
       engraveLocation: 'lid',
       engraveLine1: '',
       engraveLine2: '',
@@ -1874,7 +1888,7 @@
     scene.fog = new THREE.FogExp2(0x060910, 0.012);
 
     const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 1000);
-    camera.position.set(38, 28, 55);
+    camera.position.set(44, 30, 64);
 
     const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, preserveDrawingBuffer: true });
     renderer.setSize(container.clientWidth, container.clientHeight, false);
@@ -1892,8 +1906,8 @@
     controls.dampingFactor = 0.06;
     controls.maxPolarAngle = Math.PI / 2 + 0.05; // don't go below ground
     controls.minDistance = 20;
-    controls.maxDistance = 140;
-    controls.target.set(0, 16, 0);
+    controls.maxDistance = 160;
+    controls.target.set(0, 15, 2);
 
     // Studio Lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
@@ -1907,6 +1921,14 @@
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
     keyLight.shadow.mapSize.height = 2048;
+    keyLight.shadow.camera.left = -48;
+    keyLight.shadow.camera.right = 48;
+    keyLight.shadow.camera.top = 60;
+    keyLight.shadow.camera.bottom = -20;
+    keyLight.shadow.camera.near = 10;
+    keyLight.shadow.camera.far = 170;
+    keyLight.shadow.bias = -0.0005;
+    keyLight.shadow.normalBias = 0.08;
     scene.add(keyLight);
 
     const cyanFillLight = new THREE.DirectionalLight(0x00f0ff, 0.7);
@@ -2241,12 +2263,17 @@
       24: { quarts: 80, cans: 74, dryLbs: 28, priceDelta: 25,  mm: 609.6 }
     };
 
+    const WAGON_ADDON_PRICE = 129;
+    const WAGON_ADDON_LBS = 18;
+    const WAGON_ADDON_HEIGHT_IN = 8.5;
+
     function computeStudioPrice() {
       const preset = getActivePreset();
       let total = preset.basePrice;
       if (preset.isV12Cad && V12_HEIGHT_SPECS[studioState.v12HeightIn]) {
         total += V12_HEIGHT_SPECS[studioState.v12HeightIn].priceDelta;
       }
+      if (studioState.showWagon) total += WAGON_ADDON_PRICE;
       if (studioState.showPizza) total += 49;
       if (studioState.pattern && studioState.pattern !== 'none') total += 59;
       if ((studioState.engraveLine1 && studioState.engraveLine1.trim()) ||
@@ -2258,31 +2285,41 @@
       return Math.max(149, total);
     }
 
-    function updateStudioHUD() {
+    function getCurrentBuildMetrics() {
       const preset = getActivePreset();
-      const price = computeStudioPrice();
       const hSpec = V12_HEIGHT_SPECS[studioState.v12HeightIn] || V12_HEIGHT_SPECS[20];
-      const dispHeight = preset.isV12Cad ? studioState.v12HeightIn : preset.heightIn;
+      const baseHeightIn = preset.isV12Cad ? studioState.v12HeightIn : preset.heightIn;
+      const rawHeight = baseHeightIn + (studioState.showWagon ? WAGON_ADDON_HEIGHT_IN : 0);
+      const dispHeight = Number.isInteger(rawHeight) ? String(rawHeight) : rawHeight.toFixed(1);
       const dispQuarts = preset.isV12Cad ? hSpec.quarts : preset.quarts;
       const dispCans = preset.isV12Cad ? hSpec.cans : (preset.cansCapacity || Math.round(dispQuarts * 0.92));
-      const dispDryLbs = preset.isV12Cad ? hSpec.dryLbs : preset.dryLbs;
+      const baseDryLbs = preset.isV12Cad ? hSpec.dryLbs : preset.dryLbs;
+      const dispDryLbs = baseDryLbs + (studioState.showWagon ? WAGON_ADDON_LBS : 0);
       const ice = studioState.iceLbs || 38;
       const drinks = Math.round((studioState.cansCount || 48) * 0.78);
-      const dispLoaded = dispDryLbs + ice + drinks;
+      const dispLoadedLbs = dispDryLbs + ice + drinks;
+      const price = computeStudioPrice();
+      return { preset, rawHeight, dispHeight, dispQuarts, dispCans, dispDryLbs, ice, drinks, dispLoadedLbs, price };
+    }
 
-      if (hudHeight) hudHeight.textContent = `${dispHeight}"`;
-      if (hudQuarts) hudQuarts.textContent = `${dispQuarts} QT`;
-      if (telQuarts) telQuarts.textContent = `${dispQuarts} QT`;
-      if (telCans) telCans.textContent = `${dispCans} CANS`;
-      if (telDryLbs) telDryLbs.textContent = `${dispDryLbs} LBS`;
-      if (telLoadedLbs) telLoadedLbs.textContent = `${dispLoaded} LBS`;
-      if (consoleTotalPrice) consoleTotalPrice.textContent = `$${price.toFixed(2)}`;
+    function updateStudioHUD() {
+      const m = getCurrentBuildMetrics();
+
+      if (hudHeight) hudHeight.textContent = `${m.dispHeight}"`;
+      if (hudQuarts) hudQuarts.textContent = `${m.dispQuarts} QT`;
+      if (hudWeight) hudWeight.textContent = `${m.dispLoadedLbs} LBS`;
+      if (telQuarts) telQuarts.textContent = `${m.dispQuarts} QT`;
+      if (telCans) telCans.textContent = `${m.dispCans} CANS`;
+      if (telDryLbs) telDryLbs.textContent = `${m.dispDryLbs} LBS`;
+      if (telLoadedLbs) telLoadedLbs.textContent = `${m.dispLoadedLbs} LBS`;
+      if (consoleTotalPrice) consoleTotalPrice.textContent = `$${m.price.toFixed(2)}`;
       if (breakdownDryLabel) {
-        breakdownDryLabel.textContent = preset.isV12Cad
-          ? `Dry Prototype Weight (24" OD × ${studioState.v12HeightIn}" Tall V12 CAD):`
-          : `Dry Stack Weight (${preset.tiers.length} ${preset.tiers.length === 1 ? 'Tier' : 'Tiers'} + Lid):`;
+        const baseLbl = m.preset.isV12Cad
+          ? `Dry Prototype Weight (24" OD × ${studioState.v12HeightIn}" V12 CAD`
+          : `Dry Stack Weight (${m.preset.tiers.length} ${m.preset.tiers.length === 1 ? 'Tier' : 'Tiers'} + Lid`;
+        breakdownDryLabel.textContent = baseLbl + (studioState.showWagon ? ' + 3-Wheel Wagon):' : '):');
       }
-      if (breakdownDryVal) breakdownDryVal.textContent = `${dispDryLbs} lbs`;
+      if (breakdownDryVal) breakdownDryVal.textContent = `${m.dispDryLbs} lbs`;
       const mixSum = document.getElementById('mix-match-summary');
       if (mixSum) {
         const tiersList = studioState.customTiers || [];
@@ -2295,15 +2332,25 @@
     const coolerRoot = new THREE.Group();
     scene.add(coolerRoot);
 
-    // V12 Real CAD Prototype Assembly Group
+    // 3-Wheel All-Terrain Wagon Base Group (grounded on y = 0 across V12 & multi-tier stacks)
+    const wagonGroup = new THREE.Group();
+    coolerRoot.add(wagonGroup);
+
+    // V12 Real CAD Prototype Assembly Group + Concentric Twist-Lock Lid Group
     const v12AssemblyGroup = new THREE.Group();
     coolerRoot.add(v12AssemblyGroup);
     let v12ExplodableMeshes = [];
+    let v12LidGroup = new THREE.Group();
 
     // CAD Mesh Inspector Group (hidden until user activates 6. CAD Mesh Inspector)
     const cadInspectorGroup = new THREE.Group();
     cadInspectorGroup.visible = false;
     scene.add(cadInspectorGroup);
+
+    // Container that seats procedural / mix-and-match stacks onto the wagon cradle (or floor)
+    const stackLiftGroup = new THREE.Group();
+    coolerRoot.add(stackLiftGroup);
+    let stackBaseOffsetY = 0;
 
     // Groups for explosion animation (supports 2, 3, or 4 tiers)
     const baseGroup = new THREE.Group();
@@ -2311,11 +2358,11 @@
     const upperMidGroup = new THREE.Group();
     const topGroup = new THREE.Group();
     const lidGroup = new THREE.Group();
-    coolerRoot.add(baseGroup);
-    coolerRoot.add(midGroup);
-    coolerRoot.add(upperMidGroup);
-    coolerRoot.add(topGroup);
-    coolerRoot.add(lidGroup);
+    stackLiftGroup.add(baseGroup);
+    stackLiftGroup.add(midGroup);
+    stackLiftGroup.add(upperMidGroup);
+    stackLiftGroup.add(topGroup);
+    stackLiftGroup.add(lidGroup);
 
     // Tracked R-8 foam cutaway cap meshes updated dynamically when slider moves
     let foamSectionSlices = [];
@@ -2580,12 +2627,21 @@
     let iceMeshGroup, cansMeshGroup;
 
     function buildV12PrototypeAssembly(preset) {
-      if (!window.KOK_CAD_MESHES) return;
+      if (!window.KOK_CAD_MESHES) return 0;
       const isSplit = preset.v12Mode === 'split';
       const hIn = studioState.v12HeightIn || 20;
       const deltaIn = hIn - 20.0; // Height offset relative to default 20" Tall V12 baseline
       const MM_TO_IN = 1.0 / 25.4;
-      const Y_FLOOR_OFFSET_MM = 61.68; // Lifts wheeled wagon base bottom (-61.68 mm) cleanly onto y = 0 floor
+
+      let wagonDeckOffsetIn = 0.0;
+      if (studioState.showWagon) {
+        const wagonBuilt = buildThreeWheelWagonBase('v12');
+        wagonGroup.add(wagonBuilt.group);
+        wagonDeckOffsetIn = wagonBuilt.deckY;
+      }
+
+      v12LidGroup = new THREE.Group();
+      v12AssemblyGroup.add(v12LidGroup);
 
       const clippedKeys = new Set([
         'v12_one_piece_body',
@@ -2597,13 +2653,15 @@
         'v12_sec2_lower',
         'v12_sec3_mid',
         'v12_sec4_handles',
-        'v12_sec5_collar',
-        'v12_wagon_base'
+        'v12_sec5_collar'
       ]);
 
       const activeOnePieceKey = hIn === 20 ? 'v12_one_piece_body' : `v12_one_piece_${hIn}in`;
 
       Object.values(window.KOK_CAD_MESHES).forEach(part => {
+        // Rendered via dedicated multi-material 3-Wheel All-Terrain Wagon builder in wagonGroup
+        if (part.key === 'v12_wagon_base') return;
+
         if (isSplit) {
           if (!part.inSplitKit) return;
         } else {
@@ -2671,7 +2729,7 @@
         const mesh = new THREE.Mesh(geo, mat);
         let scaleY = MM_TO_IN;
         const cx = (part.centerMmYUp ? part.centerMmYUp[0] : 0) * MM_TO_IN;
-        let cy = ((part.centerMmYUp ? part.centerMmYUp[1] : 0) + Y_FLOOR_OFFSET_MM) * MM_TO_IN;
+        let cy = ((part.centerMmYUp ? part.centerMmYUp[1] : 0) * MM_TO_IN) + wagonDeckOffsetIn;
         const cz = (part.centerMmYUp ? part.centerMmYUp[2] : 0) * MM_TO_IN;
 
         // Apply parametric height offset `deltaIn` to upper/middle components when hIn != 20
@@ -2707,13 +2765,20 @@
         mesh.receiveShadow = true;
 
         const layer = typeof part.explodeLayer === 'number' ? part.explodeLayer : 2.0;
+        const deltaExp = studioState.showWagon
+          ? (layer + 0.5) * 3.8
+          : Math.max(0.2, layer - 0.3) * 3.8;
         mesh.userData = {
           partKey: part.key,
           baseY: cy,
-          explodeDeltaY: (layer - 1.2) * 3.8
+          explodeDeltaY: deltaExp
         };
 
-        v12AssemblyGroup.add(mesh);
+        if (part.key === 'v12_crown_lid' || part.key === 'v12_solar_batteries') {
+          v12LidGroup.add(mesh);
+        } else {
+          v12AssemblyGroup.add(mesh);
+        }
         v12ExplodableMeshes.push(mesh);
       });
 
@@ -2723,12 +2788,17 @@
         const badgeGeo = new THREE.CylinderGeometry(RADIUS_OUTER + 0.12, RADIUS_OUTER + 0.12, 4.6, 32, 1, true, -Math.PI / 5, (Math.PI * 2) / 5);
         const badgeMat = new THREE.MeshStandardMaterial({ map: bodyTex, roughness: 0.4, side: THREE.DoubleSide, clippingPlanes: clipPlaneArray });
         bodyPlateMesh = new THREE.Mesh(badgeGeo, badgeMat);
-        const badgeY = Math.max(7.2, 10.5 + deltaIn * 0.5);
+        const badgeY = wagonDeckOffsetIn + Math.max(7.2, 10.5 + deltaIn * 0.5);
         bodyPlateMesh.position.y = badgeY;
-        bodyPlateMesh.userData = { baseY: badgeY, explodeDeltaY: (2.6 - 1.2) * 3.8 };
+        bodyPlateMesh.userData = {
+          baseY: badgeY,
+          explodeDeltaY: studioState.showWagon ? (2.6 + 0.5) * 3.8 : (2.6 - 0.3) * 3.8
+        };
         v12AssemblyGroup.add(bodyPlateMesh);
         v12ExplodableMeshes.push(bodyPlateMesh);
       }
+
+      return wagonDeckOffsetIn;
     }
 
     function makeTierMaterial(hexColor) {
@@ -2861,39 +2931,301 @@
       }
     }
 
-    // Visible 3D Vertical Deadbolt Slider & Twist-Lock Pulse Ring
-    let deadboltSliderMesh = null;
-    let deadboltHostGroup = null;
+    // Twist-Lock Pulse Ring (invisible at rest, pulses briefly during 18° lock animation)
     let lockPulseRing = null;
     let twistLockAnim = { active: false, startTime: 0, dropPlayed: false, twistPlayed: false, lockPlayed: false, targetGroup: null, baseRotY: 0 };
 
-    function attachDeadboltAndPulseRing(hostGroup, seamY, isV12) {
-      deadboltHostGroup = hostGroup;
-      const rEdge = isV12 ? 12.35 : RADIUS_OUTER + 0.35;
-      const dGrp = new THREE.Group();
-      const bodyGeo = new THREE.BoxGeometry(1.3, 2.8, 0.7);
-      const bodyMat = new THREE.MeshStandardMaterial({ color: 0x10b981, emissive: 0x065f46, emissiveIntensity: 0.4, roughness: 0.3, metalness: 0.4 });
-      deadboltSliderMesh = new THREE.Mesh(bodyGeo, bodyMat);
-      deadboltSliderMesh.position.set(0, seamY + 0.2, rEdge);
-      deadboltSliderMesh.userData.baseY = seamY + 0.2;
-      const tabGeo = new THREE.BoxGeometry(1.55, 0.45, 0.85);
-      const tabMesh = new THREE.Mesh(tabGeo, new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2, metalness: 0.7 }));
-      tabMesh.position.y = 0.65;
-      deadboltSliderMesh.add(tabMesh);
-      dGrp.add(deadboltSliderMesh);
-      hostGroup.add(dGrp);
-
+    function attachLockPulseRing(parentGroup, seamY) {
+      if (lockPulseRing && lockPulseRing.parent) {
+        lockPulseRing.parent.remove(lockPulseRing);
+      }
       const pulseGeo = new THREE.RingGeometry(RADIUS_OUTER - 0.15, RADIUS_OUTER + 0.65, 64);
       const pulseMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0, side: THREE.DoubleSide });
       lockPulseRing = new THREE.Mesh(pulseGeo, pulseMat);
       lockPulseRing.rotation.x = Math.PI / 2;
       lockPulseRing.position.y = seamY;
-      coolerRoot.add(lockPulseRing);
+      parentGroup.add(lockPulseRing);
+    }
+
+    // Photorealistic Multi-Material 3-Wheel All-Terrain Wagon Roller Dolly (Module 31)
+    function buildThreeWheelWagonBase(mode) {
+      const isV12 = mode === 'v12';
+      const rRear = isV12 ? 5.1 : 3.8;
+      const wRear = isV12 ? 3.8 : 3.1;
+      const rFront = isV12 ? 3.55 : 2.65;
+      const wFront = isV12 ? 2.65 : 2.2;
+      const tubBottomY = isV12 ? 8.4 : 6.3;
+      const tubH = isV12 ? 2.2 : 1.8;
+      const tubTopY = tubBottomY + tubH;
+      const collarH = isV12 ? 1.75 : 1.50;
+      const deckY = tubTopY + 0.24;
+
+      const wagon = new THREE.Group();
+
+      const panColor = (studioState.pattern && studioState.pattern !== 'none') ? '#1e4bd7' : (studioState.baseColor || '#1e4bd7');
+      const panMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(panColor), roughness: 0.42, metalness: 0.08 });
+      const collarBlackMat = new THREE.MeshStandardMaterial({ color: 0x1b1f27, roughness: 0.84, metalness: 0.06, side: THREE.DoubleSide });
+      const cradleMat = new THREE.MeshStandardMaterial({ color: 0x161920, roughness: 0.90, metalness: 0.04 });
+      const galvSteelMat = new THREE.MeshStandardMaterial({ color: 0xb8c5d4, roughness: 0.30, metalness: 0.82 });
+      const alumMat = new THREE.MeshStandardMaterial({ color: 0xd8e0ea, roughness: 0.24, metalness: 0.88 });
+      const tireRubberMat = new THREE.MeshStandardMaterial({ color: 0x15171c, roughness: 0.94, metalness: 0.02 });
+      const rimBlackMat = new THREE.MeshStandardMaterial({ color: 0x101318, roughness: 0.30, metalness: 0.65 });
+      const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.18, metalness: 0.92 });
+
+      // 1. Circular Rotomolded Base Pan + Concentric Underside Recess
+      const panMesh = new THREE.Mesh(new THREE.CylinderGeometry(13.5, 12.9, tubH, 48), panMat);
+      panMesh.position.y = tubBottomY + tubH * 0.5;
+      panMesh.castShadow = true;
+      panMesh.receiveShadow = true;
+      wagon.add(panMesh);
+
+      const underRing = new THREE.Mesh(new THREE.TorusGeometry(10.8, 0.42, 10, 48), panMat);
+      underRing.rotation.x = Math.PI / 2;
+      underRing.position.y = tubBottomY + 0.18;
+      wagon.add(underRing);
+
+      // Matte-Black Rubberized Inner Cradle Mat seated above panMesh top face (deckY = tubTopY + 0.24)
+      const cradleFloor = new THREE.Mesh(new THREE.CylinderGeometry(12.22, 12.22, 0.24, 48), cradleMat);
+      cradleFloor.position.y = tubTopY + 0.12;
+      cradleFloor.receiveShadow = true;
+      wagon.add(cradleFloor);
+
+      // 2. Matte-Black Rubberized Concentric Top Locking Bumper Collar (wraps cooler wall cleanly)
+      const collarOuter = new THREE.Mesh(new THREE.CylinderGeometry(13.75, 13.68, collarH, 48, 1, true), collarBlackMat);
+      collarOuter.position.y = tubTopY + collarH * 0.5;
+      collarOuter.castShadow = true;
+      collarOuter.receiveShadow = true;
+      wagon.add(collarOuter);
+
+      const collarInner = new THREE.Mesh(new THREE.CylinderGeometry(12.16, 12.16, collarH, 48, 1, true), collarBlackMat);
+      collarInner.position.y = tubTopY + collarH * 0.5;
+      wagon.add(collarInner);
+
+      const collarLip = new THREE.Mesh(new THREE.TorusGeometry(12.95, 0.80, 14, 48), collarBlackMat);
+      collarLip.rotation.x = Math.PI / 2;
+      collarLip.scale.z = 0.65;
+      collarLip.position.y = tubTopY + collarH - 0.12;
+      collarLip.castShadow = true;
+      wagon.add(collarLip);
+
+      // 3. Recessed Galvanized Steel Y-Frame Chassis Underneath
+      const beamY = tubBottomY - 0.58;
+      const hubGusset = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.5, 4.2), galvSteelMat);
+      hubGusset.position.set(0, tubBottomY - 0.22, -1.0);
+      wagon.add(hubGusset);
+
+      const frontBeam = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.15, 11.8), galvSteelMat);
+      frontBeam.position.set(0, beamY, 4.7);
+      frontBeam.castShadow = true;
+      wagon.add(frontBeam);
+
+      // Front 4-Bolt Caster Mounting Plate + Corner Bolts + Swivel Bearing + Kingpin
+      const casterPlate = new THREE.Mesh(new THREE.BoxGeometry(5.2, 0.44, 5.2), galvSteelMat);
+      casterPlate.position.set(0, tubBottomY - 0.22, 10.4);
+      wagon.add(casterPlate);
+
+      const boltGeo = new THREE.CylinderGeometry(0.28, 0.28, 0.72, 6);
+      [[-1.9, 8.5], [1.9, 8.5], [-1.9, 12.3], [1.9, 12.3]].forEach(([bx, bz]) => {
+        const bolt = new THREE.Mesh(boltGeo, chromeMat);
+        bolt.position.set(bx, tubBottomY - 0.22, bz);
+        wagon.add(bolt);
+      });
+
+      const swivelRace = new THREE.Mesh(new THREE.CylinderGeometry(1.8, 1.8, 0.72, 24), galvSteelMat);
+      swivelRace.position.set(0, tubBottomY - 0.62, 10.4);
+      wagon.add(swivelRace);
+
+      const forkCrownY = Math.min(tubBottomY - 1.15, rFront * 2 + 0.62);
+      const kingpinH = Math.max(0.8, (tubBottomY - 0.65) - forkCrownY + 0.35);
+      const kingpin = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.68, kingpinH, 16), chromeMat);
+      kingpin.position.set(0, forkCrownY + kingpinH * 0.5 - 0.15, 10.4);
+      wagon.add(kingpin);
+
+      // Rear Left & Right Diagonal Y-Arms + Sliding Dovetail Brackets + Drop Plates + Axles
+      [-1, 1].forEach((side) => {
+        const dx = side * 12.4;
+        const dz = -4.2;
+        const len = Math.hypot(dx, dz);
+        const arm = new THREE.Mesh(new THREE.BoxGeometry(1.25, 1.15, len + 0.8), galvSteelMat);
+        arm.position.set(dx * 0.5, beamY, -1.0 + dz * 0.5);
+        arm.rotation.y = Math.atan2(dx, dz);
+        arm.castShadow = true;
+        wagon.add(arm);
+
+        const dovetailPocket = new THREE.Mesh(new THREE.BoxGeometry(1.85, 1.95, 3.8), galvSteelMat);
+        dovetailPocket.position.set(side * 12.3, tubBottomY - 0.32, -5.2);
+        wagon.add(dovetailPocket);
+
+        const dropH = Math.max(1.8, (tubBottomY - 0.45) - rRear + 0.9);
+        const dropBracket = new THREE.Mesh(new THREE.BoxGeometry(0.62, dropH, 2.7), galvSteelMat);
+        dropBracket.position.set(side * 12.85, rRear + dropH * 0.5 - 0.7, -5.2);
+        wagon.add(dropBracket);
+
+        const axleShaft = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.48, 4.9, 14), chromeMat);
+        axleShaft.rotation.z = Math.PI / 2;
+        axleShaft.position.set(side * 14.3, rRear, -5.2);
+        wagon.add(axleShaft);
+      });
+
+      // Helper: Circular Knobby Pneumatic Off-Road Tire (Axle along X, resting on y = cy - radius)
+      function buildKnobbyTire(radius, width, lugRows, rimRadius) {
+        const grp = new THREE.Group();
+        const hw = width * 0.5;
+        const rBody = radius - 0.22;
+        const rShoulder = rBody - 0.34;
+        const profile = [
+          new THREE.Vector2(rimRadius, -hw * 0.24),
+          new THREE.Vector2(rimRadius + 0.35, -hw * 0.44),
+          new THREE.Vector2(rShoulder, -hw * 0.50),
+          new THREE.Vector2(rBody, -hw * 0.38),
+          new THREE.Vector2(rBody, hw * 0.38),
+          new THREE.Vector2(rShoulder, hw * 0.50),
+          new THREE.Vector2(rimRadius + 0.35, hw * 0.44),
+          new THREE.Vector2(rimRadius, hw * 0.24)
+        ];
+        const carcassGeo = new THREE.LatheGeometry(profile, radius > 4.2 ? 40 : 32);
+        const carcassMesh = new THREE.Mesh(carcassGeo, tireRubberMat);
+        carcassMesh.rotation.z = Math.PI / 2;
+        carcassMesh.castShadow = true;
+        carcassMesh.receiveShadow = true;
+        grp.add(carcassMesh);
+
+        // Staggered 3-row knobby tread blocks around circumference
+        const lugLen = Math.max(0.45, (2 * Math.PI * rBody / lugRows) * 0.56);
+        const lugGeo = new THREE.BoxGeometry(width * 0.23, 0.28, lugLen);
+        const lugR = rBody + 0.08;
+        for (let i = 0; i < lugRows; i++) {
+          [-width * 0.30, 0, width * 0.30].forEach((bx, bandIdx) => {
+            const ang = (2 * Math.PI * i / lugRows) + (bandIdx % 2) * (Math.PI / lugRows);
+            const lug = new THREE.Mesh(lugGeo, tireRubberMat);
+            lug.position.set(bx, Math.cos(ang) * lugR, Math.sin(ang) * lugR);
+            lug.rotation.x = ang;
+            lug.castShadow = true;
+            grp.add(lug);
+          });
+        }
+
+        // Recessed Gloss-Black 4-Bolt Steel Rim + Silver Center Bearing Cap
+        const rimDish = new THREE.Mesh(new THREE.CylinderGeometry(rimRadius + 0.06, rimRadius + 0.06, width * 0.44, 24), rimBlackMat);
+        rimDish.rotation.z = Math.PI / 2;
+        grp.add(rimDish);
+
+        const rimLip = new THREE.Mesh(new THREE.TorusGeometry(rimRadius, 0.16, 8, 24), rimBlackMat);
+        rimLip.rotation.y = Math.PI / 2;
+        const rimLipLeft = rimLip.clone();
+        rimLip.position.x = hw * 0.36;
+        rimLipLeft.position.x = -hw * 0.36;
+        grp.add(rimLip, rimLipLeft);
+
+        const capMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.88, 0.88, width * 0.56, 16), chromeMat);
+        capMesh.rotation.z = Math.PI / 2;
+        grp.add(capMesh);
+
+        const lugBoltGeo = new THREE.CylinderGeometry(0.22, 0.22, width * 0.54, 8);
+        const boltR = rimRadius * 0.54;
+        for (let bi = 0; bi < 4; bi++) {
+          const ba = bi * (Math.PI * 0.5) + Math.PI * 0.25;
+          const bMesh = new THREE.Mesh(lugBoltGeo, chromeMat);
+          bMesh.rotation.z = Math.PI / 2;
+          bMesh.position.set(0, Math.cos(ba) * boltR, Math.sin(ba) * boltR);
+          grp.add(bMesh);
+        }
+
+        return grp;
+      }
+
+      // 4. Mount 2 Large Fixed Rear Tires (x = ±15.2, z = -5.2) + 1 Front Swivel Tire (x = 0, z = +10.4)
+      const rearLeftWheel = buildKnobbyTire(rRear, wRear, 22, rRear * 0.50);
+      rearLeftWheel.position.set(-15.2, rRear, -5.2);
+      wagon.add(rearLeftWheel);
+
+      const rearRightWheel = buildKnobbyTire(rRear, wRear, 22, rRear * 0.50);
+      rearRightWheel.position.set(15.2, rRear, -5.2);
+      wagon.add(rearRightWheel);
+
+      const frontWheel = buildKnobbyTire(rFront, wFront, 18, rFront * 0.50);
+      frontWheel.position.set(0, rFront, 10.4);
+      wagon.add(frontWheel);
+
+      // Front Gloss-Black U-Shaped Swivel Caster Fork + Through Axle
+      const forkCrown = new THREE.Mesh(new THREE.BoxGeometry(wFront + 1.45, 0.52, 2.3), rimBlackMat);
+      forkCrown.position.set(0, forkCrownY, 10.4);
+      forkCrown.castShadow = true;
+      wagon.add(forkCrown);
+
+      const forkLegH = Math.max(1.5, forkCrownY - rFront + 0.5);
+      [-1, 1].forEach((side) => {
+        const leg = new THREE.Mesh(new THREE.BoxGeometry(0.46, forkLegH, 1.7), rimBlackMat);
+        leg.position.set(side * (wFront * 0.5 + 0.48), rFront + forkLegH * 0.5 - 0.35, 10.4);
+        leg.castShadow = true;
+        wagon.add(leg);
+      });
+      const frontAxle = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, wFront + 1.55, 14), chromeMat);
+      frontAxle.rotation.z = Math.PI / 2;
+      frontAxle.position.set(0, rFront, 10.4);
+      wagon.add(frontAxle);
+
+      // 5. Front U-Clevis & 3-Stage Telescoping Brushed Aluminum Pull Handle
+      const clevisBracket = new THREE.Mesh(new THREE.BoxGeometry(2.9, 1.7, 1.9), galvSteelMat);
+      clevisBracket.position.set(0, tubBottomY - 0.25, 13.55);
+      wagon.add(clevisBracket);
+
+      const clevisPin = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.30, 3.4, 12), chromeMat);
+      clevisPin.rotation.z = Math.PI / 2;
+      clevisPin.position.set(0, tubBottomY - 0.25, 13.95);
+      wagon.add(clevisPin);
+
+      const handleArmGroup = new THREE.Group();
+      handleArmGroup.position.set(0, tubBottomY - 0.25, 13.95);
+      handleArmGroup.rotation.x = Math.PI * 0.5 - 0.38; // Extended forward (+Z) & upward (~21.8°), cleanly framed in viewport
+      wagon.add(handleArmGroup);
+
+      const pivotBoot = new THREE.Mesh(new THREE.CylinderGeometry(0.70, 0.70, 1.7, 16), collarBlackMat);
+      pivotBoot.position.y = 0.85;
+      handleArmGroup.add(pivotBoot);
+
+      const stage1Tube = new THREE.Mesh(new THREE.CylinderGeometry(0.54, 0.54, 7.4, 18), alumMat);
+      stage1Tube.position.y = 5.4;
+      stage1Tube.castShadow = true;
+      handleArmGroup.add(stage1Tube);
+
+      const lockCollar = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.68, 1.0, 18), collarBlackMat);
+      lockCollar.position.y = 9.5;
+      handleArmGroup.add(lockCollar);
+
+      const detentPin = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 1.5, 10), chromeMat);
+      detentPin.rotation.x = Math.PI / 2;
+      detentPin.position.y = 9.5;
+      handleArmGroup.add(detentPin);
+
+      const stage2Tube = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 6.4, 18), alumMat);
+      stage2Tube.position.y = 13.1;
+      stage2Tube.castShadow = true;
+      handleArmGroup.add(stage2Tube);
+
+      const gripThroat = new THREE.Mesh(new THREE.CylinderGeometry(0.66, 0.48, 1.4, 16), collarBlackMat);
+      gripThroat.position.y = 16.8;
+      handleArmGroup.add(gripThroat);
+
+      const tGripBar = new THREE.Mesh(new THREE.CylinderGeometry(0.64, 0.64, 5.6, 18), collarBlackMat);
+      tGripBar.rotation.z = Math.PI / 2;
+      tGripBar.position.y = 17.6;
+      tGripBar.castShadow = true;
+      handleArmGroup.add(tGripBar);
+
+      [-2.7, 2.7].forEach((gx) => {
+        const gCap = new THREE.Mesh(new THREE.CylinderGeometry(0.72, 0.72, 0.45, 16), collarBlackMat);
+        gCap.rotation.z = Math.PI / 2;
+        gCap.position.set(gx, 17.6, 0);
+        handleArmGroup.add(gCap);
+      });
+
+      return { group: wagon, deckY };
     }
 
     function buildFullStack() {
       // Clear previous children across all animation groups
-      [baseGroup, midGroup, upperMidGroup, topGroup, lidGroup, v12AssemblyGroup].forEach(g => {
+      [wagonGroup, baseGroup, midGroup, upperMidGroup, topGroup, lidGroup, v12AssemblyGroup].forEach(g => {
         while (g.children.length > 0) {
           const child = g.children[0];
           g.remove(child);
@@ -2901,11 +3233,11 @@
         g.position.set(0, 0, 0);
         g.rotation.set(0, 0, 0);
       });
+      stackLiftGroup.position.set(0, 0, 0);
+      stackBaseOffsetY = 0;
       if (lockPulseRing && lockPulseRing.parent) {
         lockPulseRing.parent.remove(lockPulseRing);
       }
-      deadboltSliderMesh = null;
-      deadboltHostGroup = null;
       lockPulseRing = null;
       foamSectionSlices = [];
       v12ExplodableMeshes = [];
@@ -2914,9 +3246,9 @@
 
       const preset = getActivePreset();
       if (preset.isV12Cad) {
-        buildV12PrototypeAssembly(preset);
+        const wagonDeckOffsetIn = buildV12PrototypeAssembly(preset);
         const hIn = studioState.v12HeightIn || 20;
-        attachDeadboltAndPulseRing(v12AssemblyGroup, Math.max(10, hIn * 0.92), true);
+        attachLockPulseRing(v12AssemblyGroup, wagonDeckOffsetIn + Math.max(9.5, hIn - 1.2));
         updateStudioHUD();
         updateScaleReferences();
         if (typeof applyXRayCutaway === 'function') {
@@ -2927,6 +3259,15 @@
         }
         return;
       }
+
+      if (studioState.showWagon) {
+        const wagonBuilt = buildThreeWheelWagonBase('stack');
+        wagonGroup.add(wagonBuilt.group);
+        stackBaseOffsetY = wagonBuilt.deckY + 1.2;
+      } else {
+        stackBaseOffsetY = 1.2;
+      }
+      stackLiftGroup.position.y = stackBaseOffsetY;
 
       const tiers = preset.tiers;
       const tierColors = preset.tierColors || null;
@@ -3019,10 +3360,9 @@
       lidMesh.position.y = runningY + 0.9;
       lidGroup.add(lidMesh);
 
-      // Attach Deadbolt Slider & Pulse Ring to top locking seam
-      const activeTwistTarget = tierHeights.length >= 2 ? topGroup : lidGroup;
+      // Attach Twist-Lock Pulse Ring to top locking seam
       const seamY = tierHeights.length >= 2 ? (runningY - H_TOP) : runningY;
-      attachDeadboltAndPulseRing(activeTwistTarget, seamY, false);
+      attachLockPulseRing(stackLiftGroup, seamY);
 
       // Center Drain Core Sleeve inside Base
       if (studioState.showDrain) {
@@ -3195,6 +3535,16 @@
       targetExplosion = next ? 1.0 : 0.0;
       explodeSlider.value = targetExplosion * 100;
       syncExplodeButtonState(next);
+      const preset = getActivePreset();
+      if (next && preset.tiers && preset.tiers.length >= 2) {
+        gsapMoveCamera(62, 42, 92, 0, 26, 2);
+      } else if (!next && !isCadInspectorMode) {
+        if (preset.heightIn >= 50) {
+          gsapMoveCamera(52, 34, 78, 0, Math.max(16, preset.heightIn * 0.32), 2);
+        } else {
+          gsapMoveCamera(44, 30, 64, 0, 15, 2);
+        }
+      }
     });
 
     // 3B. Interactive X-Ray / Cutaway Shader Slider (reveals 3.5" R-8 Foam, #16 Deli Carousel, #29 Spiral Ramp & Ice Bed)
@@ -3292,15 +3642,15 @@
         const view = btn.dataset.view;
 
         if (view === 'front') {
-          gsapMoveCamera(0, 16, 52, 0, 16, 0);
+          gsapMoveCamera(0, 16, 56, 0, 15, 2);
         } else if (view === 'top') {
           gsapMoveCamera(0, 68, 8, 0, 18, 0);
         } else if (view === 'orbit') {
-          gsapMoveCamera(38, 28, 55, 0, 16, 0);
+          gsapMoveCamera(44, 30, 64, 0, 15, 2);
         } else if (view === 'reset') {
           controls.reset();
-          camera.position.set(38, 28, 55);
-          controls.target.set(0, 16, 0);
+          camera.position.set(44, 30, 64);
+          controls.target.set(0, 15, 2);
         }
       });
     });
@@ -3394,8 +3744,14 @@
         b.classList.toggle('active', b.dataset.stack === stackKey);
       });
       const preset = getActivePreset();
-      controls.target.set(0, Math.max(11, preset.heightIn * 0.28), 0);
       buildFullStack();
+      if (!isCadInspectorMode) {
+        if (preset.heightIn >= 50) {
+          gsapMoveCamera(52, 34, 78, 0, Math.max(16, preset.heightIn * 0.32), 2);
+        } else {
+          gsapMoveCamera(44, 30, 64, 0, 15, 2);
+        }
+      }
     }
 
     document.querySelectorAll('[data-stack]').forEach(btn => {
@@ -3478,9 +3834,23 @@
       });
     });
 
-    // Hardware Toggles (Spigot & 10W Solar Lid)
+    // Hardware Toggles (3-Wheel Wagon Base, Spigot & 10W Solar Lid)
+    const btnToggleWagon = document.getElementById('btn-toggle-wagon');
     const btnToggleSpigot = document.getElementById('btn-toggle-spigot');
     const btnToggleSolar = document.getElementById('btn-toggle-solar');
+
+    if (btnToggleWagon) {
+      btnToggleWagon.addEventListener('click', () => {
+        studioState.showWagon = !studioState.showWagon;
+        btnToggleWagon.classList.toggle('active', studioState.showWagon);
+        btnToggleWagon.setAttribute('aria-pressed', String(studioState.showWagon));
+        btnToggleWagon.textContent = studioState.showWagon
+          ? '✓ 3-Wheel All-Terrain Wagon Mounted (+$129)'
+          : '+ Add 3-Wheel All-Terrain Wagon (+$129)';
+        if (window.kokAudio) window.kokAudio.playDeadbolt(studioState.showWagon);
+        buildFullStack();
+      });
+    }
 
     if (btnToggleSpigot) {
       btnToggleSpigot.addEventListener('click', () => {
@@ -3723,7 +4093,7 @@
         if (explodeSlider) explodeSlider.value = 0;
         syncExplodeButtonState(false);
         const preset = getActivePreset();
-        const targetGrp = preset.isV12Cad ? v12AssemblyGroup : (preset.tiers.length >= 2 ? topGroup : lidGroup);
+        const targetGrp = preset.isV12Cad ? v12LidGroup : (preset.tiers.length >= 2 ? topGroup : lidGroup);
         twistLockAnim = {
           active: true,
           startTime: performance.now(),
@@ -3812,11 +4182,11 @@
     // 9. Weight & Ergonomics Gauge Engine (DOM refs hoisted above buildFullStack)
 
     function updateErgonomicsGauge() {
-      const preset = getActivePreset();
-      const dryStack = preset.dryLbs;
-      const ice = studioState.iceLbs;
-      const drinks = Math.round(studioState.cansCount * 0.78);
-      const gross = dryStack + ice + drinks;
+      const m = getCurrentBuildMetrics();
+      const dryStack = m.dispDryLbs;
+      const ice = m.ice;
+      const drinks = m.drinks;
+      const gross = m.dispLoadedLbs;
       const grossKg = (gross * 0.453592).toFixed(1);
 
       gaugeGrossLbs.textContent = `${gross} LBS`;
@@ -3834,10 +4204,17 @@
         ergoAlertText.textContent = 'Solo Carry Approved (<45 lbs). Easily portable by one person.';
       } else if (gross <= 110) {
         ergoAlertBox.className = 'ergo-alert-badge ergo-yellow';
-        ergoAlertText.textContent = 'Two-Person Team Lift Required (45-110 lbs). Use molded side loop handles.';
+        ergoAlertText.textContent = studioState.showWagon
+          ? 'Team Lift or Roll (45-110 lbs). 3-Wheel All-Terrain Wagon handles trail rolling effortlessly.'
+          : 'Two-Person Team Lift Required (45-110 lbs). Use molded side loop handles.';
       } else {
-        ergoAlertBox.className = 'ergo-alert-badge ergo-red';
-        ergoAlertText.textContent = 'Heavy Expedition Load (>110 lbs). Recommend Modular Off-Road Sand Wagon Base.';
+        if (studioState.showWagon) {
+          ergoAlertBox.className = 'ergo-alert-badge ergo-green';
+          ergoAlertText.textContent = 'Heavy Load (>110 lbs) — 3-Wheel All-Terrain Wagon Active (350-lb Rolling Capacity).';
+        } else {
+          ergoAlertBox.className = 'ergo-alert-badge ergo-red';
+          ergoAlertText.textContent = 'Heavy Expedition Load (>110 lbs). Recommend adding 3-Wheel All-Terrain Wagon Base.';
+        }
       }
 
       document.getElementById('breakdown-ice').textContent = `${ice} lbs`;
@@ -3856,14 +4233,14 @@
 
     function generateBuildCardCanvas() {
       renderer.render(scene, camera);
-      const preset = getActivePreset();
-      const hSpec = V12_HEIGHT_SPECS[studioState.v12HeightIn] || V12_HEIGHT_SPECS[20];
-      const dispHeight = preset.isV12Cad ? studioState.v12HeightIn : preset.heightIn;
-      const dispQuarts = preset.isV12Cad ? hSpec.quarts : preset.quarts;
-      const dispCans = preset.isV12Cad ? hSpec.cans : (preset.cansCapacity || Math.round(dispQuarts * 0.92));
-      const dispDryLbs = preset.isV12Cad ? hSpec.dryLbs : preset.dryLbs;
-      const grossLbs = dispDryLbs + (studioState.iceLbs || 38) + Math.round((studioState.cansCount || 48) * 0.78);
-      const price = computeStudioPrice();
+      const m = getCurrentBuildMetrics();
+      const preset = m.preset;
+      const dispHeight = m.dispHeight;
+      const dispQuarts = m.dispQuarts;
+      const dispCans = m.dispCans;
+      const dispDryLbs = m.dispDryLbs;
+      const grossLbs = m.dispLoadedLbs;
+      const price = m.price;
 
       const out = document.createElement('canvas');
       out.width = 1600;
@@ -3959,11 +4336,12 @@
       });
 
       // Hardware Options & Itemized Summary
-      const optY = 620;
+      const optY = 602;
       ctx.fillStyle = '#cbd5e1';
       ctx.font = 'bold 16px "SF Mono", Consolas, monospace';
       ctx.fillText('OUTFITTING & HARDWARE OPTIONS', sx, optY);
       const opts = [
+        `3-Wheel All-Terrain Wagon: ${studioState.showWagon ? 'Mounted (+$129)' : 'Not Added'}`,
         `10W USB Solar Lid: ${studioState.showSolar ? 'Included' : 'Omitted (-$40)'}`,
         `316 SS Fast-Flow Spigot: ${studioState.showSpigot ? 'Included' : 'Omitted (-$25)'}`,
         `16" Pizza Vault Insert: ${studioState.showPizza ? 'Added (+$49)' : 'None'}`,
@@ -3971,8 +4349,8 @@
         `Laser Engraving: ${studioState.engraveLine1 ? studioState.engraveLine1 : 'None'}`
       ];
       ctx.fillStyle = '#94a3b8';
-      ctx.font = '16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-      opts.forEach((line, i) => ctx.fillText(`• ${line}`, sx, optY + 28 + i * 25));
+      ctx.font = '15.5px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      opts.forEach((line, i) => ctx.fillText(`• ${line}`, sx, optY + 26 + i * 23));
 
       // Total Price Footer Box
       ctx.fillStyle = 'rgba(0, 240, 255, 0.14)';
@@ -4252,7 +4630,11 @@
       updateStudioHUD();
       if (typeof updateErgonomicsGauge === 'function') updateErgonomicsGauge();
       const preset = getActivePreset();
-      gsapMoveCamera(38, 28, 55, 0, Math.max(11, preset.heightIn * 0.28), 0);
+      if (preset.heightIn >= 50) {
+        gsapMoveCamera(52, 34, 78, 0, Math.max(16, preset.heightIn * 0.32), 2);
+      } else {
+        gsapMoveCamera(44, 30, 64, 0, 15, 2);
+      }
     }
 
     populateCadPartsList();
@@ -4286,6 +4668,9 @@
       currentExplosion += (targetExplosion - currentExplosion) * 0.1;
 
       const tierCount = getActivePreset().tiers.length;
+      if (stackBaseOffsetY > 0) {
+        stackLiftGroup.position.y = stackBaseOffsetY + (studioState.showWagon ? currentExplosion * 6.5 : 0);
+      }
       midGroup.position.y = currentExplosion * 14;
       upperMidGroup.position.y = currentExplosion * 26;
       topGroup.position.y = currentExplosion * (tierCount === 2 ? 16 : tierCount === 3 ? 28 : 38);
@@ -4300,7 +4685,7 @@
         }
       }
 
-      // Interactive 3-Phase 18° Twist-Lock & Vertical Deadbolt Animation
+      // Interactive 3-Phase 18° Twist-Lock Animation
       if (twistLockAnim.active && twistLockAnim.targetGroup) {
         const elapsed = performance.now() - twistLockAnim.startTime;
         const tgt = twistLockAnim.targetGroup;
@@ -4309,11 +4694,6 @@
           const e = 0.5 - Math.cos(t * Math.PI) / 2;
           tgt.position.y = e * 5.2;
           tgt.rotation.y = e * (-Math.PI / 10); // -18 deg pre-align
-          if (deadboltSliderMesh) {
-            const by = deadboltSliderMesh.userData.baseY || deadboltSliderMesh.position.y;
-            deadboltSliderMesh.position.y = by + e * 0.85;
-            deadboltSliderMesh.material.color.setHex(0xf59e0b);
-          }
         } else if (elapsed < 950) {
           const t = (elapsed - 450) / 500;
           const e = 0.5 - Math.cos(t * Math.PI) / 2;
@@ -4332,12 +4712,6 @@
             twistLockAnim.twistPlayed = true;
             if (window.kokAudio) window.kokAudio.playTwistLock();
           }
-          if (deadboltSliderMesh && t > 0.65) {
-            const dt = (t - 0.65) / 0.35;
-            const by = deadboltSliderMesh.userData.baseY || deadboltSliderMesh.position.y;
-            deadboltSliderMesh.position.y = by + (1 - dt) * 0.85 - dt * 0.15;
-            deadboltSliderMesh.material.color.setHex(0x10b981);
-          }
           if (lockPulseRing) {
             lockPulseRing.material.opacity = Math.sin(t * Math.PI) * 0.75;
             lockPulseRing.scale.setScalar(1 + t * 0.12);
@@ -4350,9 +4724,6 @@
         } else {
           tgt.position.y = 0;
           tgt.rotation.y = 0;
-          if (deadboltSliderMesh && typeof deadboltSliderMesh.userData.baseY === 'number') {
-            deadboltSliderMesh.position.y = deadboltSliderMesh.userData.baseY;
-          }
           if (lockPulseRing) lockPulseRing.material.opacity = 0;
           twistLockAnim.active = false;
           setTimeout(() => { if (twistLockToast) twistLockToast.classList.remove('visible'); }, 2200);
@@ -4375,14 +4746,16 @@
     if (btnSaveRes) {
       btnSaveRes.addEventListener('click', () => {
         try {
-          const preset = getActivePreset();
+          const m = getCurrentBuildMetrics();
+          const preset = m.preset;
           const payload = {
             stackType: studioState.stackType,
             indexPreset: preset.indexPreset,
             stackLabel: preset.label,
-            heightIn: preset.heightIn,
-            dryLbs: preset.dryLbs,
-            estimatedPrice: computeStudioPrice(),
+            heightIn: m.rawHeight,
+            dryLbs: m.dispDryLbs,
+            estimatedPrice: m.price,
+            showWagon: studioState.showWagon,
             theme: studioState.theme,
             colorTheme: studioState.theme,
             pattern: studioState.pattern,
