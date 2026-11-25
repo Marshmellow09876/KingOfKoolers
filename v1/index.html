@@ -22,6 +22,78 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Product",
+          "name": "King of Koolers 24-Inch Modular Cylindrical Stacking Cooler",
+          "brand": { "@type": "Brand", "name": "King of Koolers" },
+          "creator": { "@type": "Person", "name": "Austin Marshall" },
+          "description": "Patent-pending 24-inch diameter rotomolded cylindrical modular stacking cooler system featuring a 20-start 18-degree helical twist-lock, vertical anti-rotation deadbolt, 3.5-inch R-8 polyurethane insulation, 10W USB solar lid, and 31 modular accessories.",
+          "image": [
+            "https://marshmellow09876.github.io/KingOfKoolers/v1/assets/images/apple_hero_plastic_rwb.jpg",
+            "https://marshmellow09876.github.io/KingOfKoolers/v1/assets/images/allthread_section_view.jpg",
+            "https://marshmellow09876.github.io/KingOfKoolers/v1/assets/images/accessory_31_wagon_roller_dolly.jpg"
+          ],
+          "additionalProperty": [
+            { "@type": "PropertyValue", "name": "Outer Diameter", "value": "24.0 inches" },
+            { "@type": "PropertyValue", "name": "Wall Insulation", "value": "3.5-inch 120 PSI R-8 Polyurethane Foam" },
+            { "@type": "PropertyValue", "name": "Locking Mechanism", "value": "20-Start 18° Helix Twist-Lock + 12 mm Vertical Deadbolt" },
+            { "@type": "PropertyValue", "name": "Static Load Rating", "value": "500 lbs (doubles as camp stool)" }
+          ],
+          "offers": {
+            "@type": "AggregateOffer",
+            "priceCurrency": "USD",
+            "lowPrice": "229.00",
+            "highPrice": "549.00",
+            "offerCount": "4",
+            "availability": "https://schema.org/PreOrder"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Why is the King of Koolers 24-inch cylindrical instead of rectangular?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A 24-inch cylinder eliminates 90-degree corner thermal bridges and reduces external surface area by 12.8% for equivalent volume, cutting heat gain by up to 34% for 10+ day ice retention."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the 20-Start 18-degree twist-lock and vertical slider work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Twenty parallel spiral helix threads spaced every 18 degrees lock any lid or stacked tier in 1/20th of a turn (3.64 inches of rim travel). Pushing the external vertical deadbolt slider 12 mm downward keys the lid to the lower cooler collar so upper tiers twist off independently without unscrewing lower lids."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the center all-thread compression rod and deli tray work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A continuous 2-inch stainless center all-thread post anchors into the hex-slotted lower dish and compresses the crown top dish, while adjustable circular deli and dry-goods trays thread onto the post and lock cleanly with hex nuts above the ice bed."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can the stacked cooler convert into camp seating and haul hot pizza with cold drinks?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Each unstacked rotomolded module supports over 500 lbs as a camp stool, and adding a 2-inch Vacuum Thermal Isolation Disc lets an upper 12-inch Pizza Vault hold hot 18-inch pizzas above freezing ice and drinks below."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  </script>
 
   <style>
     /* ==========================================================================
@@ -614,6 +686,9 @@
     }
 
     .hero-chapter-pill {
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
       padding: 6px 12px;
       border-radius: 999px;
       font-size: 11.5px;
@@ -623,15 +698,45 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.1);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hero-chapter-pill::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      width: var(--clip-progress, 0%);
+      background: linear-gradient(90deg, rgba(0, 240, 255, 0.35), rgba(0, 240, 255, 0.72));
+      z-index: -1;
+      transition: width 0.08s linear;
     }
 
     .hero-chapter-pill:hover,
     .hero-chapter-pill.active {
-      color: #05070c;
-      background: var(--accent-cyan);
+      color: #ffffff;
+      background: rgba(6, 28, 44, 0.92);
       border-color: var(--accent-cyan);
       box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
+    }
+
+    .hero-media-wrapper.cinema-mode {
+      max-width: min(1440px, 95vw) !important;
+      width: min(1440px, 95vw);
+      position: relative;
+      z-index: 40;
+      transition: max-width 0.35s var(--ease-apple);
+    }
+
+    .hero-media-wrapper.cinema-mode .hero-image-frame {
+      box-shadow: 0 36px 120px rgba(0, 0, 0, 0.96), 0 0 80px rgba(0, 240, 255, 0.28);
+      border-color: rgba(0, 240, 255, 0.55);
+    }
+
+    .hero-shortcuts-hint {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
     }
 
     /* Floating callout badges on hero */
@@ -1169,6 +1274,8 @@
       margin-top: 48px;
       box-shadow: 0 0 60px rgba(0, 240, 255, 0.08);
       position: relative;
+      content-visibility: auto;
+      contain-intrinsic-size: auto none auto 520px;
     }
 
     .sim-header {
@@ -3595,15 +3702,19 @@
           </div>
 
           <div class="hero-video-controls" aria-label="Launch Film Controls">
-            <button type="button" class="hero-vid-btn" id="btn-hero-audio" aria-pressed="false" title="Toggle Audio">
+            <button type="button" class="hero-vid-btn" id="btn-hero-audio" aria-pressed="false" title="Toggle Audio (M)">
               🔊 <span id="hero-audio-label">Unmute Audio</span>
             </button>
-            <button type="button" class="hero-vid-btn" id="btn-hero-play" aria-pressed="true" title="Pause or Resume Video">
+            <button type="button" class="hero-vid-btn" id="btn-hero-play" aria-pressed="true" title="Pause or Resume Video (Space)">
               ⏸ <span id="hero-play-label">Pause</span>
+            </button>
+            <button type="button" class="hero-vid-btn" id="btn-hero-cinema" aria-pressed="false" title="Toggle Wide Cinema Mode">
+              🎬 <span id="hero-cinema-label">Cinema Mode</span>
             </button>
             <button type="button" class="hero-vid-btn" id="btn-hero-fullscreen" title="Watch Fullscreen">
               ⛶ <span>Fullscreen</span>
             </button>
+            <span class="hero-shortcuts-hint" aria-hidden="true">Space: Play · M: Mute · ←/→: Clip</span>
           </div>
         </div>
       </div>
@@ -4225,6 +4336,104 @@
         <div class="packout-tiers" id="packout-tiers-grid"></div>
         <div class="packout-summary-strip" id="packout-summary"></div>
       </div>
+
+      <!-- 13. Interactive Food & Beverage Packing Calculator ("What Fits Inside?") -->
+      <div class="kok-module-card" id="packing-calculator">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div class="bento-eyebrow">FOOD &amp; BEVERAGE PACKING CALCULATOR</div>
+            <h3 class="headline-medium" style="margin:0;">What Fits Inside? Visual Tier-by-Tier Pack-Out</h3>
+            <p style="font-size:13.5px;color:var(--text-secondary);margin-top:6px;">
+              Pick a trip profile or adjust individual counts to visually pack each 24&Prime; cylindrical tier and verify ice clearance.
+            </p>
+          </div>
+          <a href="./customizer.html" class="btn btn-glass btn-sm">Launch 3D Studio &rarr;</a>
+        </div>
+
+        <div class="packout-presets" role="tablist" aria-label="Trip Type Packing Presets" style="margin-top:16px;">
+          <button type="button" class="packout-btn active" data-calc-trip="camping4" role="tab" aria-selected="true">🏕️ Weekend Camping for 4</button>
+          <button type="button" class="packout-btn" data-calc-trip="tailgate20" role="tab" aria-selected="false">🏈 Tailgate for 20</button>
+          <button type="button" class="packout-btn" data-calc-trip="offshore" role="tab" aria-selected="false">🎣 Offshore Fishing</button>
+          <button type="button" class="packout-btn" data-calc-trip="sports" role="tab" aria-selected="false">⚽ Youth Sports Tournament</button>
+        </div>
+
+        <div class="kok-packing-grid">
+          <div style="display:flex;flex-direction:column;gap:10px;" id="packing-steppers">
+            <!-- Populated by JS -->
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;" id="packing-bays-output">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 15. Camp Stool Circle Seating Layout Planner -->
+      <div class="kok-module-card" id="camp-seating-planner">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div class="bento-eyebrow">DUAL-PURPOSE CAMP FURNITURE ARCHITECTURE</div>
+            <h3 class="headline-medium" style="margin:0;">Camp Stool Circle Seating Layout Planner</h3>
+            <p style="font-size:13.5px;color:var(--text-secondary);margin-top:6px;">
+              Watch one 4-tier 72&Prime; Titan tower unpack into <strong>1 main cold cooler + 3 heavy-duty 500-lb rated camp stools</strong> around the campfire—zero folding chairs needed.
+            </p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="button" class="packout-btn active" id="btn-camp-stacked">🧊 Stacked 72&Prime; Transport</button>
+            <button type="button" class="packout-btn" id="btn-camp-circle">🔥 Unpacked Campfire Circle</button>
+          </div>
+        </div>
+
+        <div class="kok-camp-grid">
+          <div style="background:rgba(5,8,16,0.75);border:1px solid rgba(0,240,255,0.24);border-radius:18px;padding:14px;">
+            <svg id="camp-seating-svg" viewBox="0 0 680 320" style="width:100%;height:auto;display:block;" role="img" aria-label="Interactive camp stool seating layout diagram"></svg>
+          </div>
+          <div id="camp-seat-inspector" style="display:flex;flex-direction:column;gap:12px;">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. Module 31 All-Terrain 3-Wheel Wagon Dolly Close-Up Video & Terrain Card -->
+      <div class="kok-wagon-showcase" id="home-wagon-demo" style="margin-top:32px;margin-bottom:0;">
+        <div style="position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(0,240,255,0.28);background:#050810;">
+          <video
+            id="home-wagon-video"
+            loading="lazy"
+            width="1280"
+            height="720"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster="./assets/images/wagon_dolly_demo_poster.jpg"
+            aria-label="Close-up video showing Module 31 All-Terrain 3-Wheel Wagon Dolly across gravel, dovetail steel Y-plate, sand, and curbs"
+            style="width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;"
+          >
+            <source src="./assets/videos/wagon_dolly_closeup_demo.mp4" type="video/mp4">
+          </video>
+          <button type="button" id="btn-home-wagon-toggle" class="hero-vid-btn" style="position:absolute;right:12px;bottom:12px;padding:6px 12px;font-size:11.5px;">
+            ⏸ Pause Demo
+          </button>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="bento-eyebrow">MODULE 31 · CLOSE-UP MOBILITY DEMO</div>
+          <h3 class="headline-medium" style="margin:0;">3-Wheel All-Terrain Wagon Roller Dolly</h3>
+          <p style="font-size:13.5px;color:var(--text-secondary);line-height:1.5;margin:0;">
+            Recessed galvanized steel <strong>Y-reinforcement plate</strong>, sliding dovetail mounts, and three <strong>8&Prime; pneumatic knobby tires</strong> (1 front 360° swivel + 2 rear fixed) rated for 350 lbs rolling on gravel, sand, and curbs.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;" role="tablist" aria-label="Home Wagon Terrain Comparison">
+            <button type="button" class="packout-btn active" data-home-terrain="gravel" role="tab" aria-selected="true" style="padding:6px 10px;font-size:11.5px;">🪨 Gravel Trail</button>
+            <button type="button" class="packout-btn" data-home-terrain="sand" role="tab" aria-selected="false" style="padding:6px 10px;font-size:11.5px;">🏖️ Beach Sand</button>
+            <button type="button" class="packout-btn" data-home-terrain="curb" role="tab" aria-selected="false" style="padding:6px 10px;font-size:11.5px;">🪜 Curb Climb</button>
+          </div>
+          <div id="home-wagon-metrics" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <a href="./accessories.html#wagon-dolly-demo" class="btn btn-cyan btn-sm">Inspect Full Wagon Demo &amp; 3MF Files &rarr;</a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -4323,6 +4532,60 @@
         </div>
       </div>
 
+      <!-- 14. Rotomolded Material Drop & UV Stress Test Cards -->
+      <div class="kok-stress-grid" id="stress-test-validation" aria-label="Rotomolded Material Drop and UV Stress Validation">
+        <article class="kok-stress-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="bento-eyebrow">UV &amp; WALL INTEGRITY</span>
+            <span style="font-family:var(--font-mono);font-size:12px;color:var(--accent-cyan);font-weight:700;">0.30" LLDPE + 3.5" R-8</span>
+          </div>
+          <h4 style="font-size:17px;margin:0;">UV-Stabilized LLDPE Wall Matrix</h4>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin:0;">
+            Virgin food-grade LLDPE outer skin compounded with UV-8 stabilizers resists <strong>10,000+ hours</strong> of accelerated Xenon-arc desert sun without chalking, warping, or hairline crazing.
+          </p>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+            <div style="display:flex;justify-content:space-between;"><span>King of Koolers Wall + Foam</span><strong style="color:var(--accent-cyan);">3.80" Total Core</strong></div>
+            <div class="kok-meter-track"><div class="kok-meter-bar" style="width:94%;"></div></div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-muted);"><span>Typical Rotomolded Chest</span><span>2.10" Core</span></div>
+            <div class="kok-meter-track"><div class="kok-meter-bar" style="width:54%;background:#64748b;"></div></div>
+          </div>
+        </article>
+
+        <article class="kok-stress-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="bento-eyebrow">DROP &amp; HOOP IMPACT</span>
+            <span style="font-family:var(--font-mono);font-size:12px;color:var(--accent-green);font-weight:700;">6-FT @ -20°F</span>
+          </div>
+          <h4 style="font-size:17px;margin:0;">Zero-Corner Impact Distribution</h4>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin:0;">
+            Rectangular molds thin out at 90° corners where drops crack shells. Our continuous <strong>24&Prime; cylindrical hoop</strong> spreads shock radially across 360° for <strong>3.2× corner impact survival</strong>.
+          </p>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+            <div style="display:flex;justify-content:space-between;"><span>Cylindrical Radial Hoop Stress</span><strong style="color:#34d399;">3.2× Distribution</strong></div>
+            <div class="kok-meter-track"><div class="kok-meter-bar" style="width:92%;background:linear-gradient(90deg,#10b981,#34d399);"></div></div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-muted);"><span>90° Rectangular Corner</span><span>High Stress Riser</span></div>
+            <div class="kok-meter-track"><div class="kok-meter-bar" style="width:36%;background:#ef4444;"></div></div>
+          </div>
+        </article>
+
+        <article class="kok-stress-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="bento-eyebrow">HARDWARE &amp; BEAR LOCK</span>
+            <span style="font-family:var(--font-mono);font-size:12px;color:#fbbf24;font-weight:700;">420 FT-LB SHEAR</span>
+          </div>
+          <h4 style="font-size:17px;margin:0;">Bear-Lock Hasps &amp; 500-lb Crush</h4>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin:0;">
+            Dual stainless steel padlock sleeves pair with the <strong>12 mm vertical deadbolt</strong> (420 ft-lb rotational shear rating) and <strong>500+ lb static vertical compression</strong> for camp-stool seating.
+          </p>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+            <div style="display:flex;justify-content:space-between;"><span>Deadbolt Anti-Twist Shear</span><strong style="color:#fbbf24;">420 ft-lbs</strong></div>
+            <div class="kok-meter-track"><div class="kok-meter-bar" style="width:96%;background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div></div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-muted);"><span>Static Seat Rating / Tier</span><span>500+ lbs Verified</span></div>
+            <div class="kok-meter-track"><div class="kok-meter-bar" style="width:90%;"></div></div>
+          </div>
+        </article>
+      </div>
+
       <!-- Technical Drawing Showcase -->
       <div class="cad-showcase">
         <div class="cad-header">
@@ -4343,6 +4606,58 @@
             <source srcset="./assets/images/cad_technical_transparency.webp" type="image/webp">
             <img src="./assets/images/cad_technical_transparency.png" alt="Technical Drawing and Orthographic Dimensions of King of Koolers Cylindrical Design" loading="lazy" decoding="async" width="1400" height="623">
           </picture>
+        </div>
+      </div>
+
+      <!-- 11. Center All-Thread Compression Rod & Section-View Explainer -->
+      <div class="kok-module-card" id="allthread-explainer">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div class="bento-eyebrow">V12 STRUCTURAL CORE · SECTION PHOTOS &amp; INTERACTIVE DIAGRAM</div>
+            <h3 class="headline-medium" style="margin:0;">How the Center All-Thread Compression Rod &amp; Tray Work</h3>
+            <p style="font-size:13.5px;color:var(--text-secondary);margin-top:6px;max-width:780px;">
+              A continuous stainless-steel center all-thread shaft threads into the lower hex-slotted mounting dish and clamps the crown top dish—creating a rigid backbone where elevated deli trays lock at any height via oversized brass hex nuts.
+            </p>
+          </div>
+          <a href="./customizer.html#cad-inspector" class="btn btn-glass btn-sm">Inspect V12 All-Thread STL &rarr;</a>
+        </div>
+
+        <div class="kok-allthread-layout">
+          <div>
+            <div class="kok-photo-pair">
+              <figure class="kok-photo-figure">
+                <picture>
+                  <source srcset="./assets/images/allthread_section_view.webp" type="image/webp">
+                  <img src="./assets/images/allthread_section_view.jpg" alt="Cutaway section view of King of Koolers showing 3.5-inch amber polyurethane foam walls, center all-thread compression rod, lower hex dish, elevated deli tray, and crown top tray" loading="lazy" decoding="async" width="1600" height="900">
+                </picture>
+                <figcaption><strong>Section Cutaway:</strong> 3.5&Prime; R-8 foam core, continuous all-thread shaft, lower hex dish &amp; crown top tray.</figcaption>
+              </figure>
+              <figure class="kok-photo-figure">
+                <picture>
+                  <source srcset="./assets/images/allthread_tray_closeup.webp" type="image/webp">
+                  <img src="./assets/images/allthread_tray_closeup.jpg" alt="Macro close-up showing the circular deli tray mounted onto the vertical center all-thread rod and locked with a brass hex compression nut above chilled cans and ice" loading="lazy" decoding="async" width="1600" height="900">
+                </picture>
+                <figcaption><strong>Tray Lock Detail:</strong> Deli tray threads onto the central post and locks with an oversized brass hex nut above ice.</figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <div style="background:rgba(5,9,18,0.82);border:1px solid rgba(0,240,255,0.24);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+              <strong style="font-size:13px;font-family:var(--font-mono);color:var(--accent-cyan);" id="allthread-stage-label">100% COMPRESSED &amp; LOCKED (180 LBF CLAMP)</strong>
+              <span style="font-size:11.5px;color:var(--text-muted);font-family:var(--font-mono);" id="allthread-clearance-label">Tray Height: +7.5" Above Ice</span>
+            </div>
+            <svg id="allthread-diagram-svg" viewBox="0 0 440 270" style="width:100%;height:auto;display:block;" role="img" aria-label="Interactive V12 center all-thread compression rod and tray assembly diagram"></svg>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <label for="allthread-slider" style="font-size:11.5px;font-family:var(--font-mono);color:var(--text-secondary);white-space:nowrap;">Assembly:</label>
+              <input type="range" id="allthread-slider" min="0" max="100" value="100" class="ctrl-slider" style="flex:1;" aria-label="All-thread assembly compression state">
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+              <button type="button" class="packout-btn" data-allthread-pct="0" style="padding:7px 6px;font-size:11px;">0% Exploded</button>
+              <button type="button" class="packout-btn" data-allthread-pct="55" style="padding:7px 6px;font-size:11px;">55% Tray Index</button>
+              <button type="button" class="packout-btn active" data-allthread-pct="100" style="padding:7px 6px;font-size:11px;">100% Locked</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -5451,6 +5766,26 @@
     </div>
   </dialog>
 
+  <!-- 19. Floating Section Progress Spy Rail -->
+  <nav class="kok-spy-rail" id="kok-spy-rail" aria-label="Page section progress">
+    <div class="kok-spy-progress-track" aria-hidden="true">
+      <div class="kok-spy-progress-fill" id="kok-spy-progress-fill"></div>
+    </div>
+    <a href="#overview" class="kok-spy-link active" data-spy-target="overview"><span class="kok-spy-label">Overview</span><span class="kok-spy-dot"></span></a>
+    <a href="#stack-and-sit" class="kok-spy-link" data-spy-target="stack-and-sit"><span class="kok-spy-label">Twist &amp; Lock</span><span class="kok-spy-dot"></span></a>
+    <a href="#thermodynamics" class="kok-spy-link" data-spy-target="thermodynamics"><span class="kok-spy-label">Thermal Lab</span><span class="kok-spy-dot"></span></a>
+    <a href="#modular-stack" class="kok-spy-link" data-spy-target="modular-stack"><span class="kok-spy-label">Modular Stack</span><span class="kok-spy-dot"></span></a>
+    <a href="#packing-calculator" class="kok-spy-link" data-spy-target="packing-calculator"><span class="kok-spy-label">Pack Calc</span><span class="kok-spy-dot"></span></a>
+    <a href="#camp-seating-planner" class="kok-spy-link" data-spy-target="camp-seating-planner"><span class="kok-spy-label">Camp Stools</span><span class="kok-spy-dot"></span></a>
+    <a href="#specs" class="kok-spy-link" data-spy-target="specs"><span class="kok-spy-label">Specs &amp; Tests</span><span class="kok-spy-dot"></span></a>
+    <a href="#allthread-explainer" class="kok-spy-link" data-spy-target="allthread-explainer"><span class="kok-spy-label">All-Thread Core</span><span class="kok-spy-dot"></span></a>
+    <a href="#prototype" class="kok-spy-link" data-spy-target="prototype"><span class="kok-spy-label">Prototype</span><span class="kok-spy-dot"></span></a>
+    <a href="#configurator" class="kok-spy-link" data-spy-target="configurator"><span class="kok-spy-label">Configurator</span><span class="kok-spy-dot"></span></a>
+    <a href="#pizza-vault" class="kok-spy-link" data-spy-target="pizza-vault"><span class="kok-spy-label">Pizza Vault</span><span class="kok-spy-dot"></span></a>
+    <a href="#kickstarter-tiers" class="kok-spy-link" data-spy-target="kickstarter-tiers"><span class="kok-spy-label">Tiers</span><span class="kok-spy-dot"></span></a>
+    <a href="#investors" class="kok-spy-link" data-spy-target="investors"><span class="kok-spy-label">Investors</span><span class="kok-spy-dot"></span></a>
+  </nav>
+
   <!-- ==========================================================================
        APPLE FOOTER
        ========================================================================== -->
@@ -6225,6 +6560,30 @@
         });
       }
 
+      // Auto-freeze thermal WebP when scrolled off-screen to conserve bandwidth/decoding
+      if (thermalImg && thermalFreezeCanvas && 'IntersectionObserver' in window) {
+        const thermalObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (isThermalPaused) return;
+            if (!entry.isIntersecting) {
+              try {
+                if (thermalImg.complete && thermalImg.naturalWidth > 0) {
+                  thermalFreezeCanvas.width = thermalImg.naturalWidth;
+                  thermalFreezeCanvas.height = thermalImg.naturalHeight;
+                  thermalFreezeCanvas.getContext('2d').drawImage(thermalImg, 0, 0, thermalFreezeCanvas.width, thermalFreezeCanvas.height);
+                  thermalFreezeCanvas.style.display = 'block';
+                  thermalImg.style.display = 'none';
+                }
+              } catch (_) {}
+            } else {
+              thermalFreezeCanvas.style.display = 'none';
+              thermalImg.style.display = 'block';
+            }
+          });
+        }, { threshold: 0.08 });
+        thermalObserver.observe(thermalImg.closest('.video-element-wrapper') || thermalImg);
+      }
+
       /* ------------------------------------------------------------------------
          3. 60FPS INTERACTIVE THERMAL CANVAS SIMULATOR
          ------------------------------------------------------------------------ */
@@ -6493,7 +6852,13 @@
           ctx.setLineDash([]);
         }
 
+        let simVisible = true;
+
         function simLoop() {
+          if (!simVisible) {
+            animFrameId = null;
+            return;
+          }
           if (isSimRunning) {
             let cur = parseFloat(sliderTime.value);
             cur = (cur + 0.05) % 73;
@@ -6501,6 +6866,30 @@
           }
           drawSimulation();
           animFrameId = requestAnimationFrame(simLoop);
+        }
+
+        function setSimVisible(visible) {
+          if (simVisible === visible) return;
+          simVisible = visible;
+          if (simVisible && !animFrameId) {
+            animFrameId = requestAnimationFrame(simLoop);
+          } else if (!simVisible && animFrameId) {
+            cancelAnimationFrame(animFrameId);
+            animFrameId = null;
+          }
+        }
+
+        const simCard = canvas.closest('.sim-card');
+        if (simCard) {
+          if ('contentVisibility' in document.documentElement.style) {
+            simCard.addEventListener('contentvisibilityautostatechange', (event) => {
+              setSimVisible(!event.skipped);
+            });
+          } else if ('IntersectionObserver' in window) {
+            new IntersectionObserver((entries) => {
+              entries.forEach((entry) => setSimVisible(entry.isIntersecting));
+            }, { rootMargin: '200px' }).observe(simCard);
+          }
         }
 
         sliderTime.addEventListener('input', () => { isSimRunning = false; updateSimPlayBtn(); drawSimulation(); });
@@ -8494,7 +8883,7 @@
         updateUnitEconSimulator();
       }
 
-      /* 38. 6-Clip Hero Video Back-to-Back Auto-Play & Continuous Loop Controller */
+      /* 38. 6-Clip Hero Video Back-to-Back Auto-Play, Progress Fill, Cinema Mode, Shortcuts & Offscreen Pause */
       const HERO_CLIPS = [
         './assets/videos/gemini_generated_video_first10sec.mp4',
         './assets/videos/gemini_generated_video_first10_20sec_v2.mp4',
@@ -8506,12 +8895,19 @@
       let currentHeroClipIdx = 0;
 
       const heroVid = document.getElementById('hero-sizzle-video');
+      const heroWrap = document.querySelector('.hero-media-wrapper');
       const btnHeroAudio = document.getElementById('btn-hero-audio');
       const heroAudioLabel = document.getElementById('hero-audio-label');
       const btnHeroPlay = document.getElementById('btn-hero-play');
       const heroPlayLabel = document.getElementById('hero-play-label');
+      const btnHeroCinema = document.getElementById('btn-hero-cinema');
+      const heroCinemaLabel = document.getElementById('hero-cinema-label');
       const btnHeroFs = document.getElementById('btn-hero-fullscreen');
       const chapterPills = document.querySelectorAll('#hero-chapter-bar .hero-chapter-pill');
+      const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let heroUserPaused = Boolean(reducedMotion);
+      let heroInViewport = true;
+      let heroProgressRaf = null;
 
       // Preload the next clip in background for gapless back-to-back transitions without saturating initial bandwidth
       const nextHeroPreloader = document.createElement('video');
@@ -8525,57 +8921,104 @@
       }
       preloadNextHeroClip(0);
 
+      function updateHeroPillProgress() {
+        if (!heroVid) return;
+        const pct = (heroVid.duration && isFinite(heroVid.duration) && heroVid.duration > 0)
+          ? Math.max(0, Math.min(100, (heroVid.currentTime / heroVid.duration) * 100))
+          : 0;
+        chapterPills.forEach((p, i) => {
+          p.style.setProperty('--clip-progress', i === currentHeroClipIdx ? `${pct.toFixed(1)}%` : '0%');
+        });
+        if (!heroVid.paused && !heroVid.ended && heroInViewport) {
+          heroProgressRaf = requestAnimationFrame(updateHeroPillProgress);
+        } else {
+          heroProgressRaf = null;
+        }
+      }
+
+      function syncPlayButtonUI(isPlaying) {
+        if (!btnHeroPlay) return;
+        btnHeroPlay.innerHTML = isPlaying
+          ? '⏸ <span id="hero-play-label">Pause</span>'
+          : '▶ <span id="hero-play-label">Play</span>';
+        btnHeroPlay.setAttribute('aria-pressed', String(isPlaying));
+      }
+
       function playHeroClip(idx) {
         if (!heroVid) return;
         currentHeroClipIdx = ((idx % HERO_CLIPS.length) + HERO_CLIPS.length) % HERO_CLIPS.length;
         const wasMuted = heroVid.muted;
+        heroUserPaused = false;
         heroVid.src = HERO_CLIPS[currentHeroClipIdx];
         heroVid.muted = wasMuted;
         heroVid.load();
         heroVid.play().catch(() => {});
         preloadNextHeroClip(currentHeroClipIdx);
-        if (btnHeroPlay) {
-          btnHeroPlay.innerHTML = '⏸ <span id="hero-play-label">Pause</span>';
-          btnHeroPlay.setAttribute('aria-pressed', 'true');
+        syncPlayButtonUI(true);
+        chapterPills.forEach((p, i) => {
+          p.classList.toggle('active', i === currentHeroClipIdx);
+          p.style.setProperty('--clip-progress', '0%');
+        });
+        if (!heroProgressRaf) heroProgressRaf = requestAnimationFrame(updateHeroPillProgress);
+      }
+
+      function toggleHeroPlay() {
+        if (!heroVid) return;
+        if (heroVid.paused) {
+          heroUserPaused = false;
+          heroVid.play().catch(() => {});
+          syncPlayButtonUI(true);
+          if (!heroProgressRaf) heroProgressRaf = requestAnimationFrame(updateHeroPillProgress);
+        } else {
+          heroUserPaused = true;
+          heroVid.pause();
+          syncPlayButtonUI(false);
         }
-        chapterPills.forEach((p, i) => p.classList.toggle('active', i === currentHeroClipIdx));
+      }
+
+      function toggleHeroMute() {
+        if (!heroVid) return;
+        heroVid.muted = !heroVid.muted;
+        if (!heroVid.muted && heroVid.paused) {
+          heroUserPaused = false;
+          heroVid.play().catch(() => {});
+          syncPlayButtonUI(true);
+        }
+        if (btnHeroAudio) {
+          btnHeroAudio.classList.toggle('active-audio', !heroVid.muted);
+          btnHeroAudio.setAttribute('aria-pressed', String(!heroVid.muted));
+        }
+        if (heroAudioLabel) {
+          heroAudioLabel.textContent = heroVid.muted ? 'Unmute Audio' : 'Audio On';
+        }
       }
 
       if (heroVid) {
-        // Automatically advance to the next clip when current clip ends, looping 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 1 forever
         heroVid.addEventListener('ended', () => {
           playHeroClip(currentHeroClipIdx + 1);
         });
+        heroVid.addEventListener('timeupdate', updateHeroPillProgress);
+        heroVid.addEventListener('play', () => {
+          if (!heroProgressRaf) heroProgressRaf = requestAnimationFrame(updateHeroPillProgress);
+        });
 
-        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        if (reducedMotion) {
           heroVid.pause();
-          if (heroPlayLabel) heroPlayLabel.textContent = 'Play';
-          if (btnHeroPlay) btnHeroPlay.setAttribute('aria-pressed', 'false');
+          syncPlayButtonUI(false);
+        } else {
+          heroProgressRaf = requestAnimationFrame(updateHeroPillProgress);
         }
 
-        if (btnHeroAudio) {
-          btnHeroAudio.addEventListener('click', () => {
-            heroVid.muted = !heroVid.muted;
-            if (!heroVid.muted && heroVid.paused) heroVid.play().catch(() => {});
-            btnHeroAudio.classList.toggle('active-audio', !heroVid.muted);
-            btnHeroAudio.setAttribute('aria-pressed', String(!heroVid.muted));
-            if (heroAudioLabel) {
-              heroAudioLabel.textContent = heroVid.muted ? 'Unmute Audio' : 'Audio On';
-            }
-          });
-        }
+        if (btnHeroAudio) btnHeroAudio.addEventListener('click', toggleHeroMute);
+        if (btnHeroPlay) btnHeroPlay.addEventListener('click', toggleHeroPlay);
 
-        if (btnHeroPlay) {
-          btnHeroPlay.addEventListener('click', () => {
-            if (heroVid.paused) {
-              heroVid.play().catch(() => {});
-              btnHeroPlay.innerHTML = '⏸ <span id="hero-play-label">Pause</span>';
-              btnHeroPlay.setAttribute('aria-pressed', 'true');
-            } else {
-              heroVid.pause();
-              btnHeroPlay.innerHTML = '▶ <span id="hero-play-label">Play</span>';
-              btnHeroPlay.setAttribute('aria-pressed', 'false');
-            }
+        if (btnHeroCinema && heroWrap) {
+          btnHeroCinema.addEventListener('click', () => {
+            const on = heroWrap.classList.toggle('cinema-mode');
+            document.body.classList.toggle('hero-cinema-active', on);
+            btnHeroCinema.setAttribute('aria-pressed', String(on));
+            btnHeroCinema.classList.toggle('active-audio', on);
+            if (heroCinemaLabel) heroCinemaLabel.textContent = on ? 'Exit Cinema' : 'Cinema Mode';
           });
         }
 
@@ -8587,7 +9030,9 @@
               btnHeroAudio.setAttribute('aria-pressed', 'true');
             }
             if (heroAudioLabel) heroAudioLabel.textContent = 'Audio On';
+            heroUserPaused = false;
             heroVid.play().catch(() => {});
+            syncPlayButtonUI(true);
             if (heroVid.requestFullscreen) heroVid.requestFullscreen();
             else if (heroVid.webkitRequestFullscreen) heroVid.webkitRequestFullscreen();
           });
@@ -8599,7 +9044,420 @@
             playHeroClip(clipIdx);
           });
         });
+
+        // Keyboard Media Shortcuts: Space (Play/Pause), M (Mute), Left/Right Arrow (Previous/Next Clip)
+        document.addEventListener('keydown', (e) => {
+          const tgt = e.target;
+          if (tgt && (tgt.matches('input, textarea, select, [contenteditable]') || tgt.closest('dialog[open], .open'))) return;
+          if (document.querySelector('dialog[open], .kok-modal-backdrop.open, .kok-drawer-backdrop.open')) return;
+          if (e.code === 'Space') {
+            if (tgt && tgt.matches('button, a')) return;
+            e.preventDefault();
+            toggleHeroPlay();
+          } else if (e.key && e.key.toLowerCase() === 'm' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+            toggleHeroMute();
+          } else if (e.key === 'ArrowRight' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+            playHeroClip(currentHeroClipIdx + 1);
+          } else if (e.key === 'ArrowLeft' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+            playHeroClip(currentHeroClipIdx - 1);
+          }
+        });
+
+        // Smart Offscreen Bandwidth & Playback Pause Optimizer
+        if ('IntersectionObserver' in window) {
+          const heroIo = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              heroInViewport = entry.isIntersecting;
+              if (!heroInViewport) {
+                if (!heroVid.paused) heroVid.pause();
+              } else if (!heroUserPaused && !reducedMotion && !document.hidden) {
+                heroVid.play().catch(() => {});
+                if (!heroProgressRaf) heroProgressRaf = requestAnimationFrame(updateHeroPillProgress);
+              }
+            });
+          }, { threshold: 0.15 });
+          heroIo.observe(heroVid);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            if (!heroVid.paused) heroVid.pause();
+          } else if (heroInViewport && !heroUserPaused && !reducedMotion) {
+            heroVid.play().catch(() => {});
+            if (!heroProgressRaf) heroProgressRaf = requestAnimationFrame(updateHeroPillProgress);
+          }
+        });
       }
+
+      /* ------------------------------------------------------------------------
+         39. FOOD & BEVERAGE PACKING CALCULATOR ("WHAT FITS INSIDE?")
+         ------------------------------------------------------------------------ */
+      (function initPackingCalculator() {
+        const TRIP_PRESETS = {
+          camping4:   { cans: 48, bottles: 4, briskets: 2, pizzas: 1, iceBags: 3 },
+          tailgate20: { cans: 96, bottles: 6, briskets: 3, pizzas: 4, iceBags: 4 },
+          offshore:   { cans: 60, bottles: 4, briskets: 2, pizzas: 0, iceBags: 5 },
+          sports:     { cans: 84, bottles: 8, briskets: 0, pizzas: 3, iceBags: 3 }
+        };
+        const ITEM_META = [
+          { key: 'cans',     label: '12-oz Beverage Cans', icon: '🥫', step: 6, max: 144, lbs: 0.85, tier: 'base' },
+          { key: 'bottles',  label: '2-Liter Bottles',     icon: '🍾', step: 1, max: 12,  lbs: 4.5,  tier: 'base' },
+          { key: 'iceBags',  label: '10-lb Crushed Ice',   icon: '🧊', step: 1, max: 8,   lbs: 10.0, tier: 'base' },
+          { key: 'briskets', label: 'Whole Briskets / Food', icon: '🥩', step: 1, max: 6, lbs: 12.0, tier: 'mid' },
+          { key: 'pizzas',   label: '18" Hot Pizzas (Vault)', icon: '🍕', step: 1, max: 5, lbs: 2.5, tier: 'top' }
+        ];
+        const state = Object.assign({}, TRIP_PRESETS.camping4);
+        const steppersEl = document.getElementById('packing-steppers');
+        const baysEl = document.getElementById('packing-bays-output');
+
+        function renderPacking() {
+          if (steppersEl) {
+            steppersEl.innerHTML = ITEM_META.map((m) => `
+              <div class="kok-item-stepper-row">
+                <span style="font-size:13.5px;font-weight:600;">${m.icon} ${m.label}</span>
+                <div class="kok-stepper-btns">
+                  <button type="button" class="kok-step-btn" data-pack-key="${m.key}" data-pack-dir="-1" aria-label="Decrease ${m.label}">&minus;</button>
+                  <strong style="min-width:34px;text-align:center;font-family:var(--font-mono);color:var(--accent-cyan);">${state[m.key]}</strong>
+                  <button type="button" class="kok-step-btn" data-pack-key="${m.key}" data-pack-dir="1" aria-label="Increase ${m.label}">+</button>
+                </div>
+              </div>
+            `).join('');
+          }
+          if (!baysEl) return;
+
+          const basePct = Math.min(130, Math.round((state.cans / 88 + state.bottles / 8 + state.iceBags / 4) * 38));
+          const midPct  = Math.min(130, Math.round((state.briskets * 24 + Math.max(0, state.cans - 66) * 1.1)));
+          const topPct  = Math.min(130, Math.round(state.pizzas * 25));
+          const totalLbs = Math.round(
+            state.cans * 0.85 + state.bottles * 4.5 + state.iceBags * 10 + state.briskets * 12 + state.pizzas * 2.5 + 46
+          );
+
+          function bayCard(title, sub, pct, chips) {
+            const over = pct > 100;
+            const barColor = over ? '#ef4444' : (pct > 85 ? '#f59e0b' : '#00f0ff');
+            return `
+              <div class="kok-tier-bay">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                  <div><strong style="font-size:13.5px;">${title}</strong> <span style="font-size:11.5px;color:var(--text-muted);">(${sub})</span></div>
+                  <span style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:${barColor};">${Math.min(100, pct)}% Full${over ? ' · Overflow' : ''}</span>
+                </div>
+                <div class="kok-meter-track" style="margin-top:6px;"><div class="kok-meter-bar" style="width:${Math.min(100, pct)}%;background:${barColor};"></div></div>
+                <div class="kok-bay-chips">${chips.length ? chips.map((c) => `<span class="kok-bay-chip">${c}</span>`).join('') : '<span style="font-size:11.5px;color:var(--text-muted);">Empty · Ready for dry gear</span>'}</div>
+              </div>
+            `;
+          }
+
+          const baseChips = [
+            state.cans ? `🥫 ${Math.min(state.cans, 66)} Cans` : '',
+            state.bottles ? `🍾 ${state.bottles} × 2L Bottles` : '',
+            state.iceBags ? `🧊 ${state.iceBags * 10} lbs Ice` : ''
+          ].filter(Boolean);
+          const midChips = [
+            state.briskets ? `🥩 ${state.briskets} Whole Briskets` : '',
+            state.cans > 66 ? `🥫 +${state.cans - 66} Overflow Cans` : ''
+          ].filter(Boolean);
+          const topChips = [
+            state.pizzas ? `🍕 ${state.pizzas} × 18" Hot Pizzas` : '🥪 Dry Sandwiches / Plates'
+          ];
+
+          baysEl.innerHTML =
+            bayCard('Tier 1 · Base 24" Cold Core', '80 QT · 316 SS Spigot', basePct, baseChips) +
+            bayCard('Tier 2 · Mid 18" Provision Tier', '55 QT · Center Deli Tree', midPct, midChips) +
+            bayCard('Tier 3 · Top 12" Dry / Pizza Vault', '38 QT · Vacuum Isolated', topPct, topChips) +
+            `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-radius:12px;background:rgba(0,240,255,0.08);border:1px solid rgba(0,240,255,0.28);font-size:12.5px;">
+              <span>Total Loaded Stack Weight: <strong style="color:var(--accent-cyan);font-family:var(--font-mono);">${totalLbs} LBS</strong></span>
+              <span>Cold Hold: <strong style="color:#34d399;">${state.iceBags >= 3 ? '7–10 Days' : '3–5 Days'}</strong></span>
+            </div>`;
+        }
+
+        document.querySelectorAll('[data-calc-trip]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('[data-calc-trip]').forEach((b) => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+            const preset = TRIP_PRESETS[btn.dataset.calcTrip];
+            if (preset) Object.assign(state, preset);
+            renderPacking();
+          });
+        });
+
+        if (steppersEl) {
+          steppersEl.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-pack-key]');
+            if (!btn) return;
+            const key = btn.dataset.packKey;
+            const dir = parseInt(btn.dataset.packDir, 10) || 0;
+            const meta = ITEM_META.find((m) => m.key === key);
+            if (!meta) return;
+            state[key] = Math.max(0, Math.min(meta.max, (state[key] || 0) + dir * meta.step));
+            renderPacking();
+          });
+        }
+        renderPacking();
+      })();
+
+      /* ------------------------------------------------------------------------
+         40. CAMP STOOL CIRCLE SEATING LAYOUT PLANNER
+         ------------------------------------------------------------------------ */
+      (function initCampSeatingPlanner() {
+        const svg = document.getElementById('camp-seating-svg');
+        const infoEl = document.getElementById('camp-seat-inspector');
+        const btnStacked = document.getElementById('btn-camp-stacked');
+        const btnCircle = document.getElementById('btn-camp-circle');
+        if (!svg || !infoEl) return;
+
+        let mode = 'circle';
+        let selectedUnit = 'stool-1';
+        const UNITS = {
+          'cooler-main': { title: 'Main 24" Cold Core Cooler', height: '24" Base', rating: '500 lbs (Ice Vault)', color: '#1e4bd7', desc: 'Stays sealed beside camp holding 60+ cans and 40 lbs of ice at sub-freezing temperature while acting as a side table or extra seat.' },
+          'stool-1': { title: 'Camp Stool #1 · 18" Mid Tier', height: '18" Ergonomic Seat Height', rating: '500 lb Static Rating', color: '#f0f4fa', desc: 'Standard dining/campfire chair height. Rotomolded 3.5"-wall cylinder won\'t sink in mud or sand and locks its lid flat for zero wobble.' },
+          'stool-2': { title: 'Camp Stool #2 · 20" Tall Tier', height: '20" Tall Seat Height', rating: '500 lb Static Rating', color: '#e1232d', desc: 'Ideal upright camp seat or beverage side-perch. Built-in 10W Solar Lid can charge phones right beside the fire.' },
+          'stool-3': { title: 'Camp Stool #3 · 12" Low Ottoman / Youth Seat', height: '12" Low Footrest / Youth Seat', rating: '500 lb Static Rating', color: '#38bdf8', desc: 'Perfect low camp stool, kid seat, or leg ottoman around the fire—unpacks directly off the 72" Titan stack with a 18° wrist twist.' }
+        };
+
+        function renderCamp() {
+          if (btnStacked) btnStacked.classList.toggle('active', mode === 'stacked');
+          if (btnCircle) btnCircle.classList.toggle('active', mode === 'circle');
+
+          if (mode === 'stacked') {
+            svg.innerHTML = `
+              <rect x="0" y="0" width="680" height="320" rx="14" fill="#060912"/>
+              <line x1="80" y1="278" x2="600" y2="278" stroke="rgba(0,240,255,0.28)" stroke-width="2"/>
+              <g transform="translate(275, 42)">
+                <rect x="0" y="0" width="130" height="36" rx="8" fill="#38bdf8" stroke="#fff" stroke-width="1.5"/>
+                <rect x="0" y="38" width="130" height="58" rx="8" fill="#e1232d" stroke="#fff" stroke-width="1.5"/>
+                <rect x="0" y="98" width="130" height="54" rx="8" fill="#f0f4fa" stroke="#94a3b8" stroke-width="1.5"/>
+                <rect x="0" y="154" width="130" height="80" rx="10" fill="#1e4bd7" stroke="#fff" stroke-width="1.5"/>
+                <text x="65" y="23" text-anchor="middle" fill="#050810" font-size="11" font-weight="700">12" STOOL #3</text>
+                <text x="65" y="72" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">20" STOOL #2</text>
+                <text x="65" y="129" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="700">18" STOOL #1</text>
+                <text x="65" y="198" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">24" MAIN COOLER</text>
+              </g>
+              <text x="455" y="155" fill="#00f0ff" font-family="monospace" font-size="13" font-weight="700">← 72" STACKED TOWER</text>
+              <text x="455" y="176" fill="#94a3b8" font-family="monospace" font-size="11.5">24" × 24" Footprint · 0 Folding Chairs</text>
+            `;
+          } else {
+            const seats = [
+              { id: 'cooler-main', x: 165, y: 160, r: 44, label: 'MAIN COOLER', sub: '24" Cold Core' },
+              { id: 'stool-1', x: 340, y: 72, r: 36, label: 'STOOL #1', sub: '18" · 500 lb' },
+              { id: 'stool-2', x: 515, y: 160, r: 38, label: 'STOOL #2', sub: '20" · 500 lb' },
+              { id: 'stool-3', x: 340, y: 252, r: 34, label: 'STOOL #3', sub: '12" · 500 lb' }
+            ];
+            svg.innerHTML = `
+              <rect x="0" y="0" width="680" height="320" rx="14" fill="#060912"/>
+              <circle cx="340" cy="162" r="118" fill="none" stroke="rgba(0,240,255,0.18)" stroke-dasharray="6 6" stroke-width="2"/>
+              <circle cx="340" cy="162" r="42" fill="rgba(245,158,11,0.22)" stroke="#f59e0b" stroke-width="2"/>
+              <text x="340" y="158" text-anchor="middle" fill="#fbbf24" font-size="22">🔥</text>
+              <text x="340" y="178" text-anchor="middle" fill="#fde68a" font-family="monospace" font-size="10" font-weight="700">CAMPFIRE</text>
+              ${seats.map((s) => {
+                const u = UNITS[s.id];
+                const act = selectedUnit === s.id;
+                return `
+                  <g class="camp-seat-node" data-seat-id="${s.id}" style="cursor:pointer;">
+                    <circle cx="${s.x}" cy="${s.y}" r="${s.r + 5}" fill="none" stroke="${act ? '#00f0ff' : 'transparent'}" stroke-width="2.5"/>
+                    <circle cx="${s.x}" cy="${s.y}" r="${s.r}" fill="${u.color}" stroke="#fff" stroke-width="2"/>
+                    <text x="${s.x}" y="${s.y - 2}" text-anchor="middle" fill="${s.id === 'stool-1' ? '#0f172a' : '#fff'}" font-size="10.5" font-weight="800">${s.label}</text>
+                    <text x="${s.x}" y="${s.y + 12}" text-anchor="middle" fill="${s.id === 'stool-1' ? '#334155' : 'rgba(255,255,255,0.85)'}" font-family="monospace" font-size="9.5">${s.sub}</text>
+                  </g>
+                `;
+              }).join('')}
+              <text x="16" y="24" fill="#00f0ff" font-family="monospace" font-size="11" font-weight="700">CLICK ANY MODULE TO INSPECT SEAT SPEC</text>
+            `;
+          }
+
+          const u = UNITS[selectedUnit] || UNITS['stool-1'];
+          infoEl.innerHTML = `
+            <div class="kok-tier-bay" style="border-color:rgba(0,240,255,0.35);">
+              <div style="font-size:11px;font-family:var(--font-mono);color:var(--accent-cyan);">SELECTED MODULE SPEC</div>
+              <h4 style="font-size:18px;margin:4px 0 6px;">${u.title}</h4>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+                <span class="kok-bay-chip">${u.height}</span>
+                <span class="kok-bay-chip">${u.rating}</span>
+              </div>
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.5;margin:0;">${u.desc}</p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div class="kok-tier-bay"><div style="font-size:10.5px;color:var(--text-muted);font-family:var(--font-mono);">FOLDING CHAIRS NEEDED</div><strong style="font-size:20px;color:#34d399;font-family:var(--font-mono);">0 PACKED</strong></div>
+              <div class="kok-tier-bay"><div style="font-size:10.5px;color:var(--text-muted);font-family:var(--font-mono);">TOTAL SEAT CAPACITY</div><strong style="font-size:20px;color:var(--accent-cyan);font-family:var(--font-mono);">1,500+ LBS</strong></div>
+            </div>
+          `;
+        }
+
+        svg.addEventListener('click', (e) => {
+          const node = e.target.closest('[data-seat-id]');
+          if (node) {
+            selectedUnit = node.dataset.seatId;
+            renderCamp();
+          }
+        });
+        if (btnStacked) btnStacked.addEventListener('click', () => { mode = 'stacked'; renderCamp(); });
+        if (btnCircle) btnCircle.addEventListener('click', () => { mode = 'circle'; renderCamp(); });
+        renderCamp();
+      })();
+
+      /* ------------------------------------------------------------------------
+         41. HOME WAGON DOLLY DEMO & TERRAIN TABS + OFFSCREEN PAUSE
+         ------------------------------------------------------------------------ */
+      (function initHomeWagonDemo() {
+        const TERRAIN = {
+          gravel: { m1: '24" Zero-Turn Swivel', m2: '4.2" Pneumatic Absorption', m3: '350 lbs Rolling Y-Plate', m4: 'Sliding Dovetail Slots' },
+          sand:   { m1: 'Wide Tread Flotation', m2: 'Zero Sand Sinkage', m3: '300 lbs Beach Rated', m4: '24" Concentric Ring' },
+          curb:   { m1: '6" Curb Step-Up', m2: '3-Stage Pull Handle', m3: '500 lbs Static Impact', m4: '2-Second Snap Detach' }
+        };
+        const metrics = document.getElementById('home-wagon-metrics');
+        function renderHomeTerrain(k) {
+          if (!metrics) return;
+          const d = TERRAIN[k] || TERRAIN.gravel;
+          metrics.innerHTML = `
+            <div class="kok-tier-bay" style="padding:9px 11px;"><div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);">TURNING / CLIMB</div><strong style="font-size:12.5px;color:var(--accent-cyan);">${d.m1}</strong></div>
+            <div class="kok-tier-bay" style="padding:9px 11px;"><div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);">TERRAIN RIDE</div><strong style="font-size:12.5px;color:var(--accent-cyan);">${d.m2}</strong></div>
+            <div class="kok-tier-bay" style="padding:9px 11px;"><div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);">CHASSIS RATING</div><strong style="font-size:12.5px;">${d.m3}</strong></div>
+            <div class="kok-tier-bay" style="padding:9px 11px;"><div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);">LOCK INTERFACE</div><strong style="font-size:12.5px;">${d.m4}</strong></div>
+          `;
+        }
+        renderHomeTerrain('gravel');
+        document.querySelectorAll('[data-home-terrain]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('[data-home-terrain]').forEach((b) => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+            renderHomeTerrain(btn.dataset.homeTerrain);
+          });
+        });
+
+        const wVid = document.getElementById('home-wagon-video');
+        const wToggle = document.getElementById('btn-home-wagon-toggle');
+        let wUserPaused = Boolean(reducedMotion);
+        if (wVid) {
+          if (reducedMotion) {
+            wVid.pause();
+            if (wToggle) wToggle.textContent = '▶ Play Demo';
+          }
+          if (wToggle) {
+            wToggle.addEventListener('click', () => {
+              if (wVid.paused) {
+                wUserPaused = false;
+                wVid.play().catch(() => {});
+                wToggle.textContent = '⏸ Pause Demo';
+              } else {
+                wUserPaused = true;
+                wVid.pause();
+                wToggle.textContent = '▶ Play Demo';
+              }
+            });
+          }
+          if ('IntersectionObserver' in window) {
+            new IntersectionObserver((entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) {
+                  if (!wVid.paused) wVid.pause();
+                } else if (!wUserPaused && !reducedMotion && !document.hidden) {
+                  wVid.play().catch(() => {});
+                }
+              });
+            }, { threshold: 0.15 }).observe(wVid);
+          }
+        }
+      })();
+
+      /* ------------------------------------------------------------------------
+         42. CENTER ALL-THREAD COMPRESSION ROD INTERACTIVE EXPLAINER
+         ------------------------------------------------------------------------ */
+      (function initAllThreadExplainer() {
+        const svg = document.getElementById('allthread-diagram-svg');
+        const slider = document.getElementById('allthread-slider');
+        const stageLbl = document.getElementById('allthread-stage-label');
+        const clearLbl = document.getElementById('allthread-clearance-label');
+        if (!svg || !slider) return;
+
+        function renderAllThread(pctRaw) {
+          const pct = Math.max(0, Math.min(100, parseInt(pctRaw, 10) || 0));
+          slider.value = pct;
+          const gap = ((100 - pct) / 100) * 38;
+          const clampLbf = Math.round((pct / 100) * 180);
+
+          if (stageLbl) {
+            stageLbl.textContent = pct >= 90
+              ? `100% COMPRESSED & LOCKED (${clampLbf} LBF CLAMP)`
+              : (pct <= 15 ? '0% EXPLODED ASSEMBLY VIEW' : `${pct}% TRAY HEIGHT INDEXING (${clampLbf} LBF)`);
+          }
+          if (clearLbl) {
+            clearLbl.textContent = pct <= 15 ? 'Shows 5 Internal Core Parts' : 'Tray Height: +7.5" Above Ice';
+          }
+          document.querySelectorAll('[data-allthread-pct]').forEach((b) => {
+            b.classList.toggle('active', Math.abs(parseInt(b.dataset.allthreadPct, 10) - pct) <= 8);
+          });
+
+          const topDishY = 58 - gap * 0.65;
+          const trayY = 132 - gap * 0.25;
+          const nutY = trayY + 12 + gap * 0.2;
+          const botDishY = 212 + gap * 0.35;
+
+          svg.innerHTML = `
+            <rect x="0" y="0" width="440" height="270" rx="12" fill="#04070e"/>
+            <!-- Outer cutaway wall silhouettes -->
+            <rect x="76" y="42" width="22" height="196" rx="4" fill="#d97706" fill-opacity="0.45" stroke="#f59e0b" stroke-width="1.2"/>
+            <rect x="342" y="42" width="22" height="196" rx="4" fill="#d97706" fill-opacity="0.45" stroke="#f59e0b" stroke-width="1.2"/>
+            <!-- Ice & Cans Zone -->
+            <rect x="104" y="182" width="232" height="48" rx="6" fill="rgba(56,189,248,0.14)" stroke="rgba(56,189,248,0.35)" stroke-dasharray="4 3"/>
+            <text x="150" y="205" fill="#7dd3fc" font-size="10.5" font-family="monospace">🧊 ICE &amp; CANS</text>
+            <!-- Lower Hex-Slotted Dish -->
+            <rect x="172" y="${botDishY}" width="96" height="14" rx="4" fill="#475569" stroke="#cbd5e1" stroke-width="1.5"/>
+            <text x="278" y="${botDishY + 11}" fill="#94a3b8" font-size="10" font-family="monospace">Lower Hex Dish</text>
+            <!-- Continuous 2" Center All-Thread Shaft -->
+            <rect x="213" y="${topDishY - 6}" width="14" height="${botDishY - topDishY + 16}" rx="3" fill="#cbd5e1" stroke="#00f0ff" stroke-width="1.2"/>
+            <text x="234" y="102" fill="#00f0ff" font-size="10" font-family="monospace" font-weight="700">2" All-Thread Post</text>
+            <!-- Elevated Adjustable Deli Tray -->
+            <rect x="114" y="${trayY}" width="212" height="12" rx="5" fill="#f8fafc" stroke="#00f0ff" stroke-width="1.5"/>
+            <text x="120" y="${trayY - 6}" fill="#f8fafc" font-size="10.5" font-weight="700">Elevated Deli / Dry Tray</text>
+            <!-- Brass Hex Lock Nut -->
+            <rect x="204" y="${nutY}" width="32" height="12" rx="3" fill="#f59e0b" stroke="#fef08a" stroke-width="1.5"/>
+            <text x="242" y="${nutY + 10}" fill="#fbbf24" font-size="10" font-family="monospace" font-weight="700">Brass Hex Lock Nut</text>
+            <!-- Crown Top Compression Dish -->
+            <rect x="126" y="${topDishY}" width="188" height="12" rx="5" fill="#38bdf8" stroke="#fff" stroke-width="1.4"/>
+            <text x="130" y="${topDishY - 7}" fill="#7dd3fc" font-size="10" font-family="monospace">Crown Top Dish</text>
+          `;
+        }
+
+        slider.addEventListener('input', (e) => renderAllThread(e.target.value));
+        document.querySelectorAll('[data-allthread-pct]').forEach((b) => {
+          b.addEventListener('click', () => renderAllThread(b.dataset.allthreadPct));
+        });
+        renderAllThread(100);
+      })();
+
+      /* ------------------------------------------------------------------------
+         43. FLOATING SECTION PROGRESS SPY RAIL
+         ------------------------------------------------------------------------ */
+      (function initSectionSpyRail() {
+        const rail = document.getElementById('kok-spy-rail');
+        const fill = document.getElementById('kok-spy-progress-fill');
+        if (!rail) return;
+        const links = Array.from(rail.querySelectorAll('.kok-spy-link'));
+        const targets = links.map((l) => document.getElementById(l.dataset.spyTarget)).filter(Boolean);
+
+        function setActiveSpy(id) {
+          links.forEach((l) => l.classList.toggle('active', l.dataset.spyTarget === id));
+        }
+
+        if ('IntersectionObserver' in window && targets.length) {
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) setActiveSpy(entry.target.id);
+            });
+          }, { rootMargin: '-32% 0px -56% 0px' });
+          targets.forEach((t) => io.observe(t));
+        }
+
+        function updateRailProgress() {
+          if (!fill) return;
+          const docH = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          const pct = Math.max(0, Math.min(100, (window.scrollY / docH) * 100));
+          fill.style.height = `${pct.toFixed(1)}%`;
+        }
+        window.addEventListener('scroll', updateRailProgress, { passive: true });
+        updateRailProgress();
+      })();
     })();
   </script>
   <script src="./assets/js/apple-polish.js" defer></script>

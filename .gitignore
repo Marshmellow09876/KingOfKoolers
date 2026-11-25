@@ -13,3 +13,6 @@ __pycache__/
 # OS files
 Thumbs.db
 .DS_Store
+
+# Temporary headless browser test profiles
+v2/.taste-skill/chrome-check/

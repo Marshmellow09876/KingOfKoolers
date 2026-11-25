@@ -998,3 +998,687 @@ html[data-theme="light"] .roadmap-phase-card {
   align-items: center;
   justify-content: center;
 }
+
+/* ==========================================================================
+   15. UNIFIED MOBILE SLIDE-OVER <dialog> NAVIGATION DRAWER (Scroll-Snap)
+   ========================================================================== */
+html.kok-drawer-ready .nav-links.mobile-open {
+  display: none !important;
+}
+
+dialog.kok-mobile-drawer,
+dialog.kok-mobile-drawer:modal,
+dialog.kok-mobile-drawer[open] {
+  --drawer-width: min(21em, 84dvw, 100dvw - 24px);
+  --drawer-backdrop: 0;
+  position: fixed;
+  inset: 0;
+  width: 100dvw;
+  height: 100svh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  z-index: 9999;
+}
+
+dialog.kok-mobile-drawer::backdrop {
+  background: #000000;
+  opacity: calc(var(--drawer-backdrop) * 0.72);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.kok-mobile-drawer-scroller {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--drawer-width) 100%;
+  overflow-x: scroll;
+  overscroll-behavior: none;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+
+.kok-mobile-drawer-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .kok-mobile-drawer-scroller {
+    scroll-behavior: smooth;
+  }
+}
+
+.kok-mobile-drawer-scroller::after {
+  content: '';
+  scroll-snap-align: end;
+  scroll-initial-target: nearest;
+}
+
+.kok-mobile-drawer-sheet {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+  height: 100svh;
+  padding: calc(14px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));
+  background: rgba(8, 12, 22, 0.96);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border-right: 1px solid rgba(0, 240, 255, 0.24);
+  color: #f8fafc;
+  overflow-y: auto;
+  scroll-snap-align: start;
+  scrollbar-width: none;
+}
+
+html[data-theme="light"] .kok-mobile-drawer-sheet {
+  background: rgba(255, 255, 255, 0.97);
+  border-right-color: rgba(0, 0, 0, 0.12);
+  color: #1d1d1f;
+}
+
+@supports (animation-timeline: scroll()) {
+  @property --drawer-backdrop {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
+
+  @keyframes kok-drawer-fade {
+    0% { --drawer-backdrop: 1; }
+    100% { --drawer-backdrop: 0; }
+  }
+
+  .kok-mobile-drawer {
+    timeline-scope: --kok-drawer-fade;
+    animation: kok-drawer-fade linear both;
+    animation-timeline: --kok-drawer-fade;
+  }
+
+  .kok-mobile-drawer-scroller {
+    scroll-timeline: --kok-drawer-fade x;
+  }
+}
+
+.kok-drawer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="light"] .kok-drawer-top {
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+.kok-drawer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 800;
+  font-size: 15px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.kok-drawer-brand svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--kok-accent);
+}
+
+.kok-drawer-close-btn {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--kok-border);
+  background: rgba(255, 255, 255, 0.07);
+  color: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html[data-theme="light"] .kok-drawer-close-btn {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.kok-drawer-nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+.kok-drawer-nav-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: inherit;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+html[data-theme="light"] .kok-drawer-nav-list a {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.kok-drawer-nav-list a.active {
+  background: rgba(0, 240, 255, 0.12);
+  border-color: rgba(0, 240, 255, 0.42);
+  color: var(--kok-accent);
+}
+
+.kok-drawer-utils {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.kok-drawer-util-btn {
+  min-height: 44px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--kok-border);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+html[data-theme="light"] .kok-drawer-util-btn {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.kok-drawer-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border-radius: 999px;
+  background: var(--kok-accent);
+  color: #040810;
+  font-weight: 800;
+  font-size: 14.5px;
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+html[data-theme="light"] .kok-drawer-cta {
+  color: #ffffff;
+}
+
+.kok-drawer-swipe-hint {
+  text-align: center;
+  font-size: 11px;
+  color: var(--kok-ink-muted);
+  margin-top: 8px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+
+/* ==========================================================================
+   16. MOBILE STICKY BOTTOM "BUILD & RESERVE" BAR
+   ========================================================================== */
+.kok-mobile-bottom-bar {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  body {
+    padding-bottom: calc(74px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* Keep narrow mobile navbar clean so #menu-toggle always sits inside the viewport */
+  .kok-nav-pill {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-actions .btn-cyan,
+  .nav-actions .nav-cta,
+  .nav-badge-pill,
+  #btn-snapshot {
+    display: none !important;
+  }
+}
+
+@media (max-width: 960px) {
+
+  .kok-mobile-bottom-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 980;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.35fr;
+    gap: 8px;
+    padding: 9px 12px calc(9px + env(safe-area-inset-bottom));
+    background: rgba(7, 11, 19, 0.92);
+    border-top: 1px solid rgba(0, 240, 255, 0.22);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  html[data-theme="light"] .kok-mobile-bottom-bar {
+    background: rgba(255, 255, 255, 0.94);
+    border-top-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .kok-mb-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 44px;
+    padding: 8px 8px;
+    border-radius: 12px;
+    border: 1px solid var(--kok-border);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--kok-ink);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  html[data-theme="light"] .kok-mb-btn {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .kok-mb-btn.primary {
+    background: var(--kok-accent);
+    border-color: var(--kok-accent);
+    color: #040810;
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.28);
+  }
+
+  html[data-theme="light"] .kok-mb-btn.primary {
+    color: #ffffff;
+  }
+
+  .bundle-bar-floating {
+    bottom: calc(74px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* ==========================================================================
+   17. FLOATING SECTION PROGRESS SPY RAIL (index.html)
+   ========================================================================== */
+.kok-spy-rail {
+  position: fixed;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 860;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px 10px;
+  border-radius: 20px;
+  background: rgba(8, 12, 22, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+html[data-theme="light"] .kok-spy-rail {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.kok-spy-progress-track {
+  position: absolute;
+  right: 14px;
+  top: 16px;
+  bottom: 16px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+html[data-theme="light"] .kok-spy-progress-track {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.kok-spy-progress-fill {
+  width: 100%;
+  height: 0%;
+  background: var(--kok-accent);
+  transition: height 0.18s ease-out;
+}
+
+.kok-spy-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--kok-ink-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 0;
+  transition: color 0.18s ease;
+}
+
+.kok-spy-label {
+  opacity: 0;
+  transform: translateX(6px);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(8, 12, 22, 0.92);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: #f8fafc;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+html[data-theme="light"] .kok-spy-label {
+  background: #ffffff;
+  color: #1d1d1f;
+  border-color: rgba(0, 113, 227, 0.35);
+}
+
+.kok-spy-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+html[data-theme="light"] .kok-spy-dot {
+  background: rgba(0, 0, 0, 0.18);
+  border-color: rgba(0, 0, 0, 0.28);
+}
+
+.kok-spy-link:hover .kok-spy-label,
+.kok-spy-link:focus-visible .kok-spy-label,
+.kok-spy-link.active .kok-spy-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.kok-spy-rail:not(:hover) .kok-spy-link.active .kok-spy-label {
+  opacity: 0;
+}
+
+.kok-spy-link.active .kok-spy-dot,
+.kok-spy-link:hover .kok-spy-dot {
+  background: var(--kok-accent);
+  border-color: var(--kok-accent);
+  transform: scale(1.35);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.65);
+}
+
+@media (max-width: 1180px) {
+  .kok-spy-rail {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   18. SHARED INTERACTIVE MODULES (STRESS TESTS, ALL-THREAD, PACKING, CAMP, WAGON)
+   ========================================================================== */
+.kok-module-card {
+  margin-top: 32px;
+  padding: 28px;
+  border-radius: 24px;
+  background: rgba(14, 18, 28, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  backdrop-filter: blur(18px);
+}
+
+html[data-theme="light"] .kok-module-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+.kok-stress-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 28px;
+}
+
+@media (max-width: 960px) {
+  .kok-stress-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kok-stress-card {
+  padding: 22px;
+  border-radius: 20px;
+  background: rgba(18, 24, 38, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+html[data-theme="light"] .kok-stress-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.kok-meter-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  overflow: hidden;
+}
+
+html[data-theme="light"] .kok-meter-track {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.kok-meter-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0ea5e9, #00f0ff);
+}
+
+.kok-allthread-layout {
+  display: grid;
+  grid-template-columns: 1.08fr 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+@media (max-width: 980px) {
+  .kok-allthread-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kok-photo-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 640px) {
+  .kok-photo-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kok-photo-figure {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 240, 255, 0.24);
+  background: #05080f;
+}
+
+.kok-photo-figure img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.kok-photo-figure figcaption {
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--kok-ink-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.kok-packing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 22px;
+  margin-top: 18px;
+}
+
+@media (max-width: 960px) {
+  .kok-packing-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kok-item-stepper-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--kok-border);
+}
+
+html[data-theme="light"] .kok-item-stepper-row {
+  background: #f8fafc;
+}
+
+.kok-stepper-btns {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kok-step-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--kok-border);
+  background: rgba(0, 240, 255, 0.1);
+  color: var(--kok-ink);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.kok-step-btn:hover {
+  background: var(--kok-accent);
+  color: #050810;
+}
+
+.kok-tier-bay {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--kok-border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+html[data-theme="light"] .kok-tier-bay {
+  background: #f8fafc;
+}
+
+.kok-bay-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.kok-bay-chip {
+  font-size: 11.5px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  color: var(--kok-ink);
+}
+
+.kok-camp-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 22px;
+  align-items: center;
+  margin-top: 18px;
+}
+
+@media (max-width: 960px) {
+  .kok-camp-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kok-wagon-showcase {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 24px;
+  padding: 26px;
+  border-radius: 22px;
+  background: linear-gradient(155deg, rgba(14, 22, 36, 0.92), rgba(7, 10, 18, 0.96));
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  margin-bottom: 30px;
+  align-items: center;
+}
+
+html[data-theme="light"] .kok-wagon-showcase {
+  background: #ffffff;
+  border-color: rgba(0, 113, 227, 0.25);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 960px) {
+  .kok-wagon-showcase {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+}
+

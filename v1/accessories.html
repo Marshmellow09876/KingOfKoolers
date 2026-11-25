@@ -20,6 +20,75 @@
   <meta name="twitter:image" content="./assets/images/accessory_01_bluetooth_lid.jpg">
   <meta name="twitter:image:alt" content="King of Koolers 24-Inch Modular Outfitting and Accessories Ecosystem">
   <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "ItemList",
+          "name": "King of Koolers 31 Modular Outfitting Accessories",
+          "numberOfItems": 31,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "Product",
+                "name": "Module 31: All-Terrain 3-Wheel Wagon Roller Dolly Base",
+                "image": "https://marshmellow09876.github.io/KingOfKoolers/v1/assets/images/accessory_31_wagon_roller_dolly.jpg",
+                "description": "24-inch circular wagon base with recessed galvanized steel Y-chassis, sliding dovetail wheel mounts, three 8-inch pneumatic tires (1 swivel + 2 fixed), and 3-stage telescoping handle.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "129.00",
+                  "priceCurrency": "USD",
+                  "availability": "https://schema.org/PreOrder"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Do these accessories fit all cooler tier heights (12\", 18\", 20\", and 28\")?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! Because every single King of Koolers tier shares the identical 24.0-inch outer diameter and circumferential 20-helix twist-lock bayonet collar, all lid and inter-tier accessories are cross-compatible across the 12\", 18\", 20\", and 28\" modules."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are electrical accessories (Bluetooth lid, LED ring, Power Bank) waterproof?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. All electronic modules are engineered to IPX7 marine-grade submersible standards with sealed silicone port gaskets and conformal-coated internal circuit boards."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the Dual-Zone Hot & Cold Vacuum Isolation Disc work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The 2-inch thick Vacuum Thermal Isolation Disc uses closed-cell polyurethane foam with an internal vacuum barrier and dual-lip silicone compression seals to halt vertical heat transfer between 32°F ice below and 140°F+ pizza or BBQ above."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I easily add these accessories to my cooler reservation on the main page?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Selected accessories are saved to your session and pre-populate directly into your reservation summary with bundle discounts automatically calculated."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  </script>
 
   <style>
     /* ==========================================================================
@@ -1359,6 +1428,64 @@
        ========================================================================== -->
   <main class="catalog-section">
     <div class="container">
+      <!-- Module 31 Close-Up Video & Interactive Terrain Comparison Card -->
+      <section class="kok-wagon-showcase" id="wagon-dolly-demo" aria-label="Module 31 All-Terrain 3-Wheel Wagon Dolly Demo">
+        <div>
+          <div style="position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(0,240,255,0.3);background:#050810;">
+            <video
+              id="wagon-demo-video"
+              loading="lazy"
+              width="1280"
+              height="720"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              poster="./assets/images/wagon_dolly_demo_poster.jpg"
+              aria-label="Close-up video demonstration of Module 31 All-Terrain 3-Wheel Wagon Roller Dolly on gravel, steel Y-plate dovetails, beach sand, and curb climb"
+              style="width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;"
+            >
+              <source src="./assets/videos/wagon_dolly_closeup_demo.mp4" type="video/mp4">
+            </video>
+            <div style="position:absolute;right:12px;bottom:12px;display:flex;gap:8px;">
+              <button type="button" id="btn-wagon-video-toggle" class="filter-btn active" style="padding:6px 12px;font-size:11.5px;backdrop-filter:blur(10px);">
+                ⏸ Pause Demo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+            <span class="badge-mod-num">MODULE 31 · CLOSE-UP TERRAIN DEMO</span>
+            <span style="font-family:var(--font-mono,monospace);font-size:12px;color:var(--accent-cyan);font-weight:700;">$129.00 · 350 LB ROLLING</span>
+          </div>
+          <h2 style="font-size:clamp(22px,2.5vw,30px);line-height:1.15;margin:0;">3-Wheel All-Terrain Wagon Roller Dolly</h2>
+          <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;margin:0;">
+            Built with a recessed <strong>galvanized steel Y-chassis</strong>, <strong>sliding dovetail wheel mounts</strong>, and three <strong>8&Prime; knobby pneumatic tires</strong> (1 front 360° swivel + 2 rear fixed) that capture any 24&Prime; King of Koolers base in 2 seconds.
+          </p>
+
+          <div style="display:flex;flex-wrap:wrap;gap:6px;" role="tablist" aria-label="Wagon Dolly Terrain Modes">
+            <button type="button" class="filter-btn active" data-wagon-terrain="gravel" role="tab" aria-selected="true" style="padding:6px 11px;font-size:12px;">🪨 Gravel &amp; Trail</button>
+            <button type="button" class="filter-btn" data-wagon-terrain="sand" role="tab" aria-selected="false" style="padding:6px 11px;font-size:12px;">🏖️ Soft Sand</button>
+            <button type="button" class="filter-btn" data-wagon-terrain="curb" role="tab" aria-selected="false" style="padding:6px 11px;font-size:12px;">🪜 Curbs &amp; Steps</button>
+            <button type="button" class="filter-btn" data-wagon-terrain="asphalt" role="tab" aria-selected="false" style="padding:6px 11px;font-size:12px;">🏟️ Tailgate Asphalt</button>
+          </div>
+
+          <div id="wagon-terrain-metrics" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <!-- Populated by JS -->
+          </div>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <button type="button" class="btn-cyan btn-add-accessory" id="btn-wagon-add-mod31" data-id="kok-acc-31" style="padding:11px 18px;font-size:13.5px;">
+              + Add Module 31 ($129) to Outfitting
+            </button>
+            <span style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono,monospace);">Incl. 4-Part .3MF Print Pack</span>
+          </div>
+        </div>
+      </section>
+
       <div class="grid-header">
         <div class="grid-title-area">
           <h2>Official King of Koolers Outfitting</h2>
@@ -2639,6 +2766,135 @@
 
     // Initial render
     renderCatalog();
+
+    // Module 31 Wagon Dolly Interactive Terrain Comparison & Video Optimizer
+    (function initWagonDollyShowcase() {
+      const TERRAIN_SPECS = {
+        gravel: {
+          turn: '24" Zero-Turn Swivel',
+          vsTurn: 'vs. 54" 2-Wheel Drag',
+          clearance: '4.2" Pneumatic Flex',
+          vsClearance: 'vs. 1.1" Hard Plastic',
+          load: '350 lbs Rolling Y-Plate',
+          lock: 'Sliding 4-Bolt Dovetail + Snap Ring'
+        },
+        sand: {
+          turn: 'Wide-Footprint Float',
+          vsTurn: '3x 8" Knobby Pneumatic',
+          clearance: 'Zero Rut Sinkage',
+          vsClearance: 'vs. Narrow Solid Casters',
+          load: '300 lbs Deep Sand Rated',
+          lock: '24" Concentric Anti-Tip Channel'
+        },
+        curb: {
+          turn: 'Front Swivel Climb',
+          vsTurn: '3-Stage Aluminum Handle',
+          clearance: '6" Curb Step-Up',
+          vsClearance: 'Zero Bottom Scrape',
+          load: '500 lbs Static Shock',
+          lock: 'Steel Y-Plate Gusset Support'
+        },
+        asphalt: {
+          turn: '360° Pivot In Place',
+          vsTurn: 'Tight Tailgate Aisles',
+          clearance: 'Whisper Rubber Roll',
+          vsClearance: 'Sealed Ball Bearings',
+          load: '350 lbs Full 4-Tier Stack',
+          lock: '2-Second Quick Detach'
+        }
+      };
+
+      const metricsEl = document.getElementById('wagon-terrain-metrics');
+      function renderTerrain(key) {
+        if (!metricsEl) return;
+        const d = TERRAIN_SPECS[key] || TERRAIN_SPECS.gravel;
+        metricsEl.innerHTML = `
+          <div class="kok-tier-bay" style="padding:10px 12px;">
+            <div style="font-size:10.5px;color:var(--text-muted);font-family:var(--font-mono,monospace);">MANEUVERABILITY</div>
+            <div style="font-size:13.5px;font-weight:700;color:var(--accent-cyan);margin-top:2px;">${d.turn}</div>
+            <div style="font-size:11px;color:var(--text-secondary);">${d.vsTurn}</div>
+          </div>
+          <div class="kok-tier-bay" style="padding:10px 12px;">
+            <div style="font-size:10.5px;color:var(--text-muted);font-family:var(--font-mono,monospace);">CLEARANCE &amp; RIDE</div>
+            <div style="font-size:13.5px;font-weight:700;color:var(--accent-cyan);margin-top:2px;">${d.clearance}</div>
+            <div style="font-size:11px;color:var(--text-secondary);">${d.vsClearance}</div>
+          </div>
+          <div class="kok-tier-bay" style="padding:10px 12px;">
+            <div style="font-size:10.5px;color:var(--text-muted);font-family:var(--font-mono,monospace);">CHASSIS CAPACITY</div>
+            <div style="font-size:13px;font-weight:700;margin-top:2px;">${d.load}</div>
+          </div>
+          <div class="kok-tier-bay" style="padding:10px 12px;">
+            <div style="font-size:10.5px;color:var(--text-muted);font-family:var(--font-mono,monospace);">DOVETAIL INTERFACE</div>
+            <div style="font-size:13px;font-weight:700;margin-top:2px;">${d.lock}</div>
+          </div>
+        `;
+      }
+      renderTerrain('gravel');
+
+      document.querySelectorAll('[data-wagon-terrain]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('[data-wagon-terrain]').forEach((b) => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          renderTerrain(btn.dataset.wagonTerrain);
+        });
+      });
+
+      const wagonBtn = document.getElementById('btn-wagon-add-mod31');
+      function syncWagonBtn() {
+        if (!wagonBtn) return;
+        const added = cart.some((c) => c.id === 'kok-acc-31');
+        wagonBtn.classList.toggle('added', added);
+        wagonBtn.textContent = added ? '✓ Module 31 Added to Outfitting' : '+ Add Module 31 ($129) to Outfitting';
+      }
+      syncWagonBtn();
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-add-accessory') || e.target.closest('.drawer-item-remove')) {
+          setTimeout(syncWagonBtn, 0);
+        }
+      });
+
+      const wagonVid = document.getElementById('wagon-demo-video');
+      const wagonVidToggle = document.getElementById('btn-wagon-video-toggle');
+      const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let wagonUserPaused = reducedMotion;
+
+      if (wagonVid) {
+        if (reducedMotion) {
+          wagonVid.pause();
+          if (wagonVidToggle) wagonVidToggle.textContent = '▶ Play Demo';
+        }
+        if (wagonVidToggle) {
+          wagonVidToggle.addEventListener('click', () => {
+            if (wagonVid.paused) {
+              wagonUserPaused = false;
+              wagonVid.play().catch(() => {});
+              wagonVidToggle.textContent = '⏸ Pause Demo';
+            } else {
+              wagonUserPaused = true;
+              wagonVid.pause();
+              wagonVidToggle.textContent = '▶ Play Demo';
+            }
+          });
+        }
+        if ('IntersectionObserver' in window) {
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) {
+                if (!wagonVid.paused) wagonVid.pause();
+              } else if (!wagonUserPaused && !document.hidden) {
+                wagonVid.play().catch(() => {});
+              }
+            });
+          }, { threshold: 0.15 });
+          io.observe(wagonVid);
+        }
+      }
+    })();
+
     // Mobile Navigation Drawer Toggle
     (function initMobileNav() {
       const toggle = document.getElementById('menu-toggle');

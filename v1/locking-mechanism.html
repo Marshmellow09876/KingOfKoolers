@@ -20,6 +20,8 @@
   <meta name="twitter:image" content="./assets/images/lock_01_20_helix_overview.jpg">
   <meta name="twitter:image:alt" content="King of Koolers 20-Helix 18-Degree Twist-Lock and Vertical Deadbolt Cutaway">
   <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
   <style>
     :root {
       --bg-obsidian: #030508;
@@ -1170,10 +1172,16 @@
                 <span>↺ Twist Top White Cooler 18° CCW (Remove Upper Tier)</span>
                 <span style="font-family: var(--font-mono); font-size: 12px;">1/20 Circle</span>
               </button>
-              <button id="btn-sim-reset" class="sim-btn" style="background: rgba(255,255,255,0.04); border-color: var(--border-subtle);">
-                <span>⟳ Reset Stacked Assembly</span>
-                <span style="font-family: var(--font-mono); font-size: 12px;">Restack</span>
-              </button>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button id="btn-sim-reset" class="sim-btn" style="background: rgba(255,255,255,0.04); border-color: var(--border-subtle);">
+                  <span>⟳ Reset Assembly</span>
+                  <span style="font-family: var(--font-mono); font-size: 11px;">Restack</span>
+                </button>
+                <button id="btn-lock-sfx" type="button" class="sim-btn" aria-pressed="false" style="background: rgba(255,255,255,0.04); border-color: var(--border-subtle);">
+                  <span>🔇 Mech SFX: Off</span>
+                  <span style="font-family: var(--font-mono); font-size: 11px;">Audio</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1382,12 +1390,14 @@
       btnSlider.addEventListener('click', () => {
         sliderLocked = !sliderLocked;
         animProgress = 0;
+        if (window.kokAudio) window.kokAudio.playDeadbolt(sliderLocked);
         updateStatusUI();
       });
 
       btnTwistUpper.addEventListener('click', () => {
         if (animating) return;
         animating = true;
+        if (window.kokAudio) window.kokAudio.playTwistLock();
         const start = performance.now();
         function step(now) {
           const t = Math.min((now - start) / 900, 1);
@@ -1403,7 +1413,26 @@
 
       btnReset.addEventListener('click', () => {
         animProgress = 0;
+        if (window.kokAudio) window.kokAudio.playTierDrop();
       });
+
+      const btnLockSfx = document.getElementById('btn-lock-sfx');
+      function syncLockSfxBtn() {
+        if (!btnLockSfx || !window.kokAudio) return;
+        const on = window.kokAudio.isEnabled();
+        btnLockSfx.setAttribute('aria-pressed', String(on));
+        btnLockSfx.innerHTML = on
+          ? '<span>🔊 Mech SFX: On</span><span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan);">Web Audio</span>'
+          : '<span>🔇 Mech SFX: Off</span><span style="font-family: var(--font-mono); font-size: 11px;">Audio</span>';
+      }
+      if (btnLockSfx) {
+        btnLockSfx.addEventListener('click', () => {
+          if (window.kokAudio) window.kokAudio.toggle();
+          syncLockSfxBtn();
+        });
+        window.addEventListener('kok:sfx-changed', syncLockSfxBtn);
+        document.addEventListener('DOMContentLoaded', syncLockSfxBtn);
+      }
 
       function drawSimulator() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);

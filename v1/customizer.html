@@ -20,6 +20,8 @@
   <meta name="twitter:image" content="./assets/images/render_red_white_blue_stacked.jpg">
   <meta name="twitter:image:alt" content="King of Koolers 3D Customizer and Modular Stack Studio">
   <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png">
 
   <!-- Local Three.js and OrbitControls with CDN fallback -->
   <script src="./assets/js/three.min.js"></script>
@@ -1122,6 +1124,145 @@
         min-block-size: 32px;
       }
     }
+
+    /* Live Telemetry Pill, Scale Refs & Mix-and-Match Tier Cards */
+    .viewport-telemetry-pill {
+      position: absolute;
+      left: 20px;
+      top: 66px;
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      gap: 12px;
+      padding: 7px 13px;
+      border-radius: 14px;
+      background: rgba(8, 12, 22, 0.86);
+      border: 1px solid rgba(0, 240, 255, 0.34);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 9;
+      pointer-events: none;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .tel-item {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .tel-item span {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    .tel-item strong {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+    }
+
+    .viewport-scale-bar {
+      position: absolute;
+      right: 20px;
+      top: 114px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      z-index: 21;
+    }
+
+    .twist-lock-toast {
+      position: absolute;
+      left: 50%;
+      top: 158px;
+      transform: translateX(-50%);
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.22);
+      border: 1px solid rgba(16, 185, 129, 0.6);
+      color: #a7f3d0;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .twist-lock-toast.visible {
+      opacity: 1;
+    }
+
+    .mix-tier-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mix-tier-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .mix-tier-select {
+      background: #080c14;
+      color: #f8fafc;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 5px 6px;
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+    }
+
+    .mix-tier-remove {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.14);
+      color: #fca5a5;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mix-tier-remove:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .footer-export-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    @media (max-width: 1180px) {
+      .viewport-telemetry-pill {
+        top: 64px;
+        left: 12px;
+        gap: 8px;
+        padding: 6px 10px;
+      }
+      .viewport-scale-bar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .viewport-telemetry-pill {
+        display: none;
+      }
+    }
   </style>
   <link rel="stylesheet" href="./assets/css/apple-polish.css">
 </head>
@@ -1174,10 +1315,30 @@
 
       <!-- 18. Studio Lighting & Environment Switcher -->
       <div class="studio-env-bar" role="group" aria-label="3D Studio Lighting Environment">
-        <button type="button" class="studio-env-btn active" data-env="obsidian">Obsidian</button>
-        <button type="button" class="studio-env-btn" data-env="studio">Apple White</button>
-        <button type="button" class="studio-env-btn" data-env="sunset">Sunset Overland</button>
-        <button type="button" class="studio-env-btn" data-env="boat">Boat Deck</button>
+        <button type="button" class="studio-env-btn active" data-env="studio-dark">Studio Dark</button>
+        <button type="button" class="studio-env-btn" data-env="desert-noon">Desert Noon</button>
+        <button type="button" class="studio-env-btn" data-env="alpine-snow">Alpine Snow</button>
+        <button type="button" class="studio-env-btn" data-env="tailgate-night">Tailgate Night</button>
+      </div>
+
+      <!-- Twist-Lock Live Status Toast -->
+      <div class="twist-lock-toast" id="twist-lock-toast" role="status" aria-live="polite">
+        🔒 18° Twist-Lock Engaged · Deadbolt Anchored
+      </div>
+
+      <!-- Floating Live Can / Quart / Weight Telemetry Pill -->
+      <div class="viewport-telemetry-pill" id="viewport-telemetry-pill" aria-live="polite" aria-atomic="true">
+        <div class="tel-item"><span>VOLUME</span><strong id="tel-quarts">65 QT</strong></div>
+        <div class="tel-item"><span>12-OZ CANS</span><strong id="tel-cans">60 CANS</strong></div>
+        <div class="tel-item"><span>EMPTY WT</span><strong id="tel-dry-lbs">24 LBS</strong></div>
+        <div class="tel-item"><span>LOADED WT</span><strong id="tel-loaded-lbs">98 LBS</strong></div>
+      </div>
+
+      <!-- 3D Human & Vehicle Scale References Toggle -->
+      <div class="viewport-scale-bar" role="group" aria-label="3D Scale References">
+        <button type="button" class="hud-btn" id="btn-ref-human" aria-pressed="false" title="Toggle 6-foot-0 Human Scale Silhouette">🧍 6'0" Person</button>
+        <button type="button" class="hud-btn" id="btn-ref-truck" aria-pressed="false" title="Toggle Ford F-150 21.5-inch Truck Bed Rail">🛻 F-150 Bed (21.5")</button>
+        <button type="button" class="hud-btn" id="btn-ref-can" aria-pressed="false" title="Toggle Standard 330 mL Soda Can Scale">🥫 330 mL Can</button>
       </div>
 
       <!-- Viewport Top HUD -->
@@ -1271,10 +1432,39 @@
             <div class="pill-grid">
               <button class="preset-chip active" data-stack="v12-split">👑 V12 Split Prototype (24" CAD)</button>
               <button class="preset-chip" data-stack="v12-onepiece">🔩 V12 One-Piece CAD (24")</button>
+              <button class="preset-chip" data-stack="custom">🧩 Mix &amp; Match Custom</button>
               <button class="preset-chip" data-stack="patriot-58">Patriot RWB (58")</button>
               <button class="preset-chip" data-stack="titan-72">Titan Max (72")</button>
               <button class="preset-chip" data-stack="explorer-38">Explorer Duo (38")</button>
               <button class="preset-chip" data-stack="scout-30">Solo Scout (30")</button>
+            </div>
+          </div>
+
+          <div class="control-card" id="mix-match-card" style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.28);">
+            <div class="control-label" style="color: #34d399;">
+              <span>Mix &amp; Match Per-Height Tier Stacker</span>
+              <span id="mix-match-summary">54" · 3 Tiers</span>
+            </div>
+            <div class="mix-tier-list" id="mix-tier-list"></div>
+            <div class="pill-grid">
+              <button type="button" class="preset-chip" id="btn-add-custom-tier">+ Add Tier (Max 4)</button>
+              <button type="button" class="preset-chip" id="btn-preset-24-18-12">24" + 18" + 12" Combo</button>
+            </div>
+          </div>
+
+          <div class="control-card" style="background: rgba(0, 240, 255, 0.05); border-color: rgba(0, 240, 255, 0.28);">
+            <div class="control-label" style="color: var(--accent-cyan);">
+              <span>20-Helix Lock Animation &amp; Audio</span>
+              <span>18° / 12mm</span>
+            </div>
+            <div class="pill-grid">
+              <button type="button" class="preset-chip" id="btn-animate-twistlock">🔒 Animate 18° Twist-Lock</button>
+              <button type="button" class="preset-chip" id="btn-toggle-sfx" aria-pressed="false">🔇 Mech SFX: Off</button>
+            </div>
+            <div class="pill-grid-3" style="margin-top: 2px;">
+              <button type="button" class="preset-chip" id="btn-panel-ref-human" aria-pressed="false" style="font-size:11px;padding:6px 4px;">🧍 6'0" Scale</button>
+              <button type="button" class="preset-chip" id="btn-panel-ref-truck" aria-pressed="false" style="font-size:11px;padding:6px 4px;">🛻 F-150 Bed</button>
+              <button type="button" class="preset-chip" id="btn-panel-ref-can" aria-pressed="false" style="font-size:11px;padding:6px 4px;">🥫 330 mL Can</button>
             </div>
           </div>
 
@@ -1613,6 +1803,10 @@
           <span>Configured Stack Value</span>
           <div class="footer-total-price" id="console-total-price" aria-live="polite" aria-atomic="true">$389.00</div>
         </div>
+        <div class="footer-export-row">
+          <button type="button" class="preset-chip" id="btn-export-build-card" style="font-size:12px;padding:9px 8px;">📄 Export Build Card (PNG)</button>
+          <button type="button" class="preset-chip" id="btn-export-build-pdf" style="font-size:12px;padding:9px 8px;">🖨️ Print / Save PDF</button>
+        </div>
         <a href="./index.html#configurator" class="btn-apply-checkout" id="btn-save-reservation">
           <span>Apply to Dream Cooler Reservation &rarr;</span>
         </a>
@@ -1651,7 +1845,17 @@
       partySize: 4,
       tripDays: 3,
       cansCount: 48,
-      iceLbs: 38
+      iceLbs: 38,
+      customTiers: [
+        { heightIn: 24, color: '#1e4bd7', role: 'Base Cold Core' },
+        { heightIn: 18, color: '#f0f4fa', role: 'Mid Beverage Tier' },
+        { heightIn: 12, color: '#e1232d', role: 'Top Pizza Vault' }
+      ],
+      scaleRefs: {
+        human: false,
+        truck: false,
+        can: false
+      }
     };
 
     // DOM Setup
@@ -1695,6 +1899,9 @@
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
     scene.add(ambientLight);
 
+    const hemiLight = new THREE.HemisphereLight(0xdbeafe, 0x0b1220, 0.42);
+    scene.add(hemiLight);
+
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
     keyLight.position.set(45, 60, 40);
     keyLight.castShadow = true;
@@ -1724,7 +1931,7 @@
     scene.add(floor);
 
     // Subtle Grid Helper
-    const gridHelper = new THREE.GridHelper(120, 40, 0x00f0ff, 0x141f33);
+    let gridHelper = new THREE.GridHelper(120, 40, 0x00f0ff, 0x141f33);
     gridHelper.position.y = 0.01;
     scene.add(gridHelper);
 
@@ -1888,6 +2095,23 @@
       return texture;
     }
 
+    const TIER_HEIGHT_METRICS = {
+      12: { quarts: 38, cans: 30, dryLbs: 16, price: 139, label: '12" Vault / Pizza' },
+      18: { quarts: 55, cans: 50, dryLbs: 20, price: 169, label: '18" Mid Tier' },
+      20: { quarts: 65, cans: 60, dryLbs: 22, price: 189, label: '20" All-Rounder' },
+      24: { quarts: 80, cans: 74, dryLbs: 26, price: 219, label: '24" Cold Core' },
+      28: { quarts: 95, cans: 88, dryLbs: 30, price: 249, label: '28" Deep Base' }
+    };
+
+    const TIER_COLOR_OPTIONS = [
+      { hex: '#1e4bd7', name: 'Patriot Blue' },
+      { hex: '#f0f4fa', name: 'Alpine White' },
+      { hex: '#e1232d', name: 'Patriot Red' },
+      { hex: '#181a20', name: 'Stealth Black' },
+      { hex: '#3a4b3a', name: 'Tactical Olive' },
+      { hex: '#f45b24', name: 'Blaze Orange' }
+    ];
+
     // 2. Stack Preset Definitions & Build Hierarchy
     const STACK_PRESETS = {
       'v12-split': {
@@ -1895,6 +2119,7 @@
         indexPreset: 'rwb',
         heightIn: 22.4,
         quarts: 65,
+        cansCapacity: 60,
         dryLbs: 24,
         basePrice: 249,
         tiers: [20],
@@ -1906,6 +2131,7 @@
         indexPreset: 'rwb',
         heightIn: 22.4,
         quarts: 65,
+        cansCapacity: 60,
         dryLbs: 22,
         basePrice: 229,
         tiers: [20],
@@ -1917,6 +2143,7 @@
         indexPreset: 'rwb',
         heightIn: 58,
         quarts: 160,
+        cansCapacity: 150,
         dryLbs: 46,
         basePrice: 389,
         tiers: [28, 18, 12]
@@ -1926,6 +2153,7 @@
         indexPreset: 'titan',
         heightIn: 72,
         quarts: 215,
+        cansCapacity: 200,
         dryLbs: 68,
         basePrice: 549,
         tiers: [28, 20, 12, 12]
@@ -1935,6 +2163,7 @@
         indexPreset: 'explorer',
         heightIn: 38,
         quarts: 110,
+        cansCapacity: 105,
         dryLbs: 34,
         basePrice: 289,
         tiers: [20, 18]
@@ -1944,6 +2173,7 @@
         indexPreset: 'scout',
         heightIn: 30,
         quarts: 80,
+        cansCapacity: 78,
         dryLbs: 28,
         basePrice: 239,
         tiers: [18, 12]
@@ -1952,6 +2182,10 @@
 
     const hudHeight = document.getElementById('hud-height');
     const hudQuarts = document.getElementById('hud-quarts');
+    const telQuarts = document.getElementById('tel-quarts');
+    const telCans = document.getElementById('tel-cans');
+    const telDryLbs = document.getElementById('tel-dry-lbs');
+    const telLoadedLbs = document.getElementById('tel-loaded-lbs');
     const consoleTotalPrice = document.getElementById('console-total-price');
     const breakdownDryLabel = document.getElementById('breakdown-dry')?.previousElementSibling;
     const breakdownDryVal = document.getElementById('breakdown-dry');
@@ -1963,14 +2197,48 @@
     const hudWeight = document.getElementById('hud-weight');
 
     function getActivePreset() {
+      if (studioState.stackType === 'custom') {
+        const list = studioState.customTiers && studioState.customTiers.length
+          ? studioState.customTiers
+          : [{ heightIn: 24, color: '#1e4bd7', role: 'Base Cold Core' }];
+        let heightIn = 0;
+        let quarts = 0;
+        let cansCapacity = 0;
+        let dryLbs = 4; // recessed solar lid assembly
+        let basePrice = 49; // base lid & gasket kit
+        const tiers = [];
+        const tierColors = [];
+        list.forEach((t) => {
+          const m = TIER_HEIGHT_METRICS[t.heightIn] || TIER_HEIGHT_METRICS[18];
+          heightIn += t.heightIn;
+          quarts += m.quarts;
+          cansCapacity += m.cans;
+          dryLbs += m.dryLbs;
+          basePrice += m.price;
+          tiers.push(t.heightIn);
+          tierColors.push(t.color);
+        });
+        return {
+          label: `Custom ${tiers.length}-Tier Mix (${tiers.join('" + ')}")`,
+          indexPreset: 'custom',
+          heightIn,
+          quarts,
+          cansCapacity,
+          dryLbs,
+          basePrice,
+          tiers,
+          tierColors,
+          isCustom: true
+        };
+      }
       return STACK_PRESETS[studioState.stackType] || STACK_PRESETS['patriot-58'];
     }
 
     const V12_HEIGHT_SPECS = {
-      12: { quarts: 38, dryLbs: 18, priceDelta: -30, mm: 304.8 },
-      18: { quarts: 58, dryLbs: 22, priceDelta: -10, mm: 457.2 },
-      20: { quarts: 65, dryLbs: 24, priceDelta: 0,   mm: 508.0 },
-      24: { quarts: 80, dryLbs: 28, priceDelta: 25,  mm: 609.6 }
+      12: { quarts: 38, cans: 30, dryLbs: 18, priceDelta: -30, mm: 304.8 },
+      18: { quarts: 58, cans: 52, dryLbs: 22, priceDelta: -10, mm: 457.2 },
+      20: { quarts: 65, cans: 60, dryLbs: 24, priceDelta: 0,   mm: 508.0 },
+      24: { quarts: 80, cans: 74, dryLbs: 28, priceDelta: 25,  mm: 609.6 }
     };
 
     function computeStudioPrice() {
@@ -1996,17 +2264,31 @@
       const hSpec = V12_HEIGHT_SPECS[studioState.v12HeightIn] || V12_HEIGHT_SPECS[20];
       const dispHeight = preset.isV12Cad ? studioState.v12HeightIn : preset.heightIn;
       const dispQuarts = preset.isV12Cad ? hSpec.quarts : preset.quarts;
+      const dispCans = preset.isV12Cad ? hSpec.cans : (preset.cansCapacity || Math.round(dispQuarts * 0.92));
       const dispDryLbs = preset.isV12Cad ? hSpec.dryLbs : preset.dryLbs;
+      const ice = studioState.iceLbs || 38;
+      const drinks = Math.round((studioState.cansCount || 48) * 0.78);
+      const dispLoaded = dispDryLbs + ice + drinks;
 
       if (hudHeight) hudHeight.textContent = `${dispHeight}"`;
       if (hudQuarts) hudQuarts.textContent = `${dispQuarts} QT`;
+      if (telQuarts) telQuarts.textContent = `${dispQuarts} QT`;
+      if (telCans) telCans.textContent = `${dispCans} CANS`;
+      if (telDryLbs) telDryLbs.textContent = `${dispDryLbs} LBS`;
+      if (telLoadedLbs) telLoadedLbs.textContent = `${dispLoaded} LBS`;
       if (consoleTotalPrice) consoleTotalPrice.textContent = `$${price.toFixed(2)}`;
       if (breakdownDryLabel) {
         breakdownDryLabel.textContent = preset.isV12Cad
           ? `Dry Prototype Weight (24" OD × ${studioState.v12HeightIn}" Tall V12 CAD):`
-          : `Dry Stack Weight (${preset.tiers.length} Tiers + Lid):`;
+          : `Dry Stack Weight (${preset.tiers.length} ${preset.tiers.length === 1 ? 'Tier' : 'Tiers'} + Lid):`;
       }
       if (breakdownDryVal) breakdownDryVal.textContent = `${dispDryLbs} lbs`;
+      const mixSum = document.getElementById('mix-match-summary');
+      if (mixSum) {
+        const tiersList = studioState.customTiers || [];
+        const totalIn = tiersList.reduce((acc, t) => acc + t.heightIn, 0);
+        mixSum.textContent = `${totalIn}" · ${tiersList.length} ${tiersList.length === 1 ? 'Tier' : 'Tiers'}`;
+      }
     }
 
     // Build Procedural 3D Cooler Hierarchy
@@ -2449,6 +2731,166 @@
       }
     }
 
+    function makeTierMaterial(hexColor) {
+      const patternTex = generatePatternTexture(studioState.pattern);
+      return new THREE.MeshStandardMaterial({
+        color: patternTex ? 0xffffff : new THREE.Color(hexColor),
+        map: patternTex,
+        roughness: 0.45,
+        metalness: 0.05,
+        clippingPlanes: clipPlaneArray,
+        side: THREE.DoubleSide
+      });
+    }
+
+    // 3D Scale Reference Group (6'0" Human, F-150 Bed Rail 21.5", 330 mL Soda Can)
+    const scaleRefGroup = new THREE.Group();
+    scene.add(scaleRefGroup);
+
+    function makeScaleLabelSprite(text, bgColor) {
+      const cvs = document.createElement('canvas');
+      cvs.width = 512;
+      cvs.height = 128;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = bgColor || 'rgba(6, 12, 24, 0.88)';
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.7)';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.roundRect(12, 16, 488, 96, 48);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#00f0ff';
+      ctx.font = 'bold 34px "SF Mono", Consolas, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, 256, 65);
+      const tex = new THREE.CanvasTexture(cvs);
+      const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
+      const sp = new THREE.Sprite(mat);
+      sp.scale.set(16, 4, 1);
+      return sp;
+    }
+
+    function updateScaleReferences() {
+      while (scaleRefGroup.children.length > 0) {
+        const ch = scaleRefGroup.children[0];
+        scaleRefGroup.remove(ch);
+      }
+      const preset = getActivePreset();
+      const yScale = preset.isV12Cad ? 1.0 : 0.5;
+      const ghostMat = new THREE.MeshStandardMaterial({
+        color: 0x38bdf8,
+        emissive: 0x0284c7,
+        emissiveIntensity: 0.25,
+        transparent: true,
+        opacity: 0.28,
+        roughness: 0.3,
+        side: THREE.DoubleSide
+      });
+      const wireMat = new THREE.MeshBasicMaterial({
+        color: 0x00f0ff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.35
+      });
+
+      if (studioState.scaleRefs.human) {
+        const hGrp = new THREE.Group();
+        const parts = [
+          { geo: new THREE.CylinderGeometry(2.1, 1.8, 32, 14), y: 16, x: -2.4 },
+          { geo: new THREE.CylinderGeometry(2.1, 1.8, 32, 14), y: 16, x: 2.4 },
+          { geo: new THREE.CylinderGeometry(5.6, 4.6, 24, 18), y: 44, x: 0 },
+          { geo: new THREE.SphereGeometry(4.4, 16, 16), y: 65, x: 0 },
+          { geo: new THREE.CylinderGeometry(1.4, 1.2, 22, 12), y: 44, x: -7.5, rz: 0.12 },
+          { geo: new THREE.CylinderGeometry(1.4, 1.2, 22, 12), y: 44, x: 7.5, rz: -0.12 }
+        ];
+        parts.forEach((p) => {
+          const m = new THREE.Mesh(p.geo, ghostMat);
+          m.position.set(p.x, p.y, 0);
+          if (p.rz) m.rotation.z = p.rz;
+          hGrp.add(m);
+          const w = new THREE.Mesh(p.geo, wireMat);
+          w.position.copy(m.position);
+          w.rotation.copy(m.rotation);
+          hGrp.add(w);
+        });
+        const lbl = makeScaleLabelSprite('6\'0" PERSON (72")');
+        lbl.position.set(0, 77, 0);
+        hGrp.add(lbl);
+        hGrp.scale.setScalar(yScale);
+        hGrp.position.set(-28 * (yScale === 1 ? 1.0 : 0.85), 0, -4);
+        scaleRefGroup.add(hGrp);
+      }
+
+      if (studioState.scaleRefs.truck) {
+        const tGrp = new THREE.Group();
+        const bedFloor = new THREE.Mesh(new THREE.BoxGeometry(62, 1.2, 30), ghostMat);
+        bedFloor.position.set(0, 0.6, 0);
+        tGrp.add(bedFloor);
+        const railGeo = new THREE.BoxGeometry(62, 21.5, 3.2);
+        const rail = new THREE.Mesh(railGeo, ghostMat);
+        rail.position.set(0, 21.5 / 2, -13.4);
+        tGrp.add(rail, new THREE.Mesh(railGeo, wireMat).translateY(21.5 / 2).translateZ(-13.4));
+        const capGeo = new THREE.BoxGeometry(62, 1.6, 4.4);
+        const cap = new THREE.Mesh(capGeo, wireMat);
+        cap.position.set(0, 21.5, -13.4);
+        tGrp.add(cap);
+        const lbl = makeScaleLabelSprite('F-150 BED RAIL · 21.5"');
+        lbl.position.set(0, 27, -13);
+        tGrp.add(lbl);
+        tGrp.scale.setScalar(yScale);
+        tGrp.position.set(0, 0, -18 * (yScale === 1 ? 1.15 : 1.0));
+        scaleRefGroup.add(tGrp);
+      }
+
+      if (studioState.scaleRefs.can) {
+        const cGrp = new THREE.Group();
+        const canGeo = new THREE.CylinderGeometry(1.3, 1.3, 4.83, 24);
+        const canMesh = new THREE.Mesh(canGeo, new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.78, roughness: 0.22 }));
+        canMesh.position.y = 2.415;
+        const rim = new THREE.Mesh(new THREE.TorusGeometry(1.18, 0.1, 8, 24), wireMat);
+        rim.rotation.x = Math.PI / 2;
+        rim.position.y = 4.83;
+        cGrp.add(canMesh, rim);
+        const lbl = makeScaleLabelSprite('330 mL CAN · 4.83"');
+        lbl.position.set(0, 8.2, 0);
+        cGrp.add(lbl);
+        cGrp.scale.setScalar(yScale);
+        cGrp.position.set(17, 0, 12);
+        scaleRefGroup.add(cGrp);
+      }
+    }
+
+    // Visible 3D Vertical Deadbolt Slider & Twist-Lock Pulse Ring
+    let deadboltSliderMesh = null;
+    let deadboltHostGroup = null;
+    let lockPulseRing = null;
+    let twistLockAnim = { active: false, startTime: 0, dropPlayed: false, twistPlayed: false, lockPlayed: false, targetGroup: null, baseRotY: 0 };
+
+    function attachDeadboltAndPulseRing(hostGroup, seamY, isV12) {
+      deadboltHostGroup = hostGroup;
+      const rEdge = isV12 ? 12.35 : RADIUS_OUTER + 0.35;
+      const dGrp = new THREE.Group();
+      const bodyGeo = new THREE.BoxGeometry(1.3, 2.8, 0.7);
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0x10b981, emissive: 0x065f46, emissiveIntensity: 0.4, roughness: 0.3, metalness: 0.4 });
+      deadboltSliderMesh = new THREE.Mesh(bodyGeo, bodyMat);
+      deadboltSliderMesh.position.set(0, seamY + 0.2, rEdge);
+      deadboltSliderMesh.userData.baseY = seamY + 0.2;
+      const tabGeo = new THREE.BoxGeometry(1.55, 0.45, 0.85);
+      const tabMesh = new THREE.Mesh(tabGeo, new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2, metalness: 0.7 }));
+      tabMesh.position.y = 0.65;
+      deadboltSliderMesh.add(tabMesh);
+      dGrp.add(deadboltSliderMesh);
+      hostGroup.add(dGrp);
+
+      const pulseGeo = new THREE.RingGeometry(RADIUS_OUTER - 0.15, RADIUS_OUTER + 0.65, 64);
+      const pulseMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0, side: THREE.DoubleSide });
+      lockPulseRing = new THREE.Mesh(pulseGeo, pulseMat);
+      lockPulseRing.rotation.x = Math.PI / 2;
+      lockPulseRing.position.y = seamY;
+      coolerRoot.add(lockPulseRing);
+    }
+
     function buildFullStack() {
       // Clear previous children across all animation groups
       [baseGroup, midGroup, upperMidGroup, topGroup, lidGroup, v12AssemblyGroup].forEach(g => {
@@ -2456,7 +2898,15 @@
           const child = g.children[0];
           g.remove(child);
         }
+        g.position.set(0, 0, 0);
+        g.rotation.set(0, 0, 0);
       });
+      if (lockPulseRing && lockPulseRing.parent) {
+        lockPulseRing.parent.remove(lockPulseRing);
+      }
+      deadboltSliderMesh = null;
+      deadboltHostGroup = null;
+      lockPulseRing = null;
       foamSectionSlices = [];
       v12ExplodableMeshes = [];
 
@@ -2465,7 +2915,10 @@
       const preset = getActivePreset();
       if (preset.isV12Cad) {
         buildV12PrototypeAssembly(preset);
+        const hIn = studioState.v12HeightIn || 20;
+        attachDeadboltAndPulseRing(v12AssemblyGroup, Math.max(10, hIn * 0.92), true);
         updateStudioHUD();
+        updateScaleReferences();
         if (typeof applyXRayCutaway === 'function') {
           applyXRayCutaway(studioState.xrayCut * 100);
         }
@@ -2476,13 +2929,22 @@
       }
 
       const tiers = preset.tiers;
-      const tierHeights = tiers.map(h => h * 0.5); // 28" -> 14, 20" -> 10, 18" -> 9, 12" -> 6
+      const tierColors = preset.tierColors || null;
+      const tierHeights = tiers.map(h => h * 0.5); // 28" -> 14, 24" -> 12, 20" -> 10, 18" -> 9, 12" -> 6
+
+      function matForIndex(idx) {
+        if (tierColors && tierColors[idx]) return makeTierMaterial(tierColors[idx]);
+        if (idx === 0) return baseMat;
+        if (idx === 1) return midMat;
+        if (idx === 2) return tierHeights.length === 4 ? baseMat : topMat;
+        return topMat;
+      }
 
       let runningY = 0;
 
       // Base Tier (index 0)
       const H_BASE = tierHeights[0];
-      baseMesh = buildCoolerTier(H_BASE, baseMat, studioState.showSpigot, true);
+      baseMesh = buildCoolerTier(H_BASE, matForIndex(0), studioState.showSpigot, true);
       baseMesh.position.y = H_BASE / 2;
       baseGroup.add(baseMesh);
       runningY += H_BASE;
@@ -2493,7 +2955,7 @@
       if (tierHeights.length >= 3) {
         H_MID = tierHeights[1];
         midStartY = runningY;
-        midMesh = buildCoolerTier(H_MID, midMat, false, true);
+        midMesh = buildCoolerTier(H_MID, matForIndex(1), false, true);
         midMesh.position.y = runningY + H_MID / 2;
         midGroup.add(midMesh);
         runningY += H_MID;
@@ -2501,17 +2963,21 @@
 
       if (tierHeights.length >= 4) {
         const H_UPPER_MID = tierHeights[2];
-        upperMidMesh = buildCoolerTier(H_UPPER_MID, baseMat, false, true);
+        upperMidMesh = buildCoolerTier(H_UPPER_MID, matForIndex(2), false, true);
         upperMidMesh.position.y = runningY + H_UPPER_MID / 2;
         upperMidGroup.add(upperMidMesh);
         runningY += H_UPPER_MID;
       }
 
-      // Top Vault Tier (always last index)
-      const H_TOP = tierHeights[tierHeights.length - 1];
-      topMesh = buildCoolerTier(H_TOP, tierHeights.length === 2 ? midMat : topMat, false, true);
-      topMesh.position.y = runningY + H_TOP / 2;
-      topGroup.add(topMesh);
+      // Top Vault Tier (only when 2+ tiers; avoid duplicate tier when 1 custom tier is selected)
+      let H_TOP = H_BASE;
+      if (tierHeights.length >= 2) {
+        H_TOP = tierHeights[tierHeights.length - 1];
+        const topMatPicked = tierColors ? matForIndex(tierHeights.length - 1) : (tierHeights.length === 2 ? midMat : topMat);
+        topMesh = buildCoolerTier(H_TOP, topMatPicked, false, true);
+        topMesh.position.y = runningY + H_TOP / 2;
+        topGroup.add(topMesh);
+      }
 
       // Optional Front Wall Laser Engraving Badge when 'body' placement active
       if (studioState.engraveLocation === 'body') {
@@ -2526,6 +2992,8 @@
       // Optional Pizza Vault Insert Inside Top Vault Cavity (unclipped so exposed in X-Ray)
       if (studioState.showPizza) {
         const bagGroup = new THREE.Group();
+        const pizzaTargetGroup = tierHeights.length >= 2 ? topGroup : baseGroup;
+        const pizzaCenterY = tierHeights.length >= 2 ? (runningY + H_TOP / 2 + 0.3) : (H_BASE / 2 + 0.3);
         const pizzaBag = new THREE.Mesh(
           new THREE.CylinderGeometry(RADIUS_INNER - 0.6, RADIUS_INNER - 0.6, Math.max(H_TOP - 1.4, 3.8), 32),
           new THREE.MeshStandardMaterial({ color: 0xb91c1c, roughness: 0.7 })
@@ -2538,16 +3006,23 @@
         rimStrap.rotation.x = Math.PI / 2;
         rimStrap.position.y = 1.1;
         bagGroup.add(rimStrap);
-        bagGroup.position.y = runningY + H_TOP / 2 + 0.3;
-        topGroup.add(bagGroup);
+        bagGroup.position.y = pizzaCenterY;
+        pizzaTargetGroup.add(bagGroup);
       }
 
-      runningY += H_TOP;
+      if (tierHeights.length >= 2) {
+        runningY += H_TOP;
+      }
 
       // Lid
       lidMesh = buildLid();
       lidMesh.position.y = runningY + 0.9;
       lidGroup.add(lidMesh);
+
+      // Attach Deadbolt Slider & Pulse Ring to top locking seam
+      const activeTwistTarget = tierHeights.length >= 2 ? topGroup : lidGroup;
+      const seamY = tierHeights.length >= 2 ? (runningY - H_TOP) : runningY;
+      attachDeadboltAndPulseRing(activeTwistTarget, seamY, false);
 
       // Center Drain Core Sleeve inside Base
       if (studioState.showDrain) {
@@ -2681,6 +3156,7 @@
       baseGroup.add(cansMeshGroup);
 
       updateStudioHUD();
+      updateScaleReferences();
       if (typeof applyXRayCutaway === 'function') {
         applyXRayCutaway(studioState.xrayCut * 100);
       }
@@ -2912,7 +3388,7 @@
 
     // Stack Presets, Interior Chamber & Hardware Listeners
     function selectStackPreset(stackKey) {
-      if (!STACK_PRESETS[stackKey]) return;
+      if (stackKey !== 'custom' && !STACK_PRESETS[stackKey]) return;
       studioState.stackType = stackKey;
       document.querySelectorAll('[data-stack]').forEach(b => {
         b.classList.toggle('active', b.dataset.stack === stackKey);
@@ -3091,12 +3567,12 @@
       });
     }
 
-    // 18. Studio Lighting & Environment Switcher Logic
+    // 18. Studio Lighting & Environment Switcher Logic (HDR-Style Presets)
     const STUDIO_ENVS = {
-      obsidian: { bg: 0x060910, fog: 0x060910, ambient: [0xffffff, 0.65], key: [0xffffff, 1.2], fill: [0x00f0ff, 0.7], rim: [0xffffff, 0.9], floor: 0x05070d, grid: [0x00f0ff, 0x141f33] },
-      studio:   { bg: 0xf2f4f7, fog: 0xf2f4f7, ambient: [0xffffff, 0.95], key: [0xffffff, 1.35], fill: [0xe0f2fe, 0.45], rim: [0xffffff, 0.75], floor: 0xe5e7eb, grid: [0x94a3b8, 0xd1d5db] },
-      sunset:   { bg: 0x1c1218, fog: 0x1c1218, ambient: [0xffedd5, 0.6], key: [0xff9e5e, 1.4], fill: [0xf43f5e, 0.55], rim: [0xfbbf24, 0.95], floor: 0x181014, grid: [0xf59e0b, 0x3b1f2b] },
-      boat:     { bg: 0x091d2c, fog: 0x091d2c, ambient: [0xe0f2fe, 0.78], key: [0xfef9c3, 1.3], fill: [0x38bdf8, 0.85], rim: [0xffffff, 0.9], floor: 0x0d283b, grid: [0x38bdf8, 0x16425b] }
+      'studio-dark':    { bg: 0x060910, fog: 0x060910, ambient: [0xffffff, 0.62], hemi: [0xdbeafe, 0x0b1220, 0.42], key: [0xffffff, 1.25], fill: [0x00f0ff, 0.72], rim: [0xffffff, 0.9], floor: 0x05070d, grid: [0x00f0ff, 0x141f33] },
+      'desert-noon':    { bg: 0xd6b892, fog: 0xd6b892, ambient: [0xfff7ed, 0.85], hemi: [0xfef3c7, 0x92400e, 0.65], key: [0xfffbeb, 1.6], fill: [0xfb923c, 0.55], rim: [0xfef08a, 0.7], floor: 0xc29b6c, grid: [0x78350f, 0xa87d4f] },
+      'alpine-snow':    { bg: 0xdbeafe, fog: 0xe0f2fe, ambient: [0xffffff, 0.98], hemi: [0xe0f2fe, 0x94a3b8, 0.75], key: [0xffffff, 1.45], fill: [0x38bdf8, 0.55], rim: [0xffffff, 0.85], floor: 0xeff6ff, grid: [0x64748b, 0xcbd5e1] },
+      'tailgate-night': { bg: 0x090d1a, fog: 0x090d1a, ambient: [0xcbd5e1, 0.52], hemi: [0x1e3a8a, 0x111827, 0.55], key: [0xfbbf24, 1.3], fill: [0xef4444, 0.65], rim: [0x3b82f6, 1.0], floor: 0x111827, grid: [0xfbbf24, 0x1f2937] }
     };
     document.querySelectorAll('[data-env]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -3105,14 +3581,180 @@
         const cfg = STUDIO_ENVS[btn.dataset.env];
         if (!cfg) return;
         scene.background = new THREE.Color(cfg.bg);
-        scene.fog = new THREE.FogExp2(cfg.fog, 0.012);
+        scene.fog = new THREE.FogExp2(cfg.fog, 0.011);
         ambientLight.color.setHex(cfg.ambient[0]); ambientLight.intensity = cfg.ambient[1];
+        hemiLight.color.setHex(cfg.hemi[0]); hemiLight.groundColor.setHex(cfg.hemi[1]); hemiLight.intensity = cfg.hemi[2];
         keyLight.color.setHex(cfg.key[0]); keyLight.intensity = cfg.key[1];
         cyanFillLight.color.setHex(cfg.fill[0]); cyanFillLight.intensity = cfg.fill[1];
         rimLight.color.setHex(cfg.rim[0]); rimLight.intensity = cfg.rim[1];
         floorMat.color.setHex(cfg.floor);
+        if (gridHelper) scene.remove(gridHelper);
+        gridHelper = new THREE.GridHelper(120, 40, cfg.grid[0], cfg.grid[1]);
+        gridHelper.position.y = 0.01;
+        scene.add(gridHelper);
       });
     });
+
+    // 19. Mix-and-Match Per-Height Tier Stacker UI
+    const mixTierList = document.getElementById('mix-tier-list');
+    function renderMixMatchTiers() {
+      if (!mixTierList) return;
+      const tiers = studioState.customTiers || [];
+      mixTierList.innerHTML = '';
+      for (let idx = tiers.length - 1; idx >= 0; idx--) {
+        const tier = tiers[idx];
+        const roleLabel = idx === 0 ? 'Base' : (idx === tiers.length - 1 ? 'Top' : `Mid ${idx}`);
+        const row = document.createElement('div');
+        row.className = 'mix-tier-row';
+
+        const title = document.createElement('div');
+        title.style.cssText = 'font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:6px;';
+        title.innerHTML = `<span class="swatch-dot" style="background:${tier.color};border:1px solid rgba(255,255,255,0.4);"></span><span>Tier ${idx + 1} · ${roleLabel}</span>`;
+
+        const hSel = document.createElement('select');
+        hSel.className = 'mix-tier-select';
+        hSel.setAttribute('aria-label', `Tier ${idx + 1} height`);
+        [12, 18, 20, 24, 28].forEach((h) => {
+          const opt = document.createElement('option');
+          opt.value = String(h);
+          opt.textContent = `${h}"`;
+          if (tier.heightIn === h) opt.selected = true;
+          hSel.appendChild(opt);
+        });
+        hSel.addEventListener('change', () => {
+          tier.heightIn = parseInt(hSel.value, 10) || 18;
+          selectStackPreset('custom');
+          renderMixMatchTiers();
+        });
+
+        const cSel = document.createElement('select');
+        cSel.className = 'mix-tier-select';
+        cSel.setAttribute('aria-label', `Tier ${idx + 1} color`);
+        TIER_COLOR_OPTIONS.forEach((c) => {
+          const opt = document.createElement('option');
+          opt.value = c.hex;
+          opt.textContent = c.name;
+          if (tier.color.toLowerCase() === c.hex.toLowerCase()) opt.selected = true;
+          cSel.appendChild(opt);
+        });
+        cSel.addEventListener('change', () => {
+          tier.color = cSel.value;
+          selectStackPreset('custom');
+          renderMixMatchTiers();
+        });
+
+        const rmBtn = document.createElement('button');
+        rmBtn.type = 'button';
+        rmBtn.className = 'mix-tier-remove';
+        rmBtn.textContent = '×';
+        rmBtn.title = 'Remove Tier';
+        rmBtn.disabled = tiers.length <= 1;
+        rmBtn.addEventListener('click', () => {
+          if (tiers.length <= 1) return;
+          tiers.splice(idx, 1);
+          selectStackPreset('custom');
+          renderMixMatchTiers();
+        });
+
+        row.append(title, hSel, cSel, rmBtn);
+        mixTierList.appendChild(row);
+      }
+      updateStudioHUD();
+    }
+    renderMixMatchTiers();
+
+    const btnAddTier = document.getElementById('btn-add-custom-tier');
+    const btnCombo241812 = document.getElementById('btn-preset-24-18-12');
+    if (btnAddTier) {
+      btnAddTier.addEventListener('click', () => {
+        if (studioState.customTiers.length >= 4) return;
+        const palette = ['#1e4bd7', '#f0f4fa', '#e1232d', '#181a20'];
+        const nextColor = palette[studioState.customTiers.length % palette.length];
+        studioState.customTiers.push({ heightIn: 18, color: nextColor, role: 'Added Tier' });
+        selectStackPreset('custom');
+        renderMixMatchTiers();
+      });
+    }
+    if (btnCombo241812) {
+      btnCombo241812.addEventListener('click', () => {
+        studioState.customTiers = [
+          { heightIn: 24, color: '#1e4bd7', role: 'Base Cold Core' },
+          { heightIn: 18, color: '#f0f4fa', role: 'Mid Beverage Tier' },
+          { heightIn: 12, color: '#e1232d', role: 'Top Pizza Vault' }
+        ];
+        selectStackPreset('custom');
+        renderMixMatchTiers();
+      });
+    }
+
+    // 20. Interactive 3D Scale References & 18° Twist-Lock Animation + SFX Toggle
+    function toggleScaleRef(key) {
+      studioState.scaleRefs[key] = !studioState.scaleRefs[key];
+      const active = studioState.scaleRefs[key];
+      const pairs = {
+        human: ['btn-ref-human', 'btn-panel-ref-human'],
+        truck: ['btn-ref-truck', 'btn-panel-ref-truck'],
+        can: ['btn-ref-can', 'btn-panel-ref-can']
+      };
+      (pairs[key] || []).forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.toggle('active', active);
+          el.setAttribute('aria-pressed', String(active));
+        }
+      });
+      updateScaleReferences();
+    }
+    ['human', 'truck', 'can'].forEach((k) => {
+      const topId = k === 'human' ? 'btn-ref-human' : k === 'truck' ? 'btn-ref-truck' : 'btn-ref-can';
+      const panelId = k === 'human' ? 'btn-panel-ref-human' : k === 'truck' ? 'btn-panel-ref-truck' : 'btn-panel-ref-can';
+      const b1 = document.getElementById(topId);
+      const b2 = document.getElementById(panelId);
+      if (b1) b1.addEventListener('click', () => toggleScaleRef(k));
+      if (b2) b2.addEventListener('click', () => toggleScaleRef(k));
+    });
+
+    const btnAnimateTwist = document.getElementById('btn-animate-twistlock');
+    const twistLockToast = document.getElementById('twist-lock-toast');
+    if (btnAnimateTwist) {
+      btnAnimateTwist.addEventListener('click', () => {
+        if (isCadInspectorMode) exitCadInspectorMode();
+        targetExplosion = 0;
+        if (explodeSlider) explodeSlider.value = 0;
+        syncExplodeButtonState(false);
+        const preset = getActivePreset();
+        const targetGrp = preset.isV12Cad ? v12AssemblyGroup : (preset.tiers.length >= 2 ? topGroup : lidGroup);
+        twistLockAnim = {
+          active: true,
+          startTime: performance.now(),
+          dropPlayed: false,
+          twistPlayed: false,
+          lockPlayed: false,
+          targetGroup: targetGrp,
+          baseRotY: 0
+        };
+        if (twistLockToast) {
+          twistLockToast.textContent = '↺ Aligning 20-Start Helix (18°)...';
+          twistLockToast.classList.add('visible');
+        }
+      });
+    }
+
+    const btnToggleSfx = document.getElementById('btn-toggle-sfx');
+    function syncSfxBtn() {
+      if (!btnToggleSfx || !window.kokAudio) return;
+      const on = window.kokAudio.isEnabled();
+      btnToggleSfx.classList.toggle('active', on);
+      btnToggleSfx.setAttribute('aria-pressed', String(on));
+      btnToggleSfx.textContent = on ? '🔊 Mech SFX: On' : '🔇 Mech SFX: Off';
+    }
+    if (btnToggleSfx) {
+      btnToggleSfx.addEventListener('click', () => {
+        if (window.kokAudio) window.kokAudio.toggle();
+        syncSfxBtn();
+      });
+      window.addEventListener('kok:sfx-changed', syncSfxBtn);
+    }
 
     // 8. Capacity & Ice Calculator Engine
     const partyRange = document.getElementById('calc-party-range');
@@ -3180,6 +3822,8 @@
       gaugeGrossLbs.textContent = `${gross} LBS`;
       gaugeGrossKg.textContent = `${grossKg} KG`;
       hudWeight.textContent = `${gross} LBS`;
+      if (telLoadedLbs) telLoadedLbs.textContent = `${gross} LBS`;
+      if (telDryLbs) telDryLbs.textContent = `${dryStack} LBS`;
 
       // Percentage of 200 lb scale
       const pct = Math.min((gross / 180) * 100, 100);
@@ -3200,7 +3844,7 @@
       document.getElementById('breakdown-cans').textContent = `${drinks} lbs`;
     }
 
-    // 10. WebGL 4K Snapshot Tool
+    // 10. WebGL 4K Snapshot Tool & Downloadable Build Spec Sheet (PNG / PDF)
     document.getElementById('btn-snapshot').addEventListener('click', () => {
       renderer.render(scene, camera);
       const dataUrl = renderer.domElement.toDataURL('image/png');
@@ -3209,6 +3853,175 @@
       a.href = dataUrl;
       a.click();
     });
+
+    function generateBuildCardCanvas() {
+      renderer.render(scene, camera);
+      const preset = getActivePreset();
+      const hSpec = V12_HEIGHT_SPECS[studioState.v12HeightIn] || V12_HEIGHT_SPECS[20];
+      const dispHeight = preset.isV12Cad ? studioState.v12HeightIn : preset.heightIn;
+      const dispQuarts = preset.isV12Cad ? hSpec.quarts : preset.quarts;
+      const dispCans = preset.isV12Cad ? hSpec.cans : (preset.cansCapacity || Math.round(dispQuarts * 0.92));
+      const dispDryLbs = preset.isV12Cad ? hSpec.dryLbs : preset.dryLbs;
+      const grossLbs = dispDryLbs + (studioState.iceLbs || 38) + Math.round((studioState.cansCount || 48) * 0.78);
+      const price = computeStudioPrice();
+
+      const out = document.createElement('canvas');
+      out.width = 1600;
+      out.height = 900;
+      const ctx = out.getContext('2d');
+
+      const bgGrad = ctx.createLinearGradient(0, 0, 1600, 900);
+      bgGrad.addColorStop(0, '#070b14');
+      bgGrad.addColorStop(1, '#0d1729');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, 1600, 900);
+
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.28)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(24, 24, 1552, 852);
+
+      // Header
+      ctx.fillStyle = '#00f0ff';
+      ctx.font = 'bold 20px "SF Mono", Consolas, monospace';
+      ctx.fillText('KING OF KOOLERS · OFFICIAL 3D BUILD SPEC CARD', 54, 72);
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '16px "SF Mono", Consolas, monospace';
+      ctx.fillText(`24.0" OD MODULAR CYLINDRICAL SYSTEM  ·  ${new Date().toLocaleDateString()}`, 54, 100);
+
+      // Left WebGL render frame
+      const rx = 54, ry = 128, rw = 860, rh = 700;
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(rx, ry, rw, rh, 22);
+      ctx.clip();
+      const srcW = renderer.domElement.width || 1280;
+      const srcH = renderer.domElement.height || 720;
+      const scale = Math.max(rw / srcW, rh / srcH);
+      const dw = srcW * scale, dh = srcH * scale;
+      ctx.drawImage(renderer.domElement, rx + (rw - dw) / 2, ry + (rh - dh) / 2, dw, dh);
+      ctx.restore();
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.42)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(rx, ry, rw, rh, 22);
+      ctx.stroke();
+
+      // Right spec column
+      const sx = 950;
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillText(preset.label, sx, 166);
+
+      const kpis = [
+        ['TOTAL HEIGHT', `${dispHeight}"`],
+        ['VOLUME / CANS', `${dispQuarts} QT · ${dispCans} Cans`],
+        ['EMPTY WEIGHT', `${dispDryLbs} LBS`],
+        ['LOADED WEIGHT', `${grossLbs} LBS`]
+      ];
+      kpis.forEach(([k, v], i) => {
+        const col = i % 2;
+        const row = Math.floor(i / 2);
+        const bx = sx + col * 295;
+        const by = 198 + row * 94;
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.08)';
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.25)';
+        ctx.beginPath();
+        ctx.roundRect(bx, by, 280, 80, 14);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 13px "SF Mono", Consolas, monospace';
+        ctx.fillText(k, bx + 16, by + 28);
+        ctx.fillStyle = '#00f0ff';
+        ctx.font = 'bold 24px "SF Mono", Consolas, monospace';
+        ctx.fillText(v, bx + 16, by + 58);
+      });
+
+      // Tier Breakdown
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = 'bold 16px "SF Mono", Consolas, monospace';
+      ctx.fillText('MODULAR TIER STACK BREAKDOWN', sx, 422);
+      const tiers = preset.tiers || [20];
+      const colors = preset.tierColors || [studioState.baseColor, studioState.midColor, studioState.topColor, studioState.baseColor];
+      tiers.forEach((h, idx) => {
+        const y = 446 + idx * 38;
+        ctx.fillStyle = colors[idx % colors.length] || '#1e4bd7';
+        ctx.beginPath();
+        ctx.arc(sx + 12, y + 8, 9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = '18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        const role = idx === 0 ? 'Base Cold Core' : (idx === tiers.length - 1 ? 'Top Vault Module' : `Mid Tier #${idx + 1}`);
+        ctx.fillText(`Tier ${idx + 1}: ${h}" Tall · ${role}`, sx + 34, y + 14);
+      });
+
+      // Hardware Options & Itemized Summary
+      const optY = 620;
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = 'bold 16px "SF Mono", Consolas, monospace';
+      ctx.fillText('OUTFITTING & HARDWARE OPTIONS', sx, optY);
+      const opts = [
+        `10W USB Solar Lid: ${studioState.showSolar ? 'Included' : 'Omitted (-$40)'}`,
+        `316 SS Fast-Flow Spigot: ${studioState.showSpigot ? 'Included' : 'Omitted (-$25)'}`,
+        `16" Pizza Vault Insert: ${studioState.showPizza ? 'Added (+$49)' : 'None'}`,
+        `Hydro-Dip Wrap: ${studioState.pattern !== 'none' ? studioState.pattern.toUpperCase() + ' (+$59)' : 'Solid Rotomold'}`,
+        `Laser Engraving: ${studioState.engraveLine1 ? studioState.engraveLine1 : 'None'}`
+      ];
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      opts.forEach((line, i) => ctx.fillText(`• ${line}`, sx, optY + 28 + i * 25));
+
+      // Total Price Footer Box
+      ctx.fillStyle = 'rgba(0, 240, 255, 0.14)';
+      ctx.strokeStyle = '#00f0ff';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(sx, 772, 575, 74, 16);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = 'bold 18px "SF Mono", Consolas, monospace';
+      ctx.fillText('CONFIGURED STACK VALUE', sx + 22, 815);
+      ctx.fillStyle = '#00f0ff';
+      ctx.font = 'bold 34px "SF Mono", Consolas, monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(`$${price.toFixed(2)}`, sx + 550, 818);
+      ctx.textAlign = 'left';
+
+      return out;
+    }
+
+    const btnExportBuildCard = document.getElementById('btn-export-build-card');
+    const btnExportBuildPdf = document.getElementById('btn-export-build-pdf');
+    if (btnExportBuildCard) {
+      btnExportBuildCard.addEventListener('click', () => {
+        const poster = generateBuildCardCanvas();
+        const a = document.createElement('a');
+        a.download = `KingOfKoolers_Build_Card_${Date.now()}.png`;
+        a.href = poster.toDataURL('image/png');
+        a.click();
+      });
+    }
+    if (btnExportBuildPdf) {
+      btnExportBuildPdf.addEventListener('click', () => {
+        const poster = generateBuildCardCanvas();
+        const imgUrl = poster.toDataURL('image/png');
+        const preset = getActivePreset();
+        const w = window.open('', '_blank', 'width=980,height=780');
+        if (!w) return;
+        w.document.write(`<!DOCTYPE html><html><head><title>King of Koolers — Custom Build Spec Sheet</title>
+          <style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px;margin:0;background:#fff;color:#111;}
+          img{width:100%;max-width:1000px;display:block;margin:0 auto 16px;border-radius:12px;}
+          .meta{max-width:1000px;margin:0 auto;font-size:13px;color:#444;display:flex;justify-content:space-between;}</style></head>
+          <body><img src="${imgUrl}" alt="King of Koolers Build Card">
+          <div class="meta"><strong>${preset.label}</strong><span>Configured Value: $${computeStudioPrice().toFixed(2)} · 24.0" OD System</span></div>
+          <script>window.onload=function(){setTimeout(function(){window.print();},200);};<\/script></body></html>`);
+        w.document.close();
+      });
+    }
 
     // Responsive 3D Canvas Resize Handler (Desktop split-screen + Mobile stacked + Orientation Change)
     function updateViewportSize(entries) {
@@ -3484,6 +4297,65 @@
           if (m && m.userData) {
             m.position.y = m.userData.baseY + currentExplosion * m.userData.explodeDeltaY;
           }
+        }
+      }
+
+      // Interactive 3-Phase 18° Twist-Lock & Vertical Deadbolt Animation
+      if (twistLockAnim.active && twistLockAnim.targetGroup) {
+        const elapsed = performance.now() - twistLockAnim.startTime;
+        const tgt = twistLockAnim.targetGroup;
+        if (elapsed < 450) {
+          const t = elapsed / 450;
+          const e = 0.5 - Math.cos(t * Math.PI) / 2;
+          tgt.position.y = e * 5.2;
+          tgt.rotation.y = e * (-Math.PI / 10); // -18 deg pre-align
+          if (deadboltSliderMesh) {
+            const by = deadboltSliderMesh.userData.baseY || deadboltSliderMesh.position.y;
+            deadboltSliderMesh.position.y = by + e * 0.85;
+            deadboltSliderMesh.material.color.setHex(0xf59e0b);
+          }
+        } else if (elapsed < 950) {
+          const t = (elapsed - 450) / 500;
+          const e = 0.5 - Math.cos(t * Math.PI) / 2;
+          tgt.position.y = (1 - e) * 5.2;
+          tgt.rotation.y = -Math.PI / 10;
+          if (!twistLockAnim.dropPlayed && t > 0.85) {
+            twistLockAnim.dropPlayed = true;
+            if (window.kokAudio) window.kokAudio.playTierDrop();
+          }
+        } else if (elapsed < 1550) {
+          const t = (elapsed - 950) / 600;
+          const e = 0.5 - Math.cos(t * Math.PI) / 2;
+          tgt.position.y = 0;
+          tgt.rotation.y = (-Math.PI / 10) * (1 - e);
+          if (!twistLockAnim.twistPlayed) {
+            twistLockAnim.twistPlayed = true;
+            if (window.kokAudio) window.kokAudio.playTwistLock();
+          }
+          if (deadboltSliderMesh && t > 0.65) {
+            const dt = (t - 0.65) / 0.35;
+            const by = deadboltSliderMesh.userData.baseY || deadboltSliderMesh.position.y;
+            deadboltSliderMesh.position.y = by + (1 - dt) * 0.85 - dt * 0.15;
+            deadboltSliderMesh.material.color.setHex(0x10b981);
+          }
+          if (lockPulseRing) {
+            lockPulseRing.material.opacity = Math.sin(t * Math.PI) * 0.75;
+            lockPulseRing.scale.setScalar(1 + t * 0.12);
+          }
+          if (!twistLockAnim.lockPlayed && t > 0.78) {
+            twistLockAnim.lockPlayed = true;
+            if (window.kokAudio) window.kokAudio.playDeadbolt(true);
+            if (twistLockToast) twistLockToast.textContent = '🔒 18° Twist-Lock Engaged · Deadbolt Anchored';
+          }
+        } else {
+          tgt.position.y = 0;
+          tgt.rotation.y = 0;
+          if (deadboltSliderMesh && typeof deadboltSliderMesh.userData.baseY === 'number') {
+            deadboltSliderMesh.position.y = deadboltSliderMesh.userData.baseY;
+          }
+          if (lockPulseRing) lockPulseRing.material.opacity = 0;
+          twistLockAnim.active = false;
+          setTimeout(() => { if (twistLockToast) twistLockToast.classList.remove('visible'); }, 2200);
         }
       }
 

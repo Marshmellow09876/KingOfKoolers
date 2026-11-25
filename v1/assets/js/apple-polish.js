@@ -478,8 +478,292 @@
     });
   }
 
+  /* ------------------------------------------------------------------------
+     6. SYNTHESIZED MECHANICAL SOUND ENGINE (Optional Toggle, Off by Default)
+     ------------------------------------------------------------------------ */
+  const SFX_KEY = 'kok_mech_sfx_enabled';
+  let sfxEnabled = false;
+  let audioCtx = null;
+
+  function ensureAudioCtx() {
+    if (!sfxEnabled) return null;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    if (!audioCtx) audioCtx = new Ctx();
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+    return audioCtx;
+  }
+
+  function playTone(freqStart, freqEnd, durationSec, type, gainPeak, delaySec) {
+    const ctx = ensureAudioCtx();
+    if (!ctx) return;
+    const now = ctx.currentTime + (delaySec || 0);
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || 'triangle';
+    osc.frequency.setValueAtTime(freqStart, now);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(20, freqEnd), now + durationSec);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(gainPeak || 0.14, now + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + durationSec);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + durationSec + 0.02);
+  }
+
+  function playNoiseClick(durationSec, filterFreq, gainPeak, delaySec) {
+    const ctx = ensureAudioCtx();
+    if (!ctx) return;
+    const now = ctx.currentTime + (delaySec || 0);
+    const len = Math.max(256, Math.floor(ctx.sampleRate * durationSec));
+    const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.35));
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(filterFreq || 1400, now);
+    filter.Q.setValueAtTime(2.5, now);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(gainPeak || 0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + durationSec);
+    src.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    src.start(now);
+  }
+
+  const kokAudio = {
+    isEnabled() {
+      return sfxEnabled;
+    },
+    setEnabled(val) {
+      sfxEnabled = Boolean(val);
+      try { sessionStorage.setItem(SFX_KEY, sfxEnabled ? '1' : '0'); } catch (_) {}
+      if (sfxEnabled) {
+        ensureAudioCtx();
+        playTone(440, 660, 0.06, 'sine', 0.08, 0);
+      }
+      window.dispatchEvent(new CustomEvent('kok:sfx-changed', { detail: { enabled: sfxEnabled } }));
+      return sfxEnabled;
+    },
+    toggle() {
+      return this.setEnabled(!sfxEnabled);
+    },
+    playTierDrop() {
+      if (!sfxEnabled) return;
+      playTone(135, 48, 0.12, 'sine', 0.22, 0);
+      playNoiseClick(0.06, 420, 0.14, 0.01);
+    },
+    playTwistLock() {
+      if (!sfxEnabled) return;
+      playNoiseClick(0.09, 950, 0.14, 0);
+      playTone(190, 105, 0.11, 'triangle', 0.16, 0.03);
+      playTone(620, 480, 0.055, 'sine', 0.1, 0.09);
+    },
+    playDeadbolt(isLocked) {
+      if (!sfxEnabled) return;
+      if (isLocked) {
+        playNoiseClick(0.04, 2200, 0.18, 0);
+        playTone(940, 520, 0.06, 'square', 0.07, 0.01);
+        playTone(640, 320, 0.07, 'triangle', 0.12, 0.055);
+      } else {
+        playNoiseClick(0.04, 1800, 0.14, 0);
+        playTone(500, 860, 0.065, 'triangle', 0.1, 0.015);
+      }
+    }
+  };
+  window.kokAudio = kokAudio;
+
+  /* ------------------------------------------------------------------------
+     7. UNIFIED MOBILE SLIDE-OVER <dialog> DRAWER & STICKY BOTTOM BAR
+     ------------------------------------------------------------------------ */
+  function getCurrentPageKey() {
+    const p = (window.location.pathname || '').toLowerCase();
+    if (p.includes('customizer')) return 'customizer';
+    if (p.includes('accessories')) return 'accessories';
+    if (p.includes('locking-mechanism')) return 'locking';
+    return 'overview';
+  }
+
+  function initMobileSlideDrawer() {
+    if (document.getElementById('kok-mobile-drawer')) return;
+    const pageKey = getCurrentPageKey();
+    const drawer = document.createElement('dialog');
+    drawer.id = 'kok-mobile-drawer';
+    drawer.className = 'kok-mobile-drawer';
+    drawer.setAttribute('aria-label', 'Site navigation');
+    drawer.innerHTML = `
+      <div class="kok-mobile-drawer-scroller">
+        <nav class="kok-mobile-drawer-sheet" aria-label="Mobile Navigation">
+          <div>
+            <div class="kok-drawer-top">
+              <a href="./index.html#overview" class="kok-drawer-brand">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+                <span>King of Koolers</span>
+              </a>
+              <button type="button" class="kok-drawer-close-btn" id="kok-mobile-drawer-close" aria-label="Close menu" autofocus>&times;</button>
+            </div>
+
+            <ul class="kok-drawer-nav-list" style="margin-top:14px;">
+              <li><a href="./index.html#overview" class="${pageKey === 'overview' ? 'active' : ''}"><span>👑 Overview &amp; Video</span><span>&rsaquo;</span></a></li>
+              <li><a href="./locking-mechanism.html" class="${pageKey === 'locking' ? 'active' : ''}"><span>🔒 Patented 20-Helix Lock</span><span>&rsaquo;</span></a></li>
+              <li><a href="./accessories.html" class="${pageKey === 'accessories' ? 'active' : ''}"><span>🧰 31 Accessories &amp; Wagon</span><span>&rsaquo;</span></a></li>
+              <li><a href="./customizer.html" class="${pageKey === 'customizer' ? 'active' : ''}"><span>🧊 3D Cooler Studio</span><span>&rsaquo;</span></a></li>
+              <li><a href="./index.html#specs"><span>📐 CAD &amp; Stress Specs</span><span>&rsaquo;</span></a></li>
+              <li><a href="./index.html#configurator"><span>⚡ Build Configurator</span><span>&rsaquo;</span></a></li>
+            </ul>
+
+            <div class="kok-drawer-utils">
+              <button type="button" class="kok-drawer-util-btn" id="kok-drawer-cmd-btn">🔍 Quick Search</button>
+              <button type="button" class="kok-drawer-util-btn" id="kok-drawer-docs-btn">📐 CAD &amp; PDFs</button>
+              <button type="button" class="kok-drawer-util-btn" id="kok-drawer-theme-btn" style="grid-column:span 2;">🌗 Toggle Daylight / Night Camp</button>
+            </div>
+          </div>
+
+          <div>
+            <a href="./index.html#configurator" class="kok-drawer-cta" id="kok-drawer-reserve-cta">Build &amp; Reserve Tier &rarr;</a>
+            <div class="kok-drawer-swipe-hint">&larr; Swipe left or tap backdrop to close</div>
+          </div>
+        </nav>
+      </div>
+    `;
+    document.body.appendChild(drawer);
+    document.documentElement.classList.add('kok-drawer-ready');
+
+    const scroller = drawer.querySelector('.kok-mobile-drawer-scroller');
+    const sheet = drawer.querySelector('.kok-mobile-drawer-sheet');
+    const closeBtn = document.getElementById('kok-mobile-drawer-close');
+    const menuToggle = document.getElementById('menu-toggle');
+
+    if (!CSS.supports('animation-timeline: scroll()')) {
+      scroller.addEventListener('scroll', () => {
+        const w = sheet.offsetWidth || 1;
+        const ratio = Math.max(0, Math.min(1, 1 - scroller.scrollLeft / w));
+        drawer.style.setProperty('--drawer-backdrop', String(ratio));
+      }, { passive: true });
+    }
+
+    async function openDrawer() {
+      if (drawer.open) return;
+      haptic(8);
+      drawer.showModal();
+      if (!CSS.supports('scroll-initial-target', 'nearest')) {
+        scroller.scrollTo({ left: scroller.offsetWidth, behavior: 'instant' });
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      }
+      scroller.scrollTo({ left: 0, behavior: 'auto' });
+    }
+
+    function closeDrawer() {
+      if (!drawer.open) return;
+      scroller.scrollTo({ left: scroller.offsetWidth, behavior: 'auto' });
+    }
+
+    const visibleThreshold = 1 / Math.max(window.innerWidth || 360, 320);
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[entries.length - 1];
+      if (!entry) return;
+      if (entry.intersectionRatio < visibleThreshold && drawer.open) {
+        drawer.close();
+        if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+      } else if (entry.intersectionRatio >= 0.98) {
+        if (menuToggle) menuToggle.setAttribute('aria-expanded', 'true');
+      }
+    }, { root: drawer, threshold: [visibleThreshold, 1] });
+    observer.observe(sheet);
+
+    if (menuToggle) {
+      menuToggle.setAttribute('aria-controls', 'kok-mobile-drawer');
+      menuToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        openDrawer();
+      }, true);
+    }
+
+    closeBtn.addEventListener('click', closeDrawer);
+    drawer.addEventListener('click', (e) => {
+      if (!sheet.contains(e.target)) closeDrawer();
+    });
+    drawer.addEventListener('cancel', (e) => {
+      if (e.cancelable) {
+        e.preventDefault();
+        closeDrawer();
+      }
+    });
+
+    drawer.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        if (drawer.open) drawer.close();
+      });
+    });
+
+    const dCmd = document.getElementById('kok-drawer-cmd-btn');
+    const dDocs = document.getElementById('kok-drawer-docs-btn');
+    const dTheme = document.getElementById('kok-drawer-theme-btn');
+    if (dCmd) dCmd.addEventListener('click', () => { if (drawer.open) drawer.close(); openCmdPalette(); });
+    if (dDocs) dDocs.addEventListener('click', () => { if (drawer.open) drawer.close(); openDocsDrawer(); });
+    if (dTheme) dTheme.addEventListener('click', () => {
+      haptic(12);
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      applyTheme(next);
+    });
+  }
+
+  function initMobileBottomBar() {
+    if (document.getElementById('kok-mobile-bottom-bar')) return;
+    const bar = document.createElement('nav');
+    bar.id = 'kok-mobile-bottom-bar';
+    bar.className = 'kok-mobile-bottom-bar';
+    bar.setAttribute('aria-label', 'Quick Mobile Actions');
+    const isIndex = getCurrentPageKey() === 'overview';
+    const isCustomizer = getCurrentPageKey() === 'customizer';
+    bar.innerHTML = `
+      <a href="./customizer.html" class="kok-mb-btn">🧊 <span>${isCustomizer ? 'Top 3D' : '3D Studio'}</span></a>
+      <a href="./accessories.html" class="kok-mb-btn">🧰 <span>31 Mods</span></a>
+      <a href="${isIndex ? '#configurator' : './index.html#configurator'}" class="kok-mb-btn primary" id="kok-mb-reserve">👑 <span>Build &amp; Reserve</span></a>
+    `;
+    document.body.appendChild(bar);
+    if (isIndex) {
+      const resBtn = document.getElementById('kok-mb-reserve');
+      if (resBtn) {
+        resBtn.addEventListener('click', (e) => {
+          const cfg = document.getElementById('configurator');
+          if (cfg) {
+            e.preventDefault();
+            cfg.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      }
+    }
+  }
+
+  /* ------------------------------------------------------------------------
+     8. PWA SERVICE WORKER REGISTRATION
+     ------------------------------------------------------------------------ */
+  function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+    const proto = window.location.protocol;
+    if (proto !== 'https:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      return;
+    }
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     injectNavUtilities();
     initCursorAndHaptics();
+    initMobileSlideDrawer();
+    initMobileBottomBar();
   });
+  registerServiceWorker();
 })();
