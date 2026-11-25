@@ -1334,35 +1334,54 @@ html[data-theme="light"] .kok-drawer-cta {
 
 /* ==========================================================================
    17. FLOATING SECTION PROGRESS SPY RAIL (index.html)
+   Compact pill rail at rest (~25px wide); expands on hover/focus with all labels
    ========================================================================== */
 .kok-spy-rail {
   position: fixed;
-  right: 16px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 860;
+  scroll-target-group: auto;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
-  padding: 12px 10px;
-  border-radius: 20px;
-  background: rgba(8, 12, 22, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 7px;
+  padding: 10px 7px;
+  border-radius: 999px;
+  background: rgba(8, 12, 22, 0.46);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  transition: padding 0.22s ease, border-radius 0.22s ease, background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.kok-spy-rail:hover,
+.kok-spy-rail:focus-within {
+  padding: 12px 7px 12px 12px;
+  border-radius: 18px;
+  background: rgba(8, 12, 22, 0.90);
+  border-color: rgba(0, 240, 255, 0.24);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
 }
 
 html[data-theme="light"] .kok-spy-rail {
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.72);
   border-color: rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="light"] .kok-spy-rail:hover,
+html[data-theme="light"] .kok-spy-rail:focus-within {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(0, 113, 227, 0.26);
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.14);
 }
 
 .kok-spy-progress-track {
   position: absolute;
-  right: 14px;
-  top: 16px;
-  bottom: 16px;
+  right: 10.5px;
+  top: 14px;
+  bottom: 14px;
   width: 2px;
   background: rgba(255, 255, 255, 0.12);
   border-radius: 2px;
@@ -1385,7 +1404,7 @@ html[data-theme="light"] .kok-spy-progress-track {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 0;
   text-decoration: none;
   color: var(--kok-ink-muted);
   font-size: 11px;
@@ -1394,23 +1413,43 @@ html[data-theme="light"] .kok-spy-progress-track {
   transition: color 0.18s ease;
 }
 
+.kok-spy-link:focus-visible {
+  outline: 2px solid var(--kok-accent);
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+
 .kok-spy-label {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 0 solid rgba(255, 255, 255, 0.14);
+  margin-right: 0;
   opacity: 0;
   transform: translateX(6px);
-  padding: 3px 8px;
   border-radius: 999px;
-  background: rgba(8, 12, 22, 0.92);
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.84);
+  color: #cbd5e1;
   white-space: nowrap;
   pointer-events: none;
-  transition: opacity 0.16s ease, transform 0.16s ease;
+  transition: max-width 0.24s ease, opacity 0.18s ease, transform 0.2s ease, padding 0.2s ease, margin-right 0.2s ease, background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+.kok-spy-rail:hover .kok-spy-label,
+.kok-spy-rail:focus-within .kok-spy-label {
+  max-width: 150px;
+  padding: 3px 10px;
+  border-width: 1px;
+  margin-right: 8px;
+  opacity: 1;
+  transform: translateX(0);
 }
 
 html[data-theme="light"] .kok-spy-label {
-  background: #ffffff;
-  color: #1d1d1f;
-  border-color: rgba(0, 113, 227, 0.35);
+  background: rgba(248, 250, 252, 0.96);
+  color: #334155;
+  border-color: rgba(15, 23, 42, 0.14);
 }
 
 .kok-spy-dot {
@@ -1429,23 +1468,48 @@ html[data-theme="light"] .kok-spy-dot {
   border-color: rgba(0, 0, 0, 0.28);
 }
 
-.kok-spy-link:hover .kok-spy-label,
-.kok-spy-link:focus-visible .kok-spy-label,
-.kok-spy-link.active .kok-spy-label {
-  opacity: 1;
-  transform: translateX(0);
+.kok-spy-rail:is(:hover, :focus-within) .kok-spy-link:is(:target-current, .active) .kok-spy-label {
+  background: rgba(0, 240, 255, 0.14);
+  border-color: rgba(0, 240, 255, 0.72);
+  color: #ffffff;
+  font-weight: 700;
 }
 
-.kok-spy-rail:not(:hover) .kok-spy-link.active .kok-spy-label {
-  opacity: 0;
+html[data-theme="light"] .kok-spy-rail:is(:hover, :focus-within) .kok-spy-link:is(:target-current, .active) .kok-spy-label {
+  background: rgba(0, 113, 227, 0.12);
+  border-color: rgba(0, 113, 227, 0.65);
+  color: #0f172a;
 }
 
-.kok-spy-link.active .kok-spy-dot,
+.kok-spy-rail:is(:hover, :focus-within) .kok-spy-link:hover .kok-spy-label,
+.kok-spy-rail:is(:hover, :focus-within) .kok-spy-link:focus-visible .kok-spy-label {
+  background: rgba(0, 240, 255, 0.24);
+  border-color: #00f0ff;
+  color: #ffffff;
+}
+
+html[data-theme="light"] .kok-spy-rail:is(:hover, :focus-within) .kok-spy-link:hover .kok-spy-label,
+html[data-theme="light"] .kok-spy-rail:is(:hover, :focus-within) .kok-spy-link:focus-visible .kok-spy-label {
+  background: rgba(0, 113, 227, 0.20);
+  border-color: #0071e3;
+  color: #0f172a;
+}
+
+.kok-spy-link:is(:target-current, .active) .kok-spy-dot,
 .kok-spy-link:hover .kok-spy-dot {
   background: var(--kok-accent);
   border-color: var(--kok-accent);
   transform: scale(1.35);
   box-shadow: 0 0 10px rgba(0, 240, 255, 0.65);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kok-spy-rail,
+  .kok-spy-label,
+  .kok-spy-dot,
+  .kok-spy-progress-fill {
+    transition: none;
+  }
 }
 
 @media (max-width: 1180px) {

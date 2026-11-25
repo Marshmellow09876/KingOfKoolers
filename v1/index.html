@@ -3593,7 +3593,7 @@
       </linearGradient>
     </defs>
   </svg>
-  <link rel="stylesheet" href="./assets/css/apple-polish.css">
+  <link rel="stylesheet" href="./assets/css/apple-polish.css?v=spy-compact">
 </head>
 
 <body>
@@ -9435,27 +9435,68 @@
         if (!rail) return;
         const links = Array.from(rail.querySelectorAll('.kok-spy-link'));
         const targets = links.map((l) => document.getElementById(l.dataset.spyTarget)).filter(Boolean);
+        targets.forEach((t) => {
+          if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+        });
+
+        const supportsNativeSpy = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('scroll-target-group: auto');
+        let lastIoId = links[0] ? links[0].dataset.spyTarget : '';
 
         function setActiveSpy(id) {
-          links.forEach((l) => l.classList.toggle('active', l.dataset.spyTarget === id));
+          links.forEach((l) => {
+            const isActive = l.dataset.spyTarget === id;
+            l.classList.toggle('active', isActive);
+            l.setAttribute('aria-current', isActive ? 'true' : 'false');
+          });
+        }
+
+        function syncSpyState() {
+          if (supportsNativeSpy) {
+            const nativeCurrent = rail.querySelector('.kok-spy-link:target-current');
+            if (nativeCurrent) {
+              // Keep .active aligned with native :target-current so only one dot lights up
+              const nid = nativeCurrent.dataset.spyTarget;
+              links.forEach((l) => {
+                const isActive = l.dataset.spyTarget === nid;
+                l.classList.toggle('active', isActive);
+                l.setAttribute('aria-current', isActive ? 'true' : 'false');
+              });
+              return;
+            }
+          }
+          if (lastIoId) setActiveSpy(lastIoId);
         }
 
         if ('IntersectionObserver' in window && targets.length) {
           const io = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
-              if (entry.isIntersecting) setActiveSpy(entry.target.id);
+              if (entry.isIntersecting) {
+                lastIoId = entry.target.id;
+                syncSpyState();
+              }
             });
           }, { rootMargin: '-32% 0px -56% 0px' });
           targets.forEach((t) => io.observe(t));
         }
 
+        let scrollTicking = false;
         function updateRailProgress() {
-          if (!fill) return;
-          const docH = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-          const pct = Math.max(0, Math.min(100, (window.scrollY / docH) * 100));
-          fill.style.height = `${pct.toFixed(1)}%`;
+          if (fill) {
+            const docH = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+            const pct = Math.max(0, Math.min(100, (window.scrollY / docH) * 100));
+            fill.style.height = `${pct.toFixed(1)}%`;
+          }
+          if (!scrollTicking) {
+            scrollTicking = true;
+            requestAnimationFrame(() => {
+              syncSpyState();
+              scrollTicking = false;
+            });
+          }
         }
         window.addEventListener('scroll', updateRailProgress, { passive: true });
+        document.addEventListener('scrollend', syncSpyState, { passive: true });
+        syncSpyState();
         updateRailProgress();
       })();
     })();
