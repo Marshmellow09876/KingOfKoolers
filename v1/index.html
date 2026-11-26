@@ -33,7 +33,7 @@
           "name": "King of Koolers 24-Inch Modular Cylindrical Stacking Cooler",
           "brand": { "@type": "Brand", "name": "King of Koolers" },
           "creator": { "@type": "Person", "name": "Austin Marshall" },
-          "description": "Patent-pending 24-inch diameter rotomolded cylindrical modular stacking cooler system featuring a 20-start 18-degree helical twist-lock, vertical anti-rotation deadbolt, 3.5-inch R-8 polyurethane insulation, 10W USB solar lid, and 31 modular accessories.",
+          "description": "Patent-pending 24-inch diameter rotomolded cylindrical modular stacking cooler system featuring a 20-start 18-degree helical twist-lock, vertical anti-rotation deadbolt, 3.5-inch R-8 polyurethane insulation, 10W USB solar lid, and 52 modular accessories.",
           "image": [
             "https://marshmellow09876.github.io/KingOfKoolers/v1/assets/images/apple_hero_plastic_rwb.jpg",
             "https://marshmellow09876.github.io/KingOfKoolers/v1/assets/images/allthread_section_view.jpg",
@@ -601,6 +601,86 @@
       max-width: min(96vw, 1440px);
       width: 100%;
       margin: 0 auto;
+    }
+
+    .thanksgiving-promo-banner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      max-width: min(100%, 980px);
+      min-block-size: 44px;
+      margin: 0 auto 22px;
+      padding: 8px 14px 8px 12px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), rgba(180, 83, 9, 0.10) 55%, rgba(16, 16, 22, 0.85));
+      border: 1px solid rgba(251, 191, 36, 0.42);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 24px rgba(245, 158, 11, 0.14);
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 1.35;
+      transition: transform 0.25s var(--ease-apple), border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .thanksgiving-promo-banner:hover {
+      transform: translateY(-1px);
+      border-color: rgba(251, 191, 36, 0.78);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 28px rgba(245, 158, 11, 0.24);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(180, 83, 9, 0.16) 55%, rgba(20, 20, 28, 0.9));
+    }
+
+    .thanksgiving-promo-banner:focus-visible {
+      outline: 2px solid #fbbf24;
+      outline-offset: 3px;
+    }
+
+    .tg-promo-badge {
+      background: rgba(245, 158, 11, 0.22);
+      border: 1px solid rgba(251, 191, 36, 0.52);
+      color: #fde68a;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .tg-promo-text {
+      color: #f8fafc;
+      font-weight: 500;
+    }
+
+    .tg-promo-text strong {
+      color: #fef3c7;
+    }
+
+    .tg-promo-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 11px;
+      border-radius: var(--radius-full);
+      background: #f59e0b;
+      color: #0b0b0f;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      .thanksgiving-promo-banner {
+        border-radius: 16px;
+        padding: 10px 14px;
+        text-align: center;
+      }
     }
 
     .hero-media-wrapper {
@@ -3658,6 +3738,15 @@
   <header class="hero-section" id="overview">
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="container hero-content">
+      <a href="./accessories.html?category=thanksgiving#catalog-controls" class="thanksgiving-promo-banner" id="thanksgiving-promo-banner">
+        <span class="tg-promo-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 4.4 4.2-1.4-2.1 4.1 4.1 1.9-4.5 1.8 1.5 3.7-4-1.6V22h-2v-7.1l-4 1.6 1.5-3.7L4 11l4.1-1.9L6 5l4.2 1.4L12 2z"/></svg>
+          Thanksgiving Specials
+        </span>
+        <span class="tg-promo-text"><strong>Holiday Feast Accessories</strong> — Turkey Brine Vault, 165°F Resting Cradle, Walnut Carving Deck &amp; More</span>
+        <span class="tg-promo-cta">Shop Specials <span aria-hidden="true">&rarr;</span></span>
+      </a>
+
       <div class="eyebrow">
         <span class="eyebrow-pill" style="border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.1); color: #f87171;">ROTOMOLDED PATRIOT EDITION</span>
         <span style="color: #38bdf8;">PATENT-PENDING 24" CYLINDRICAL ARCHITECTURE</span>
@@ -5661,7 +5750,7 @@
         <div class="roadmap-phase-card">
           <span class="roadmap-status-pill active">PHASE 4 · Q4 SCALE</span>
           <div class="bento-title" style="font-size:15px;">Retail Rollout &amp; OEM Licensing</div>
-          <div class="bento-desc" style="font-size:12.5px;">Multi-mold 50k+ annual production capacity, 46-module accessory attach flywheel &amp; strategic licensing.</div>
+          <div class="bento-desc" style="font-size:12.5px;">Multi-mold 50k+ annual production capacity, 52-module accessory attach flywheel &amp; strategic licensing.</div>
         </div>
       </div>
     </div>

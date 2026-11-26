@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>King of Koolers | Official Modular Accessories & Outfitting Ecosystem</title>
-  <meta name="description" content="Explore all 46 official modular accessories for the King of Koolers 24-inch rotomolded stacking cooler. All-terrain 3-wheel wagon dollies, river floating inner tube, 42-inch camp tables, propane griddle docks, marine fillet decks, hitch swing carriers, 12V compressor chill-collars, Bluetooth audio lids, and dry-gear vaults.">
+  <meta name="description" content="Explore all 52 official modular accessories for the King of Koolers 24-inch rotomolded stacking cooler—including Thanksgiving Feast Specials (26-lb Turkey Brine Vault, 165°F Resting Cradle, 24-inch Walnut Carving Deck, 3-Tier Pie Carousel, Hot Mulled Cider Brass Tap), 3-wheel wagon dollies, river floating inner tube, and dry-gear vaults.">
   <meta name="theme-color" content="#000000">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="King of Koolers">
   <meta property="og:title" content="King of Koolers | Modular Accessories &amp; 24&quot; Outfitting Store">
-  <meta property="og:description" content="Explore all 46 precision-engineered &amp; 3D-printable modules for the 24-inch King of Koolers platform—from the River Floating Tube Accessory and 12V Hybrid Chill-Collar to hitch swing carriers, propane griddle docks, and 3-wheel wagon dollies.">
+  <meta property="og:description" content="Explore all 52 precision-engineered &amp; 3D-printable modules for the 24-inch King of Koolers platform—from Thanksgiving Turkey Brine Vaults, Walnut Carving Decks, and Mulled Cider Taps to the River Floating Tube and 3-wheel wagon dollies.">
   <meta property="og:image" content="./assets/images/accessory_01_bluetooth_lid.jpg">
   <meta property="og:image:alt" content="King of Koolers 24-Inch Modular Outfitting and Accessories Ecosystem">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="King of Koolers | Modular Accessories &amp; 24&quot; Outfitting Store">
-  <meta name="twitter:description" content="Explore 46 precision-engineered &amp; 3D-printable modules for the 24-inch King of Koolers platform—from River Floating Tubes and 12V Chill-Collars to hitch carriers, propane griddle docks, and Bluetooth lids.">
+  <meta name="twitter:description" content="Explore 52 precision-engineered &amp; 3D-printable modules for the 24-inch King of Koolers platform—from Thanksgiving Specials (Turkey Brine Liner, 165°F Resting Cradle, Pie Carousel) to River Floating Tubes and 12V Chill-Collars.">
   <meta name="twitter:image" content="./assets/images/accessory_01_bluetooth_lid.jpg">
   <meta name="twitter:image:alt" content="King of Koolers 24-Inch Modular Outfitting and Accessories Ecosystem">
   <link rel="manifest" href="./manifest.json">
@@ -28,8 +28,8 @@
       "@graph": [
         {
           "@type": "ItemList",
-          "name": "King of Koolers 46 Modular Outfitting Accessories",
-          "numberOfItems": 46,
+          "name": "King of Koolers 52 Modular Outfitting Accessories",
+          "numberOfItems": 52,
           "itemListElement": [
             {
               "@type": "ListItem",
@@ -465,6 +465,67 @@
       color: var(--accent-cyan);
     }
 
+    #catalog-controls {
+      scroll-margin-top: 68px;
+    }
+
+    .filter-btn-thanksgiving {
+      background: rgba(245, 158, 11, 0.10);
+      border-color: rgba(245, 158, 11, 0.42);
+      color: #fcd34d;
+    }
+
+    .filter-btn-thanksgiving:hover {
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(251, 191, 36, 0.72);
+      color: #fffbeb;
+    }
+
+    .filter-btn-thanksgiving.active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(217, 119, 6, 0.24));
+      border-color: #fbbf24;
+      color: #fef3c7;
+      box-shadow: 0 0 18px rgba(245, 158, 11, 0.26);
+    }
+
+    .thanksgiving-section-banner[hidden] {
+      display: none !important;
+    }
+
+    .thanksgiving-section-banner {
+      margin-bottom: 24px;
+      padding: 18px 22px;
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 12% 20%, rgba(245, 158, 11, 0.18), transparent 55%),
+                  linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(180, 83, 9, 0.08) 55%, rgba(14, 20, 32, 0.9));
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .thanksgiving-banner-copy {
+      max-width: 780px;
+    }
+
+    .thanksgiving-banner-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fbbf24;
+      margin-bottom: 6px;
+    }
+
+    .thanksgiving-banner-desc {
+      font-size: 14px;
+      color: #fef3c7;
+      line-height: 1.5;
+    }
+
     .search-sort-box {
       display: flex;
       align-items: center;
@@ -499,6 +560,8 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
       margin-bottom: 36px;
     }
 
@@ -1367,19 +1430,19 @@
   <header class="accessories-hero">
     <div class="container">
       <div class="hero-eyebrow">
-        <span>THE MODULAR ECOSYSTEM</span> · <span>24-INCH ROTOMOLDED ARCHITECTURE</span> · <span>46 SPECIALTY MODULES</span>
+        <span>THE MODULAR ECOSYSTEM</span> · <span>24-INCH ROTOMOLDED ARCHITECTURE</span> · <span>52 SPECIALTY MODULES</span>
       </div>
       <h1 class="hero-headline">
         Engineered to Stack.<br>
         Equipped for Anything.
       </h1>
       <p class="hero-subheadline">
-        Transform your 24-inch King of Koolers into a twist-locked river floating cooler tube, 3-wheel all-terrain wagon base, 12V compressor chill-collar, hitch swing-away carrier, 42-inch camp table, heat-shielded 22-inch griddle dock, or IP68 dry-gear vault.
+        Transform your 24-inch King of Koolers into a Thanksgiving 26-lb turkey brine barrel, 165°F hot meat resting vault, 24-inch walnut carving deck, hot mulled cider bar, twist-locked river floating tube, 3-wheel all-terrain wagon base, or 12V compressor chill-collar.
       </p>
 
       <div class="hero-stats-bar">
         <div class="stat-item">
-          <span class="stat-val">46</span>
+          <span class="stat-val">52</span>
           <span class="stat-label">Specialty Modules</span>
         </div>
         <div class="stat-item">
@@ -1405,16 +1468,17 @@
   <!-- ==========================================================================
        CATEGORY FILTER & SEARCH CONTROLS
        ========================================================================== -->
-  <section class="controls-section">
+  <section class="controls-section" id="catalog-controls">
     <div class="container controls-wrapper">
       <div class="category-pills" id="category-filter-pills">
-        <button class="filter-btn active" data-category="all">All Outfitting (46)</button>
-        <button class="filter-btn" data-category="mobility">Rigging &amp; Mobility (6)</button>
-        <button class="filter-btn" data-category="picnic">Picnic &amp; 3D-Print (18)</button>
-        <button class="filter-btn" data-category="culinary">Culinary &amp; Draft (9)</button>
-        <button class="filter-btn" data-category="angler">Seating &amp; Angler (5)</button>
-        <button class="filter-btn" data-category="lid">Lid &amp; Prep (4)</button>
-        <button class="filter-btn" data-category="power">Power &amp; Lighting (4)</button>
+        <button type="button" class="filter-btn active" data-category="all" aria-pressed="true">All Outfitting (52)</button>
+        <button type="button" class="filter-btn filter-btn-thanksgiving" data-category="thanksgiving" aria-pressed="false">Thanksgiving Specials (6)</button>
+        <button type="button" class="filter-btn" data-category="mobility" aria-pressed="false">Rigging &amp; Mobility (6)</button>
+        <button type="button" class="filter-btn" data-category="picnic" aria-pressed="false">Picnic &amp; 3D-Print (18)</button>
+        <button type="button" class="filter-btn" data-category="culinary" aria-pressed="false">Culinary &amp; Draft (9)</button>
+        <button type="button" class="filter-btn" data-category="angler" aria-pressed="false">Seating &amp; Angler (5)</button>
+        <button type="button" class="filter-btn" data-category="lid" aria-pressed="false">Lid &amp; Prep (4)</button>
+        <button type="button" class="filter-btn" data-category="power" aria-pressed="false">Power &amp; Lighting (4)</button>
       </div>
 
       <div class="search-sort-box">
@@ -1486,13 +1550,21 @@
         </div>
       </section>
 
+      <div class="thanksgiving-section-banner" id="thanksgiving-section-banner" hidden>
+        <div class="thanksgiving-banner-copy">
+          <div class="thanksgiving-banner-eyebrow">Thanksgiving Specials · Limited Holiday Outfitting</div>
+          <p class="thanksgiving-banner-desc">Brine a 26-lb turkey without stealing fridge space, rest smoked birds at 165°F+ for 6 hours, carve flush on solid black walnut, stack 3 un-pierced pies vertically, and pour steaming mulled cider outdoors. Bundle 4+ holiday modules for 20% off.</p>
+        </div>
+        <button type="button" class="filter-btn" id="btn-reset-all-from-thanksgiving">View All 52 Modules</button>
+      </div>
+
       <div class="grid-header">
         <div class="grid-title-area">
-          <h2>Official King of Koolers Outfitting</h2>
-          <p>Precision-molded &amp; 3D-printable accessories designed exclusively for the 24-inch cylindrical platform</p>
+          <h2 id="catalog-grid-title">Official King of Koolers Outfitting</h2>
+          <p id="catalog-grid-subtitle">Precision-molded &amp; 3D-printable accessories designed exclusively for the 24-inch cylindrical platform</p>
         </div>
-        <div aria-live="polite" aria-atomic="true" style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-cyan);">
-          Showing <span id="displayed-count">46</span> Modules
+        <div aria-live="polite" aria-atomic="true" style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-cyan); white-space: nowrap; flex-shrink: 0;">
+          Showing <span id="displayed-count">52</span> Modules
         </div>
       </div>
 
@@ -1658,6 +1730,7 @@
         <div class="footer-col">
           <h5>Outfitting</h5>
           <ul>
+            <li><a href="#catalog-controls" data-filter="thanksgiving">Thanksgiving Specials (6)</a></li>
             <li><a href="#product-grid" data-filter="lid">Lid Ecosystem</a></li>
             <li><a href="#product-grid" data-filter="power">Power &amp; Lighting</a></li>
             <li><a href="#product-grid" data-filter="culinary">Culinary &amp; Draft</a></li>
@@ -1688,7 +1761,7 @@
        CATALOG DATA & CLIENT SCRIPT
        ========================================================================== -->
   <script>
-    // Complete 46 Accessories Dataset
+    // Complete 52 Accessories Dataset
     const ACCESSORIES_DATA = [
       {
         id: "kok-acc-31",
@@ -2753,6 +2826,144 @@
           "Lock Compatibility": "Dual Reinforced Padlock Tabs + Full 18° Collar Latch",
           "Weight": "9.2 lbs"
         }
+      },
+      {
+        id: "kok-acc-47",
+        num: "47",
+        name: "26-lb Turkey Wet-Brine Barrel Liner & Weighted Submersion Press",
+        category: "thanksgiving",
+        compat: "Fits 20\" & 28\" Base Tiers · Food-Grade Brine Vault",
+        price: 64.00,
+        image: "./assets/images/accessory_47_turkey_brine_liner.jpg",
+        hook: "Turn any 20\" or 28\" cooler tier into a dedicated 26-lb Thanksgiving turkey brining vault with a seamless BPA-free drop-in barrel liner, weighted brushed-stainless submersion press disc, and silicone lifting sling—freeing up your entire kitchen fridge.",
+        features: [
+          "Drop-in heavy-gauge food-grade cylindrical liner holds up to a 26-lb bird plus 4 gallons of chilled apple-cider herb brine cleanly",
+          "Perforated 304 stainless steel weighted press disc locks the turkey 1.5\" below the cold brine line for uniform curing",
+          "High-tensile silicone sling cradle lifts the heavy wet turkey smoothly into the roasting pan with zero mess or torn skin",
+          "Front spigot gravity-drain compatibility empties leftover brine cleanly outdoors without lifting the cooler"
+        ],
+        specs: {
+          "Liner Capacity": "26-lb Whole Turkey + 4.5 Gal Chilled Brine Solution",
+          "Submersion Plate": "Weighted Perforated 304 Stainless Disc w/ Integrated Grip Handles",
+          "Lift Sling": "Food-Grade Platinum Silicone 4-Point Harness (Dishwasher Safe)",
+          "Safe Temp": "Maintains < 38°F Food-Safe Brine Temps for 48+ Hours w/ 1 Bag Ice",
+          "Weight": "4.6 lbs"
+        }
+      },
+      {
+        id: "kok-acc-48",
+        num: "48",
+        name: "Cambro-Grade Hot Turkey Resting & Smoked-Meat Thermal Cradle",
+        category: "thanksgiving",
+        compat: "Fits 18\" & 20\" Tiers · 212°F High-Temp Silicone + SS",
+        price: 89.00,
+        image: "./assets/images/accessory_48_turkey_resting_cradle.jpg",
+        hook: "Restaurant-grade stainless pan-drippings catch tray, elevated V-ribbed roasting rack, and heat-resistant terracotta-silicone steam baffle built to rest freshly smoked or roasted turkeys above 165°F inside your cooler for up to 6 hours.",
+        features: [
+          "Elevated 17-inch circular wire roasting cradle keeps crispy turkey skin lifted above rendered au jus while juices collect below",
+          "High-temp terracotta-silicone perimeter steam baffle protects inner polyethylene liner walls up to 212°F",
+          "Saves over 4 hours of Thanksgiving oven bottlenecks while allowing juices to reabsorb into breast meat",
+          "Dual fold-flat stainless bail handles extract a scorching hot 22-lb bird safely with insulated grill gloves"
+        ],
+        specs: {
+          "Thermal Rating": "212°F / 100°C Food-Grade Terracotta Silicone + 304 Stainless Steel",
+          "Holding Window": "6+ Hours Above 145°F–165°F Safe Hot-Rest Range",
+          "Tray Diameter": "18.2\" OD × 2.8\" Deep Integrated Au-Jus Drippings Catch Basin",
+          "Tier Fitment": "Universal Drop-In for 18\", 20\" & 28\" King of Koolers Modules",
+          "Weight": "5.8 lbs"
+        }
+      },
+      {
+        id: "kok-acc-49",
+        num: "49",
+        name: "24\" Walnut Turkey Carving Board & Gravy Juice-Moat Lid Deck",
+        category: "thanksgiving",
+        compat: "24\" Lid Recess Lock · Solid End-Grain Black Walnut",
+        price: 94.00,
+        image: "./assets/images/accessory_49_walnut_carving_deck.jpg",
+        hook: "Heirloom 24-inch solid end-grain American black walnut carving deck locking flush into the top lid recess, complete with a deep perimeter gravy moat, stainless pour spout, turkey anchor spikes, and magnetic carving-knife rim dock.",
+        features: [
+          "1.5-inch thick self-healing end-grain black walnut keeps fine Damascus slicing blades razor-sharp without warping",
+          "Deep CNC-routed 360° perimeter trench funnels up to 16 oz of turkey pan jus cleanly through a brushed-stainless pour spout",
+          "Removable micro-spike center grip plate stabilizes heavy birds and prime rib roasts during precision carving",
+          "Concealed rare-earth neodymium magnetic rim dock safely holsters carving knife and fork between servings"
+        ],
+        specs: {
+          "Board Construction": "22.4\" Circular End-Grain American Black Walnut · Beeswax Finish",
+          "Juice Moat + Spout": "360° Deep Gravy Channel w/ Removable 304 SS Corner Pour Spout",
+          "Blade Dock": "Neodymium Dual-Zone Magnetic Rim Dock (Supports 12\" Slicers)",
+          "Lid Integration": "Snap-Fit Anti-Slip Silicone Pads · Zero Board Shift While Carving",
+          "Weight": "8.4 lbs"
+        }
+      },
+      {
+        id: "kok-acc-50",
+        num: "50",
+        name: "3-Tier Hot Casserole & Pie Warming Carousel Tower",
+        category: "thanksgiving",
+        compat: "Open-Center 3-Post Perimeter Cage · Holds 3× 10\"–12\" Pies",
+        price: 79.00,
+        image: "./assets/images/accessory_50_pie_casserole_carousel.jpg",
+        hook: "Transport or keep warm up to three whole 10\"–12\" pumpkin, apple, and pecan pies—or hot holiday casseroles—vertically inside any 20\" or 28\" tier with an open-center 3-post perimeter lift frame so zero rods ever pierce the crust.",
+        features: [
+          "Open-center 3-post perimeter brushed-stainless lift cage keeps the middle completely unobstructed for un-pierced whole pies & springforms",
+          "Micro-indexed knurled locking collars space three perforated stainless shelves cleanly to fit tall meringue toppings or deep casserole dishes",
+          "Anti-slosh textured silicone base rings grip foil pie tins, ceramic pie plates, and round Dutch dishes on winding road trips",
+          "Integrated top stainless arch bail handle lifts all 3 stacked holiday pies smoothly out of the barrel onto the dessert table"
+        ],
+        specs: {
+          "Tower Frame": "Open-Center 3-Post Perimeter 304 Stainless Lift Cage + Top Bail Arch",
+          "Shelf Capacity": "3× Adjustable 17.5\" Perforated Shelves (Fits up to 12\" Pans Each)",
+          "Vertical Travel": "Tool-Free Knurled Collar Adjustment (2.5\" to 7.5\" Clearance per Tier)",
+          "Grip Rings": "3× High-Temp Anti-Skid Silicone Dish Rings Included",
+          "Weight": "5.2 lbs"
+        }
+      },
+      {
+        id: "kok-acc-51",
+        num: "51",
+        name: "Hot Mulled Cider & Spiced Punch Brass-Tap Dispensing Core",
+        category: "thanksgiving",
+        compat: "Fits 12\" & 18\" Tiers · 200°F Hot-Liquid Rated",
+        price: 84.00,
+        image: "./assets/images/accessory_51_mulled_cider_dispenser.jpg",
+        hook: "Transform any 12\" or 18\" cooler tier into an outdoor autumn spiced-apple-cider and hot toddy dispenser featuring a drip-free heavy brushed-brass tap, 200°F high-temp Viton seals, and a drop-in stainless spice infuser core basket.",
+        features: [
+          "Direct thread-in brushed brass beverage spigot swaps cleanly into the front cooler drain port with food-grade Viton heat gaskets",
+          "Internal laser-perforated 304 stainless cylindrical spice infuser core steeps whole cinnamon sticks, star anise, cloves & fresh citrus slices",
+          "Vacuum-like R-8 closed-cell polyurethane cooler wall keeps 8+ gallons of mulled cider piping hot at patio parties for 10+ hours",
+          "Self-closing quarter-turn brass lever delivers crisp zero-drip mug pours without heat loss from opening the top lid"
+        ],
+        specs: {
+          "Valve & Fitting": "Heavy Forged Brushed Brass ¼-Turn Spigot w/ 220°F Viton O-Rings",
+          "Infuser Basket": "7.5\" × 9.0\" Laser-Perforated 304 Stainless Spice & Botanical Core",
+          "Liquid Rating": "Safe for Boiling/Mulled Beverages up to 200°F Continuous",
+          "Heat Hold": "10+ Hours Serving Warmth (140°F+) in 18\" King of Koolers Tier",
+          "Weight": "3.1 lbs"
+        }
+      },
+      {
+        id: "kok-acc-52",
+        num: "52",
+        name: "Autumn Harvest & Turkey-Trot Side-Wall Decal Wrap & Chalkboard Panel",
+        category: "thanksgiving",
+        compat: "24\" OD Weatherproof 3M Vinyl · Peel-Clean Holiday Skin",
+        price: 49.00,
+        image: "./assets/images/accessory_52_thanksgiving_wrap_skin.jpg",
+        hook: "Dress your 24-inch King of Koolers stack for Friendsgiving, Thanksgiving tailgates, and backyard harvest parties with a reusable air-release matte copper & burnt-sienna autumn wrap skin and wipe-clean slate chalkboard menu panel.",
+        features: [
+          "Precision-die-cut for the 24.0\" cylindrical wall diameter and 18° twist-lock seams on 12\", 18\", and 20\" cooler tiers",
+          "Deep matte burnt-sienna architectural 3M vinyl with embossed geometric brushed-copper maple leaf accents & gold rim pinstripe",
+          "Curved wipe-clean matte chalkboard centerpiece lets hosts write the Thanksgiving menu, cider recipes, or guest names cleanly",
+          "Low-tack micro-channel adhesive installs bubble-free in 90 seconds and peels off cleanly without residue when winter ends"
+        ],
+        specs: {
+          "Film Material": "7-Year Cast Marine Matte 3M Air-Release Vinyl w/ UV Matte Overlaminate",
+          "Menu Panel": "Integrated Wet-Erase & Liquid-Chalk Curved Slate Overlay Zone",
+          "Coverage Kit": "3× Tier Wrap Bands (Fits 12\", 18\" & 20\") + 3× Gold Seam Trim Strips",
+          "Removal": "Zero-Residue Repositionable Peel-Clean Seasonal Adhesive",
+          "Weight": "1.1 lbs"
+        }
       }
     ];
 
@@ -2981,6 +3192,62 @@
       specTriggerEl = null;
     }
 
+    const VALID_CATEGORIES = new Set(['all', 'thanksgiving', 'mobility', 'picnic', 'culinary', 'angler', 'lid', 'power']);
+
+    function setCategory(cat, { updateUrl = true, scrollToCatalog = false } = {}) {
+      const normalized = VALID_CATEGORIES.has(cat) ? cat : 'all';
+      currentCategory = normalized;
+
+      document.querySelectorAll('#category-filter-pills .filter-btn').forEach(btn => {
+        const isActive = btn.dataset.category === normalized;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+
+      const tgBanner = document.getElementById('thanksgiving-section-banner');
+      if (tgBanner) {
+        tgBanner.hidden = normalized !== 'thanksgiving';
+      }
+
+      const wagonDemo = document.getElementById('wagon-dolly-demo');
+      if (wagonDemo) {
+        wagonDemo.style.display = (normalized === 'all' || normalized === 'mobility') ? '' : 'none';
+      }
+
+      const gridTitle = document.getElementById('catalog-grid-title');
+      const gridSubtitle = document.getElementById('catalog-grid-subtitle');
+      if (gridTitle && gridSubtitle) {
+        if (normalized === 'thanksgiving') {
+          gridTitle.textContent = 'Thanksgiving Specials & Holiday Outfitting';
+          gridSubtitle.textContent = 'Engineered for turkey brining, 165°F resting, walnut table carving, intact pie stacking, and mulled cider service';
+        } else {
+          gridTitle.textContent = 'Official King of Koolers Outfitting';
+          gridSubtitle.textContent = 'Precision-molded & 3D-printable accessories designed exclusively for the 24-inch cylindrical platform';
+        }
+      }
+
+      renderCatalog();
+
+      if (updateUrl && window.history && typeof window.history.replaceState === 'function') {
+        const url = new URL(window.location.href);
+        if (normalized === 'all') {
+          url.searchParams.delete('category');
+          if (url.hash === '#thanksgiving') url.hash = '';
+        } else {
+          url.searchParams.set('category', normalized);
+        }
+        window.history.replaceState(null, '', url.toString());
+      }
+
+      if (scrollToCatalog) {
+        const target = document.getElementById('catalog-controls') || document.getElementById('product-grid');
+        if (target) {
+          const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+        }
+      }
+    }
+
     // Event Handlers
     document.addEventListener('click', (e) => {
       // Add/Remove button on cards
@@ -3041,23 +3308,22 @@
         closeSpecModal();
       }
 
-      // Category filter pill click
-      if (e.target.closest('.filter-btn')) {
-        const btn = e.target.closest('.filter-btn');
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentCategory = btn.dataset.category;
-        renderCatalog();
+      // Category filter pill click (scoped strictly to #category-filter-pills)
+      if (e.target.closest('#category-filter-pills .filter-btn')) {
+        const btn = e.target.closest('#category-filter-pills .filter-btn');
+        setCategory(btn.dataset.category || 'all', { updateUrl: true, scrollToCatalog: false });
+      }
+
+      // Reset All Modules button inside Thanksgiving section banner
+      if (e.target.closest('#btn-reset-all-from-thanksgiving')) {
+        setCategory('all', { updateUrl: true, scrollToCatalog: true });
       }
 
       // Footer filter shortcut links
-      if (e.target.matches('[data-filter]')) {
-        const cat = e.target.dataset.filter;
-        currentCategory = cat;
-        document.querySelectorAll('.filter-btn').forEach(b => {
-          b.classList.toggle('active', b.dataset.category === cat);
-        });
-        renderCatalog();
+      const filterLink = e.target.closest('[data-filter]');
+      if (filterLink) {
+        e.preventDefault();
+        setCategory(filterLink.dataset.filter || 'all', { updateUrl: true, scrollToCatalog: true });
       }
 
       // FAQ accordion toggle
@@ -3130,8 +3396,34 @@
       }
     });
 
-    // Initial render
-    renderCatalog();
+    // Initial render with URL query / #thanksgiving deep-link detection
+    (function initCatalogFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const paramCat = params.get('category');
+      const hash = (window.location.hash || '').toLowerCase();
+      let initialCat = 'all';
+      let hasDeepLink = false;
+
+      if (paramCat && VALID_CATEGORIES.has(paramCat) && paramCat !== 'all') {
+        initialCat = paramCat;
+        hasDeepLink = true;
+      } else if (hash === '#thanksgiving') {
+        initialCat = 'thanksgiving';
+        hasDeepLink = true;
+      }
+
+      setCategory(initialCat, { updateUrl: false, scrollToCatalog: false });
+
+      if (hasDeepLink) {
+        requestAnimationFrame(() => {
+          const target = document.getElementById('catalog-controls');
+          if (target) {
+            const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+          }
+        });
+      }
+    })();
 
     // Module 31 Wagon Dolly Interactive Terrain Comparison & Video Optimizer
     (function initWagonDollyShowcase() {
