@@ -136,7 +136,8 @@
     { title: 'V12 Full-Scale 24" OD Prototype Assembly (.3MF Download)', cat: 'V12 CAD', url: './assets/cad/v12_prototype/KingOfKoolers_V12_Full_Prototype_24in_Assembly.3mf', external: true },
     { title: 'V12 Split 5-Ring Printable Kit w/ 24 Alignment Pins (.3MF)', cat: 'V12 CAD', url: './assets/cad/v12_prototype/KingOfKoolers_V12_Split_Printable_Kit_24in.3mf', external: true },
     { title: 'Real CAD Mesh Inspector (.3MF / .STL / .OBJ)', cat: 'CAD 3D', url: './customizer.html#cad-inspector' },
-    { title: 'All 31 Modular Accessories Ecosystem (incl. 3-Wheel Wagon)', cat: 'Catalog', url: './accessories.html' },
+    { title: 'Frequently Asked Questions — All 28 FAQs', cat: 'Help', url: './faq.html' },
+    { title: 'All 66 Modular Accessories Ecosystem (incl. Holiday Specials)', cat: 'Catalog', url: './accessories.html' },
     { title: 'Acc #01 — Bluetooth Lid Speaker', cat: 'Accessory', url: './accessories.html' },
     { title: 'Acc #02 — Bamboo Cutting Board', cat: 'Accessory', url: './accessories.html' },
     { title: 'Acc #08 — Draft Beer Tap System', cat: 'Accessory', url: './accessories.html' },
@@ -589,6 +590,7 @@
     if (p.includes('customizer')) return 'customizer';
     if (p.includes('accessories')) return 'accessories';
     if (p.includes('locking-mechanism')) return 'locking';
+    if (p.includes('faq')) return 'faq';
     return 'overview';
   }
 
@@ -614,8 +616,9 @@
             <ul class="kok-drawer-nav-list" style="margin-top:14px;">
               <li><a href="./index.html#overview" class="${pageKey === 'overview' ? 'active' : ''}"><span>👑 Overview &amp; Video</span><span>&rsaquo;</span></a></li>
               <li><a href="./locking-mechanism.html" class="${pageKey === 'locking' ? 'active' : ''}"><span>🔒 Patented 20-Helix Lock</span><span>&rsaquo;</span></a></li>
-              <li><a href="./accessories.html" class="${pageKey === 'accessories' ? 'active' : ''}"><span>🧰 31 Accessories &amp; Wagon</span><span>&rsaquo;</span></a></li>
+              <li><a href="./accessories.html" class="${pageKey === 'accessories' ? 'active' : ''}"><span>🧰 66 Accessories &amp; Holiday Gear</span><span>&rsaquo;</span></a></li>
               <li><a href="./customizer.html" class="${pageKey === 'customizer' ? 'active' : ''}"><span>🧊 3D Cooler Studio</span><span>&rsaquo;</span></a></li>
+              <li><a href="./faq.html" class="${pageKey === 'faq' ? 'active' : ''}"><span>❓ All 28 FAQs</span><span>&rsaquo;</span></a></li>
               <li><a href="./index.html#specs"><span>📐 CAD &amp; Stress Specs</span><span>&rsaquo;</span></a></li>
               <li><a href="./index.html#configurator"><span>⚡ Build Configurator</span><span>&rsaquo;</span></a></li>
             </ul>
@@ -727,7 +730,7 @@
     const isCustomizer = getCurrentPageKey() === 'customizer';
     bar.innerHTML = `
       <a href="./customizer.html" class="kok-mb-btn">🧊 <span>${isCustomizer ? 'Top 3D' : '3D Studio'}</span></a>
-      <a href="./accessories.html" class="kok-mb-btn">🧰 <span>31 Mods</span></a>
+      <a href="./accessories.html" class="kok-mb-btn">🧰 <span>66 Mods</span></a>
       <a href="${isIndex ? '#configurator' : './index.html#configurator'}" class="kok-mb-btn primary" id="kok-mb-reserve">👑 <span>Build &amp; Reserve</span></a>
     `;
     document.body.appendChild(bar);

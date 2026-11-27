@@ -195,7 +195,7 @@
        ========================================================================== */
     .studio-workspace {
       display: flex;
-      flex: 1;
+      flex: 0 0 auto;
       height: calc(100vh - 60px);
       min-height: 700px;
       position: relative;
@@ -861,12 +861,14 @@
       flex-shrink: 0;
     }
 
-    /* Fix short 720p/768p/900p PC laptop double scrollbars while keeping crisp full-bleed split screen */
+    /* Full-bleed desktop 3D Studio above the fold + scrollable #studio-faq band below */
     @media (min-width: 1025px) {
       html,
       body {
-        height: 100dvh;
-        overflow: hidden;
+        min-height: 100dvh;
+        height: auto;
+        overflow-x: clip;
+        overflow-y: auto;
       }
       body {
         display: flex;
@@ -876,11 +878,11 @@
         display: grid;
         grid-template-columns: minmax(0, 1fr) 460px;
         grid-template-rows: minmax(0, 1fr);
-        flex: 1 1 0;
+        flex: 0 0 auto;
         width: 100%;
         height: calc(100dvh - 60px);
-        max-height: calc(100dvh - 60px);
-        min-height: 0;
+        min-height: 680px;
+        max-height: none;
         overflow: hidden;
       }
       .viewport-container {
@@ -1263,6 +1265,151 @@
         display: none;
       }
     }
+
+    /* Below-the-Fold 3D Studio FAQ Band */
+    .studio-faq-section {
+      padding: 72px 24px 88px;
+      background: linear-gradient(180deg, #060910 0%, #030508 100%);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .studio-faq-inner {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .studio-faq-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .studio-faq-eyebrow {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      margin-bottom: 12px;
+    }
+
+    .studio-faq-header h2 {
+      font-size: clamp(24px, 3vw, 34px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .studio-faq-header p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .studio-faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    details.kok-faq-details {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.22s ease, background-color 0.22s ease;
+    }
+
+    details.kok-faq-details[open] {
+      background: var(--bg-card-hover);
+      border-color: var(--border-cyan);
+    }
+
+    details.kok-faq-details > summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 22px;
+      font-size: 15.5px;
+      font-weight: 600;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    details.kok-faq-details > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.kok-faq-details > summary:hover {
+      color: var(--accent-cyan);
+    }
+
+    details.kok-faq-details > summary::before {
+      content: "";
+      inline-size: 1em;
+      block-size: 1em;
+      flex-shrink: 0;
+      background-color: var(--accent-cyan);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+      rotate: -90deg;
+    }
+
+    details.kok-faq-details[open] > summary::before {
+      rotate: 0deg;
+    }
+
+    details.kok-faq-details::details-content {
+      interpolate-size: allow-keywords;
+      overflow: clip;
+      contain: layout;
+    }
+
+    details.kok-faq-details:not([open])::details-content {
+      block-size: 0;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      details.kok-faq-details > summary::before {
+        transition: rotate 0.2s ease;
+      }
+      details.kok-faq-details::details-content {
+        transition: block-size, content-visibility, display;
+        transition-duration: 0.28s;
+        transition-timing-function: ease-in-out;
+        transition-behavior: allow-discrete;
+      }
+    }
+
+    .kok-faq-answer {
+      padding: 0 22px 18px 48px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .studio-faq-cta {
+      display: flex;
+      justify-content: center;
+      margin-top: 28px;
+    }
+
+    .studio-faq-cta a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      background: var(--accent-cyan);
+      color: #000;
+      font-weight: 700;
+      font-size: 13.5px;
+      border-radius: var(--radius-full);
+    }
   </style>
   <link rel="stylesheet" href="./assets/css/apple-polish.css">
 </head>
@@ -1285,6 +1432,7 @@
         <li><a href="./locking-mechanism.html">Patented Lock</a></li>
         <li><a href="./accessories.html">Accessories</a></li>
         <li><a href="./customizer.html" class="active" aria-current="page">3D Studio</a></li>
+        <li><a href="./faq.html">FAQ</a></li>
       </ul>
 
       <div style="display: flex; align-items: center; gap: 12px;">
@@ -1827,6 +1975,51 @@
     </aside>
 
   </main>
+
+  <!-- 3D Studio Sizing, Wagon, Solar & Care FAQs (Batch D: 4 New FAQs) -->
+  <section class="studio-faq-section" id="studio-faq" aria-labelledby="studio-faq-heading">
+    <div class="studio-faq-inner">
+      <div class="studio-faq-header">
+        <span class="studio-faq-eyebrow">3D Studio FAQ · Sizing, Wagon, Solar &amp; Care</span>
+        <h2 id="studio-faq-heading">Studio Build &amp; Sizing Questions</h2>
+        <p>Answers on tier heights, wagon &amp; winter ski conversions, 10W solar charging, and rapid cleanout.</p>
+      </div>
+
+      <div class="studio-faq-list">
+        <details class="kok-faq-details">
+          <summary>What is the difference between the 12&quot;, 18&quot;, 20&quot;, and 28&quot; cooler tier heights and can capacities?</summary>
+          <div class="kok-faq-answer">
+            Every tier shares the 24.0&quot; OD (~17&quot; interior chamber) and differs only in height: 12&quot; Crown/Pizza Vault (~18–24 cans, 18&quot; hot pizzas, or dry gear), 18&quot; Day-Tripper / Camp Stool (~36–48 cans at ideal chair height), 20&quot; Expedition Bunker (~54–65 cans or a 26-lb brining turkey), and 28&quot; Base-Camp Keg Tower (~85+ cans or tall draft kegs).
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>How does the 3-Wheel All-Terrain Wagon Roller Dolly (Module 31) attach, and can I swap it for winter snow skis?</summary>
+          <div class="kok-faq-answer">
+            The 24&quot; circular wagon base captures any King of Koolers lower rim inside its concentric locking channel in ~2 seconds with a galvanized steel Y-chassis, two rear fixed 8&quot; knobby pneumatic tires, and one front 360° swivel tire (350-lb rolling load). In winter, the same sliding dovetail slots accept Module 59 (Polar 3-Ski Snow-Sled Conversion Kit) to glide across deep snow.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>How much power does the 10-Watt USB Solar Crown Lid generate, and can it charge phones or heated cushions?</summary>
+          <div class="kok-faq-answer">
+            Integrated flush into the top lid dish, the weatherproof 10W monocrystalline solar array charges an onboard waterproof power buffer (or pairs with Module 07 50,000 mAh Power Bank) to keep smartphones, Bluetooth speakers, Module 58 LED Wreath Halo, or Module 62 Heated Camp Stool Cushions running off-grid.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>How do I clean, drain, and deodorize my cooler after brining a turkey, fishing, or tailgating?</summary>
+          <div class="kok-faq-answer">
+            Twist open the front stainless drain spigot (or unscrew the drain plug for rapid flush), rinse the seamless curved rotomolded interior with warm soapy water or a baking-soda solution, and wipe the removable silicone lid gasket dry. With zero sharp 90° internal seams or recessed screw heads, fish slime, brine herbs, and BBQ clean out in under two minutes.
+          </div>
+        </details>
+      </div>
+
+      <div class="studio-faq-cta">
+        <a href="./faq.html">View All 28 FAQs &rarr;</a>
+      </div>
+    </div>
+  </section>
 
   <!-- Real CAD Mesh Bundle (.3MF/.STL/.OBJ) & Local Three.js Engine -->
   <script src="./assets/js/cad-meshes.js?v=3wheel-v1"></script>

@@ -57,7 +57,7 @@
               "name": "Do these accessories fit all cooler tier heights (12\", 18\", 20\", and 28\")?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! Because every single King of Koolers tier shares the identical 24.0-inch outer diameter and circumferential 20-helix twist-lock bayonet collar, all lid and inter-tier accessories are cross-compatible across the 12\", 18\", 20\", and 28\" modules."
+                "text": "Yes! Because every single King of Koolers tier shares the identical 24.0-inch outer diameter and circumferential 18° 20-helix twist-lock bayonet collar, all lid and inter-tier accessories (Bluetooth lid, cutting board, divider grid, dry basket, thermal isolation disc) are cross-compatible across the 12\", 18\", 20\", and 28\" models."
               }
             },
             {
@@ -82,6 +82,46 @@
               "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "Yes. Selected accessories are saved to your session and pre-populate directly into your reservation summary with bundle discounts automatically calculated."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do the multi-module bundle discounts work on the Accessories page?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Bundle discounts calculate automatically in your Outfitting Drawer and carry straight into your Dream Cooler Reservation: pick any 2 accessories for 10% off, 3 accessories for 15% off + a free waterproof dry bag, or 4+ accessories for 20% off—across all 66 modules including Thanksgiving and Christmas Specials."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the River Floating Tube Accessory (Module 35) prevent the cooler from falling through the bottom?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Module 35 features a reinforced drop-in center buoyancy well sized to the 24.0-inch cooler OD with molded side-handle twist-lock catch pockets. Lower an 18\" or 20\" tier into the tube and twist slightly so the cooler's heavy side loop handles lock into the pockets, suspending the cooler safely above the riverbed."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do the Thanksgiving & Christmas holiday accessories work with standard Patriot Red, White & Blue cooler tiers?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. All 10 Thanksgiving Specials (#47–#56) and 10 Red & Green Christmas Specials (#57–#66) share the exact universal 24.0-inch circular diameter, 18° twist-lock collar, front drain port threads, and base dovetails, so they fit seamlessly onto any standard cooler tier year-round."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I really 3D-print accessories myself, and what filament should I use?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Select modular accessories (such as the Module 31 3-Wheel Wagon Dolly 4-Part .3MF Pack, cup halos, spice turrets, and organizers) support home 3D printing. Use PETG, ASA, or ABS (4+ perimeters, 25–40% gyroid infill) for UV and outdoor heat resistance, plus food-safe sealants or silicone liners wherever direct food contact occurs."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do the 12V / 24V Hybrid Compressor Chill-Collar (Module 43) work with passive ice tiers?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Module 43 is a slim 4.5-inch tall twist-lock active refrigeration ring that stacks between any two cooler tiers and runs on vehicle 12V/24V, solar, or LiFePO4 battery power (38W eco draw) to hold 34°F fridge or 0°F freezer temps without ice—and if unplugged overnight, the 3.5-inch R-8 insulated walls continue holding cold passively for days."
               }
             }
           ]
@@ -1129,39 +1169,81 @@
       gap: 16px;
     }
 
-    .faq-item {
+    details.kok-faq-details {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       overflow: hidden;
+      transition: border-color 0.22s ease, background-color 0.22s ease;
     }
 
-    .faq-question {
+    details.kok-faq-details[open] {
+      background: var(--bg-card-hover);
+      border-color: var(--border-cyan);
+    }
+
+    details.kok-faq-details > summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       padding: 20px 24px;
-      width: 100%;
-      text-align: left;
       font-size: 16px;
       font-weight: 600;
       color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      cursor: pointer;
     }
 
-    .faq-question:hover {
-      color: var(--accent-cyan);
-    }
-
-    .faq-answer {
-      padding: 0 24px 20px;
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.6;
+    details.kok-faq-details > summary::-webkit-details-marker {
       display: none;
     }
 
-    .faq-item.active .faq-answer {
-      display: block;
+    details.kok-faq-details > summary:hover {
+      color: var(--accent-cyan);
+    }
+
+    details.kok-faq-details > summary::before {
+      content: "";
+      inline-size: 1em;
+      block-size: 1em;
+      flex-shrink: 0;
+      background-color: var(--accent-cyan);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+      rotate: -90deg;
+    }
+
+    details.kok-faq-details[open] > summary::before {
+      rotate: 0deg;
+    }
+
+    details.kok-faq-details::details-content {
+      interpolate-size: allow-keywords;
+      overflow: clip;
+      contain: layout;
+    }
+
+    details.kok-faq-details:not([open])::details-content {
+      block-size: 0;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      details.kok-faq-details > summary::before {
+        transition: rotate 0.2s ease;
+      }
+      details.kok-faq-details::details-content {
+        transition: block-size, content-visibility, display;
+        transition-duration: 0.28s;
+        transition-timing-function: ease-in-out;
+        transition-behavior: allow-discrete;
+      }
+    }
+
+    .kok-faq-answer {
+      padding: 0 24px 20px 50px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
     }
 
     /* ==========================================================================
@@ -1248,7 +1330,7 @@
        ========================================================================== */
     .accessory-card,
     .card-body,
-    .faq-item,
+    details.kok-faq-details,
     .controls-wrapper {
       min-inline-size: 0;
     }
@@ -1431,7 +1513,7 @@
       .filter-btn,
       .btn-add-cart,
       .btn-view-specs,
-      .faq-question,
+      details.kok-faq-details > summary,
       .cart-trigger-btn,
       .drawer-item-remove,
       .search-input,
@@ -1461,6 +1543,7 @@
         <li><a href="./locking-mechanism.html">Patented Lock</a></li>
         <li><a href="./accessories.html" class="active" aria-current="page">Accessories</a></li>
         <li><a href="./customizer.html">3D Studio</a></li>
+        <li><a href="./faq.html">FAQ</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -1716,55 +1799,82 @@
   </div>
 
   <!-- ==========================================================================
-       FAQ SECTION
+       FAQ SECTION (9 ACCESSORY FAQs + LINK TO MASTER 28-FAQ HUB)
        ========================================================================== -->
-  <section class="faq-section">
+  <section class="faq-section" id="accessories-faq" aria-labelledby="acc-faq-heading">
     <div class="container">
       <div class="faq-header">
-        <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Frequently Asked Questions</h2>
-        <p style="color: var(--text-muted); font-size: 14px;">Everything you need to know about King of Koolers modular outfitting</p>
+        <h2 id="acc-faq-heading" style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Frequently Asked Questions</h2>
+        <p style="color: var(--text-muted); font-size: 14px;">Everything you need to know about King of Koolers modular outfitting, bundle discounts &amp; holiday accessories</p>
       </div>
 
       <div class="faq-grid">
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>Do these accessories fit all cooler tier heights (12", 18", 20", and 28")?</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </button>
-          <div class="faq-answer">
-            Yes! Because every single King of Koolers tier shares the identical 24.0-inch outer diameter and circumferential 45° twist-lock bayonet collar, all lid and inter-tier accessories (Bluetooth lid, cutting board, divider grid, dry basket, thermal isolation disc) are 100% cross-compatible with the 12", 18", 20", and 28" models. Specialty base items (like the draft beer keg siphon and UV-C core) interface with the tall 20" and 28" bunker bases.
+        <details class="kok-faq-details">
+          <summary>Do these accessories fit all cooler tier heights (12&quot;, 18&quot;, 20&quot;, and 28&quot;)?</summary>
+          <div class="kok-faq-answer">
+            Yes! Because every single King of Koolers tier shares the identical 24.0-inch outer diameter and circumferential 18° 20-helix twist-lock bayonet collar, all lid and inter-tier accessories (Bluetooth lid, walnut &amp; bamboo cutting boards, divider grid, dry basket, thermal isolation disc) are 100% cross-compatible with the 12&quot;, 18&quot;, 20&quot;, and 28&quot; models. Specialty base items (like the draft beer keg siphon and UV-C core) interface with the tall 20&quot; and 28&quot; bunker bases.
           </div>
-        </div>
+        </details>
 
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>Are electrical accessories (Bluetooth lid, LED ring, Power Bank) waterproof?</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </button>
-          <div class="faq-answer">
+        <details class="kok-faq-details">
+          <summary>Are electrical accessories (Bluetooth lid, LED ring, Power Bank) waterproof?</summary>
+          <div class="kok-faq-answer">
             Absolutely. All electronic modules are engineered to IPX7 marine-grade submersible standards. Sealed silicone port gaskets, hydrophobic acoustic mesh, and conformal-coated internal circuit boards protect against driving rain, lake dunks, pressure-washing, and saltwater spray.
           </div>
-        </div>
+        </details>
 
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>How does the Dual-Zone Hot &amp; Cold Vacuum Isolation Disc work?</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </button>
-          <div class="faq-answer">
+        <details class="kok-faq-details">
+          <summary>How does the Dual-Zone Hot &amp; Cold Vacuum Isolation Disc work?</summary>
+          <div class="kok-faq-answer">
             The 2-inch thick Vacuum Thermal Isolation Disc utilizes closed-cell polyurethane foam with an internal vacuum barrier and dual-lip food-grade silicone compression seals. When twisted into place between two modules, it halts vertical heat transfer, allowing you to keep 32°F ice and cold beers in the bottom tier while maintaining 140°F+ steaming pizzas or smoked BBQ right above it.
           </div>
-        </div>
+        </details>
 
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>Can I easily add these accessories to my cooler reservation on the main page?</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </button>
-          <div class="faq-answer">
-            Yes. When you add accessories here, they are stored directly in your session. Clicking "Apply to Dream Cooler Build" links directly back to the 3D Configurator on the home page, where your selected items are pre-populated into your line-item reservation summary with your bundle discount automatically calculated.
+        <details class="kok-faq-details">
+          <summary>Can I easily add these accessories to my cooler reservation on the main page?</summary>
+          <div class="kok-faq-answer">
+            Yes. When you add accessories here, they are stored directly in your session. Clicking &quot;Apply to Dream Cooler Build&quot; links directly back to the 3D Configurator on the home page, where your selected items are pre-populated into your line-item reservation summary with your bundle discount automatically calculated.
           </div>
-        </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>How do the multi-module bundle discounts work on the Accessories page?</summary>
+          <div class="kok-faq-answer">
+            Bundle discounts calculate automatically in your Outfitting Drawer and carry straight into your Dream Cooler Reservation: pick any 2 accessories for 10% off, 3 accessories for 15% off + a free waterproof dry bag, or 4+ accessories for 20% off—across all 66 modules including Thanksgiving and Christmas Specials.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>How does the River Floating Tube Accessory (Module 35) prevent the cooler from falling through the bottom?</summary>
+          <div class="kok-faq-answer">
+            Module 35 features a reinforced drop-in center buoyancy well sized to the 24.0-inch cooler OD with molded side-handle twist-lock catch pockets. Lower an 18&quot; or 20&quot; tier into the tube and twist slightly so the cooler's heavy side loop handles lock into the pockets, suspending the cooler safely above the riverbed so it can never slip through.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>Do the Thanksgiving &amp; Christmas holiday accessories work with standard Patriot Red, White &amp; Blue cooler tiers?</summary>
+          <div class="kok-faq-answer">
+            Yes. All 10 Thanksgiving Specials (#47–#56) and 10 Red &amp; Green Christmas Specials (#57–#66) share the exact universal 24.0-inch circular diameter, 18° twist-lock collar, front drain port threads, and base dovetails, so they fit seamlessly onto any standard cooler tier year-round.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>Can I really 3D-print accessories myself, and what filament should I use?</summary>
+          <div class="kok-faq-answer">
+            Yes. Select modular accessories (such as the Module 31 3-Wheel Wagon Dolly 4-Part .3MF Pack, cup halos, spice turrets, and organizers) support home 3D printing. Use PETG, ASA, or ABS (4+ perimeters, 25–40% gyroid infill) for UV and outdoor heat resistance, plus food-safe sealants or silicone liners wherever direct food contact occurs.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>How does the 12V / 24V Hybrid Compressor Chill-Collar (Module 43) work with passive ice tiers?</summary>
+          <div class="kok-faq-answer">
+            Module 43 is a slim 4.5&quot; tall twist-lock active refrigeration ring that stacks between any two cooler tiers and runs on vehicle 12V/24V, solar, or LiFePO4 battery power (38W eco draw) to hold 34°F fridge or 0°F freezer temps without ice—and if unplugged overnight, the 3.5&quot; R-8 insulated walls continue holding cold passively for days.
+          </div>
+        </details>
+      </div>
+
+      <div style="text-align: center; margin-top: 28px;">
+        <a href="./faq.html" class="btn-cyan">View All 28 Frequently Asked Questions &rarr;</a>
       </div>
     </div>
   </section>
@@ -1790,6 +1900,7 @@
             <li><a href="./index.html#configurator">3D Configurator</a></li>
             <li><a href="./index.html#pizza-vault">Pizza Vault</a></li>
             <li><a href="./accessories.html">Accessories Catalog</a></li>
+            <li><a href="./faq.html">All 28 FAQs</a></li>
             <li><a href="./index.html#specs">Engineering Specs</a></li>
           </ul>
         </div>
@@ -3722,12 +3833,6 @@
       if (filterLink) {
         e.preventDefault();
         setCategory(filterLink.dataset.filter || 'all', { updateUrl: true, scrollToCatalog: true });
-      }
-
-      // FAQ accordion toggle
-      if (e.target.closest('.faq-question')) {
-        const faqItem = e.target.closest('.faq-item');
-        faqItem.classList.toggle('active');
       }
     });
 

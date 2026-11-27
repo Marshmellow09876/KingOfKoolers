@@ -88,6 +88,54 @@
                 "@type": "Answer",
                 "text": "Yes. Each unstacked rotomolded module supports over 500 lbs as a camp stool, and adding a 2-inch Vacuum Thermal Isolation Disc lets an upper 12-inch Pizza Vault hold hot 18-inch pizzas above freezing ice and drinks below."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "How long does King of Koolers actually hold ice, and how should I pre-chill it?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Up to 10+ days under controlled conditions via 3.5-inch 120 PSI R-8 closed-cell polyurethane foam, dual-lip silicone cryo gaskets, and the Circle Advantage. Pre-chill overnight with sacrificial ice, aim for a 2:1 ice-to-contents ratio, put block ice or Module 20 Cryo Pie-Wedge Freeze Packs on the bottom, and keep the drain closed so cold meltwater insulates remaining ice."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Will a 24-inch cylindrical cooler stack fit in my SUV trunk, crossover, or pickup truck bed?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Every tier shares a 24.0-inch outer diameter, so 12\", 18\", and 20\" tiers fit easily in compact SUV trunks, Jeeps, and under standard pickup tonneau covers (18\"–22\" clearance). Tall 3-tier or 4-tier stacks (up to 58\"–72\") twist-unlock in seconds into single cylinders for trunk transport, or ride stacked outside your tailgate on Module 42 (Hitch-Mount Swing-Away 2\" Receiver Dovetail Carrier)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How heavy is a loaded cooler tier, and can one person lift and stack it?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Empty rotomolded modules range from ~16 lbs (12\" crown/pizza tier) to ~28 lbs (20\" bunker tier). Because you pack and stack tiers individually instead of wrestling one 150-lb rectangular chest, a single person lifts each loaded tier comfortably (typically 35–65 lbs) and rolls the full stack up to 350 lbs using Module 31 (All-Terrain 3-Wheel Wagon Roller Dolly)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can King of Koolers really keep Thanksgiving turkeys, Christmas prime rib, or pizza piping hot without melting the cooler?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Thick UV-stabilized rotomolded polyethylene and 3.5-inch R-8 polyurethane foam double as a commercial Cambro-grade hot box. Pair any tier with high-temp silicone liners like Module 48 (Hot Turkey Resting Cradle), Module 63 (Prime Rib & Glazed Ham Vault), or Module 14 (Dual-Zone Vacuum Isolation Disc) to hold roasted meats, sides, or 18-inch pizzas at 145°F–185°F for 6+ hours—even directly above freezing ice below."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How much weight can each cooler tier hold when unstacked as a camp stool, and is it stable on uneven ground?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Each 24-inch circular module is statically load-rated above 500 lbs thanks to continuous 360° cylindrical hoop strength with no sagging flat lid spans. Its wide 24-inch footprint distributes load on sand, grass, and gravel without sinking like folding camp-chair legs, pairing cleanly with Module 10 (Swivel Camp Stool Cushion) or Module 62 (Heated Winter Camp Stool Pad)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the warranty, pricing timeline, and how does the VIP Founder Reservation work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Joining the VIP Kickstarter queue costs $0 today and generates a serialized VIP Reservation Key locking in Founder Edition early-bird pricing ($229–$549 tiers) and priority Q3 fulfillment. All rotomolded bodies are engineered for lifetime structural durability against cracks, UV yellowing, and seam failure, backed by field-replaceable gaskets, sliders, and stainless hardware."
+              }
             }
           ]
         }
@@ -3741,9 +3789,102 @@
       .modal-close-btn,
       .form-input,
       select,
-      input[type="range"] {
+      input[type="range"],
+      details.kok-faq-details > summary {
         min-block-size: 44px;
       }
+    }
+
+    /* Native <details> Inline FAQ Accordion */
+    .kok-inline-faq-list {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    details.kok-faq-details {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.22s ease, background-color 0.22s ease;
+    }
+
+    details.kok-faq-details[open] {
+      background: var(--bg-card-hover);
+      border-color: var(--border-cyan);
+    }
+
+    details.kok-faq-details > summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 22px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    details.kok-faq-details > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.kok-faq-details > summary:hover {
+      color: var(--accent-cyan);
+    }
+
+    details.kok-faq-details > summary::before {
+      content: "";
+      inline-size: 1em;
+      block-size: 1em;
+      flex-shrink: 0;
+      background-color: var(--accent-cyan);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+      rotate: -90deg;
+    }
+
+    details.kok-faq-details[open] > summary::before {
+      rotate: 0deg;
+    }
+
+    details.kok-faq-details::details-content {
+      interpolate-size: allow-keywords;
+      overflow: clip;
+      contain: layout;
+    }
+
+    details.kok-faq-details:not([open])::details-content {
+      block-size: 0;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      details.kok-faq-details > summary::before {
+        transition: rotate 0.2s ease;
+      }
+      details.kok-faq-details::details-content {
+        transition: block-size, content-visibility, display;
+        transition-duration: 0.28s;
+        transition-timing-function: ease-in-out;
+        transition-behavior: allow-discrete;
+      }
+    }
+
+    .kok-faq-answer {
+      padding: 0 22px 18px 48px;
+      font-size: 14.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .kok-faq-cta-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 28px;
     }
 
   </style>
@@ -3782,6 +3923,7 @@
         <li><a href="./locking-mechanism.html">Patented Lock</a></li>
         <li><a href="./accessories.html">Accessories</a></li>
         <li><a href="./customizer.html">3D Studio</a></li>
+        <li><a href="./faq.html">FAQ</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -5852,6 +5994,71 @@
   </section>
 
   <!-- ==========================================================================
+       HOME FAQ SECTION (6 COMMON QUESTIONS + LINK TO MASTER 28-FAQ HUB)
+       ========================================================================== -->
+  <section class="section" id="faq" aria-labelledby="home-faq-heading">
+    <div class="container">
+      <div class="section-header reveal" style="text-align: center; margin-bottom: 40px;">
+        <div class="eyebrow" style="justify-content: center;">
+          <span class="eyebrow-pill">COMMON QUESTIONS · CORE SYSTEM</span>
+        </div>
+        <h2 id="home-faq-heading" class="headline-large">Frequently Asked Questions</h2>
+        <p class="subheadline subheadline-center">
+          Quick answers on 10+ day ice retention, vehicle fit, loaded weights, hot holiday roasting, 500-lb camp seating, and $0 VIP reservations.
+        </p>
+      </div>
+
+      <div class="kok-inline-faq-list">
+        <details class="kok-faq-details">
+          <summary>How long does King of Koolers actually hold ice, and how should I pre-chill it?</summary>
+          <div class="kok-faq-answer">
+            Up to 10+ days under controlled conditions via 3.5-inch 120 PSI R-8 closed-cell polyurethane foam, dual-lip silicone cryo gaskets, and the Circle Advantage (12.8% less external surface area, zero 90° corner thermal bridges). Pre-chill overnight with sacrificial ice, aim for a 2:1 ice-to-contents ratio, put block ice or Module 20 Cryo Pie-Wedge Freeze Packs on the bottom, and keep the drain closed so cold meltwater insulates remaining ice.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>Will a 24-inch cylindrical cooler stack fit in my SUV trunk, crossover, or pickup truck bed?</summary>
+          <div class="kok-faq-answer">
+            Yes. Every tier shares a 24.0&quot; outer diameter, so 12&quot;, 18&quot;, and 20&quot; tiers fit easily in compact SUV trunks, Jeeps, and under standard pickup tonneau covers (18&quot;–22&quot; clearance). Tall 3-tier or 4-tier stacks (up to 58&quot;–72&quot;) twist-unlock in seconds into single cylinders for trunk transport, or ride stacked outside your tailgate on Module 42 (Hitch-Mount Swing-Away 2&quot; Receiver Dovetail Carrier).
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>How heavy is a loaded cooler tier, and can one person lift and stack it?</summary>
+          <div class="kok-faq-answer">
+            Empty rotomolded modules range from ~16 lbs (12&quot; crown/pizza tier) to ~28 lbs (20&quot; bunker tier). Because you pack and stack tiers individually instead of wrestling one 150-lb rectangular chest, a single person lifts each loaded tier comfortably (typically 35–65 lbs) and rolls the full stack up to 350 lbs using Module 31 (All-Terrain 3-Wheel Wagon Roller Dolly).
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>Can King of Koolers really keep Thanksgiving turkeys, Christmas prime rib, or pizza piping hot without melting the cooler?</summary>
+          <div class="kok-faq-answer">
+            Yes. Thick UV-stabilized rotomolded polyethylene and 3.5&quot; R-8 polyurethane foam double as a commercial Cambro-grade hot box. Pair any tier with high-temp food-grade silicone liners like Module 48 (Hot Turkey Resting Cradle), Module 63 (Prime Rib &amp; Glazed Ham Vault), or Module 14 (Dual-Zone Vacuum Isolation Disc) to hold roasted meats, sides, or 18-inch pizzas at 145°F–185°F for 6+ hours—even directly above freezing ice below.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>How much weight can each cooler tier hold when unstacked as a camp stool, and is it stable on uneven ground?</summary>
+          <div class="kok-faq-answer">
+            Each 24-inch circular module is statically load-rated above 500 lbs thanks to continuous 360° cylindrical hoop strength with no sagging flat lid spans. Its wide 24&quot; footprint distributes load on sand, grass, and gravel without sinking like folding camp-chair legs, pairing cleanly with Module 10 (Swivel Camp Stool Cushion) or Module 62 (Heated Winter Camp Stool Pad).
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>What is the warranty, pricing timeline, and how does the VIP Founder Reservation work?</summary>
+          <div class="kok-faq-answer">
+            Joining the VIP Kickstarter queue costs $0 today and generates a serialized VIP Reservation Key locking in Founder Edition early-bird pricing ($229–$549 tiers) and priority Q3 fulfillment. All rotomolded bodies are engineered for lifetime structural durability against cracks, UV yellowing, and seam failure, backed by field-replaceable gaskets, sliders, and stainless hardware.
+          </div>
+        </details>
+      </div>
+
+      <div class="kok-faq-cta-row">
+        <a href="./faq.html" class="btn btn-cyan">Explore All 28 FAQs &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
        MODERN WEB GUIDANCE: NATIVE RESERVATION MODAL DIALOG
        ========================================================================== -->
   <dialog id="reserve-dialog" closedby="any" aria-labelledby="dialog-title">
@@ -5968,6 +6175,7 @@
     <a href="#pizza-vault" class="kok-spy-link" data-spy-target="pizza-vault"><span class="kok-spy-label">Pizza Vault</span><span class="kok-spy-dot"></span></a>
     <a href="#kickstarter-tiers" class="kok-spy-link" data-spy-target="kickstarter-tiers"><span class="kok-spy-label">Tiers</span><span class="kok-spy-dot"></span></a>
     <a href="#investors" class="kok-spy-link" data-spy-target="investors"><span class="kok-spy-label">Investors</span><span class="kok-spy-dot"></span></a>
+    <a href="#faq" class="kok-spy-link" data-spy-target="faq"><span class="kok-spy-label">FAQ</span><span class="kok-spy-dot"></span></a>
   </nav>
 
   <!-- ==========================================================================
@@ -5984,6 +6192,7 @@
             <li><a href="#modular-stack">4-Tier Architecture</a></li>
             <li><a href="#specs">Engineering Specs</a></li>
             <li><a href="#prototype">Workshop Prototype</a></li>
+            <li><a href="./faq.html">All 28 FAQs</a></li>
           </ul>
         </div>
 

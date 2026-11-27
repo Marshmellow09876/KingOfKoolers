@@ -889,9 +889,96 @@
       .sub-nav-links a,
       .sim-btn,
       .lightbox-close,
-      .nav-cta {
+      .nav-cta,
+      details.kok-faq-details > summary {
         min-block-size: 44px;
       }
+    }
+
+    /* Native <details> FAQ Section */
+    .lock-faq-list {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    details.kok-faq-details {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.22s ease, background-color 0.22s ease;
+    }
+
+    details.kok-faq-details[open] {
+      background: var(--bg-elevated);
+      border-color: var(--border-cyan);
+    }
+
+    details.kok-faq-details > summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 22px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    details.kok-faq-details > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.kok-faq-details > summary:hover {
+      color: var(--accent-cyan);
+    }
+
+    details.kok-faq-details > summary::before {
+      content: "";
+      inline-size: 1em;
+      block-size: 1em;
+      flex-shrink: 0;
+      background-color: var(--accent-cyan);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+      rotate: -90deg;
+    }
+
+    details.kok-faq-details[open] > summary::before {
+      rotate: 0deg;
+    }
+
+    details.kok-faq-details::details-content {
+      interpolate-size: allow-keywords;
+      overflow: clip;
+      contain: layout;
+    }
+
+    details.kok-faq-details:not([open])::details-content {
+      block-size: 0;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      details.kok-faq-details > summary::before {
+        transition: rotate 0.2s ease;
+      }
+      details.kok-faq-details::details-content {
+        transition: block-size, content-visibility, display;
+        transition-duration: 0.28s;
+        transition-timing-function: ease-in-out;
+        transition-behavior: allow-discrete;
+      }
+    }
+
+    .kok-faq-answer {
+      padding: 0 22px 18px 48px;
+      font-size: 14.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
     }
   </style>
   <link rel="stylesheet" href="./assets/css/apple-polish.css">
@@ -910,6 +997,7 @@
         <li><a href="./locking-mechanism.html" class="active" aria-current="page">Patented Lock</a></li>
         <li><a href="./accessories.html">Accessories</a></li>
         <li><a href="./customizer.html">3D Studio</a></li>
+        <li><a href="./faq.html">FAQ</a></li>
       </ul>
       <div class="nav-actions" style="display: flex; align-items: center; gap: 10px;">
         <a href="./index.html#configurator" class="nav-cta">Build Your Stack</a>
@@ -1272,6 +1360,62 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mechanical & Locking FAQs (Batch B: 5 New FAQs + Hub Link) -->
+  <section class="section" id="lock-faq" aria-labelledby="lock-faq-heading" style="border-top: 1px solid var(--border-subtle); background: rgba(10, 14, 23, 0.7);">
+    <div class="container">
+      <div style="text-align: center; margin-bottom: 40px;">
+        <div class="eyebrow-badge" style="margin-bottom: 12px;">
+          <span>MECHANICAL FAQ</span> · <span>TWIST-LOCK &amp; DEADBOLT ANSWERS</span>
+        </div>
+        <h2 id="lock-faq-heading" style="font-size: clamp(26px, 3.6vw, 38px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px;">Lock Mechanism Frequently Asked Questions</h2>
+        <p style="color: var(--text-secondary); font-size: 15px; max-width: 680px; margin: 0 auto;">
+          Answers on thread tolerance, selective unstacking, rollover sealing, bear-country padlocks, and field-replaceable hardware.
+        </p>
+      </div>
+
+      <div class="lock-faq-list">
+        <details class="kok-faq-details">
+          <summary>Does the 18° 20-helix twist-lock ever cross-thread, jam with sand, or freeze shut in winter?</summary>
+          <div class="kok-faq-answer">
+            Unlike fine single-start screw threads, King of Koolers uses wide steep-profile 20-start helical lugs (8.0 mm axial draw over 3.64&quot; of rim travel) with generous debris-clearing channels. Drop the lid at any angle (max 9° blind indexing), rotate 1/20th of a circle, and it draws down squarely—shedding beach grit and breaking light frost effortlessly.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>What happens if I twist off a stacked upper cooler—will it accidentally unscrew the lid beneath it?</summary>
+          <div class="kok-faq-answer">
+            No. That is the exact job of the External Vertical Anti-Rotation Deadbolt Slider: pushing the lower lid's slider 12 mm down engages a hardened locking tongue into one of 20 vertical collar keyways (420+ ft-lbs rotational shear rating), anchoring the lower lid firmly to its base so upper tiers twist 18° counter-clockwise and lift right off.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>Is the 20-helix lid seal leakproof if the cooler tips over in a truck bed or flips on a river?</summary>
+          <div class="kok-faq-answer">
+            Yes. The 4.94° helical ramp creates an 11.5 : 1 mechanical force advantage that compresses a thick food-grade EPDM cryo-gasket uniformly around all 360° with zero corner-pinch leaks. Once twisted closed and deadbolt-locked, it stays watertight through truck rollovers, boat chop, and rapids (including inside Module 35 River Floating Tube).
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>Can I padlock the cooler for bear country (IGBC) or prevent theft in an open pickup bed?</summary>
+          <div class="kok-faq-answer">
+            Yes. Adding Module 45 (Bear-Proof Stainless Deadbolt Armor &amp; Anti-Theft Cable Lock Kit) clamps CNC-formed 4.0 mm 316 marine stainless double-shear padlock plates across the 18° lid-to-body deadbolt seam and anchors the stack via a 6-ft × 10 mm vinyl-sleeved braided steel cable to truck bed tie-downs or campsite trees.
+          </div>
+        </details>
+
+        <details class="kok-faq-details">
+          <summary>Are the vertical deadbolt slider, silicone gaskets, and drain spigots user-replaceable?</summary>
+          <div class="kok-faq-answer">
+            Yes. Every wear component—the EPDM lid compression gasket, vertical anti-rotation deadbolt slider cartridge, stainless front drain spigot, and center dish seal—is designed as a simple field-replaceable spare part so your cooler lasts decades.
+          </div>
+        </details>
+      </div>
+
+      <div style="text-align: center; margin-top: 28px;">
+        <a href="./faq.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; background: var(--accent-cyan); color: #000; font-weight: 700; font-size: 13.5px; border-radius: 9999px;">Browse All 28 FAQs &rarr;</a>
       </div>
     </div>
   </section>
