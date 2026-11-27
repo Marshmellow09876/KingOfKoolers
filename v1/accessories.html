@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>King of Koolers | Official Modular Accessories & Outfitting Ecosystem</title>
-  <meta name="description" content="Explore all 56 official modular accessories for the King of Koolers 24-inch rotomolded stacking cooler—including all 10 Thanksgiving Feast Specials (26-lb Turkey Brine Vault, 165°F Resting Cradle, 24-inch Walnut Carving Deck, 3-Tier Pie Carousel, Mulled Cider Brass Tap, Gravy Buffet Ring, 12V Heater Disc, Wine Chill Crown, Leftovers Vacuum Vaults), 3-wheel wagon dollies, and river floating inner tube.">
+  <meta name="description" content="Explore all 66 official modular accessories for the King of Koolers 24-inch rotomolded stacking cooler—including 10 Red &amp; Green Christmas Specials (Hot Cocoa Bar Turret, LED Pine Wreath Halo, 3-Ski Snow Sled Kit, Cookie Tin Vault, Eggnog Dual Keg, Prime Rib Vault, Gift-Safe Tier) and 10 Thanksgiving Feast Specials, plus 3-wheel wagon dollies and river floating inner tube.">
   <meta name="theme-color" content="#000000">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="King of Koolers">
   <meta property="og:title" content="King of Koolers | Modular Accessories &amp; 24&quot; Outfitting Store">
-  <meta property="og:description" content="Explore all 56 precision-engineered &amp; 3D-printable modules for the 24-inch King of Koolers platform—from all 10 Thanksgiving Feast Specials to the River Floating Tube and 3-wheel wagon dollies.">
+  <meta property="og:description" content="Explore all 66 precision-engineered &amp; 3D-printable modules for the 24-inch King of Koolers platform—from Red &amp; Green Christmas Specials and Thanksgiving Feast modules to the River Floating Tube and 3-wheel wagon dollies.">
   <meta property="og:image" content="./assets/images/accessory_01_bluetooth_lid.jpg">
   <meta property="og:image:alt" content="King of Koolers 24-Inch Modular Outfitting and Accessories Ecosystem">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="King of Koolers | Modular Accessories &amp; 24&quot; Outfitting Store">
-  <meta name="twitter:description" content="Explore 56 precision-engineered &amp; 3D-printable modules for the 24-inch King of Koolers platform—from 10 Thanksgiving Specials to River Floating Tubes and 12V Chill-Collars.">
+  <meta name="twitter:description" content="Explore 66 precision-engineered &amp; 3D-printable modules for the 24-inch King of Koolers platform—from 10 Christmas Specials &amp; 10 Thanksgiving Specials to River Floating Tubes and 12V Chill-Collars.">
   <meta name="twitter:image" content="./assets/images/accessory_01_bluetooth_lid.jpg">
   <meta name="twitter:image:alt" content="King of Koolers 24-Inch Modular Outfitting and Accessories Ecosystem">
   <link rel="manifest" href="./manifest.json">
@@ -28,8 +28,8 @@
       "@graph": [
         {
           "@type": "ItemList",
-          "name": "King of Koolers 56 Modular Outfitting Accessories",
-          "numberOfItems": 56,
+          "name": "King of Koolers 66 Modular Outfitting Accessories",
+          "numberOfItems": 66,
           "itemListElement": [
             {
               "@type": "ListItem",
@@ -523,6 +523,64 @@
     .thanksgiving-banner-desc {
       font-size: 14px;
       color: #fef3c7;
+      line-height: 1.5;
+    }
+
+    .filter-btn-christmas {
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.13), rgba(21, 128, 61, 0.14));
+      border-color: rgba(248, 113, 113, 0.45);
+      color: #fecaca;
+    }
+
+    .filter-btn-christmas:hover {
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.22), rgba(21, 128, 61, 0.22));
+      border-color: rgba(74, 222, 128, 0.72);
+      color: #ffffff;
+    }
+
+    .filter-btn-christmas.active {
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.30), rgba(21, 128, 61, 0.30));
+      border-color: #4ade80;
+      color: #f0fdf4;
+      box-shadow: 0 0 18px rgba(22, 163, 74, 0.28), 0 0 12px rgba(220, 38, 38, 0.22);
+    }
+
+    .christmas-section-banner[hidden] {
+      display: none !important;
+    }
+
+    .christmas-section-banner {
+      margin-bottom: 24px;
+      padding: 18px 22px;
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 12% 20%, rgba(220, 38, 38, 0.16), transparent 52%),
+                  radial-gradient(circle at 88% 80%, rgba(22, 163, 74, 0.18), transparent 52%),
+                  linear-gradient(135deg, rgba(185, 28, 28, 0.14), rgba(21, 128, 61, 0.12) 55%, rgba(14, 20, 32, 0.92));
+      border: 1px solid rgba(74, 222, 128, 0.38);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .christmas-banner-copy {
+      max-width: 780px;
+    }
+
+    .christmas-banner-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #86efac;
+      margin-bottom: 6px;
+    }
+
+    .christmas-banner-desc {
+      font-size: 14px;
+      color: #f0fdf4;
       line-height: 1.5;
     }
 
@@ -1430,19 +1488,19 @@
   <header class="accessories-hero">
     <div class="container">
       <div class="hero-eyebrow">
-        <span>THE MODULAR ECOSYSTEM</span> · <span>24-INCH ROTOMOLDED ARCHITECTURE</span> · <span>56 SPECIALTY MODULES</span>
+        <span>THE MODULAR ECOSYSTEM</span> · <span>24-INCH ROTOMOLDED ARCHITECTURE</span> · <span>66 SPECIALTY MODULES</span>
       </div>
       <h1 class="hero-headline">
         Engineered to Stack.<br>
         Equipped for Anything.
       </h1>
       <p class="hero-subheadline">
-        Transform your 24-inch King of Koolers into a complete Thanksgiving feast system (26-lb turkey brine barrel, 165°F resting vault, 24" walnut carving deck, 3-tier pie tower, mulled cider brass tap, buffet rim, active heater disc, wine chill crown &amp; leftover vaults), plus river floating tubes and 3-wheel wagon dollies.
+        Transform your 24-inch King of Koolers into a complete Christmas or Thanksgiving holiday outpost—from the Red &amp; Green Hot Cocoa Bar, LED Pine Wreath Halo, 3-Ski Snow Sled Kit &amp; Prime Rib Vault to the 26-lb Turkey Brine Barrel, Walnut Carving Deck, River Tube, and 3-Wheel Wagon Dolly.
       </p>
 
       <div class="hero-stats-bar">
         <div class="stat-item">
-          <span class="stat-val">56</span>
+          <span class="stat-val">66</span>
           <span class="stat-label">Specialty Modules</span>
         </div>
         <div class="stat-item">
@@ -1471,8 +1529,9 @@
   <section class="controls-section" id="catalog-controls">
     <div class="container controls-wrapper">
       <div class="category-pills" id="category-filter-pills">
-        <button type="button" class="filter-btn active" data-category="all" aria-pressed="true">All Outfitting (56)</button>
+        <button type="button" class="filter-btn active" data-category="all" aria-pressed="true">All Outfitting (66)</button>
         <button type="button" class="filter-btn filter-btn-thanksgiving" data-category="thanksgiving" aria-pressed="false">Thanksgiving Specials (10)</button>
+        <button type="button" class="filter-btn filter-btn-christmas" data-category="christmas" aria-pressed="false">Christmas Specials (10)</button>
         <button type="button" class="filter-btn" data-category="mobility" aria-pressed="false">Rigging &amp; Mobility (6)</button>
         <button type="button" class="filter-btn" data-category="picnic" aria-pressed="false">Picnic &amp; 3D-Print (18)</button>
         <button type="button" class="filter-btn" data-category="culinary" aria-pressed="false">Culinary &amp; Draft (9)</button>
@@ -1555,7 +1614,15 @@
           <div class="thanksgiving-banner-eyebrow">Thanksgiving Specials · Complete 10-Module Holiday Lineup</div>
           <p class="thanksgiving-banner-desc">Brine a 26-lb turkey without stealing fridge space, rest smoked birds at 165°F+ for 6 hours, carve flush on walnut, stack 3 intact pies, hold sides at 165°F on road trips, serve gravy &amp; mulled cider outdoors, chill 7 wine bottles, and pack pie-wedge leftovers. Bundle 4+ modules for 20% off.</p>
         </div>
-        <button type="button" class="filter-btn" id="btn-reset-all-from-thanksgiving">View All 56 Modules</button>
+        <button type="button" class="filter-btn" id="btn-reset-all-from-thanksgiving">View All 66 Modules</button>
+      </div>
+
+      <div class="christmas-section-banner" id="christmas-section-banner" hidden>
+        <div class="christmas-banner-copy">
+          <div class="christmas-banner-eyebrow">Christmas Specials · Red &amp; Pine-Green Holiday Edition</div>
+          <p class="christmas-banner-desc">Turn your 24-inch stack into a snowy hot cocoa bar, illuminated LED pine wreath tower, 3-ski winter snow sled, 3-tier Christmas cookie tin vault, dual eggnog &amp; punch keg, heated camp stool, prime rib rest vault, plaid wrap, gift-safe locker, and fireside s'mores deck. Bundle 4+ modules for 20% off.</p>
+        </div>
+        <button type="button" class="filter-btn" id="btn-reset-all-from-christmas">View All 66 Modules</button>
       </div>
 
       <div class="grid-header">
@@ -1564,7 +1631,7 @@
           <p id="catalog-grid-subtitle">Precision-molded &amp; 3D-printable accessories designed exclusively for the 24-inch cylindrical platform</p>
         </div>
         <div aria-live="polite" aria-atomic="true" style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-cyan); white-space: nowrap; flex-shrink: 0;">
-          Showing <span id="displayed-count">56</span> Modules
+          Showing <span id="displayed-count">66</span> Modules
         </div>
       </div>
 
@@ -1730,6 +1797,7 @@
         <div class="footer-col">
           <h5>Outfitting</h5>
           <ul>
+            <li><a href="#catalog-controls" data-filter="christmas">Christmas Specials (10)</a></li>
             <li><a href="#catalog-controls" data-filter="thanksgiving">Thanksgiving Specials (10)</a></li>
             <li><a href="#product-grid" data-filter="lid">Lid Ecosystem</a></li>
             <li><a href="#product-grid" data-filter="power">Power &amp; Lighting</a></li>
@@ -1761,7 +1829,7 @@
        CATALOG DATA & CLIENT SCRIPT
        ========================================================================== -->
   <script>
-    // Complete 56 Accessories Dataset
+    // Complete 66 Accessories Dataset
     const ACCESSORIES_DATA = [
       {
         id: "kok-acc-31",
@@ -3056,6 +3124,236 @@
           "Appliance Rating": "Freezer (-20°F), Microwave & Oven Safe to 400°F (Base Only)",
           "Weight": "7.6 lbs (Full 8-Piece Set)"
         }
+      },
+      {
+        id: "kok-acc-57",
+        num: "57",
+        name: "North Pole Hot Cocoa & Peppermint Whip Bar Turret",
+        category: "christmas",
+        compat: "18° Rim Twist-Lock · Red & Pine-Green Enamel + 304 SS",
+        price: 89.00,
+        image: "./assets/images/accessory_57_hot_cocoa_bar_turret.jpg",
+        hook: "Crimson Red & Forest Pine Green 18° twist-lock hot cocoa turret featuring a 4-compartment stainless toppings carousel for marshmallows, crushed candy canes, chocolate curls, and cinnamon sticks, magnetic mug hooks, and a drip-free red beverage spigot rated to 200°F.",
+        features: [
+          "Four deep removable brushed-stainless topping sectors keep mini marshmallows, crushed peppermint, dark chocolate curls & cinnamon sticks organized cleanly",
+          "Powder-coated Crimson Red & Pine-Green collar ring mounts six stainless magnetic camp-mug hooks around the perimeter",
+          "Direct thread-in Crimson Red quarter-turn brass-core tap replaces the lower drain plug to pour steaming cocoa from an 18\" tier for 10+ hours",
+          "Clear gasketed dome cover snaps shut between pours to protect sweet toppings from snowflakes and pine needles outdoors"
+        ],
+        specs: {
+          "Toppings Turret": "24.0\" OD Red/Pine-Green Twist-Lock Collar + 4-Sector 304 SS Carousel",
+          "Beverage Spigot": "200°F Viton-Sealed Crimson Red Quarter-Turn Drain Port Tap",
+          "Mug Perimeter": "6× Stainless Perimeter Mug Hooks (Fits Standard Enamel Camp Mugs)",
+          "Heat Hold": "10+ Hours Hot Cocoa Serving Temp Inside R-8 Insulated Barrel",
+          "Weight": "5.4 lbs"
+        }
+      },
+      {
+        id: "kok-acc-58",
+        num: "58",
+        name: "Illuminated Pine-Garland & Warm-White LED 360° Lid Wreath Ring",
+        category: "christmas",
+        compat: "24\" Collar Snap-Fit · IP67 Waterproof + USB-C Rechargeable",
+        price: 69.00,
+        image: "./assets/images/accessory_58_led_wreath_halo.jpg",
+        hook: "Weatherproof sculpted matte Forest Pine Green silicone wreath halo embossed with pinecones and glossy Crimson Red holly-berry lenses that snap coaxially onto any 24-inch lid rim and glow with warm-white, emerald, and ruby micro-LEDs.",
+        features: [
+          "Tactile molded Pine-Green elastomer wreath wraps 360° around the upper helix collar with zero scratch marks or tangled wires",
+          "High-efficiency IP67 addressable micro-LEDs illuminate behind ruby-red holly berries and emerald needles with steady, twinkle & cabin-amber modes",
+          "Low-profile sealed USB-C recharge port powered internally for 48+ hours per winter weekend charge",
+          "Maintains full lid clearance so you can twist-open your top cooler tier effortlessly without detaching the holiday lighting ring"
+        ],
+        specs: {
+          "Collar Geometry": "24.0\" Flexible Molded Pine-Green Silicone Snap-On Halo Ring",
+          "LED Optics": "72× Architectural Warm-White, Ruby & Emerald Diffused LEDs",
+          "Power & Runtime": "3,600 mAh Sealed Cold-Weather Lithium Cell · 48-Hr Runtime",
+          "Ingress Rating": "IP67 Snow, Ice & Freezing-Rain Submersible Seal",
+          "Weight": "2.4 lbs"
+        }
+      },
+      {
+        id: "kok-acc-59",
+        num: "59",
+        name: "Polar Snow-Sled Runner Ski Conversion Kit (3-Ski Tri-Blade Base)",
+        category: "christmas",
+        compat: "Base Dovetail Chassis · 3× Crimson UHMW-PE Carving Skis",
+        price: 139.00,
+        image: "./assets/images/accessory_59_snow_sled_ski_kit.jpg",
+        hook: "Swap your 3-wheel dovetail chassis onto three wide Crimson Red UHMW-PE carving snow skis mounted on Forest Pine Green powder-coated steel pivot brackets—turning up to 250 lbs of stacked coolers into an effortless powder-snow trail sled.",
+        features: [
+          "Tri-blade articulated snow geometry pairs one front steerable pivot ski with two wide tracking rear runners that float over deep powder",
+          "Quarter-inch virgin Crimson Red UHMW-PE ski bases shrug off hidden rocks, driveway ice, and wooden deck transitions",
+          "Heavy Pine-Green powder-coated steel clevis brackets slide and lock straight into standard King of Koolers dovetail base slots",
+          "Includes a high-visibility red-and-white 8-ft braided marine tow rope with padded ergonomic winter glove handle"
+        ],
+        specs: {
+          "Ski Blade Material": "6.3 mm Virgin Crimson Red UHMW-PE Wide Rockered Carving Skis",
+          "Mount Hardware": "10-Gauge Forest Pine-Green Powder-Coated Articulated Pivot Brackets",
+          "Tow Harness": "8-ft Red/White Braided Polysteel Tow Line w/ Wide Glove Grip",
+          "Snow Load Rating": "250 lbs Stacked Cooler Trail Haul Across Powder & Packed Crust",
+          "Weight": "13.2 lbs"
+        }
+      },
+      {
+        id: "kok-acc-60",
+        num: "60",
+        name: "3-Tier Gingerbread & Christmas Cookie Tin Stacking Vault",
+        category: "christmas",
+        compat: "Fits 18\", 20\" & 28\" Tiers · 3× Airtight Latched Tins",
+        price: 64.00,
+        image: "./assets/images/accessory_60_christmas_cookie_vault.jpg",
+        hook: "Three airtight 17-inch circular Crimson Red & Forest Pine Green bakery tins with brushed-gold compression latches, silicone lid gaskets, and scalloped drop-in cookie dividers sized to stack three deep inside any cooler barrel without crushing icing.",
+        features: [
+          "Precision 17.0-inch circular steel tins stack vertically inside 20\" & 28\" King of Koolers tiers so frosted sugar cookies stay factory-fresh in transit",
+          "Brushed-gold toggle latches compress internal food-grade white silicone O-ring seals to keep humidity and cooler condensation completely out",
+          "Alternating powder-coated Crimson Red & Pine-Green finishes match holiday kitchen displays right out of the barrel",
+          "Includes removable scalloped parchment-toned silicone quadrant dividers for gingerbread men, stars, and peppermint bark"
+        ],
+        specs: {
+          "Tin Quantity & Size": "3× 17.0\" OD × 4.2\" Deep Powder-Coated Food-Safe Carbon Steel Tins",
+          "Seal Mechanism": "Brushed-Gold Over-Center Latches + White Silicone Perimeter Gaskets",
+          "Interior Dividers": "Modular 4-Quadrant Scalloped Food-Grade Cookie Separators",
+          "Capacity": "Up to 96 Decorated Christmas Cookies Across All 3 Stacked Tins",
+          "Weight": "6.1 lbs"
+        }
+      },
+      {
+        id: "kok-acc-61",
+        num: "61",
+        name: "Holiday Eggnog, Wassail & Candy-Cane Punch Dual-Spigot Keg Core",
+        category: "christmas",
+        compat: "Fits 20\" & 28\" Tiers · Split Twin Stainless Tanks + Grater",
+        price: 94.00,
+        image: "./assets/images/accessory_61_eggnog_dual_keg_core.jpg",
+        hook: "Split vertical brushed-stainless twin beverage tank system dropping inside a 20\" or 28\" barrel to serve silky ice-cold spiced eggnog and ruby cranberry holiday punch side-by-side through dual Crimson Red and Emerald Green pull-lever taps.",
+        features: [
+          "Divided 304 stainless inner liner isolates 3.5 gallons of creamy nutmeg eggnog cleanly from 3.5 gallons of crimson cranberry citrus punch",
+          "Twin anodized Crimson Red & Emerald Green solid-billet pull-lever faucets mount cleanly through a front twin-tap bulk manifold",
+          "Clip-on collar-hung brushed stainless nutmeg micro-grater holster lets guests grate fresh whole nutmeg over every mug",
+          "Surrounding ice-jacket space keeps both beverages strictly chilled below 36°F indoors or on sunny holiday decks all day"
+        ],
+        specs: {
+          "Dual Core Volume": "2× 3.5 Gallon Isolated Brushed 304 Stainless Beverage Bays (7 Gal Total)",
+          "Faucet Hardware": "Dual Crimson Red & Emerald Green Billet Anodized Lever Taps",
+          "Bar Garnish Tool": "Removable Clip-On Stainless Whole-Nutmeg Micro-Grater & Holster",
+          "Cleaning": "Full Lift-Out Welded Seamless Stainless Split Tub · Dishwasher Safe",
+          "Weight": "8.8 lbs"
+        }
+      },
+      {
+        id: "kok-acc-62",
+        num: "62",
+        name: "Festive Red & Pine-Green Quilted Heated Camp Stool Seat Cushion",
+        category: "christmas",
+        compat: "24\" Universal Lid Rim · 3-Level USB-C Carbon Heat Element",
+        price: 59.00,
+        image: "./assets/images/accessory_62_christmas_heated_stool_pad.jpg",
+        hook: "Turn any unstacked King of Koolers barrel into a toasty 122°F fireside camp throne with a tailored 24\" diamond-quilted Forest Pine Green waxed-canvas seat pad trimmed in Crimson Red tartan piping and powered via USB-C PD.",
+        features: [
+          "Plush 2.5-inch multi-density closed-cell foam cushion upholstered in water-repellent Forest Pine-Green waxed canvas with red tartan welt",
+          "Embedded far-infrared carbon-fiber heating pad cycles seamlessly through Low (104°F), Medium (113°F) & High (122°F) via illuminated side button",
+          "Four quick-release buckle straps anchor securely under any cooler collar handles so cushions never slip during lively holiday gatherings",
+          "Tucked braided 18W USB-C power lead connects neatly to a clipped battery pouch or King of Koolers Module 07 Power Bank"
+        ],
+        specs: {
+          "Upholstery & Core": "12-oz Pine-Green Waxed Canvas + Crimson Tartan Welt + High-Resilience Foam",
+          "Heating Output": "3-Stage Carbon Infrared Pad (104°F / 113°F / 122°F · Auto 3-Hr Timer)",
+          "Power Input": "Standard 5V/9V USB-C PD Braided Lead w/ Side Molle Battery Pouch",
+          "Load Rating": "Tested to Full 500-lb King of Koolers Lid Compression Rating",
+          "Weight": "3.2 lbs"
+        }
+      },
+      {
+        id: "kok-acc-63",
+        num: "63",
+        name: "Christmas Eve Prime Rib & Glazed Ham Thermal Carving & Jus Vault",
+        category: "christmas",
+        compat: "Fits 18\" & 20\" Tiers · Pine-Green Silicone Seal + Probe Port",
+        price: 109.00,
+        image: "./assets/images/accessory_63_prime_rib_roast_vault.jpg",
+        hook: "Hold a standing 7-bone Christmas Eve prime rib roast or brown-sugar glazed spiral ham steaming hot above 145°F for 6+ hours inside a deep brushed-stainless cradle trimmed with a Forest Pine Green heat baffle and sealed digital probe pass-through.",
+        features: [
+          "Oversized 17.5-inch stainless basin + elevated V-grate cradles bone-in standing rib roasts and spiral hams cleanly above savory au jus",
+          "Forest Pine-Green 230°F high-temp food-grade silicone rim baffle forms a second dead-air seal inside Crimson Red or Alpine White drums",
+          "Micro-slotted silicone thermometer cable pass-through lets you monitor internal center roast temp without ever cracking the lid",
+          "Twin green silicone-sleeved folding lift handles elevate 20-lb holiday roasts effortlessly straight onto your carving board"
+        ],
+        specs: {
+          "Thermal Seal Ring": "230°F Platinum Pine-Green Silicone Steam Baffle w/ Probe Notch",
+          "Roast Cradle": "17.5\" × 4.0\" Deep 304 Stainless Pan + Heavy-Gauge Wire Rest Grate",
+          "Included Telemetry": "Armored Braided Leave-In Stainless Probe Lead (Matches Standard Ports)",
+          "Hold Performance": "6+ Hours Safe Internal Hold (135°F Medium-Rare to 165°F) Off Oven",
+          "Weight": "6.5 lbs"
+        }
+      },
+      {
+        id: "kok-acc-64",
+        num: "64",
+        name: "Candy-Cane & Pine-Plaid Full-Stack Holiday Armor Wrap",
+        category: "christmas",
+        compat: "24\" OD 3-Tier Cut Kit · Matte 3M Winter Vinyl + Gold Trim",
+        price: 54.00,
+        image: "./assets/images/accessory_64_christmas_plaid_wrap.jpg",
+        hook: "Transform a full 3-tier 24-inch cooler stack into a show-stopping holiday centerpiece with custom architectural matte Forest Pine Green, Crimson Red snowflake-relief, and heritage red-and-green tartan plaid 3M vinyl wraps finished with gold seam stripes.",
+        features: [
+          "Three pre-curved wrap bands custom contoured for 12\", 18\", and 20\" cylindrical cooler bodies with zero seam buckling",
+          "Bottom classic Forest Pine-Green & Crimson tartan band, geometric gold-snowflake Crimson Red middle band, and sleek deep Pine-Green top crown band",
+          "Cold-weather outdoor-rated matte cast vinyl shrugs off snow, sleigh-ride condensation, wine spills, and freezing temperatures",
+          "Air-release peel-and-stick backing installs cleanly in 2 minutes and peels off cleanly without sticky residue come January"
+        ],
+        specs: {
+          "Kit Contents": "1× Tartan Base Wrap, 1× Snowflake Crimson Wrap, 1× Pine Top Wrap + Gold Trim",
+          "Vinyl Engineering": "Outdoor 3M Cast Matte Laminate w/ Low-Tack Air-Egress Adhesive",
+          "Thermal Rating": "-20°F to +160°F Freeze/Snow Crack-Resistant Film",
+          "Reusability": "Clean Peel Removal + Waxed Backing Liner Included for Storage",
+          "Weight": "1.2 lbs"
+        }
+      },
+      {
+        id: "kok-acc-65",
+        num: "65",
+        name: "Santa's Workshop Gift-Safe Lockable Secret Present Vault Tier (8\" Tall)",
+        category: "christmas",
+        compat: "8\" Tall Twist-Lock Dry Tier · Pine/Crimson + Combo Lock",
+        price: 124.00,
+        image: "./assets/images/accessory_65_santa_gift_safe_tier.jpg",
+        hook: "Conceal jewelry, electronics, watches, and wrapped surprises in plain sight inside an 8\"-tall Forest Pine Green & Crimson Red rotomolded vault tier outfitted with a recessed 4-digit mechanical combination latch and plush crimson felt tray.",
+        features: [
+          "Coaxial 18° helical bayonet floor twists onto any existing King of Koolers stack while looking like an ordinary insulated holiday tier",
+          "Flush brushed-stainless 4-digit mechanical resettable combination lock keeps curious kids out until Christmas morning",
+          "Removable multi-sector plush crimson velvet-flocked EVA organizer protects heirloom watches, boxed ornaments, and gift cards",
+          "Dual-lip waterproof lid gasket shields fragile wrapped presents from spilled drinks, wet porch snow, and curious pets"
+        ],
+        specs: {
+          "Dimensions": "24.0\" OD × 8.0\" Tall Pine-Green Vault Drum w/ Crimson Red Hinged Lid",
+          "Lock Hardware": "Recessed Flush 304 Stainless 4-Digit Resettable Combo Latch",
+          "Interior Lining": "Plush Crimson Velvet-Flocked 7-Bay Modular Gift Divider Tray",
+          "Weather Seal": "IP67 Dual-Lip Elastomer Lid Gasket (Dry & Odor-Sealed Storage)",
+          "Weight": "10.8 lbs"
+        }
+      },
+      {
+        id: "kok-acc-66",
+        num: "66",
+        name: "Fireside Mulled Wine, S'mores & Chestnut Roasting Prep Deck",
+        category: "christmas",
+        compat: "24\" Lid Recess Deck · 6 Holiday Ramekins + 4 Skewers + Trivet",
+        price: 79.00,
+        image: "./assets/images/accessory_66_fireside_winter_prep_deck.jpg",
+        hook: "Convert your cooler top beside a snowy cabin firepit into a festive entertaining hub featuring a Forest Pine Green & Crimson Red porcelain-enameled steel lid deck, six recessed holiday ceramic ramekins, a center trivet, and four red-and-green skewers.",
+        features: [
+          "Split Forest Pine-Green & Crimson Red vitreous porcelain-enameled steel deck snaps coaxially inside any 24-inch cooler lid rim",
+          "Six patterned holiday stoneware ramekins hold chocolate bars, graham crackers, peppermint bark, marshmallows, nuts & roasted chestnuts securely",
+          "Center non-slip ribbed heatproof silicone trivet pad supports a steaming cast-iron mulled wine pot or cocoa kettle up to 425°F",
+          "Rolled stainless perimeter rail holsters four telescoping food-grade marshmallow forks finished with alternating red & pine-green handles"
+        ],
+        specs: {
+          "Deck Plate": "22.6\" Circular Porcelain-Enameled Steel + Brushed SS Perimeter Rail",
+          "Serving Bowls": "6× Patterned Holiday Ceramic Ramekins w/ Non-Rattle Silicone Wells",
+          "Included Hardware": "Center 425°F Cast-Iron Kettle Trivet + 4× Red/Green Telescoping Skewers",
+          "Outdoor Cleanup": "Dishwasher-Safe Ramekins + Wipe-Clean Glass-Smooth Enamel Surface",
+          "Weight": "6.9 lbs"
+        }
       }
     ];
 
@@ -3284,7 +3582,7 @@
       specTriggerEl = null;
     }
 
-    const VALID_CATEGORIES = new Set(['all', 'thanksgiving', 'mobility', 'picnic', 'culinary', 'angler', 'lid', 'power']);
+    const VALID_CATEGORIES = new Set(['all', 'thanksgiving', 'christmas', 'mobility', 'picnic', 'culinary', 'angler', 'lid', 'power']);
 
     function setCategory(cat, { updateUrl = true, scrollToCatalog = false } = {}) {
       const normalized = VALID_CATEGORIES.has(cat) ? cat : 'all';
@@ -3301,6 +3599,11 @@
         tgBanner.hidden = normalized !== 'thanksgiving';
       }
 
+      const xmasBanner = document.getElementById('christmas-section-banner');
+      if (xmasBanner) {
+        xmasBanner.hidden = normalized !== 'christmas';
+      }
+
       const wagonDemo = document.getElementById('wagon-dolly-demo');
       if (wagonDemo) {
         wagonDemo.style.display = (normalized === 'all' || normalized === 'mobility') ? '' : 'none';
@@ -3312,6 +3615,9 @@
         if (normalized === 'thanksgiving') {
           gridTitle.textContent = 'Thanksgiving Specials & Holiday Outfitting';
           gridSubtitle.textContent = 'Engineered for turkey brining, 165°F resting, walnut carving, pie stacking, buffet service, wine chilling & leftovers';
+        } else if (normalized === 'christmas') {
+          gridTitle.textContent = 'Christmas Specials & Red-and-Green Winter Outfitting';
+          gridSubtitle.textContent = 'Festive hot cocoa turrets, LED pine wreath halos, 3-ski snow sled kits, cookie tin vaults, eggnog dual kegs, heated seats, prime rib vaults & gift lockers';
         } else {
           gridTitle.textContent = 'Official King of Koolers Outfitting';
           gridSubtitle.textContent = 'Precision-molded & 3D-printable accessories designed exclusively for the 24-inch cylindrical platform';
@@ -3324,7 +3630,7 @@
         const url = new URL(window.location.href);
         if (normalized === 'all') {
           url.searchParams.delete('category');
-          if (url.hash === '#thanksgiving') url.hash = '';
+          if (url.hash === '#thanksgiving' || url.hash === '#christmas') url.hash = '';
         } else {
           url.searchParams.set('category', normalized);
         }
@@ -3406,8 +3712,8 @@
         setCategory(btn.dataset.category || 'all', { updateUrl: true, scrollToCatalog: false });
       }
 
-      // Reset All Modules button inside Thanksgiving section banner
-      if (e.target.closest('#btn-reset-all-from-thanksgiving')) {
+      // Reset All Modules buttons inside seasonal section banners
+      if (e.target.closest('#btn-reset-all-from-thanksgiving') || e.target.closest('#btn-reset-all-from-christmas')) {
         setCategory('all', { updateUrl: true, scrollToCatalog: true });
       }
 
@@ -3488,7 +3794,7 @@
       }
     });
 
-    // Initial render with URL query / #thanksgiving deep-link detection
+    // Initial render with URL query / #thanksgiving / #christmas deep-link detection
     (function initCatalogFromUrl() {
       const params = new URLSearchParams(window.location.search);
       const paramCat = params.get('category');
@@ -3501,6 +3807,9 @@
         hasDeepLink = true;
       } else if (hash === '#thanksgiving') {
         initialCat = 'thanksgiving';
+        hasDeepLink = true;
+      } else if (hash === '#christmas') {
+        initialCat = 'christmas';
         hasDeepLink = true;
       }
 

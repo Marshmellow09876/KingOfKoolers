@@ -1,5 +1,5 @@
 /* King of Koolers V1 — Lightweight PWA App Shell + Runtime Image Cache Service Worker */
-const CACHE_NAME = 'kok-v1-shell-v9';
+const CACHE_NAME = 'kok-v1-shell-v10';
 const IMAGE_CACHE = 'kok-v1-images-v1';
 
 const PRECACHE_URLS = [

@@ -33,7 +33,7 @@
           "name": "King of Koolers 24-Inch Modular Cylindrical Stacking Cooler",
           "brand": { "@type": "Brand", "name": "King of Koolers" },
           "creator": { "@type": "Person", "name": "Austin Marshall" },
-          "description": "Patent-pending 24-inch diameter rotomolded cylindrical modular stacking cooler system featuring a 20-start 18-degree helical twist-lock, vertical anti-rotation deadbolt, 3.5-inch R-8 polyurethane insulation, 10W USB solar lid, and 56 modular accessories.",
+          "description": "Patent-pending 24-inch diameter rotomolded cylindrical modular stacking cooler system featuring a 20-start 18-degree helical twist-lock, vertical anti-rotation deadbolt, 3.5-inch R-8 polyurethane insulation, 10W USB solar lid, and 66 modular accessories.",
           "image": [
             "https://marshmellow09876.github.io/KingOfKoolers/v1/assets/images/apple_hero_plastic_rwb.jpg",
             "https://marshmellow09876.github.io/KingOfKoolers/v1/assets/images/allthread_section_view.jpg",
@@ -603,15 +603,25 @@
       margin: 0 auto;
     }
 
+    .holiday-promo-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin: 0 auto 22px;
+      max-width: min(100%, 980px);
+    }
+
     .thanksgiving-promo-banner {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
       gap: 10px 14px;
+      width: 100%;
       max-width: min(100%, 980px);
       min-block-size: 44px;
-      margin: 0 auto 22px;
+      margin: 0;
       padding: 8px 14px 8px 12px;
       border-radius: var(--radius-full);
       background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), rgba(180, 83, 9, 0.10) 55%, rgba(16, 16, 22, 0.85));
@@ -675,8 +685,82 @@
       white-space: nowrap;
     }
 
+    .christmas-promo-banner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      width: 100%;
+      max-width: min(100%, 980px);
+      min-block-size: 44px;
+      margin: 0;
+      padding: 8px 14px 8px 12px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.16), rgba(21, 128, 61, 0.14) 55%, rgba(16, 16, 22, 0.88));
+      border: 1px solid rgba(74, 222, 128, 0.42);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 24px rgba(22, 163, 74, 0.14);
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 1.35;
+      transition: transform 0.25s var(--ease-apple), border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .christmas-promo-banner:hover {
+      transform: translateY(-1px);
+      border-color: rgba(74, 222, 128, 0.78);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 28px rgba(220, 38, 38, 0.22), 0 0 24px rgba(22, 163, 74, 0.24);
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.24), rgba(21, 128, 61, 0.22) 55%, rgba(20, 20, 28, 0.92));
+    }
+
+    .christmas-promo-banner:focus-visible {
+      outline: 2px solid #4ade80;
+      outline-offset: 3px;
+    }
+
+    .xmas-promo-badge {
+      background: rgba(220, 38, 38, 0.26);
+      border: 1px solid rgba(248, 113, 113, 0.56);
+      color: #fecaca;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .xmas-promo-text {
+      color: #f8fafc;
+      font-weight: 500;
+    }
+
+    .xmas-promo-text strong {
+      color: #bbf7d0;
+    }
+
+    .xmas-promo-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 11px;
+      border-radius: var(--radius-full);
+      background: #16a34a;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
     @media (max-width: 640px) {
-      .thanksgiving-promo-banner {
+      .thanksgiving-promo-banner,
+      .christmas-promo-banner {
         border-radius: 16px;
         padding: 10px 14px;
         text-align: center;
@@ -3738,14 +3822,25 @@
   <header class="hero-section" id="overview">
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="container hero-content">
-      <a href="./accessories.html?category=thanksgiving#catalog-controls" class="thanksgiving-promo-banner" id="thanksgiving-promo-banner">
-        <span class="tg-promo-badge">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 4.4 4.2-1.4-2.1 4.1 4.1 1.9-4.5 1.8 1.5 3.7-4-1.6V22h-2v-7.1l-4 1.6 1.5-3.7L4 11l4.1-1.9L6 5l4.2 1.4L12 2z"/></svg>
-          Thanksgiving Specials
-        </span>
-        <span class="tg-promo-text"><strong>10 Holiday Feast Accessories</strong> — Turkey Brine Vault, 165°F Resting Cradle, Walnut Carving Deck &amp; More</span>
-        <span class="tg-promo-cta">Shop Specials <span aria-hidden="true">&rarr;</span></span>
-      </a>
+      <div class="holiday-promo-stack">
+        <a href="./accessories.html?category=thanksgiving#catalog-controls" class="thanksgiving-promo-banner" id="thanksgiving-promo-banner">
+          <span class="tg-promo-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 4.4 4.2-1.4-2.1 4.1 4.1 1.9-4.5 1.8 1.5 3.7-4-1.6V22h-2v-7.1l-4 1.6 1.5-3.7L4 11l4.1-1.9L6 5l4.2 1.4L12 2z"/></svg>
+            Thanksgiving Specials
+          </span>
+          <span class="tg-promo-text"><strong>10 Holiday Feast Accessories</strong> — Turkey Brine Vault, 165°F Resting Cradle, Walnut Carving Deck &amp; More</span>
+          <span class="tg-promo-cta">Shop Specials <span aria-hidden="true">&rarr;</span></span>
+        </a>
+
+        <a href="./accessories.html?category=christmas#catalog-controls" class="christmas-promo-banner" id="christmas-promo-banner">
+          <span class="xmas-promo-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L6.5 10h3L5 17h5.5v5h3v-5H19l-4.5-7h3L12 2z"/></svg>
+            Christmas Specials
+          </span>
+          <span class="xmas-promo-text"><strong>10 Red &amp; Green Holiday Accessories</strong> — Hot Cocoa Bar, Snow-Sled Ski Kit, LED Wreath Halo &amp; More</span>
+          <span class="xmas-promo-cta">Shop Christmas <span aria-hidden="true">&rarr;</span></span>
+        </a>
+      </div>
 
       <div class="eyebrow">
         <span class="eyebrow-pill" style="border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.1); color: #f87171;">ROTOMOLDED PATRIOT EDITION</span>
@@ -5750,7 +5845,7 @@
         <div class="roadmap-phase-card">
           <span class="roadmap-status-pill active">PHASE 4 · Q4 SCALE</span>
           <div class="bento-title" style="font-size:15px;">Retail Rollout &amp; OEM Licensing</div>
-          <div class="bento-desc" style="font-size:12.5px;">Multi-mold 50k+ annual production capacity, 56-module accessory attach flywheel &amp; strategic licensing.</div>
+          <div class="bento-desc" style="font-size:12.5px;">Multi-mold 50k+ annual production capacity, 66-module accessory attach flywheel &amp; strategic licensing.</div>
         </div>
       </div>
     </div>
